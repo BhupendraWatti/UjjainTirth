@@ -62,7 +62,15 @@ const HeroBanner = memo(() => (
         <Text style={styles.ctaText}>Explore Now</Text>
       </TouchableOpacity>
     </View>
+
+    <View>
+      
+    </View>
+
+
   </View>
+
+  
 ));
 
 /* ============================= */

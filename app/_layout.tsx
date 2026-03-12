@@ -1,24 +1,30 @@
-import { Stack } from "expo-router";
-import { StatusBar } from "expo-status-bar";
-import { ThemeProvider, DarkTheme, DefaultTheme } from "@react-navigation/native";
-import { useColorScheme } from "react-native";
-import * as SplashScreen from "expo-splash-screen";
-import { useEffect } from "react";
-import "react-native-reanimated";
-
-SplashScreen.preventAutoHideAsync();
+import { Stack } from 'expo-router';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useState } from 'react';
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
 
-  useEffect(() => {
-    SplashScreen.hideAsync();
-  }, []);
+  // Create a single query client instance
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            retry: 2,
+            staleTime: 1000 * 60 * 5, // 5 minutes cache
+            refetchOnWindowFocus: false,
+          },
+        },
+      })
+  );
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Stack screenOptions={{ headerShown: false }} />
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <Stack
+        screenOptions={{
+          headerShown: false,
+        }}
+      />
+    </QueryClientProvider>
   );
 }

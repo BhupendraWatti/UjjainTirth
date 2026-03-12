@@ -1,0 +1,105 @@
+import React, { memo } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Image } from 'expo-image';
+import { useRouter } from 'expo-router';
+
+import { Temple } from '@/types/temple';
+import Badge from '@/components/ui/Badge';
+import Card from '@/components/ui/Card';
+
+interface TempleCardProps {
+  temple: Temple;
+}
+
+const TempleCard = ({ temple }: TempleCardProps) => {
+  const router = useRouter();
+
+  const image =
+    temple._embedded?.['wp:featuredmedia']?.[0]?.source_url ||
+    'https://via.placeholder.com/300';
+
+  const title = temple.title.rendered;
+
+  const description = temple.excerpt.rendered
+    .replace(/<[^>]+>/g, '')
+    .slice(0, 110);
+
+    const handlePress = () => {
+    router.push(`/temples/${temple.slug}` as any);
+    };
+
+  return (
+    <Card style={styles.card}>
+      <View style={styles.container}>
+        <Image
+          source={{ uri: image }}
+          style={styles.image}
+          contentFit="cover"
+          transition={200}
+        />
+
+        <View style={styles.content}>
+          <Text style={styles.title}>{title}</Text>
+
+          <Text style={styles.description}>{description}</Text>
+
+          <View style={styles.footer}>
+            <Badge label="Temple" />
+
+            <TouchableOpacity onPress={handlePress}>
+              <Text style={styles.viewDetails}>View Details →</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    </Card>
+  );
+};
+
+export default memo(TempleCard);
+
+const styles = StyleSheet.create({
+  card: {
+    marginBottom: 16,
+  },
+
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+
+  image: {
+    width: 90,
+    height: 90,
+    borderRadius: 14,
+  },
+
+  content: {
+    flex: 1,
+    marginLeft: 14,
+  },
+
+  title: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#8B0000',
+    marginBottom: 4,
+  },
+
+  description: {
+    fontSize: 13,
+    color: '#555',
+    marginBottom: 8,
+  },
+
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+
+  viewDetails: {
+    color: '#FF6A00',
+    fontWeight: '600',
+  },
+});
