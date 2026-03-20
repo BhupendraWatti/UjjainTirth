@@ -8,7 +8,7 @@ export default function RootLayout() {
   const [queryClient] = useState(
     () =>
       new QueryClient({
-        defaultOptions: {
+        defaultOptions: { 
           queries: {
             retry: 2,
             staleTime: 1000 * 60 * 5, // 5 minutes cache

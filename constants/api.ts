@@ -2,7 +2,7 @@
  * Base WordPress API URL
  * Change this once if the API location changes.
  */
-export const API_BASE_URL = 'https://ujjaintirth.com/wp-json/wp/v2';
+export const API_BASE_URL = 'https://ujjaintirth.com/wp-json/wp/v2'; 
 
 
 /**

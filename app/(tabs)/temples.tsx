@@ -38,10 +38,10 @@ export default function TemplesScreen() {
 
   const { data: tags } = useTempleTags();
 
-  const temples = useMemo(() => {
-    if (!data) return [];
-    return data.pages.flat();
-  }, [data]);
+const temples = useMemo(() => {
+  if (!data) return [];
+  return data.pages.flatMap(page => page.data);
+}, [data]);
 
   if (isLoading) {
     return (

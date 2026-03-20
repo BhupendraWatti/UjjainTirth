@@ -19,8 +19,9 @@ const TempleCard = ({ temple }: TempleCardProps) => {
     'https://via.placeholder.com/300';
 
   const title = temple.title.rendered;
-
-  const description = temple.excerpt.rendered
+  
+  const tag = temple.acf.temple_tag.toString();
+  const description = temple.acf.temple_short_description
     .replace(/<[^>]+>/g, '')
     .slice(0, 110);
 
@@ -44,7 +45,7 @@ const TempleCard = ({ temple }: TempleCardProps) => {
           <Text style={styles.description}>{description}</Text>
 
           <View style={styles.footer}>
-            <Badge label="Temple" />
+            <Badge label={tag} />
 
             <TouchableOpacity onPress={handlePress}>
               <Text style={styles.viewDetails}>View Details →</Text>
