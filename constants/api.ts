@@ -11,6 +11,7 @@ export const API_BASE_URL = 'https://ujjaintirth.com/wp-json/wp/v2';
 export const API_ENDPOINTS = {
   TEMPLES: '/temples',
   CATEGORIES: '/temple_category',
+  SERVICES: '/service',
 };
 
 
