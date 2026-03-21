@@ -10,9 +10,7 @@ export default function HeroBanner() {
   return (
     <View style={styles.wrapper}>
       <ImageBackground
-        source={{
-          uri: '',
-        }}
+        source={require('@/assets/images/Mahakaleshwar-1.jpeg')}
         style={styles.container}
         imageStyle={styles.image}
       >
@@ -36,12 +34,12 @@ export default function HeroBanner() {
 
 const styles = StyleSheet.create({
   wrapper: {
-    marginTop: 12,
-    paddingHorizontal: 16,
+    marginTop: 5,
+    paddingHorizontal: 0,
   },
 
   container: {
-    height: 180,
+    height: 300,
     justifyContent: 'flex-end',
   },
 
