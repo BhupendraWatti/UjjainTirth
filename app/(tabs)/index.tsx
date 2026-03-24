@@ -1,32 +1,27 @@
-import React from 'react';
-import { FlatList, ScrollView, StyleSheet } from 'react-native';
+import React from "react";
+import { FlatList } from "react-native";
 
-import ScreenContainer from '@/components/layout/ScreenContainer';
-import Header from '@/components/home/Header';
-import HeroBanner from '@/components/home/HeroBanner';
-import ServicesGrid from '@/components/home/ServicesGrid';
-import RecommendationSection from '@/components/home/RecommendationSection';
-import { useServices } from '@/hooks/useServices';
-import LoadingSkeleton from '@/components/temples/LoadingSkeleton';
-import ErrorState from '@/components/common/ErrorState';
+import ErrorState from "@/components/common/ErrorState";
+import Header from "@/components/home/Header";
+import HeroBanner from "@/components/home/HeroBanner";
+import RecommendationSection from "@/components/home/RecommendationSection";
+import ServicesGrid from "@/components/home/ServicesGrid";
+import LoadingSkeleton from "@/components/layout/LoadingSkeleton";
+import ScreenContainer from "@/components/layout/ScreenContainer";
+import { useServices } from "@/hooks/useServices";
 
 export default function HomeScreen() {
+  const { data, refetch, isLoading, isError } = useServices();
 
-  const {
-    data,
-    refetch,
-    isLoading,
-    isError,
-  } = useServices();
+  if (isLoading) {
+    return (
+      <ScreenContainer>
+        <LoadingSkeleton />
+      </ScreenContainer>
+    );
+  }
 
-  if(isLoading){
-    return( 
-    <ScreenContainer>
-        <LoadingSkeleton/>
-    </ScreenContainer>
-  )}
-
-  if(isError){
+  if (isError) {
     return (
       <ScreenContainer>
         <ErrorState onRetry={refetch} />
@@ -34,12 +29,11 @@ export default function HomeScreen() {
     );
   }
 
-
   return (
     <ScreenContainer>
       <FlatList
         data={[{}]} // dummy data
-        keyExtractor={() => 'home'}
+        keyExtractor={() => "home"}
         renderItem={() => (
           <>
             <Header />

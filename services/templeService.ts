@@ -1,53 +1,10 @@
-// import { API_BASE_URL, API_ENDPOINTS, PAGINATION, DEFAULT_HEADERS } from '@/constants/api';
-// import { Temple } from '@/types/temple';
-
-// interface FetchTempleParams {
-//   page?: number;
-//   search?: string;
-//   tag?: number | null;
-// }
-
-// export const fetchTemples = async ({
-//   page = 1,
-//   search,
-//   tag,
-// }: FetchTempleParams): Promise<Temple[]> => {
-//   try {
-//     const params = new URLSearchParams();
-
-//     params.append('page', page.toString());
-//     params.append('per_page', PAGINATION.PAGE_SIZE.toString());
-//     params.append('_embed', 'true');
-
-//     if (search) {
-//       params.append('search', search);
-//     }
-
-//     if (tag) {
-//       params.append('temple_tag', tag.toString());
-//     }
-
-//     const url = `${API_BASE_URL}${API_ENDPOINTS.TEMPLES}?${params.toString()}`;
-
-//     const response = await fetch(url, {
-//       headers: DEFAULT_HEADERS,
-//     });
-
-//     if (!response.ok) {
-//       throw new Error(`API Error: ${response.status}`);
-//     }
-
-//     const data: Temple[] = await response.json();
-
-//     return data;
-//   } catch (error) {
-//     console.error('Temple fetch failed:', error);
-//     throw error;
-//   }
-// };
-
-import { API_BASE_URL, API_ENDPOINTS, PAGINATION, DEFAULT_HEADERS } from '@/constants/api';
-import { Temple } from '@/types/temple';
+import {
+  API_BASE_URL_TEMPLES,
+  API_ENDPOINTS,
+  DEFAULT_HEADERS,
+  PAGINATION,
+} from "@/constants/api";
+import { Temple } from "@/types/temple";
 
 interface FetchTempleParams {
   page?: number;
@@ -59,7 +16,7 @@ interface FetchTempleResponse {
   data: Temple[];
   totalPages: number;
 }
-
+const templeCache = new Map<string, Temple>();
 export const fetchTemples = async ({
   page = 1,
   search,
@@ -69,22 +26,23 @@ export const fetchTemples = async ({
     const params = new URLSearchParams();
 
     // ✅ Required params
-    params.append('page', page.toString());
-    params.append('per_page', PAGINATION.PAGE_SIZE.toString());
-    params.append('_embed', 'true');
+    params.append("page", page.toString());
+    params.append("per_page", PAGINATION.PAGE_SIZE.toString());
+    // params.append("_embed", "true");
 
     // ✅ Optional params (ONLY if valid)
-    if (search && search.trim() !== '') {
-      params.append('search', search);
+    if (search && search.trim() !== "") {
+      params.append("search", search);
     }
 
     if (tag !== null && tag !== undefined) {
-      params.append('temple_tag', tag.toString());
+      params.append("temple_tag", tag.toString());
     }
 
-    const url = `${API_BASE_URL}${API_ENDPOINTS.TEMPLES}?${params.toString()}`;
+    params.append("nocache", Date.now().toString());
+    const url = `${API_BASE_URL_TEMPLES}${API_ENDPOINTS.TEMPLES}?${params.toString()}`;
 
-    console.log('API URL:', url); // 🔍 Debug
+    console.log("API URL:", url); // 🔍 Debug
 
     const response = await fetch(url, {
       headers: DEFAULT_HEADERS,
@@ -103,13 +61,49 @@ export const fetchTemples = async ({
       throw new Error(`API Error: ${response.status}`);
     }
 
-    const totalPages = Number(response.headers.get('X-WP-TotalPages') || 1);
+    const totalPages = Number(response.headers.get("X-WP-TotalPages") || 1);
 
     const data: Temple[] = await response.json();
 
     return { data, totalPages };
   } catch (error) {
-    console.error('Temple fetch failed:', error);
+    console.error("Temple fetch failed:", error);
     throw error;
+  }
+};
+
+export const fetchTempleBySlug = async (slug: string) => {
+  // 🔥 1. Check cache first
+  if (templeCache.has(slug)) {
+    return templeCache.get(slug)!;
+  }
+
+  try {
+    const params = new URLSearchParams();
+    params.append("slug", slug);
+
+    const url = `${API_BASE_URL_TEMPLES}${API_ENDPOINTS.TEMPLES}?${params.toString()}`;
+
+    const response = await fetch(url, {
+      headers: DEFAULT_HEADERS,
+    });
+
+    if (!response.ok) {
+      throw new Error(`API Error: ${response.status}`);
+    }
+
+    const data: Temple[] = await response.json();
+
+    const temple = data?.find((t) => t.slug === slug) || null;
+
+    // 🔥 2. Store in cache
+    if (temple) {
+      templeCache.set(slug, temple);
+    }
+
+    return temple;
+  } catch (error) {
+    console.error("fetchTempleBySlug failed:", error);
+    return null;
   }
 };

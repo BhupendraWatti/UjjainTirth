@@ -1,26 +1,20 @@
-import React, { useState, useMemo } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  RefreshControl,
-} from 'react-native';
+import React, { useMemo, useState } from "react";
+import { FlatList, RefreshControl, StyleSheet, Text } from "react-native";
 
-import ScreenContainer from '@/components/layout/ScreenContainer';
-import TempleCard from '@/components/temples/TempleCard';
-import TempleSearch from '@/components/temples/TempleSearch';
-import CategoryFilter from '@/components/temples/CategoryFilter';
-import LoadingSkeleton from '@/components/temples/LoadingSkeleton';
+import LoadingSkeleton from "@/components/layout/LoadingSkeleton";
+import ScreenContainer from "@/components/layout/ScreenContainer";
+import CategoryFilter from "@/components/temples/CategoryFilter";
+import TempleCard from "@/components/temples/TempleCard";
+import TempleSearch from "@/components/temples/TempleSearch";
 
-import EmptyState from '@/components/common/EmptyState';
-import ErrorState from '@/components/common/ErrorState';
+import EmptyState from "@/components/common/EmptyState";
+import ErrorState from "@/components/common/ErrorState";
 
-import { useTemples } from '@/hooks/useTemples';
-import { useTempleTags } from '@/hooks/useTempleTags';
+import { useTemples } from "@/hooks/useTemples";
+import { useTempleTags } from "@/hooks/useTempleTags";
 
 export default function TemplesScreen() {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const [selectedTag, setSelectedTag] = useState<number | null>(null);
 
   const {
@@ -38,10 +32,10 @@ export default function TemplesScreen() {
 
   const { data: tags } = useTempleTags();
 
-const temples = useMemo(() => {
-  if (!data) return [];
-  return data.pages.flatMap(page => page.data);
-}, [data]);
+  const temples = useMemo(() => {
+    if (!data) return [];
+    return data.pages.flatMap((page) => page.data);
+  }, [data]);
 
   if (isLoading) {
     return (
@@ -95,8 +89,8 @@ const temples = useMemo(() => {
 const styles = StyleSheet.create({
   title: {
     fontSize: 22,
-    fontWeight: '600',
-    color: '#8B0000',
+    fontWeight: "600",
+    color: "#8B0000",
     marginBottom: 10,
   },
 

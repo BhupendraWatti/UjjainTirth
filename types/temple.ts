@@ -9,7 +9,7 @@ export interface WPMedia {
 }
 
 export interface WPEmbedded {
-  'wp:featuredmedia'?: WPMedia[];
+  "wp:featuredmedia"?: WPMedia[];
 }
 
 export interface TempleCategory {
@@ -17,27 +17,37 @@ export interface TempleCategory {
   name: string;
   slug: string;
 }
-
-export interface Temple{
-    id:number;
-    slug:string;
-    title:{
-        rendered:string;
-    }
-    content?:{
-        rendered:string;
-    }
-    acf:{
-        map_url:string;
-        temple_short_description:string;
-        temple_tag:number;
-    }
-    featured_media:number;
-
-    _embedded?: WPEmbedded;
-    temple_category?: number[];
-    date: string;
-    
+export interface AartiItem {
+  aarti_name: string;
+  starting_time: string;
+  ending_time: string;
+}
+export interface AartiPeriod {
+  period_title: string;
+  aarti_list: AartiItem[];
+}
+export interface Temple {
+  id: number;
+  slug: string;
+  title: string;
+  content?: {
+    rendered: string;
+  };
+  acf: {
+    map_url: string;
+    temple_short_description: string;
+    temple_tag: {
+      id: number;
+      name: string;
+      slug: string;
+    };
+    aarti_periods?: AartiPeriod[];
+  };
+  image: string;
+  featured_media: number;
+  _embedded?: WPEmbedded;
+  temple_category?: number[];
+  date: string;
 }
 
 export interface PaginatedTempleResponse {

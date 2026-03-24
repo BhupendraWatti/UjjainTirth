@@ -1,10 +1,12 @@
-import { useQuery } from '@tanstack/react-query';
-import { fetchTempleTags } from '@/services/templeTagService';
+import { fetchTempleTags } from "@/services/templeTagService";
+import { useQuery } from "@tanstack/react-query";
 
 export const useTempleTags = () => {
   return useQuery({
-    queryKey: ['templeTags'],
+    queryKey: ["temples"],
     queryFn: fetchTempleTags,
-    staleTime: 1000 * 60 * 60,
+    staleTime: 0,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
   });
 };
