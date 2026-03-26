@@ -7,7 +7,11 @@
     "icon": "./assets/images/icon.png",
     "scheme": "ujjaintirth",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
+    "updates": {
+      "fallbackToCacheTimeout": 0,
+      "newArchEnabled": true,
+      "url": "https://u.expo.dev/cd61f88e-c7db-424f-8ea1-3c2f0d9d26c6"
+    },
     "ios": {
       "supportsTablet": true
     },
@@ -49,6 +53,21 @@
       "router": {},
       "eas": {
         "projectId": "cd61f88e-c7db-424f-8ea1-3c2f0d9d26c6"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "build": {
+      "preview": {
+        "android": {
+          "buildType": "apk"
+        }
+      },
+      "production": {
+        "android": {
+          "buildType": "app-bundle"
+        }
       }
     }
   }

@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 
 export const useTempleTags = () => {
   return useQuery({
-    queryKey: ["temples"],
+    queryKey: ["temple-tags"],
     queryFn: fetchTempleTags,
     staleTime: 0,
     refetchOnMount: true,

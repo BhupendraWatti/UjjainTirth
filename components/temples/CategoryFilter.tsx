@@ -1,5 +1,5 @@
-import React from 'react';
-import { ScrollView, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import React from "react";
+import { ScrollView, StyleSheet, Text, TouchableOpacity } from "react-native";
 
 interface Category {
   id: number;
@@ -12,18 +12,30 @@ interface CategoryFilterProps {
   onSelect: (id: number | null) => void;
 }
 
-const CategoryFilter = ({ categories, selected, onSelect }: CategoryFilterProps) => {
+const CategoryFilter = ({
+  categories,
+  selected,
+  onSelect,
+}: CategoryFilterProps) => {
   return (
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
       style={styles.container}
+      contentContainerStyle={styles.scrollContent}
     >
       <TouchableOpacity
-        style={[styles.chip, selected === null && styles.activeChip]}
+        style={[
+          styles.chip,
+          selected === null && styles.activeChip,
+          { marginRight: 12 }, // 🔥 extra gap after All
+        ]}
         onPress={() => onSelect(null)}
       >
-        <Text style={[styles.text, selected === null && styles.activeText]}>
+        <Text
+          numberOfLines={1}
+          style={[styles.text, selected === null && styles.activeText]}
+        >
           All
         </Text>
       </TouchableOpacity>
@@ -51,23 +63,31 @@ export default CategoryFilter;
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 10,
-    marginBottom: 10,
+    marginVertical: 6,
   },
   chip: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    backgroundColor: '#EEE',
+    paddingHorizontal: 14,
+    paddingVertical: 6,
+    backgroundColor: "#F1F1F1",
     borderRadius: 20,
-    marginRight: 10,
+    marginRight: 8,
+    alignItems: "center",
+    justifyContent: "center",
+    height: 32,
   },
   activeChip: {
-    backgroundColor: '#FF6A00',
+    backgroundColor: "#EB5C49",
   },
   text: {
-    color: '#444',
+    color: "#444",
+    fontSize: 13,
   },
   activeText: {
-    color: '#fff',
+    color: "#fff",
+    fontWeight: "600",
+  },
+  scrollContent: {
+    alignItems: "center",
+    paddingHorizontal: 10, // 🔥 gives breathing space on edges
   },
 });

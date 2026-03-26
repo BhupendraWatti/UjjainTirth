@@ -17,7 +17,10 @@ const TempleCard = ({ temple }: TempleCardProps) => {
   // const image =
   //   temple._embedded?.['wp:featuredmedia']?.[0]?.source_url ||
   //   'https://via.placeholder.com/300';
-  const image = temple.image || "https://via.placeholder.com/300";
+  const image =
+    temple?.image && temple.image.trim() !== ""
+      ? temple.image
+      : "https://via.placeholder.com/300";
   const title = temple.title;
 
   // const tag = temple.acf.temple_tag.name;
@@ -83,18 +86,20 @@ const styles = StyleSheet.create({
 
   container: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-start",
   },
 
   image: {
     width: 90,
     height: 90,
     borderRadius: 14,
+    backgroundColor: "#eee",
   },
 
   content: {
     flex: 1,
     marginLeft: 14,
+    justifyContent: "space-between",
   },
 
   title: {
