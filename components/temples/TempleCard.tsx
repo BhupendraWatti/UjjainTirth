@@ -31,10 +31,10 @@ const TempleCard = ({ temple }: TempleCardProps) => {
     ? temple.acf.temple_short_description.replace(/<[^>]+>/g, "").slice(0, 110)
     : "";
   const handlePress = () => {
-    console.log("CLICKED:", temple.slug);
+    // console.log("CLICKED:", temple.slug);
 
     if (!temple.slug) {
-      console.log("Slug missing!");
+      // console.log("Slug missing!");
       return;
     }
 
@@ -44,7 +44,7 @@ const TempleCard = ({ temple }: TempleCardProps) => {
     });
   };
   // console.log("Navigating to:", `/temples/${temple.slug}`);
-  console.log("TEMPLE:", temple);
+  // console.log("TEMPLE:", temple);
   // console.log("TEMPLE DATA:", JSON.stringify(temple, null, 2));
   return (
     <Card style={styles.card}>

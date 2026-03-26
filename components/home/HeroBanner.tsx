@@ -1,23 +1,21 @@
 import {
   ImageBackground,
-  Text,
   StyleSheet,
+  Text,
   TouchableOpacity,
   View,
-} from 'react-native';
+} from "react-native";
 
 export default function HeroBanner() {
   return (
     <View style={styles.wrapper}>
       <ImageBackground
-        source={require('@/assets/images/Mahakaleshwar-1.jpeg')}
+        source={require("@/assets/images/Mahakaleshwar-1.jpeg")}
         style={styles.container}
         imageStyle={styles.image}
       >
         <View style={styles.overlay}>
-          <Text style={styles.title}>
-            Book Darshan & {'\n'}Tour Packages
-          </Text>
+          <Text style={styles.title}>Book Darshan & {"\n"}Tour Packages</Text>
 
           <Text style={styles.subtitle}>
             Plan your spiritual journey with ease
@@ -40,7 +38,7 @@ const styles = StyleSheet.create({
 
   container: {
     height: 300,
-    justifyContent: 'flex-end',
+    justifyContent: "flex-end",
   },
 
   image: {
@@ -49,34 +47,34 @@ const styles = StyleSheet.create({
 
   overlay: {
     padding: 16,
-    backgroundColor: 'rgba(0,0,0,0.3)',
+    backgroundColor: "rgba(0,0,0,0.3)",
     borderRadius: 20,
   },
 
   title: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: "600",
   },
 
   subtitle: {
-    color: '#eee',
+    color: "#eee",
     fontSize: 12,
     marginTop: 4,
   },
 
   button: {
     marginTop: 10,
-    backgroundColor: '#FF7A00',
+    backgroundColor: "#FF7A00",
     paddingHorizontal: 14,
     paddingVertical: 6,
     borderRadius: 20,
-    alignSelf: 'flex-start',
+    alignSelf: "flex-start",
   },
 
   buttonText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 12,
-    fontWeight: '500',
+    fontWeight: "500",
   },
 });

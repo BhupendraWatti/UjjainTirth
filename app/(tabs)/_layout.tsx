@@ -1,7 +1,7 @@
+import { icons } from "@/components/ui/Icons";
 import { Tabs } from "expo-router";
 import React from "react";
 import { Image } from "react-native";
-import { icons } from "@/components/ui/Icons";
 // import { HapticTab } from '@/components/haptic-tab';
 // import { IconSymbol } from '@/components/ui/icon-symbol';
 // import { Colors } from '@/constants/theme';
@@ -12,10 +12,10 @@ export default function TabLayout() {
 
   return (
     <Tabs
-        screenOptions={{
+      screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: '#fff',
+          backgroundColor: "#fff",
           borderTopWidth: 0,
           height: 60,
         },
@@ -23,19 +23,17 @@ export default function TabLayout() {
           fontSize: 12,
           marginBottom: 5,
         },
-        tabBarActiveTintColor: '#EB5C49', // your brand color
-        tabBarInactiveTintColor: '#777',
-  }}
+        tabBarActiveTintColor: "#EB5C49", // your brand color
+        tabBarInactiveTintColor: "#777",
+      }}
     >
       <Tabs.Screen
-        name="Home"
+        name="index"
         options={{
           title: "Home",
           tabBarIcon: ({ focused }) => (
             <Image
-              source={
-                focused ? icons.home.active : icons.home.inactive
-              }
+              source={focused ? icons.home.active : icons.home.inactive}
               style={{ width: 24, height: 24 }}
               resizeMode="contain"
             />
@@ -43,14 +41,12 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="Temple"
+        name="temples"
         options={{
           title: "Temple",
           tabBarIcon: ({ focused }) => (
             <Image
-              source={
-               focused ? icons.temple.active : icons.temple.inactive
-              }
+              source={focused ? icons.temple.active : icons.temple.inactive}
               style={{ width: 24, height: 24 }}
               resizeMode="contain"
             />

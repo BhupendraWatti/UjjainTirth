@@ -1,5 +1,5 @@
 import {
-  API_BASE_URL_TEMPLES,
+  API_CUSTOM_URL,
   API_ENDPOINTS,
   DEFAULT_HEADERS,
   PAGINATION,
@@ -40,9 +40,9 @@ export const fetchTemples = async ({
     }
 
     params.append("nocache", Date.now().toString());
-    const url = `${API_BASE_URL_TEMPLES}${API_ENDPOINTS.TEMPLES}?${params.toString()}`;
+    const url = `${API_CUSTOM_URL}${API_ENDPOINTS.TEMPLES}?${params.toString()}`;
 
-    console.log("API URL:", url); // 🔍 Debug
+    // console.log("API URL:", url); // 🔍 Debug
 
     const response = await fetch(url, {
       headers: DEFAULT_HEADERS,
@@ -82,7 +82,7 @@ export const fetchTempleBySlug = async (slug: string) => {
     const params = new URLSearchParams();
     params.append("slug", slug);
 
-    const url = `${API_BASE_URL_TEMPLES}${API_ENDPOINTS.TEMPLES}?${params.toString()}`;
+    const url = `${API_CUSTOM_URL}${API_ENDPOINTS.TEMPLES}?${params.toString()}`;
 
     const response = await fetch(url, {
       headers: DEFAULT_HEADERS,

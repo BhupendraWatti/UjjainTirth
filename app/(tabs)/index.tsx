@@ -9,10 +9,9 @@ import ServicesGrid from "@/components/home/ServicesGrid";
 import LoadingSkeleton from "@/components/layout/LoadingSkeleton";
 import ScreenContainer from "@/components/layout/ScreenContainer";
 import { useServices } from "@/hooks/useServices";
-
 export default function HomeScreen() {
-  const { data, refetch, isLoading, isError } = useServices();
-
+  const { data: services, refetch, isLoading, isError } = useServices();
+  // const services: Service[] = [];
   if (isLoading) {
     return (
       <ScreenContainer>
@@ -32,13 +31,13 @@ export default function HomeScreen() {
   return (
     <ScreenContainer>
       <FlatList
-        data={[{}]} // dummy data
+        data={[{}]}
         keyExtractor={() => "home"}
         renderItem={() => (
           <>
             <Header />
             <HeroBanner />
-            <ServicesGrid />
+            <ServicesGrid services={services || []} />
             <RecommendationSection />
           </>
         )}

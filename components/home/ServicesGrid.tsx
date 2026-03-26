@@ -1,100 +1,115 @@
-import { View, Text, StyleSheet, FlatList, Dimensions } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { useServices } from '@/hooks/useServices';
-
-const { width } = Dimensions.get('window');
+import { Service } from "@/types/service";
+import { LinearGradient } from "expo-linear-gradient";
+import React from "react";
+import {
+  Dimensions,
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+const { width } = Dimensions.get("window");
 const CARD_WIDTH = (width - 50) / 2; // spacing logic
+const ServiceGrid = ({ services }: { services: Service[] }) => {
+  const renderItem = ({ item, index }: { item: Service; index: number }) => {
+    const icon = item?.acf?.service_icon;
 
-export default function ServicesGrid() {
-    const {data} = useServices();
- return (
-    <View style={styles.container}>
-      <Text style={styles.sectionTitle}>Our Services</Text>
+    // 🔥 Zig-zag logic
+    const row = Math.floor(index / 2);
+    const isEvenRow = row % 2 === 0;
+    const isLeft = index % 2 === 0;
+    const useOrange = isEvenRow ? isLeft : !isLeft;
+    return (
+      <TouchableOpacity activeOpacity={0.8}>
+        <LinearGradient
+          colors={
+            useOrange
+              ? ["#f9c3a2", "#fb9353"] // ORANGE
+              : ["#c45e71", "#922c45"] // MAROON
+          }
+          start={{ x: 1, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.card}
+        >
+          {icon ? (
+            <Image
+              source={{ uri: icon }}
+              style={styles.icon}
+              resizeMode="contain"
+            />
+          ) : (
+            <View style={styles.placeholder} />
+          )}
 
-      <FlatList
-        data={data || []}
-        numColumns={2}
-        keyExtractor={(item) => item.id.toString()}
-        columnWrapperStyle={styles.row}
-        showsVerticalScrollIndicator={false}
-        renderItem={({ item, index }) => {
-          // Alternate gradient colors
-          const row = Math.floor(index / 2);
-        const isEvenRow = row % 2 === 0;
+          <Text style={styles.title}>
+            {item?.acf?.service_name || "Service"}
+          </Text>
+        </LinearGradient>
+      </TouchableOpacity>
+    );
+  };
 
-        const isLeft = index % 2 === 0;
-
-        const useOrange = isEvenRow ? isLeft : !isLeft;
-
-          return (
-            <LinearGradient
-                colors={
-                useOrange
-                    ? ['#FFB88C', '#FF6A00']   // 🔥 stronger orange
-                    : ['#e28a91', '#bd1c0a']   // 🔥 stronger pink/red
-                }
-                start={{ x: 0, y: 0 }}
-                end={{ x: 0, y: 1 }}
-                style={styles.card}
-            > 
-                <Text style={styles.icon}>🪔</Text>
-
-                <Text style={styles.title}>
-                {item.title.rendered}
-                </Text>
-  </LinearGradient>
-          );
-        }}
-      />
-    </View>
+  return (
+    <FlatList
+      data={services || []}
+      keyExtractor={(item) => item.id.toString()}
+      renderItem={renderItem}
+      numColumns={2}
+      columnWrapperStyle={styles.row}
+      contentContainerStyle={styles.container}
+      showsVerticalScrollIndicator={false}
+    />
   );
-}
+};
+
+export default ServiceGrid;
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 5,
-    marginTop: 16,
-  },
-
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 12,
-    color: '#8B1E1E',
+    padding: 16,
   },
 
   row: {
-    justifyContent: 'space-between',
-    marginBottom: 14, // 🔥 more spacing like design
+    justifyContent: "space-between",
+    marginBottom: 16,
   },
 
   card: {
     width: CARD_WIDTH,
-    height: 120, // 🔥 slightly taller
-    borderRadius: 18,
-    padding: 14,
-    justifyContent: 'space-between',
-
-    // 🔥 Better shadow
+    marginTop: 8,
+    borderRadius: 16,
+    paddingVertical: 20,
+    alignItems: "center",
+    justifyContent: "center",
     elevation: 4,
-    shadowColor: '#000',
-    shadowOpacity: 0.12,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 4 },
   },
 
   icon: {
-    fontSize: 34, // 🔥 bigger icon
+    width: 50,
+    height: 50,
+    marginBottom: 10,
+  },
+
+  placeholder: {
+    width: 50,
+    height: 50,
+    backgroundColor: "#eee",
+    borderRadius: 25,
+    marginBottom: 10,
   },
 
   title: {
     fontSize: 13,
-    fontWeight: '600', // 🔥 stronger
-    color: '#fff', // 🔥 IMPORTANT (your design uses white text)
+    fontWeight: "600",
+    textAlign: "center",
+    color: "#fff",
   },
 
-  centerText: {
-    textAlign: 'center',
-    marginTop: 20,
+  empty: {
+    textAlign: "center",
+    marginTop: 40,
+    color: "#999",
   },
 });

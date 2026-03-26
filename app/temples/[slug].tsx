@@ -1,8 +1,9 @@
+import CollapsibleSection from "@/components/temples/CollapsibleSection";
+import MapCard from "@/components/temples/MapCard";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams } from "expo-router";
 import React, { useCallback, useEffect, useState } from "react";
 import {
-  ActivityIndicator,
   Image,
   Linking,
   ScrollView,
@@ -11,15 +12,12 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-
-import CollapsibleSection from "@/components/temples/CollapsibleSection";
-import MapCard from "@/components/temples/MapCard";
 // import CollapsibleSection from "../../../components/temples/CollapsibleSection";
 // import MapCard from "@/components/temples/MapCard";
+import LoadingSkeleton from "@/components/layout/LoadingSkeleton";
 import { fetchTempleBySlug } from "@/services/templeService";
 import { Temple } from "@/types/temple";
 // import MapCard from "../../../components/temples/MapCard";
-
 const TempleDetailScreen = () => {
   const { slug } = useLocalSearchParams<{ slug: string }>();
 
@@ -48,11 +46,7 @@ const TempleDetailScreen = () => {
   }, [slug]);
 
   if (loading) {
-    return (
-      <View style={styles.center}>
-        <ActivityIndicator size="large" color="#EB5C49" />
-      </View>
-    );
+    return <LoadingSkeleton />;
   }
 
   if (error || !temple) {
@@ -62,78 +56,90 @@ const TempleDetailScreen = () => {
       </View>
     );
   }
-
+  const aarti = Array.isArray(temple?.acf?.aarti_periods)
+    ? temple.acf.aarti_periods
+    : [];
   const openMap = () => {
     if (temple.acf?.map_url) {
       Linking.openURL(temple.acf.map_url);
     }
   };
-  console.log("RECEIVED SLUG:", slug);
+  // console.log("RECEIVED SLUG:", slug);s
   return (
-    <View style={{ flex: 1 }}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {/* HEADER */}
-        <View style={styles.header}>
-          <Image source={{ uri: temple.image }} style={styles.headerImage} />
+    <>
+      {/* <ScreenContainer /> */}
+      <View style={{ flex: 1, marginTop: 2, backgroundColor: "#F5F2EA" }}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 140 }}
+        >
+          {/* HEADER */}
+          <View style={styles.header}>
+            <Image source={{ uri: temple.image }} style={styles.headerImage} />
 
-          <LinearGradient
-            colors={["transparent", "rgba(0,0,0,0.7)"]}
-            style={styles.overlay}
-          />
+            {/* Stronger gradient */}
+            <LinearGradient
+              colors={["transparent", "rgba(0,0,0,0.85)"]}
+              style={styles.overlay}
+            />
 
-          <View style={styles.headerContent}>
-            {temple.acf?.temple_tag?.name && (
+            <View style={styles.headerContent}>
               <View style={styles.badge}>
                 <Text style={styles.badgeText}>
-                  {temple.acf.temple_tag.name}
+                  {temple.acf?.temple_tag?.name || "Temple"}
                 </Text>
               </View>
-            )}
 
-            <Text style={styles.title}>{temple.title}</Text>
+              <Text style={styles.title}>{temple.title}</Text>
+            </View>
           </View>
-        </View>
 
-        {/* ABOUT */}
-        {temple.acf?.temple_short_description && (
+          {/* ABOUT */}
+          {temple.acf?.temple_short_description && (
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>About the Temple</Text>
+              <Text style={styles.description}>
+                {temple.acf.temple_short_description}
+              </Text>
+            </View>
+          )}
+
+          {/* AARTI */}
+          {aarti.length > 0 ? (
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Schedule</Text>
+
+              {aarti.map((period, index) => (
+                <CollapsibleSection
+                  key={index}
+                  title={period.period_title}
+                  items={period.aarti_list}
+                />
+              ))}
+            </View>
+          ) : null}
+
+          {/* LOCATION */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>About the Temple</Text>
-            <Text style={styles.description}>
-              {temple.acf.temple_short_description}
-            </Text>
+            <Text style={styles.sectionTitle}>Location</Text>
+
+            <MapCard
+              mapUrl={temple.acf?.map_url}
+              title={temple.title}
+              address="Ujjain, Madhya Pradesh"
+              onPress={openMap}
+            />
           </View>
-        )}
 
-        {/* AARTI */}
-        {temple.acf.aarti_periods?.length ? (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Aarti Schedule</Text>
+          <View style={{ height: 120 }} />
+        </ScrollView>
 
-            {temple.acf.aarti_periods.map((period, index) => (
-              <CollapsibleSection
-                key={index}
-                title={period.period_title}
-                items={period.aarti_list}
-              />
-            ))}
-          </View>
-        ) : null}
-
-        {/* LOCATION */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Location</Text>
-
-          <MapCard mapUrl={temple.acf?.map_url} onPress={openMap} />
-        </View>
-
-        <View style={{ height: 80 }} />
-      </ScrollView>
-
-      {/* CTA BUTTON */}
-      <TouchableOpacity style={styles.cta}>
-        <Text style={styles.ctaText}>Book My Darshan</Text>
-      </TouchableOpacity>
-    </View>
+        {/* CTA BUTTON */}
+        <TouchableOpacity style={styles.cta}>
+          <Text style={styles.ctaText}>Book My Darshan</Text>
+        </TouchableOpacity>
+      </View>
+    </>
   );
 };
 
@@ -141,9 +147,9 @@ export default TempleDetailScreen;
 
 const styles = StyleSheet.create({
   header: {
-    height: 260,
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
+    height: 280,
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 24,
     overflow: "hidden",
   },
   headerImage: {
@@ -160,20 +166,21 @@ const styles = StyleSheet.create({
   },
   badge: {
     backgroundColor: "#EB5C49",
-    paddingHorizontal: 10,
-    paddingVertical: 4,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
     borderRadius: 20,
-    marginBottom: 6,
+    marginBottom: 8,
     alignSelf: "flex-start",
   },
   badgeText: {
     color: "#fff",
-    fontSize: 12,
+    fontSize: 14,
+    fontWeight: 700,
   },
   title: {
     color: "#fff",
-    fontSize: 22,
-    fontWeight: "600",
+    fontSize: 24,
+    fontWeight: "700",
   },
   section: {
     padding: 16,
@@ -196,6 +203,7 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 30,
     alignItems: "center",
+    elevation: 5,
   },
   ctaText: {
     color: "#fff",

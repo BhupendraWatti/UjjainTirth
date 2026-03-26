@@ -11,20 +11,26 @@ interface Props {
 }
 
 const CollapsibleSection = ({ title, items }: Props) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true); // open by default like design
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => setOpen(!open)}>
+      {/* HEADER */}
+      <TouchableOpacity style={styles.header} onPress={() => setOpen(!open)}>
         <Text style={styles.title}>{title}</Text>
+        <Text style={styles.icon}>{open ? "▲" : "▼"}</Text>
       </TouchableOpacity>
 
+      {/* CONTENT */}
       {open && (
         <View style={styles.content}>
           {items.map((item, index) => (
-            <Text key={index} style={styles.item}>
-              {item.aarti_name} ({item.starting_time} - {item.ending_time})
-            </Text>
+            <View key={index} style={styles.row}>
+              <Text style={styles.name}>{item.aarti_name}</Text>
+              <Text style={styles.time}>
+                {item.starting_time} - {item.ending_time}
+              </Text>
+            </View>
           ))}
         </View>
       )}
@@ -37,18 +43,44 @@ export default React.memo(CollapsibleSection);
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#fff",
-    padding: 12,
-    borderRadius: 10,
-    marginBottom: 10,
+    borderRadius: 16,
+    padding: 14,
+    marginBottom: 16,
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   title: {
+    fontSize: 14,
     fontWeight: "600",
+    color: "#EB5C49",
+  },
+  icon: {
+    fontSize: 12,
+    color: "#555",
   },
   content: {
-    marginTop: 10,
+    marginTop: 12,
   },
-  item: {
-    color: "#555",
-    marginBottom: 4,
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: 8,
+    borderBottomWidth: 0.5,
+    borderBottomColor: "#ddd",
+  },
+  name: {
+    color: "#333",
+    fontSize: 13,
+  },
+  time: {
+    color: "#666",
+    fontSize: 12,
   },
 });
