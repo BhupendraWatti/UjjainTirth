@@ -42,6 +42,8 @@ export interface Temple {
       slug: string;
     };
     aarti_periods?: AartiPeriod[];
+    latitude?: string; // ✅ ADD THIS
+    longitude?: string;
   };
   image: string;
   featured_media: number;

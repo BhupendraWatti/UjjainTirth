@@ -2,43 +2,44 @@ import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 interface Props {
+  latitude?: number;
+  longitude?: number;
   mapUrl?: string;
   title?: string;
   address?: string;
   onPress: () => void;
 }
-const getMapImage = (mapUrl?: string) => {
-  if (!mapUrl) return null;
 
-  let lat = "";
-  let lng = "";
+const getMapImage = (lat?: number, lng?: number) => {
+  if (
+    lat === undefined ||
+    lng === undefined ||
+    isNaN(lat) ||
+    isNaN(lng) ||
+    lat === 0 ||
+    lng === 0
+  )
+    return fallbackImage;
 
-  // Case 1: @lat,lng
-  const match1 = mapUrl.match(/@([-0-9.]+),([-0-9.]+)/);
-
-  // Case 2: ?q=lat,lng
-  const match2 = mapUrl.match(/q=([-0-9.]+),([-0-9.]+)/);
-
-  if (match1) {
-    lat = match1[1];
-    lng = match1[2];
-  } else if (match2) {
-    lat = match2[1];
-    lng = match2[2];
-  } else {
-    return null;
-  }
-
-  return `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=15&size=600x300&markers=color:red|${lat},${lng}&key=YOUR_API_KEY`;
+  return `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=15&size=600x300&markers=color:red|${lat},${lng}`;
 };
+
 const fallbackImage =
   "https://via.placeholder.com/600x300?text=Map+Unavailable";
-const MapCard = ({ mapUrl, title, address, onPress }: Props) => {
+const MapCard = ({
+  latitude,
+  longitude,
+  mapUrl,
+  title,
+  address,
+  onPress,
+}: Props) => {
+  // console.log("MAP URL:", getMapImage(latitude, longitude));
   return (
     <View style={styles.card}>
       <Image
         source={{
-          uri: getMapImage(mapUrl) || fallbackImage,
+          uri: getMapImage(latitude, longitude),
         }}
         style={styles.map}
       />

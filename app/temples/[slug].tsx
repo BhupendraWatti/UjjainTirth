@@ -64,7 +64,7 @@ const TempleDetailScreen = () => {
       Linking.openURL(temple.acf.map_url);
     }
   };
-  // console.log("RECEIVED SLUG:", slug);s
+
   return (
     <>
       {/* <ScreenContainer /> */}
@@ -124,6 +124,8 @@ const TempleDetailScreen = () => {
             <Text style={styles.sectionTitle}>Location</Text>
 
             <MapCard
+              latitude={Number(temple.acf?.latitude)}
+              longitude={Number(temple.acf?.longitude)}
               mapUrl={temple.acf?.map_url}
               title={temple.title}
               address="Ujjain, Madhya Pradesh"
