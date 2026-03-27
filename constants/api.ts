@@ -13,6 +13,7 @@ export const API_ENDPOINTS = {
   TEMPLES: "/temples",
   CATEGORIES: "/temple_category",
   SERVICES: "/services",
+  ONBOARDING: "/onboarding",
 };
 
 /**
