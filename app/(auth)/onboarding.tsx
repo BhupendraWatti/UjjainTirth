@@ -14,23 +14,13 @@ const { width } = Dimensions.get("window");
 
 export default function Onboarding() {
   const [data, setData] = useState<any[]>([]);
-  // const [index, setIndex] = useState(0);
-  // const flatRef = useRef<FlatList>(null);
+
   const router = useRouter();
   const scrollX = useRef(new Animated.Value(0)).current;
-  // useEffect(() => {
-  //   load();
-  // }, []);
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const flatListRef = useRef<FlatList>(null);
-  // const load = async () => {
-  //   const { data, isLoading } = useQuery({
-  //     queryKey: ["onboarding"],
-  //     queryFn: fetchOnboarding,
-  //   });
-  // };
 
-  // const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -50,13 +40,6 @@ export default function Onboarding() {
   const viewConfig = {
     viewAreaCoveragePercentThreshold: 50,
   };
-  // if (loading) {
-  //   return (
-  //     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-  //       <Text>Loading...</Text>
-  //     </View>
-  //   );
-  // }
   const onViewRef = useRef(({ viewableItems }: any) => {
     if (viewableItems.length > 0) {
       setCurrentIndex(viewableItems[0].index);
@@ -158,11 +141,12 @@ export default function Onboarding() {
         >
           <Text
             style={{
-              fontSize: 24,
+              fontSize: 28,
               fontWeight: "700",
               letterSpacing: 0.5,
               color: "#3A3A3A",
               textAlign: "center",
+              marginTop: 10,
             }}
           >
             {item.title}
@@ -170,13 +154,14 @@ export default function Onboarding() {
 
           <Text
             style={{
-              marginTop: 12,
+              marginTop: 17,
               paddingHorizontal: 20,
-              fontSize: 14,
+              fontSize: 18,
               lineHeight: 20,
               textAlign: "center",
               color: "#444",
               maxWidth: 300,
+              fontWeight: 500,
             }}
           >
             {item.description}
@@ -239,7 +224,7 @@ export default function Onboarding() {
               shadowRadius: 5,
             }}
           >
-            <Text style={{ color: "#fff", fontSize: 20 }}>→</Text>
+            <Text style={{ color: "#fff", fontSize: 28 }}>→</Text>
           </TouchableOpacity>
         </Animated.View>
       </View>

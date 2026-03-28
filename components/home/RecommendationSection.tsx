@@ -46,13 +46,13 @@ export default function RecommendationSection() {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 16,
+    paddingHorizontal: 0,
     marginTop: 20,
     paddingBottom: 20,
   },
 
   sectionTitle: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "600",
     color: "#8B1E1E",
     marginBottom: 12,
@@ -72,14 +72,14 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: "600",
     marginBottom: 6,
     color: "#333",
   },
 
   desc: {
-    fontSize: 12,
+    fontSize: 14,
     color: "#666",
     marginBottom: 10,
   },
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
 
   buttonText: {
     color: "#fff",
-    fontSize: 12,
-    fontWeight: "500",
+    fontSize: 13,
+    fontWeight: "600",
   },
 });

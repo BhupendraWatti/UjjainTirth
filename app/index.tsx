@@ -48,7 +48,7 @@ export default function Intro() {
     >
       <Animated.Image
         source={require("../assets/images/ujjain_tirth_logo.png")}
-        style={{ width: 160, height: 160, opacity: logoOpacity }}
+        style={{ width: "80%", height: 260, opacity: logoOpacity }}
         resizeMode="contain"
       />
     </View>

@@ -63,7 +63,7 @@ export default CategoryFilter;
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: 6,
+    marginVertical: 9,
   },
   chip: {
     paddingHorizontal: 14,
@@ -74,6 +74,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     height: 32,
+    marginVertical: 4,
+    borderWidth: 0.3,
   },
   activeChip: {
     backgroundColor: "#EB5C49",

@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { View, TextInput, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from "@expo/vector-icons";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, TextInput, View } from "react-native";
 
 interface TempleSearchProps {
   onSearch: (value: string) => void;
 }
 
 const TempleSearch = ({ onSearch }: TempleSearchProps) => {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -36,17 +36,19 @@ export default TempleSearch;
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#F5F5F5',
-    paddingHorizontal: 14,
-    borderRadius: 25,
-    height: 45,
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#F5F5F5",
+    paddingHorizontal: 18,
+    borderRadius: 20,
+    height: 55,
+    borderWidth: 0.3,
+    marginVertical: 6,
   },
 
   input: {
     flex: 1,
     marginLeft: 8,
-    fontSize: 14,
+    fontSize: 16,
   },
 });

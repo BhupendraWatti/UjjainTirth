@@ -95,6 +95,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     marginBottom: 16,
     elevation: 2,
+    padding: 10,
   },
 
   supportCard: {
