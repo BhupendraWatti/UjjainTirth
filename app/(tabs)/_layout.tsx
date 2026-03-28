@@ -11,11 +11,11 @@ export default function TabLayout() {
 
         tabBarStyle: {
           position: "absolute",
-          bottom: 15,
+          bottom: 0,
           left: 15,
           right: 15,
-          height: 65,
-          borderRadius: 20,
+          height: 75,
+          borderRadius: 0,
           backgroundColor: "#fff",
           elevation: 10,
         },

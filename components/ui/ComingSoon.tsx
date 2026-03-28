@@ -60,21 +60,25 @@ const ComingSoon = forwardRef<ComingSoonRef>((props, ref) => {
     }, 6000);
   };
 
-  Animated.parallel([
-    Animated.timing(textOpacity, {
-      toValue: 1,
-      duration: 500,
-      useNativeDriver: true,
-    }),
-    Animated.spring(scale, {
-      toValue: 1,
-      useNativeDriver: true,
-    }),
-  ]).start();
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(textOpacity, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: true,
+      }),
+      Animated.spring(scale, {
+        toValue: 1,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  });
+
   return (
     <View style={styles.container}>
       <LottieView
         ref={animationRef}
+        renderMode="HARDWARE"
         source={require("../../assets/animations/plane.json")}
         loop={false}
         onAnimationFinish={handleAnimationFinish}
