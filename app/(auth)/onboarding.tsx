@@ -1,6 +1,4 @@
 import { fetchOnboarding } from "@/services/onboarding";
-import { useQuery } from "@tanstack/react-query";
-import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import {
@@ -12,7 +10,6 @@ import {
   View,
 } from "react-native";
 import Svg, { Path } from "react-native-svg";
-
 const { width } = Dimensions.get("window");
 
 export default function Onboarding() {
@@ -21,21 +18,45 @@ export default function Onboarding() {
   // const flatRef = useRef<FlatList>(null);
   const router = useRouter();
   const scrollX = useRef(new Animated.Value(0)).current;
-  useEffect(() => {
-    load();
-  }, []);
+  // useEffect(() => {
+  //   load();
+  // }, []);
   const [currentIndex, setCurrentIndex] = useState(0);
   const flatListRef = useRef<FlatList>(null);
-  const load = async () => {
-    const { data } = useQuery({
-      queryKey: ["onboarding"],
-      queryFn: fetchOnboarding,
-    });
-  };
+  // const load = async () => {
+  //   const { data, isLoading } = useQuery({
+  //     queryKey: ["onboarding"],
+  //     queryFn: fetchOnboarding,
+  //   });
+  // };
+
+  // const [data, setData] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const res = await fetchOnboarding();
+        setData(res);
+      } catch (e) {
+        console.log("Error:", e);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    load();
+  }, []);
   const viewConfig = {
     viewAreaCoveragePercentThreshold: 50,
   };
-
+  // if (loading) {
+  //   return (
+  //     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+  //       <Text>Loading...</Text>
+  //     </View>
+  //   );
+  // }
   const onViewRef = useRef(({ viewableItems }: any) => {
     if (viewableItems.length > 0) {
       setCurrentIndex(viewableItems[0].index);
@@ -79,14 +100,14 @@ export default function Onboarding() {
       <View style={{ width, flex: 1 }}>
         {/* IMAGE */}
         <View style={{ height: "60%" }}>
-          <Image
+          <Animated.Image
             source={{ uri: item.image }}
             style={{
               width: "100%",
               height: "100%",
               transform: [{ translateX }],
             }}
-            contentFit="cover"
+            resizeMode="cover"
           />
 
           {/* CURVE */}

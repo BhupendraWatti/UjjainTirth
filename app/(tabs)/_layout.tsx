@@ -1,32 +1,27 @@
 import { icons } from "@/components/ui/Icons";
 import { Tabs } from "expo-router";
-import React from "react";
-import { Image } from "react-native";
-// import { HapticTab } from '@/components/haptic-tab';
-// import { IconSymbol } from '@/components/ui/icon-symbol';
-// import { Colors } from '@/constants/theme';
-// import { useColorScheme } from '@/hooks/use-color-scheme';
+import { Image } from "react-native"; // ✅ MISSING IMPORT
 
 export default function TabLayout() {
-  // const colorScheme = useColorScheme();
-
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
+        tabBarActiveTintColor: "#EB5C49",
+
         tabBarStyle: {
+          position: "absolute",
+          bottom: 15,
+          left: 15,
+          right: 15,
+          height: 65,
+          borderRadius: 20,
           backgroundColor: "#fff",
-          borderTopWidth: 0,
-          height: 60,
+          elevation: 10,
         },
-        tabBarLabelStyle: {
-          fontSize: 12,
-          marginBottom: 5,
-        },
-        tabBarActiveTintColor: "#EB5C49", // your brand color
-        tabBarInactiveTintColor: "#777",
       }}
     >
+      {/* HOME */}
       <Tabs.Screen
         name="index"
         options={{
@@ -34,21 +29,63 @@ export default function TabLayout() {
           tabBarIcon: ({ focused }) => (
             <Image
               source={focused ? icons.home.active : icons.home.inactive}
-              style={{ width: 24, height: 24 }}
-              resizeMode="contain"
+              style={{ width: 22, height: 22 }}
             />
           ),
         }}
       />
+
+      {/* TEMPLES */}
       <Tabs.Screen
         name="temples"
         options={{
-          title: "Temple",
+          title: "Temples",
           tabBarIcon: ({ focused }) => (
             <Image
               source={focused ? icons.temple.active : icons.temple.inactive}
-              style={{ width: 24, height: 24 }}
-              resizeMode="contain"
+              style={{ width: 22, height: 22 }}
+            />
+          ),
+        }}
+      />
+
+      {/* PACKAGES */}
+      <Tabs.Screen
+        name="packages"
+        options={{
+          title: "Packages",
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={focused ? icons.packages.active : icons.packages.inactive}
+              style={{ width: 22, height: 22 }}
+            />
+          ),
+        }}
+      />
+
+      {/* PUJA */}
+      <Tabs.Screen
+        name="puja"
+        options={{
+          title: "Puja",
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={focused ? icons.puja.active : icons.puja.inactive}
+              style={{ width: 22, height: 22 }}
+            />
+          ),
+        }}
+      />
+
+      {/* MORE */}
+      <Tabs.Screen
+        name="more"
+        options={{
+          title: "More",
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={focused ? icons.more.active : icons.more.inactive}
+              style={{ width: 22, height: 22 }}
             />
           ),
         }}
