@@ -17,9 +17,7 @@ export default function HeroBanner() {
         <View style={styles.overlay}>
           <Text style={styles.title}>Book Darshan & {"\n"}Tour Packages</Text>
 
-          <Text style={styles.subtitle}>
-            Plan your spiritual journey with ease
-          </Text>
+          <Text style={styles.subtitle}>Ujjain trusted tirth App</Text>
 
           <TouchableOpacity style={styles.button}>
             <Text style={styles.buttonText}>Explore Now</Text>

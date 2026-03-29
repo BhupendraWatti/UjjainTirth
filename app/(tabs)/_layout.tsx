@@ -51,7 +51,7 @@ export default function TabLayout() {
 
       {/* PACKAGES */}
       <Tabs.Screen
-        name="packages"
+        name="packages/index"
         options={{
           title: "Packages",
           tabBarIcon: ({ focused }) => (

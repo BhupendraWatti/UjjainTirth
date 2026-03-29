@@ -14,6 +14,7 @@ export const API_ENDPOINTS = {
   CATEGORIES: "/temple_category",
   SERVICES: "/services",
   ONBOARDING: "/onboarding",
+  PACKAGES: "/packages",
 };
 
 /**

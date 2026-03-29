@@ -27,6 +27,7 @@ export default function Onboarding() {
     const load = async () => {
       try {
         const res = await fetchOnboarding();
+        console.log("API DATA:", res);
         setData(res);
       } catch (e) {
         console.log("Error:", e);
@@ -78,7 +79,24 @@ export default function Onboarding() {
       outputRange: [0.3, 1, 0.3],
       extrapolate: "clamp",
     });
-
+    if (loading) {
+      return (
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <Text>Loading...</Text>
+        </View>
+      );
+    }
+    if (!data || data.length === 0) {
+      return (
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <Text>No onboarding data found</Text>
+        </View>
+      );
+    }
     return (
       <View style={{ width, flex: 1 }}>
         {/* IMAGE */}

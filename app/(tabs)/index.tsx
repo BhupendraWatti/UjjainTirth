@@ -39,7 +39,7 @@ export default function HomeScreen() {
             <HeroBanner />
 
             <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Our Serivce</Text>
+              <Text style={styles.sectionTitle}>Our Serivces</Text>
             </View>
             <ServicesGrid services={services || []} />
             <RecommendationSection />
