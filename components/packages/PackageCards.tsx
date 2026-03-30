@@ -1,6 +1,6 @@
 import { Package } from "@/types/product";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-
+import ScreenContainer from "../layout/ScreenContainer";
 interface Props {
   item: Package;
   onPress: () => void;
@@ -8,25 +8,26 @@ interface Props {
 
 export default function PackageCard({ item, onPress }: Props) {
   return (
-    <TouchableOpacity style={styles.card} onPress={onPress}>
-      <Image source={{ uri: item.image }} style={styles.image} />
+    <ScreenContainer>
+      <TouchableOpacity style={styles.card} onPress={onPress}>
+        <Image source={{ uri: item.image }} style={styles.image} />
 
-      <View style={styles.content}>
-        <Text style={styles.title}>{item.name}</Text>
-        <Text style={styles.duration}>{item.duration}</Text>
+        <View style={styles.content}>
+          <Text style={styles.title}>{item.name}</Text>
+          <Text style={styles.duration}>{item.duration}</Text>
 
-        <View style={styles.footer}>
-          <Text style={styles.price}>₹ {item.price}</Text>
-          <Text style={styles.cta}>View Details →</Text>
+          <View style={styles.footer}>
+            <Text style={styles.price}>₹ {item.price}</Text>
+            <Text style={styles.cta}>View Details (Coming Soon)</Text>
+          </View>
         </View>
-      </View>
-    </TouchableOpacity>
+      </TouchableOpacity>
+    </ScreenContainer>
   );
 }
 
 const styles = StyleSheet.create({
   card: {
-    marginBottom: 16,
     borderRadius: 16,
     backgroundColor: "#fff",
     overflow: "hidden",

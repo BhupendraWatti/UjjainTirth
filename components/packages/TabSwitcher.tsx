@@ -1,17 +1,16 @@
-import { COLORS } from "@/constants/colors";
 import { PackageTab } from "@/types/tab";
 import { useState } from "react";
 import {
-    LayoutChangeEvent,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  LayoutChangeEvent,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import Animated, {
-    useAnimatedStyle,
-    useSharedValue,
-    withTiming,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
 } from "react-native-reanimated";
 
 interface Tab {
@@ -76,8 +75,8 @@ export default function TabSwitcher({ tabs, active, onChange }: Props) {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    backgroundColor: COLORS.secondary,
-    borderRadius: 14,
+    backgroundColor: "#F3E3DF",
+    borderRadius: 30,
     padding: 4,
     overflow: "hidden",
   },
@@ -85,19 +84,21 @@ const styles = StyleSheet.create({
   slider: {
     position: "absolute",
     height: "100%",
-    backgroundColor: COLORS.primary,
-    borderRadius: 12,
+    backgroundColor: "#EB5C49",
+    borderRadius: 30,
+    elevation: 3,
   },
 
   tab: {
     flex: 1,
     alignItems: "center",
-    paddingVertical: 12,
+    paddingVertical: 16,
+    marginBottom: 4,
   },
 
   text: {
     fontSize: 14,
-    color: COLORS.textDark,
+    color: "#555",
     fontWeight: "500",
   },
 

@@ -1,9 +1,10 @@
-import { Text, View } from "react-native";
+import ComingSoon from "@/components/ui/ComingSoon";
 
-export default function MoreScreen() {
+export default function PujaScreen() {
   return (
-    <View>
-      <Text>More Screen</Text>
-    </View>
+    <ComingSoon
+      title="Online Puja Booking"
+      subtitle="Book puja services soon"
+    />
   );
 }

@@ -11,54 +11,64 @@ export type ComingSoonRef = {
   startAnimation: () => void;
 };
 
-const ComingSoon = forwardRef<ComingSoonRef>((props, ref) => {
-  const [showText, setShowText] = useState(false);
+interface ComingSoonProps {
+  title?: string;
+  subtitle?: string;
+}
 
-  const opacity = useRef(new Animated.Value(0)).current;
-  const scale = useRef(new Animated.Value(0.8)).current;
+const ComingSoon = forwardRef<ComingSoonRef, ComingSoonProps>(
+  (
+    { title = "🚀 Coming Soon", subtitle = "Something exciting is on the way" },
+    ref,
+  ) => {
+    const [showText, setShowText] = useState(false);
 
-  const startAnimation = () => {
-    setShowText(true);
+    const opacity = useRef(new Animated.Value(0)).current;
+    const scale = useRef(new Animated.Value(0.8)).current;
 
-    Animated.parallel([
-      Animated.timing(opacity, {
-        toValue: 1,
-        duration: 800,
-        useNativeDriver: true,
-      }),
-      Animated.spring(scale, {
-        toValue: 1,
-        friction: 5,
-        useNativeDriver: true,
-      }),
-    ]).start();
-  };
+    const startAnimation = () => {
+      setShowText(true);
 
-  useImperativeHandle(ref, () => ({
-    startAnimation,
-  }));
+      Animated.parallel([
+        Animated.timing(opacity, {
+          toValue: 1,
+          duration: 800,
+          useNativeDriver: true,
+        }),
+        Animated.spring(scale, {
+          toValue: 1,
+          friction: 5,
+          useNativeDriver: true,
+        }),
+      ]).start();
+    };
 
-  useEffect(() => {
-    startAnimation();
-  }, []);
+    useImperativeHandle(ref, () => ({
+      startAnimation,
+    }));
 
-  return (
-    <View style={styles.container}>
-      <Animated.View
-        style={[
-          styles.textContainer,
-          {
-            opacity,
-            transform: [{ scale }],
-          },
-        ]}
-      >
-        <Text style={styles.title}>🚀 Coming Soon</Text>
-        <Text style={styles.subtitle}>Something exciting is on the way</Text>
-      </Animated.View>
-    </View>
-  );
-});
+    useEffect(() => {
+      startAnimation();
+    }, []);
+
+    return (
+      <View style={styles.container}>
+        <Animated.View
+          style={[
+            styles.textContainer,
+            {
+              opacity,
+              transform: [{ scale }],
+            },
+          ]}
+        >
+          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.subtitle}>{subtitle}</Text>
+        </Animated.View>
+      </View>
+    );
+  },
+);
 
 export default ComingSoon;
 

@@ -6,10 +6,10 @@ interface ScreenContainerProps {
   children: React.ReactNode;
 }
 
-export default function ScreenContainer({ children }: any) {
+export default function ScreenContainer({ children }: ScreenContainerProps) {
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.content}>{children}</View>
+    <SafeAreaView style={styles.safe}>
+      <View style={styles.container}>{children}</View>
     </SafeAreaView>
   );
 }
@@ -17,14 +17,11 @@ export default function ScreenContainer({ children }: any) {
 const styles = StyleSheet.create({
   safe: {
     flex: 1,
-    backgroundColor: "#F5F2EA",
+    backgroundColor: "#F5F2EA", // 🔥 your premium background
   },
   container: {
-    flexGrow: 1,
-    padding: 16,
-    paddingBottom: 40,
-  },
-  content: {
     flex: 1,
+    paddingHorizontal: 16, // 👈 FIXED spacing
+    paddingTop: 10,
   },
 });
