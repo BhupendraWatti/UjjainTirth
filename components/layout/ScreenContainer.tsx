@@ -4,12 +4,22 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 interface ScreenContainerProps {
   children: React.ReactNode;
+  noPadding?: boolean;
 }
-
-export default function ScreenContainer({ children }: ScreenContainerProps) {
+export default function ScreenContainer({
+  children,
+  noPadding = false,
+}: ScreenContainerProps) {
   return (
     <SafeAreaView style={styles.safe}>
-      <View style={styles.container}>{children}</View>
+      <View
+        style={[
+          styles.container,
+          noPadding && { paddingHorizontal: 0, paddingTop: 0 },
+        ]}
+      >
+        {children}
+      </View>
     </SafeAreaView>
   );
 }
@@ -21,7 +31,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    paddingHorizontal: 16, // 👈 FIXED spacing
+    paddingHorizontal: 14, // 👈 FIXED spacing
     paddingTop: 10,
   },
 });

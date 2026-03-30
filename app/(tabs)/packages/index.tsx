@@ -176,7 +176,7 @@ export default function PackagesScreen() {
   // });
 
   return (
-    <ScreenContainer>
+    <ScreenContainer noPadding>
       {/* HEADER */}
       <View style={styles.header}>
         <Text style={styles.heading}>Travel Packages</Text>
@@ -186,7 +186,7 @@ export default function PackagesScreen() {
       {/* TABS */}
       <TabSwitcher
         tabs={[
-          { label: "My Package", value: "custom" },
+          { label: "My Package/My Cost", value: "custom" },
           { label: "Latest Packages", value: "list" },
         ]}
         active={activeTab}
@@ -225,7 +225,7 @@ export default function PackagesScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    padding: 20,
     backgroundColor: "#FFF",
     width: "100%",
   },
@@ -239,17 +239,20 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "700",
     color: COLORS.textDark,
+    paddingHorizontal: 12,
   },
 
   subHeading: {
     fontSize: 13,
     color: COLORS.textLight,
     marginTop: 4,
+    paddingHorizontal: 12,
   },
 
   tabs: {
     flexDirection: "row",
     marginBottom: 16,
+    paddingHorizontal: 12,
   },
 
   tab: {

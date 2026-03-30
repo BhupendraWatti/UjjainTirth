@@ -78,6 +78,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#f4e5be",
     justifyContent: "center",
     alignItems: "center",
+    width: "100%",
+    paddingHorizontal: 0,
   },
 
   textContainer: {
