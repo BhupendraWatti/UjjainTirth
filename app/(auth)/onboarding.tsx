@@ -27,7 +27,7 @@ export default function Onboarding() {
     const load = async () => {
       try {
         const res = await fetchOnboarding();
-        console.log("API DATA:", res);
+        // console.log("API DATA:", res);
         setData(res);
       } catch (e) {
         console.log("Error:", e);

@@ -1,5 +1,4 @@
 import ScreenContainer from "@/components/layout/ScreenContainer";
-import PackageCard from "@/components/packages/PackageCards";
 import TabSwitcher from "@/components/packages/TabSwitcher";
 import ComingSoon from "@/components/ui/ComingSoon";
 import { COLORS } from "@/constants/colors";
@@ -7,7 +6,7 @@ import { usePackages } from "@/hooks/useProducts";
 import { PackageTab } from "@/types/tab";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 export default function PackagesScreen() {
   const [activeTab, setActiveTab] = useState<PackageTab>("list");
@@ -202,21 +201,27 @@ export default function PackagesScreen() {
           />
         </View>
       ) : (
-        <FlatList
-          data={packages}
-          keyExtractor={(item) => item.id.toString()}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            paddingBottom: 40,
-            paddingTop: 10,
-          }}
-          renderItem={({ item }) => (
-            <PackageCard
-              item={item}
-              onPress={() => router.push("/packages/form")}
-            />
-          )}
-        />
+        // <FlatList
+        //   data={packages}
+        //   keyExtractor={(item) => item.id.toString()}
+        //   showsVerticalScrollIndicator={false}
+        //   contentContainerStyle={{
+        //     paddingBottom: 40,
+        //     paddingTop: 10,
+        //   }}
+        //   renderItem={({ item }) => (
+        //     <PackageCard
+        //       item={item}
+        //       onPress={() => router.push("/packages/form")}
+        //     />
+        //   )}
+        // />
+        <View style={{ flex: 1 }}>
+          <ComingSoon
+            title="Latest Packages"
+            subtitle="Packages will be available soon"
+          />
+        </View>
       )}
     </ScreenContainer>
   );

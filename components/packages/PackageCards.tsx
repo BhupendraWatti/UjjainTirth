@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     elevation: 3,
     marginBottom: 16,
+    margin: 10,
   },
   image: {
     width: "100%",
@@ -65,3 +66,15 @@ const styles = StyleSheet.create({
     color: "#3A3A3A",
   },
 });
+
+// import ComingSoon from "@/components/ui/ComingSoon";
+// import React from "react";
+// import { View } from "react-native";
+
+// export default function PackagesScreen() {
+//   return (
+//     <View style={{ flex: 1 }}>
+//       <ComingSoon title="Packages" />
+//     </View>
+//   );
+// }

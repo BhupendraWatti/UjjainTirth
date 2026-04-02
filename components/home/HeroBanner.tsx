@@ -1,3 +1,4 @@
+import { router } from "expo-router";
 import {
   ImageBackground,
   StyleSheet,
@@ -5,8 +6,8 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-
 export default function HeroBanner() {
+  const comingsoon = () => router.push("/packages/form");
   return (
     <View style={styles.wrapper}>
       <ImageBackground
@@ -19,7 +20,7 @@ export default function HeroBanner() {
 
           <Text style={styles.subtitle}>Ujjain trusted tirth App</Text>
 
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity onPress={comingsoon} style={styles.button}>
             <Text style={styles.buttonText}>Explore Now</Text>
           </TouchableOpacity>
         </View>
