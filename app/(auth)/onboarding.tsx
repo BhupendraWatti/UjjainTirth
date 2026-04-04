@@ -121,7 +121,7 @@ export default function Onboarding() {
             }}
           >
             <Path
-              d={`M0,60 Q${width / 2},140 ${width},60 L${width},160 L0,160 Z`}
+              d={`M0,60 Q${width / 2},220 ${width},60 L${width},160 L0,160 Z`}
               fill="#F5EFE7"
             />
           </Svg>
@@ -242,7 +242,16 @@ export default function Onboarding() {
               shadowRadius: 5,
             }}
           >
-            <Text style={{ color: "#fff", fontSize: 28 }}>→</Text>
+            <Text
+              style={{
+                color: "#fff",
+                fontSize: 35,
+                fontWeight: 500,
+                marginBottom: 13,
+              }}
+            >
+              →
+            </Text>
           </TouchableOpacity>
         </Animated.View>
       </View>

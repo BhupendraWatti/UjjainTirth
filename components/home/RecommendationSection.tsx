@@ -15,29 +15,29 @@ export default function RecommendationSection() {
 
       {/* Card 1 */}
       <View style={styles.card}>
-        <Text style={styles.title}>Plan Your Spiritual Journey</Text>
+        <Text style={styles.title}>Customize Your Trip</Text>
 
         <Text style={styles.desc}>
-          Tell us your dates, temples, stay, and transport — we’ll arrange
-          everything for you.
+          Plan your complete Ujjain trip with stay, darshan, and transport in
+          one place.
         </Text>
 
         <TouchableOpacity style={styles.button} onPress={goToPackages}>
-          <Text style={styles.buttonText}>Create My Plan</Text>
+          <Text style={styles.buttonText}>Plan My Trip</Text>
         </TouchableOpacity>
       </View>
 
       {/* Card 2 */}
       <View style={styles.card}>
-        <Text style={styles.title}>Book Your Puja Slot Easily</Text>
+        <Text style={styles.title}>Arrange Your Puja</Text>
 
         <Text style={styles.desc}>
-          Reserve your preferred puja at Mahakaleshwar Temple with simple
-          booking.
+          Get assistance for puja in Ujjain with verified pandits and smooth
+          coordination.
         </Text>
 
         <TouchableOpacity style={styles.button} onPress={goToPuja}>
-          <Text style={styles.buttonText}>Book Now</Text>
+          <Text style={styles.buttonText}>Book Puja Instantly</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 0,
     marginTop: 20,
-    paddingBottom: 20,
+    paddingBottom: 0,
   },
 
   sectionTitle: {
@@ -65,9 +65,9 @@ const styles = StyleSheet.create({
     marginBottom: 12,
 
     elevation: 2,
-    shadowColor: "#000",
-    shadowOpacity: 0.08,
-    shadowRadius: 4,
+    shadowColor: "#00000077",
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
     shadowOffset: { width: 0, height: 2 },
   },
 

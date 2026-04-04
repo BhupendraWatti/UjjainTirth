@@ -1,24 +1,19 @@
 import { Ionicons } from "@expo/vector-icons";
-import {
-  Linking,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function Header() {
   return (
     <View style={styles.container}>
       <View>
-        <Text style={styles.title}>Jai Shree MahaKal</Text>
+        <Text style={styles.title}>Jai Shree Mahakal</Text>
         <Text style={styles.subtitle}>
           Welcome to{" "}
           <Text
-            style={styles.link}
-            onPress={() => Linking.openURL("https://ujjaintirth.com")}
-          ></Text>
-          Ujjaintirth.com
+          // style={styles.link}
+          // onPress={() => Linking.openURL("https://ujjaintirth.com")}
+          >
+            Ujjaintirth.com
+          </Text>
         </Text>
       </View>
 
@@ -40,14 +35,15 @@ const styles = StyleSheet.create({
 
   title: {
     fontSize: 18,
-    fontWeight: "600",
+    fontWeight: "700",
     color: "#8B1E1E",
   },
 
   subtitle: {
-    fontSize: 12,
+    fontSize: 14,
     color: "#777",
     marginTop: 2,
+    fontWeight: "400",
   },
 
   searchBtn: {
@@ -59,7 +55,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   link: {
-    color: "blue",
-    textDecorationLine: "underline",
+    color: "#777",
+    textDecorationLine: "none",
+    fontWeight: 500,
   },
 });

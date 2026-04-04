@@ -1,6 +1,3 @@
-import React from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
-
 import ErrorState from "@/components/common/ErrorState";
 import Header from "@/components/home/Header";
 import HeroBanner from "@/components/home/HeroBanner";
@@ -9,6 +6,10 @@ import ServicesGrid from "@/components/home/ServicesGrid";
 import LoadingSkeleton from "@/components/layout/LoadingSkeleton";
 import ScreenContainer from "@/components/layout/ScreenContainer";
 import { useServices } from "@/hooks/useServices";
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
+// import { FlatList } from "react-native-reanimated/lib/typescript/Animated";
+import { FlatList } from "react-native";
 export default function HomeScreen() {
   const { data: services, refetch, isLoading, isError } = useServices();
   // const services: Service[] = [];
@@ -31,21 +32,25 @@ export default function HomeScreen() {
   return (
     <ScreenContainer>
       <FlatList
-        data={[{}]}
-        keyExtractor={() => "home"}
-        renderItem={() => (
+        data={[]} // 👈 EMPTY (important)
+        renderItem={null}
+        ListHeaderComponent={
           <>
             <Header />
             <HeroBanner />
 
             <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Our Serivces</Text>
+              <Text style={styles.sectionTitle}>Our Services</Text>
             </View>
+
             <ServicesGrid services={services || []} />
             <RecommendationSection />
           </>
-        )}
+        }
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingBottom: 60,
+        }}
       />
     </ScreenContainer>
   );

@@ -71,7 +71,7 @@ const TempleDetailScreen = () => {
       <View style={{ flex: 1, marginTop: 2, backgroundColor: "#F5F2EA" }}>
         <ScrollView
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 140 }}
+          contentContainerStyle={{ paddingBottom: 50 }}
         >
           {/* HEADER */}
           <View style={styles.header}>

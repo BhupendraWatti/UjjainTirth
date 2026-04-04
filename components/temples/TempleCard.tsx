@@ -123,6 +123,6 @@ const styles = StyleSheet.create({
 
   viewDetails: {
     color: "#FF6A00",
-    fontWeight: "600",
+    fontWeight: "500",
   },
 });

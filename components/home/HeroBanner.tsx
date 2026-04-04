@@ -18,7 +18,7 @@ export default function HeroBanner() {
         <View style={styles.overlay}>
           <Text style={styles.title}>Book Darshan & {"\n"}Tour Packages</Text>
 
-          <Text style={styles.subtitle}>Ujjain trusted tirth App</Text>
+          <Text style={styles.subtitle}>Ujjain Trusted Tirth App</Text>
 
           <TouchableOpacity onPress={comingsoon} style={styles.button}>
             <Text style={styles.buttonText}>Explore Now</Text>
@@ -36,12 +36,14 @@ const styles = StyleSheet.create({
   },
 
   container: {
-    height: 300,
+    height: 350,
+    width: "100%",
     justifyContent: "flex-end",
   },
 
   image: {
     borderRadius: 20,
+    objectFit: "fill",
   },
 
   overlay: {
@@ -58,7 +60,7 @@ const styles = StyleSheet.create({
 
   subtitle: {
     color: "#eee",
-    fontSize: 12,
+    fontSize: 13,
     marginTop: 4,
   },
 
@@ -73,7 +75,7 @@ const styles = StyleSheet.create({
 
   buttonText: {
     color: "#fff",
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: "500",
   },
 });

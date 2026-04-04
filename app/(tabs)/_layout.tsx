@@ -8,13 +8,17 @@ export default function TabLayout() {
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: "#EB5C49",
-
+        tabBarLabelStyle: {
+          fontSize: 12, // 🔹 control text size
+          fontWeight: "600", // 🔹 control weight (500, 600, 700)
+          marginTop: 0, // optional: adjust spacing
+        },
         tabBarStyle: {
           position: "absolute",
           bottom: 0,
           left: 15,
           right: 15,
-          height: 75,
+          height: 70,
           borderRadius: 0,
           backgroundColor: "#fff",
           elevation: 10,
@@ -29,7 +33,7 @@ export default function TabLayout() {
           tabBarIcon: ({ focused }) => (
             <Image
               source={focused ? icons.home.active : icons.home.inactive}
-              style={{ width: 22, height: 22 }}
+              style={{ width: 30, height: 30 }}
             />
           ),
         }}
@@ -43,7 +47,7 @@ export default function TabLayout() {
           tabBarIcon: ({ focused }) => (
             <Image
               source={focused ? icons.temple.active : icons.temple.inactive}
-              style={{ width: 22, height: 22 }}
+              style={{ width: 30, height: 30 }}
             />
           ),
         }}
@@ -57,7 +61,7 @@ export default function TabLayout() {
           tabBarIcon: ({ focused }) => (
             <Image
               source={focused ? icons.packages.active : icons.packages.inactive}
-              style={{ width: 22, height: 22 }}
+              style={{ width: 30, height: 30 }}
             />
           ),
         }}
@@ -71,7 +75,7 @@ export default function TabLayout() {
           tabBarIcon: ({ focused }) => (
             <Image
               source={focused ? icons.puja.active : icons.puja.inactive}
-              style={{ width: 22, height: 22 }}
+              style={{ width: 35, height: 35 }}
             />
           ),
         }}
@@ -85,7 +89,7 @@ export default function TabLayout() {
           tabBarIcon: ({ focused }) => (
             <Image
               source={focused ? icons.more.active : icons.more.inactive}
-              style={{ width: 22, height: 22 }}
+              style={{ width: 35, height: 35 }}
             />
           ),
         }}

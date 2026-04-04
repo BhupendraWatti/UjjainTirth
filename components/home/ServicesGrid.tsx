@@ -11,7 +11,7 @@ import {
   View,
 } from "react-native";
 const { width } = Dimensions.get("window");
-const CARD_WIDTH = (width - 50) / 2; // spacing logic
+const CARD_WIDTH = (width - 45) / 2; // spacing logic
 const ServiceGrid = ({ services }: { services: Service[] }) => {
   const renderItem = ({ item, index }: { item: Service; index: number }) => {
     const icon = item?.acf?.service_icon;
@@ -80,15 +80,15 @@ const styles = StyleSheet.create({
     width: CARD_WIDTH,
     marginTop: 8,
     borderRadius: 16,
-    paddingVertical: 20,
+    paddingVertical: 10,
     alignItems: "center",
     justifyContent: "center",
     elevation: 4,
   },
 
   icon: {
-    width: 50,
-    height: 50,
+    width: 200,
+    height: 130,
     marginBottom: 10,
   },
 
@@ -101,10 +101,12 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: 13,
+    fontSize: 15,
     fontWeight: "600",
     textAlign: "center",
     color: "#fff",
+    paddingBottom: 20,
+    // marginTop: -10,
   },
 
   empty: {
