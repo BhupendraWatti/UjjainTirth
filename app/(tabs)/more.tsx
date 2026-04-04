@@ -1,8 +1,12 @@
 import ScreenContainer from "@/components/layout/ScreenContainer";
+import ComingSoon from "@/components/ui/ComingSoon";
 import MenuItem from "@/components/ui/MenuItem";
 import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-
+const comingsoon = () => {
+  <ComingSoon title="Coming Soon" subtitle=" "></ComingSoon>;
+};
 export default function MoreScreen() {
   return (
     <ScreenContainer>
@@ -20,18 +24,47 @@ export default function MoreScreen() {
         </View>
 
         <TouchableOpacity style={styles.loginBtn}>
-          <Text style={styles.loginText}>Login / Sign Up</Text>
+          <Text
+            onPress={() => router.push("/coming-soon")}
+            style={styles.loginText}
+          >
+            Login / Sign Up
+          </Text>
         </TouchableOpacity>
       </View>
 
       {/* MENU LIST */}
       <View style={styles.menuCard}>
-        <MenuItem title="My Bookings" icon="calendar-outline" />
-        <MenuItem title="Contact Us" icon="call-outline" />
-        <MenuItem title="About Ujjain" icon="information-circle-outline" />
-        <MenuItem title="Language" icon="globe-outline" />
-        <MenuItem title="Help & Support" icon="help-circle-outline" />
-        <MenuItem title="Privacy Policy" icon="shield-checkmark-outline" />
+        <MenuItem
+          onPress={comingsoon}
+          title="My Bookings"
+          icon="calendar-outline"
+        />
+        <MenuItem
+          onPress={() => router.push("/coming-soon")}
+          title="Contact Us"
+          icon="call-outline"
+        />
+        <MenuItem
+          onPress={() => router.push("/coming-soon")}
+          title="About Ujjain"
+          icon="information-circle-outline"
+        />
+        <MenuItem
+          onPress={() => router.push("/coming-soon")}
+          title="Language"
+          icon="globe-outline"
+        />
+        <MenuItem
+          onPress={() => router.push("/coming-soon")}
+          title="Help & Support"
+          icon="help-circle-outline"
+        />
+        <MenuItem
+          onPress={() => router.push("/coming-soon")}
+          title="Privacy Policy"
+          icon="shield-checkmark-outline"
+        />
       </View>
 
       {/* SUPPORT CARD */}
@@ -41,7 +74,12 @@ export default function MoreScreen() {
 
         <TouchableOpacity style={styles.callBtn}>
           <Ionicons name="call-outline" size={18} color="#fff" />
-          <Text style={styles.callText}>Call Now</Text>
+          <Text
+            onPress={() => router.push("/coming-soon")}
+            style={styles.callText}
+          >
+            Call Now
+          </Text>
         </TouchableOpacity>
       </View>
     </ScreenContainer>

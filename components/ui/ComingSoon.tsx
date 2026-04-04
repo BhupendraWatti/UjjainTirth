@@ -75,7 +75,7 @@ export default ComingSoon;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f4e5be",
+    backgroundColor: "#F5F2EA",
     justifyContent: "center",
     alignItems: "center",
     width: "100%",

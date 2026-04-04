@@ -193,11 +193,11 @@ export default function PackagesScreen() {
       />
 
       {/* CONTENT */}
-      {activeTab === "custom" ? (
+      {activeTab === "list" ? (
         <View style={{ flex: 1 }}>
           <ComingSoon
-            title="Customize Package"
-            subtitle="Build your own spiritual journey"
+            title="Coming Soon"
+            subtitle="Personalized Packages Coming Soon"
           />
         </View>
       ) : (
@@ -218,8 +218,8 @@ export default function PackagesScreen() {
         // />
         <View style={{ flex: 1 }}>
           <ComingSoon
-            title="Latest Packages"
-            subtitle="Packages will be available soon"
+            title="Coming Soon"
+            subtitle="Curated Spiritual Packages Coming Soon"
           />
         </View>
       )}

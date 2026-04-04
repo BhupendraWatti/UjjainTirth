@@ -4,11 +4,12 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 type Props = {
   title: string;
   icon: keyof typeof Ionicons.glyphMap;
+  onPress?: () => void;
 };
 
-export default function MenuItem({ title, icon }: Props) {
+export default function MenuItem({ title, icon, onPress }: Props) {
   return (
-    <TouchableOpacity style={styles.item}>
+    <TouchableOpacity style={styles.item} onPress={onPress}>
       <View style={styles.left}>
         <Ionicons name={icon} size={20} color="#444" />
         <Text style={styles.text}>{title}</Text>

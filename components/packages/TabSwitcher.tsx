@@ -77,8 +77,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: "#F3E3DF",
     borderRadius: 30,
-    padding: 4,
+    padding: 0,
     overflow: "hidden",
+    marginBottom: 3,
   },
 
   slider: {
