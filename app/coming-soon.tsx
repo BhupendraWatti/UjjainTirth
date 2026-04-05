@@ -20,7 +20,10 @@ export default function ComingSoonScreen() {
 
       {/* CONTENT */}
       <View style={styles.content}>
-        <ComingSoon title="Coming Soon" subtitle="" />
+        <ComingSoon
+          title="Coming Soon"
+          subtitle=""
+        />
       </View>
     </ScreenContainer>
   );

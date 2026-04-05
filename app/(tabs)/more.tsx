@@ -36,7 +36,7 @@ export default function MoreScreen() {
       {/* MENU LIST */}
       <View style={styles.menuCard}>
         <MenuItem
-          onPress={comingsoon}
+          onPress={() => router.push("/coming-soon")}
           title="My Bookings"
           icon="calendar-outline"
         />

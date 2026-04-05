@@ -17,6 +17,7 @@ import {
 import LoadingSkeleton from "@/components/layout/LoadingSkeleton";
 import { fetchTempleBySlug } from "@/services/templeService";
 import { Temple } from "@/types/temple";
+import { router } from "expo-router";
 // import MapCard from "../../../components/temples/MapCard";
 const TempleDetailScreen = () => {
   const { slug } = useLocalSearchParams<{ slug: string }>();
@@ -138,7 +139,12 @@ const TempleDetailScreen = () => {
 
         {/* CTA BUTTON */}
         <TouchableOpacity style={styles.cta}>
-          <Text style={styles.ctaText}>Book My Darshan</Text>
+          <Text
+            onPress={() => router.push("/coming-soon")}
+            style={styles.ctaText}
+          >
+            Book My Darshan
+          </Text>
         </TouchableOpacity>
       </View>
     </>
