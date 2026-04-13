@@ -48,6 +48,8 @@ export default function UserCard({
           style={styles.loginBtn}
           activeOpacity={0.8}
           onPress={() => router.push("/coming-soon")}
+          accessibilityRole="button"
+          accessibilityLabel="Login or Sign Up"
         >
           <Ionicons name="log-in-outline" size={18} color="#FFF" />
           <Text style={styles.loginText}>Login / Sign Up</Text>
