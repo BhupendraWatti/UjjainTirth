@@ -1,7 +1,4 @@
-import {
-  LOCATION_CONFIG,
-  TEMPLE_COORDINATES,
-} from "@/constants/templeCoordinates";
+import { LOCATION_CONFIG } from "@/constants/templeCoordinates";
 import { Temple } from "@/types/temple";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Location from "expo-location";
@@ -21,7 +18,7 @@ export interface DistanceMap {
 
 // ─── Haversine Formula ────────────────────────────────────────────
 /**
- * Calculate the straight-line distance between two GPS coordinates.
+ * Great-circle distance between two GPS coordinates.
  * Returns distance in kilometers.
  */
 function haversineDistance(
@@ -30,51 +27,50 @@ function haversineDistance(
   lat2: number,
   lon2: number
 ): number {
-  const R = 6371; // Earth's radius in km
-  const dLat = ((lat2 - lat1) * Math.PI) / 180;
-  const dLon = ((lon2 - lon1) * Math.PI) / 180;
+  const R = 6371.0088; // Earth's mean radius in km
+  const toRad = Math.PI / 180;
+  const dLat = (lat2 - lat1) * toRad;
+  const dLon = (lon2 - lon1) * toRad;
   const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos((lat1 * Math.PI) / 180) *
-      Math.cos((lat2 * Math.PI) / 180) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
+    Math.sin(dLat * 0.5) * Math.sin(dLat * 0.5) +
+    Math.cos(lat1 * toRad) *
+      Math.cos(lat2 * toRad) *
+      Math.sin(dLon * 0.5) *
+      Math.sin(dLon * 0.5);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   return R * c;
 }
 
-// ─── Extract coordinates from map_url ─────────────────────────────
-/**
- * Try to extract lat/lng from Google Maps URL in the API response.
- * Example URL: "https://www.google.com/maps/dir/23.1479492,75.7956608/..."
- */
+// ─── Extract coordinates from Google Maps URL ─────────────────────
 function extractCoordsFromMapUrl(
   mapUrl: string
 ): { lat: number; lng: number } | null {
   if (!mapUrl) return null;
 
-  // Pattern 1: /dir/lat,lng/
-  const dirMatch = mapUrl.match(/\/dir\/([\d.-]+),([\d.-]+)/);
-  if (dirMatch) {
-    // This is the USER's location in the directions URL, skip it
-    // Try to find the destination coordinates
-    const destMatch = mapUrl.match(/@([\d.-]+),([\d.-]+)/);
-    if (destMatch) {
-      const lat = parseFloat(destMatch[1]);
-      const lng = parseFloat(destMatch[2]);
-      if (!isNaN(lat) && !isNaN(lng)) return { lat, lng };
+  // Google Maps embeds destination coords as !2d<lng>!2d<lat> in the data path
+  // or as @lat,lng in the URL. Try the most reliable patterns:
+
+  // Pattern 1: !2d{lng}!2d{lat} — most reliable for destination
+  const dataMatch = mapUrl.match(/!1d([\d.-]+)!2d([\d.-]+)/);
+  if (dataMatch) {
+    const lng = parseFloat(dataMatch[1]);
+    const lat = parseFloat(dataMatch[2]);
+    if (!isNaN(lat) && !isNaN(lng) && lat !== 0 && lng !== 0) {
+      return { lat, lng };
     }
   }
 
-  // Pattern 2: @lat,lng
+  // Pattern 2: @lat,lng — common in Google Maps URLs
   const atMatch = mapUrl.match(/@([\d.-]+),([\d.-]+)/);
   if (atMatch) {
     const lat = parseFloat(atMatch[1]);
     const lng = parseFloat(atMatch[2]);
-    if (!isNaN(lat) && !isNaN(lng)) return { lat, lng };
+    if (!isNaN(lat) && !isNaN(lng) && lat !== 0 && lng !== 0) {
+      return { lat, lng };
+    }
   }
 
-  // Pattern 3: ?q=lat,lng or place/lat,lng
+  // Pattern 3: ?q=lat,lng
   const qMatch = mapUrl.match(/[?&]q=([\d.-]+),([\d.-]+)/);
   if (qMatch) {
     const lat = parseFloat(qMatch[1]);
@@ -85,30 +81,24 @@ function extractCoordsFromMapUrl(
   return null;
 }
 
-// ─── Get temple coordinates (API → hardcoded fallback) ───────────
-function getTempleCoords(
+// ─── Get temple coordinates from API data ─────────────────────────
+/**
+ * Coordinate resolution (2-tier — API first, map_url fallback):
+ *   1. acf.latitude + acf.longitude from the WordPress API
+ *   2. Extract from acf.map_url (Google Maps URL)
+ */
+export function getTempleCoords(
   temple: Temple
 ): { lat: number; lng: number } | null {
-  // 1. Try API lat/lng fields
+  // 1. API lat/lng — primary source (every temple should have this)
   const apiLat = parseFloat(temple.acf?.latitude || "");
   const apiLng = parseFloat(temple.acf?.longitude || "");
   if (!isNaN(apiLat) && !isNaN(apiLng) && apiLat !== 0 && apiLng !== 0) {
     return { lat: apiLat, lng: apiLng };
   }
 
-  // 2. Try hardcoded coordinates by slug
-  const hardcoded = TEMPLE_COORDINATES[temple.slug];
-  if (hardcoded) {
-    return hardcoded;
-  }
-
-  // 3. Try extracting from map_url
-  const fromUrl = extractCoordsFromMapUrl(temple.acf?.map_url || "");
-  if (fromUrl) {
-    return fromUrl;
-  }
-
-  return null;
+  // 2. Fallback — extract from map_url
+  return extractCoordsFromMapUrl(temple.acf?.map_url || "");
 }
 
 // ─── Batch calculate distances ────────────────────────────────────
@@ -118,7 +108,8 @@ function batchCalculateDistances(
 ): DistanceMap {
   const distances: DistanceMap = {};
 
-  temples.forEach((temple) => {
+  for (let i = 0; i < temples.length; i++) {
+    const temple = temples[i];
     const coords = getTempleCoords(temple);
     if (coords) {
       const dist = haversineDistance(
@@ -127,11 +118,13 @@ function batchCalculateDistances(
         coords.lat,
         coords.lng
       );
-      distances[temple.id] = Math.round(dist * 10) / 10; // 1 decimal place
+      // 2 decimal places for <10km, 1 decimal for ≥10km
+      distances[temple.id] =
+        dist < 10 ? Math.round(dist * 100) / 100 : Math.round(dist * 10) / 10;
     } else {
-      distances[temple.id] = null; // unknown
+      distances[temple.id] = null;
     }
-  });
+  }
 
   return distances;
 }
@@ -148,11 +141,10 @@ async function loadCachedDistances(): Promise<CachedDistances | null> {
   try {
     const cached = await AsyncStorage.getItem(LOCATION_CONFIG.CACHE_KEY);
     if (!cached) return null;
-
     const parsed: CachedDistances = JSON.parse(cached);
-    const isExpired =
-      Date.now() - parsed.timestamp > LOCATION_CONFIG.CACHE_TTL_MS;
-    return isExpired ? null : parsed;
+    return Date.now() - parsed.timestamp > LOCATION_CONFIG.CACHE_TTL_MS
+      ? null
+      : parsed;
   } catch {
     return null;
   }
@@ -163,32 +155,33 @@ async function saveCachedDistances(
   userLoc: UserLocation
 ): Promise<void> {
   try {
-    const data: CachedDistances = {
-      distances,
-      timestamp: Date.now(),
-      userLat: userLoc.latitude,
-      userLng: userLoc.longitude,
-    };
     await AsyncStorage.setItem(
       LOCATION_CONFIG.CACHE_KEY,
-      JSON.stringify(data)
+      JSON.stringify({
+        distances,
+        timestamp: Date.now(),
+        userLat: userLoc.latitude,
+        userLng: userLoc.longitude,
+      } satisfies CachedDistances)
     );
   } catch {
-    // Silent fail — cache is not critical
+    // Silent fail
   }
 }
 
 // ─── Main Hook ────────────────────────────────────────────────────
 /**
- * Custom hook that provides:
- * - Real-time user location tracking
- * - Batch distance calculation for all temples
- * - Automatic recalculation on user movement
- * - Cached distances fallback
+ * Real-time temple distance tracking hook.
  *
- * Usage:
- *   const { distances, locationStatus } = useTempleDistances(temples);
- *   const dist = distances[temple.id]; // number | null
+ * How it works:
+ * 1. Requests GPS permission
+ * 2. Gets initial position (High accuracy)
+ * 3. Watches for location changes (50m / 8s interval)
+ * 4. On every GPS update → batch-calculates distance to ALL temples
+ * 5. Caches results to AsyncStorage
+ *
+ * Coordinates come from the API (acf.latitude / acf.longitude).
+ * Every temple in the WordPress backend has these fields populated.
  */
 export function useTempleDistances(temples: Temple[]) {
   const [distances, setDistances] = useState<DistanceMap>({});
@@ -197,124 +190,138 @@ export function useTempleDistances(temples: Temple[]) {
   const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
 
   const watchRef = useRef<Location.LocationSubscription | null>(null);
-  const lastCalcLocation = useRef<UserLocation | null>(null);
+  const lastCalcRef = useRef<UserLocation | null>(null);
+  const isFirstCalcRef = useRef(true);
+  const templesRef = useRef(temples);
+  templesRef.current = temples;
 
   // ── Request permission + start watching ──
   useEffect(() => {
-    let isMounted = true;
+    let mounted = true;
 
-    const startTracking = async () => {
+    (async () => {
       try {
-        // Load cached distances while we wait for GPS
+        // Load cache while waiting for GPS
         const cached = await loadCachedDistances();
-        if (cached && isMounted) {
+        if (cached && mounted) {
           setDistances(cached.distances);
         }
 
-        // Request foreground permission
         const { status } = await Location.requestForegroundPermissionsAsync();
-
         if (status !== "granted") {
-          if (isMounted) setLocationStatus("denied");
+          if (mounted) setLocationStatus("denied");
           return;
         }
+        if (mounted) setLocationStatus("granted");
 
-        if (isMounted) setLocationStatus("granted");
-
-        // Get initial position quickly (low accuracy)
+        // Get initial position with HIGH accuracy
         try {
           const initial = await Location.getCurrentPositionAsync({
-            accuracy: Location.Accuracy.Balanced,
+            accuracy: Location.Accuracy.High,
           });
-          if (isMounted) {
+          if (mounted) {
             setUserLocation({
               latitude: initial.coords.latitude,
               longitude: initial.coords.longitude,
             });
           }
         } catch {
-          // Initial position failed, will rely on watch
+          // Will rely on watch callback
         }
 
-        // Start watching position
-        const subscription = await Location.watchPositionAsync(
+        // Watch position — recalculate on movement
+        const sub = await Location.watchPositionAsync(
           {
-            accuracy: Location.Accuracy.Balanced,
+            accuracy: Location.Accuracy.High,
             distanceInterval: LOCATION_CONFIG.DISTANCE_INTERVAL_METERS,
             timeInterval: LOCATION_CONFIG.TIME_INTERVAL_MS,
           },
-          (location) => {
-            if (isMounted) {
+          (loc) => {
+            if (mounted) {
               setUserLocation({
-                latitude: location.coords.latitude,
-                longitude: location.coords.longitude,
+                latitude: loc.coords.latitude,
+                longitude: loc.coords.longitude,
               });
             }
           }
         );
 
-        watchRef.current = subscription;
-      } catch (error) {
-        console.warn("Location tracking error:", error);
-        if (isMounted) setLocationStatus("unavailable");
+        watchRef.current = sub;
+      } catch (err) {
+        console.warn("[useTempleDistances] Error:", err);
+        if (mounted) setLocationStatus("unavailable");
       }
-    };
-
-    startTracking();
+    })();
 
     return () => {
-      isMounted = false;
+      mounted = false;
       watchRef.current?.remove();
     };
   }, []);
 
-  // ── Recalculate distances when user moves ──
-  const recalculate = useCallback(() => {
-    if (!userLocation || temples.length === 0) return;
+  // ── Recalculate distances when user location changes ──
+  useEffect(() => {
+    if (!userLocation || templesRef.current.length === 0) return;
 
-    // Check if user moved enough to recalculate
-    if (lastCalcLocation.current) {
+    // Always calculate on first render (no skip)
+    if (!isFirstCalcRef.current && lastCalcRef.current) {
       const movedKm = haversineDistance(
-        lastCalcLocation.current.latitude,
-        lastCalcLocation.current.longitude,
+        lastCalcRef.current.latitude,
+        lastCalcRef.current.longitude,
         userLocation.latitude,
         userLocation.longitude
       );
-      // Skip if moved less than 50 meters
-      if (movedKm < 0.05) return;
+      // Skip if user hasn't moved at least 30 meters
+      if (movedKm < 0.03) return;
     }
 
+    isFirstCalcRef.current = false;
+    const newDistances = batchCalculateDistances(
+      userLocation,
+      templesRef.current
+    );
+    setDistances(newDistances);
+    lastCalcRef.current = userLocation;
+
+    // Cache asynchronously (non-blocking)
+    saveCachedDistances(newDistances, userLocation);
+  }, [userLocation]);
+
+  // ── Also recalculate if temples list changes (e.g. new page loaded) ──
+  useEffect(() => {
+    if (!userLocation || temples.length === 0) return;
     const newDistances = batchCalculateDistances(userLocation, temples);
     setDistances(newDistances);
-    lastCalcLocation.current = userLocation;
+  }, [temples.length]);
 
-    // Save to cache
-    saveCachedDistances(newDistances, userLocation);
-  }, [userLocation, temples]);
-
-  useEffect(() => {
-    recalculate();
-  }, [recalculate]);
+  const refresh = useCallback(() => {
+    if (!userLocation) return;
+    isFirstCalcRef.current = true;
+    lastCalcRef.current = null;
+    const newDistances = batchCalculateDistances(
+      userLocation,
+      templesRef.current
+    );
+    setDistances(newDistances);
+  }, [userLocation]);
 
   return {
     distances,
     locationStatus,
     userLocation,
-    /** Force recalculate distances */
-    refresh: recalculate,
+    refresh,
   };
 }
 
 /**
  * Format distance for display.
- *   < 1 km → "800 m"
- *   >= 1 km → "2.3 km"
- *   null → null
+ *   < 1 km  → "800 m"
+ *   1–10 km → "2.3 km"
+ *   > 10 km → "15 km"
  */
 export function formatDistance(km: number | null | undefined): string | null {
   if (km === null || km === undefined) return null;
-  if (km < 1) {
-    return `${Math.round(km * 1000)} m`;
-  }
-  return `${km.toFixed(1)} km`;
+  if (km < 1) return `${Math.round(km * 1000)} m`;
+  if (km < 10) return `${km.toFixed(1)} km`;
+  return `${Math.round(km)} km`;
 }

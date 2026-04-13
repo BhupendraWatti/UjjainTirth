@@ -2,7 +2,7 @@ import CollapsibleSection from "@/components/temples/CollapsibleSection";
 import MapCard from "@/components/temples/MapCard";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams } from "expo-router";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Image,
   Linking,
@@ -12,13 +12,12 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-// import CollapsibleSection from "../../../components/temples/CollapsibleSection";
-// import MapCard from "@/components/temples/MapCard";
 import LoadingSkeleton from "@/components/layout/LoadingSkeleton";
+import { useTempleDistances, formatDistance } from "@/hooks/useTempleDistances";
 import { fetchTempleBySlug } from "@/services/templeService";
 import { Temple } from "@/types/temple";
 import { router } from "expo-router";
-// import MapCard from "../../../components/temples/MapCard";
+
 const TempleDetailScreen = () => {
   const { slug } = useLocalSearchParams<{ slug: string }>();
 
@@ -46,6 +45,14 @@ const TempleDetailScreen = () => {
     if (slug) loadTemple();
   }, [slug]);
 
+  // ── Distance tracking for this single temple ──
+  const templesArray = useMemo(
+    () => (temple ? [temple] : []),
+    [temple]
+  );
+  const { distances, locationStatus } = useTempleDistances(templesArray);
+  const distanceKm = temple ? distances[temple.id] ?? null : null;
+
   if (loading) {
     return <LoadingSkeleton />;
   }
@@ -57,9 +64,11 @@ const TempleDetailScreen = () => {
       </View>
     );
   }
+
   const aarti = Array.isArray(temple?.acf?.aarti_periods)
     ? temple.acf.aarti_periods
     : [];
+
   const openMap = () => {
     if (temple.acf?.map_url) {
       Linking.openURL(temple.acf.map_url);
@@ -68,7 +77,6 @@ const TempleDetailScreen = () => {
 
   return (
     <>
-      {/* <ScreenContainer /> */}
       <View style={{ flex: 1, marginTop: 2, backgroundColor: "#F5F2EA" }}>
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -85,10 +93,21 @@ const TempleDetailScreen = () => {
             />
 
             <View style={styles.headerContent}>
-              <View style={styles.badge}>
-                <Text style={styles.badgeText}>
-                  {temple.acf?.temple_tag?.name || "Temple"}
-                </Text>
+              <View style={styles.badgeRow}>
+                <View style={styles.badge}>
+                  <Text style={styles.badgeText}>
+                    {temple.acf?.temple_tag?.name || "Temple"}
+                  </Text>
+                </View>
+
+                {/* Distance badge on header */}
+                {distanceKm !== null && (
+                  <View style={styles.distanceBadge}>
+                    <Text style={styles.distanceBadgeText}>
+                      📍 {formatDistance(distanceKm)}
+                    </Text>
+                  </View>
+                )}
               </View>
 
               <Text style={styles.title}>{temple.title}</Text>
@@ -128,6 +147,7 @@ const TempleDetailScreen = () => {
               latitude={Number(temple.acf?.latitude)}
               longitude={Number(temple.acf?.longitude)}
               mapUrl={temple.acf?.map_url}
+              distanceKm={distanceKm}
               title={temple.title}
               address="Ujjain, Madhya Pradesh"
               onPress={openMap}
@@ -173,18 +193,36 @@ const styles = StyleSheet.create({
     bottom: 20,
     left: 16,
   },
+  badgeRow: {
+    flexDirection: "row",
+    gap: 8,
+    marginBottom: 8,
+  },
   badge: {
     backgroundColor: "#EB5C49",
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 20,
-    marginBottom: 8,
     alignSelf: "flex-start",
   },
   badgeText: {
     color: "#fff",
     fontSize: 14,
-    fontWeight: 700,
+    fontWeight: "700",
+  },
+  distanceBadge: {
+    backgroundColor: "rgba(255,255,255,0.2)",
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 20,
+    alignSelf: "flex-start",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.15)",
+  },
+  distanceBadgeText: {
+    color: "#fff",
+    fontSize: 13,
+    fontWeight: "700",
   },
   title: {
     color: "#fff",

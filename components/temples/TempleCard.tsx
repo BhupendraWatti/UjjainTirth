@@ -1,14 +1,12 @@
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
-import React, { memo } from "react";
+import React, { memo, useCallback } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import Badge from "@/components/ui/Badge";
 import Card from "@/components/ui/Card";
-import { COLORS } from "@/constants/colors";
-import { formatDistance } from "@/hooks/useTempleDistances";
+import { formatDistance, LocationStatus } from "@/hooks/useTempleDistances";
 import { Temple } from "@/types/temple";
-import { LocationStatus } from "@/hooks/useTempleDistances";
 
 interface TempleCardProps {
   temple: Temple;
@@ -31,18 +29,16 @@ const TempleCard = ({ temple, distance, locationStatus }: TempleCardProps) => {
     ? temple.acf.temple_short_description.replace(/<[^>]+>/g, "").slice(0, 110)
     : "";
 
-  const handlePress = () => {
+  const handlePress = useCallback(() => {
     if (!temple.slug) return;
     router.push({
       pathname: "/temples/[slug]" as any,
       params: { slug: temple.slug },
     });
-  };
+  }, [temple.slug, router]);
 
-  // Format the distance text
   const distanceText = formatDistance(distance);
 
-  // Determine what to show for distance
   const renderDistanceBadge = () => {
     if (locationStatus === "denied") {
       return (
@@ -71,42 +67,46 @@ const TempleCard = ({ temple, distance, locationStatus }: TempleCardProps) => {
       );
     }
 
-    // No coordinates available for this temple
     return null;
   };
 
   return (
-    <Card style={styles.card}>
-      <View style={styles.container}>
-        <Image
-          source={{ uri: image }}
-          style={styles.image}
-          contentFit="cover"
-          transition={200}
-        />
+    <TouchableOpacity
+      activeOpacity={0.7}
+      onPress={handlePress}
+      accessibilityRole="button"
+      accessibilityLabel={`View ${title} details`}
+    >
+      <Card style={styles.card}>
+        <View style={styles.container}>
+          <Image
+            source={{ uri: image }}
+            style={styles.image}
+            contentFit="cover"
+            transition={200}
+          />
 
-        <View style={styles.content}>
-          <Text style={styles.title} numberOfLines={1}>
-            {title}
-          </Text>
+          <View style={styles.content}>
+            <Text style={styles.title} numberOfLines={1}>
+              {title}
+            </Text>
 
-          <Text style={styles.description} numberOfLines={2}>
-            {description}
-          </Text>
+            <Text style={styles.description} numberOfLines={2}>
+              {description}
+            </Text>
 
-          <View style={styles.footer}>
-            <View style={styles.footerLeft}>
-              <Badge label={tag} />
-              {renderDistanceBadge()}
-            </View>
+            <View style={styles.footer}>
+              <View style={styles.footerLeft}>
+                <Badge label={tag} />
+                {renderDistanceBadge()}
+              </View>
 
-            <TouchableOpacity onPress={handlePress} activeOpacity={0.7}>
               <Text style={styles.viewDetails}>View Details →</Text>
-            </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </View>
-    </Card>
+      </Card>
+    </TouchableOpacity>
   );
 };
 
@@ -159,7 +159,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 6,
-    flex: 1,
+    flexShrink: 1,
+    flexWrap: "wrap",
+    marginRight: 8,
   },
 
   // ── Distance Badge (active) ──
@@ -229,5 +231,6 @@ const styles = StyleSheet.create({
     color: "#FF6A00",
     fontWeight: "500",
     fontSize: 13,
+    flexShrink: 0,
   },
 });
