@@ -5,50 +5,76 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import Badge from "@/components/ui/Badge";
 import Card from "@/components/ui/Card";
+import { COLORS } from "@/constants/colors";
+import { formatDistance } from "@/hooks/useTempleDistances";
 import { Temple } from "@/types/temple";
+import { LocationStatus } from "@/hooks/useTempleDistances";
 
 interface TempleCardProps {
   temple: Temple;
+  /** Distance in km (null = unknown, undefined = not loaded yet) */
+  distance?: number | null;
+  /** GPS status to show appropriate fallback text */
+  locationStatus?: LocationStatus;
 }
 
-const TempleCard = ({ temple }: TempleCardProps) => {
+const TempleCard = ({ temple, distance, locationStatus }: TempleCardProps) => {
   const router = useRouter();
 
-  // const image =
-  //   temple._embedded?.['wp:featuredmedia']?.[0]?.source_url ||
-  //   'https://via.placeholder.com/300';
   const image =
     temple?.image && temple.image.trim() !== ""
       ? temple.image
       : "https://via.placeholder.com/300";
   const title = temple.title;
-
-  // const tag = temple.acf.temple_tag.name;
   const tag = temple?.acf?.temple_tag?.name || "No Tag";
-
-  // const description = temple.acf.temple_short_description
-  //   .replace(/<[^>]+>/g, "")
-  //   .slice(0, 110);
-
   const description = temple?.acf?.temple_short_description
     ? temple.acf.temple_short_description.replace(/<[^>]+>/g, "").slice(0, 110)
     : "";
+
   const handlePress = () => {
-    // console.log("CLICKED:", temple.slug);
-
-    if (!temple.slug) {
-      // console.log("Slug missing!");
-      return;
-    }
-
+    if (!temple.slug) return;
     router.push({
       pathname: "/temples/[slug]" as any,
       params: { slug: temple.slug },
     });
   };
-  // console.log("Navigating to:", `/temples/${temple.slug}`);
-  // console.log("TEMPLE:", temple);
-  // console.log("TEMPLE DATA:", JSON.stringify(temple, null, 2));
+
+  // Format the distance text
+  const distanceText = formatDistance(distance);
+
+  // Determine what to show for distance
+  const renderDistanceBadge = () => {
+    if (locationStatus === "denied") {
+      return (
+        <View style={styles.distanceBadgeOff}>
+          <Text style={styles.distanceIconOff}>📍</Text>
+          <Text style={styles.distanceTextOff}>GPS off</Text>
+        </View>
+      );
+    }
+
+    if (locationStatus === "loading") {
+      return (
+        <View style={styles.distanceBadgeLoading}>
+          <Text style={styles.distanceIconLoading}>📍</Text>
+          <Text style={styles.distanceTextLoading}>...</Text>
+        </View>
+      );
+    }
+
+    if (distanceText) {
+      return (
+        <View style={styles.distanceBadge}>
+          <Text style={styles.distanceIcon}>📍</Text>
+          <Text style={styles.distanceText}>{distanceText}</Text>
+        </View>
+      );
+    }
+
+    // No coordinates available for this temple
+    return null;
+  };
+
   return (
     <Card style={styles.card}>
       <View style={styles.container}>
@@ -60,12 +86,19 @@ const TempleCard = ({ temple }: TempleCardProps) => {
         />
 
         <View style={styles.content}>
-          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.title} numberOfLines={1}>
+            {title}
+          </Text>
 
-          <Text style={styles.description}>{description}</Text>
+          <Text style={styles.description} numberOfLines={2}>
+            {description}
+          </Text>
 
           <View style={styles.footer}>
-            <Badge label={tag} />
+            <View style={styles.footerLeft}>
+              <Badge label={tag} />
+              {renderDistanceBadge()}
+            </View>
 
             <TouchableOpacity onPress={handlePress} activeOpacity={0.7}>
               <Text style={styles.viewDetails}>View Details →</Text>
@@ -113,6 +146,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: "#555",
     marginBottom: 8,
+    lineHeight: 18,
   },
 
   footer: {
@@ -121,8 +155,79 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
+  footerLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    flex: 1,
+  },
+
+  // ── Distance Badge (active) ──
+  distanceBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#E8F5E9",
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 10,
+    gap: 3,
+  },
+
+  distanceIcon: {
+    fontSize: 10,
+  },
+
+  distanceText: {
+    fontSize: 11,
+    fontWeight: "700",
+    color: "#2E7D32",
+  },
+
+  // ── Distance Badge (loading) ──
+  distanceBadgeLoading: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#F5F5F5",
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 10,
+    gap: 3,
+  },
+
+  distanceIconLoading: {
+    fontSize: 10,
+  },
+
+  distanceTextLoading: {
+    fontSize: 11,
+    fontWeight: "600",
+    color: "#999",
+  },
+
+  // ── Distance Badge (GPS off) ──
+  distanceBadgeOff: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#FFF3E0",
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 10,
+    gap: 3,
+  },
+
+  distanceIconOff: {
+    fontSize: 10,
+  },
+
+  distanceTextOff: {
+    fontSize: 11,
+    fontWeight: "600",
+    color: "#E65100",
+  },
+
   viewDetails: {
     color: "#FF6A00",
     fontWeight: "500",
+    fontSize: 13,
   },
 });

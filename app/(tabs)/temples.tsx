@@ -10,6 +10,7 @@ import TempleSearch from "@/components/temples/TempleSearch";
 import EmptyState from "@/components/common/EmptyState";
 import ErrorState from "@/components/common/ErrorState";
 
+import { useTempleDistances } from "@/hooks/useTempleDistances";
 import { useTemples } from "@/hooks/useTemples";
 
 export default function TemplesScreen() {
@@ -27,12 +28,14 @@ export default function TemplesScreen() {
   } = useTemples({
     tag: selectedTag,
   });
-  // const { data: tags } = useTempleTags();
 
   const temples = useMemo(() => {
     if (!data) return [];
     return data.pages.flatMap((page) => page.data);
   }, [data]);
+
+  // ── Real-time distance tracking ──
+  const { distances, locationStatus } = useTempleDistances(temples);
 
   const categories = useMemo(() => {
     const map = new Map();
@@ -71,8 +74,6 @@ export default function TemplesScreen() {
     return result;
   }, [temples, selectedTag, search]);
 
-  // console.log("CATEGORIES:", categories);
-
   if (isLoading) {
     return (
       <ScreenContainer>
@@ -94,7 +95,13 @@ export default function TemplesScreen() {
       <FlatList
         data={filteredData}
         keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => <TempleCard temple={item} />}
+        renderItem={({ item }) => (
+          <TempleCard
+            temple={item}
+            distance={distances[item.id]}
+            locationStatus={locationStatus}
+          />
+        )}
         ListHeaderComponent={
           <>
             <Text style={styles.title}>Temples in Ujjain</Text>
@@ -130,7 +137,7 @@ export default function TemplesScreen() {
         }
         contentContainerStyle={{
           paddingBottom: 60,
-          flexGrow: 1, // 🔥 critical
+          flexGrow: 1,
         }}
         ListEmptyComponent={
           <EmptyState
@@ -184,7 +191,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   filterPlaceholder: {
-    height: 0, // 🔥 same height as filterBox
+    height: 0,
   },
   filterContainer: {
     marginTop: 4,
