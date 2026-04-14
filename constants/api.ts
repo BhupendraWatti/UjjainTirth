@@ -15,6 +15,7 @@ export const API_ENDPOINTS = {
   SERVICES: "/services",
   ONBOARDING: "/onboarding",
   PACKAGES: "/packages",
+  SHARE_APP: "/share-app",
 };
 
 /**

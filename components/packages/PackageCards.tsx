@@ -1,9 +1,13 @@
+import { APP_CONFIG } from "@/constants/appConfig";
 import { COLORS } from "@/constants/colors";
 import { Package } from "@/types/product";
 import { LinearGradient } from "expo-linear-gradient";
+import * as Linking from "expo-linking";
 import React from "react";
 import {
+  Alert,
   Image,
+  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -22,6 +26,23 @@ const PLACEHOLDER_IMAGE =
 export default function PackageCard({ item, onPress }: Props) {
   const imageUri =
     item.image && item.image.trim() !== "" ? item.image : PLACEHOLDER_IMAGE;
+
+  const handleCall = async () => {
+    const telUrl = Platform.select({
+      ios: `telprompt:${APP_CONFIG.SUPPORT_PHONE}`,
+      android: `tel:${APP_CONFIG.SUPPORT_PHONE}`,
+      default: `tel:${APP_CONFIG.SUPPORT_PHONE}`,
+    });
+    try {
+      if (await Linking.canOpenURL(telUrl)) {
+        await Linking.openURL(telUrl);
+      } else {
+        Alert.alert("Cannot Make Call", "Phone calling is not supported on this device.");
+      }
+    } catch {
+      Alert.alert("Error", "Something went wrong while trying to make the call.");
+    }
+  };
 
   // package_details might not exist from the list API
   const details = item.package_details;
@@ -54,11 +75,11 @@ export default function PackageCard({ item, onPress }: Props) {
         </View>
 
         {/* Price tag on image */}
-        <View style={styles.priceTag}>
+        {/* <View style={styles.priceTag}>
           <Text style={styles.priceSymbol}>₹</Text>
           <Text style={styles.priceAmount}>{item.price}</Text>
           <Text style={styles.pricePer}>/person</Text>
-        </View>
+        </View> */}
       </View>
 
       {/* Content Section */}
@@ -111,9 +132,7 @@ export default function PackageCard({ item, onPress }: Props) {
           <TouchableOpacity
             style={styles.bookButton}
             activeOpacity={0.7}
-            onPress={() => {
-              // Non-functional button
-            }}
+            onPress={handleCall}
           >
             <LinearGradient
               colors={[COLORS.primary, "#D94535"]}

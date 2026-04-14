@@ -1,10 +1,13 @@
 import { COLORS } from "@/constants/colors";
+import { APP_CONFIG } from "@/constants/appConfig";
 import { usePackageDetail } from "@/hooks/useProducts";
 import { Package } from "@/types/product";
 import { LinearGradient } from "expo-linear-gradient";
+import * as Linking from "expo-linking";
 import React, { useEffect, useRef } from "react";
 import {
   ActivityIndicator,
+  Alert,
   Animated,
   Dimensions,
   Image,
@@ -103,6 +106,23 @@ export default function PackageDetailModal({ visible, item, onClose }: Props) {
       ]).start();
     }
   }, [visible, detailLoading]);
+
+  const handleCall = async () => {
+    const telUrl = Platform.select({
+      ios: `telprompt:${APP_CONFIG.SUPPORT_PHONE}`,
+      android: `tel:${APP_CONFIG.SUPPORT_PHONE}`,
+      default: `tel:${APP_CONFIG.SUPPORT_PHONE}`,
+    });
+    try {
+      if (await Linking.canOpenURL(telUrl)) {
+        await Linking.openURL(telUrl);
+      } else {
+        Alert.alert("Cannot Make Call", "Phone calling is not supported on this device.");
+      }
+    } catch {
+      Alert.alert("Error", "Something went wrong while trying to make the call.");
+    }
+  };
 
   if (!item) return null;
 
@@ -247,7 +267,7 @@ export default function PackageDetailModal({ visible, item, onClose }: Props) {
               }}
             >
               {/* Price Banner */}
-              <View style={styles.priceBanner}>
+              {/* <View style={styles.priceBanner}>
                 <View>
                   <Text style={styles.priceLabel}>Starting from</Text>
                   <View style={styles.priceRow}>
@@ -259,7 +279,7 @@ export default function PackageDetailModal({ visible, item, onClose }: Props) {
                   <Text style={styles.priceBadgeEmoji}>✨</Text>
                   <Text style={styles.priceBadgeText}>Best Value</Text>
                 </View>
-              </View>
+              </View> */}
 
               {/* Description */}
               <View style={styles.section}>
@@ -458,21 +478,19 @@ export default function PackageDetailModal({ visible, item, onClose }: Props) {
           <TouchableOpacity
             style={styles.bottomEnquiry}
             activeOpacity={0.7}
-            onPress={() => {
-              // Non-functional button
-            }}
+            onPress={handleCall}
           >
             <Text style={styles.bottomEnquiryText}>Enquiry</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={styles.bottomBook}
             activeOpacity={0.7}
             onPress={() => {
-              // Non-functional button
+              Non-functional button
             }}
-          >
-            <LinearGradient
+          > */}
+          {/* <LinearGradient
               colors={[COLORS.primary, "#D94535"]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
@@ -480,8 +498,8 @@ export default function PackageDetailModal({ visible, item, onClose }: Props) {
             >
               <Text style={styles.bottomBookText}>Book Now</Text>
               <Text style={styles.bottomBookPrice}>₹{pkg?.price}</Text>
-            </LinearGradient>
-          </TouchableOpacity>
+            </LinearGradient> */}
+          {/* </TouchableOpacity> */}
         </View>
       </View>
     </Modal>
