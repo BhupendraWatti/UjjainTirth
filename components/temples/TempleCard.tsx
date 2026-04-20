@@ -232,5 +232,6 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     fontSize: 13,
     flexShrink: 0,
+
   },
 });

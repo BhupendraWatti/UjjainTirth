@@ -1,11 +1,11 @@
-import { ShareApp, NeedAssistance, SettingsMenuList, UserCard } from "@/components/more";
 import ScreenContainer from "@/components/layout/ScreenContainer";
+import { NeedAssistance, SettingsMenuList, ShareApp, UserCard } from "@/components/more";
 import { APP_CONFIG } from "@/constants/appConfig";
 import {
+  buildShareMessage,
   cacheShareContent,
   fetchShareContent,
   getCachedShareContent,
-  buildShareMessage,
   ShareContentData,
 } from "@/services/shareServices";
 import React, { useEffect, useState } from "react";
@@ -54,7 +54,7 @@ export default function MoreScreen() {
   // Debug log for image URL
   useEffect(() => {
     if (shareData) {
-      console.log("Share Data:", JSON.stringify(shareData, null, 2));
+      // console.log("Share Data:", JSON.stringify(shareData, null, 2));
     }
   }, [shareData]);
 

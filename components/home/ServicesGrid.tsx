@@ -1,5 +1,6 @@
 import { Service } from "@/types/service";
 import { LinearGradient } from "expo-linear-gradient";
+import { useRouter } from "expo-router";
 import React from "react";
 import {
   Dimensions,
@@ -10,19 +11,36 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+
 const { width } = Dimensions.get("window");
-const CARD_WIDTH = (width - 45) / 2; // spacing logic
+const CARD_WIDTH = (width - 45) / 2;
+
 const ServiceGrid = ({ services }: { services: Service[] }) => {
+  const router = useRouter();
+
+  const handleServicePress = (item: Service) => {
+    const serviceType = item.type?.toLowerCase();
+    if (serviceType === "accommodation") {
+      router.push("/services/accommodation" as any);
+    } else {
+      router.push("/coming-soon");
+    }
+  };
+
   const renderItem = ({ item, index }: { item: Service; index: number }) => {
-    const icon = item?.acf?.service_icon;
+    const icon = item?.acf_legacy?.service_icon;
 
     // 🔥 Zig-zag logic
     const row = Math.floor(index / 2);
     const isEvenRow = row % 2 === 0;
     const isLeft = index % 2 === 0;
     const useOrange = isEvenRow ? isLeft : !isLeft;
+
     return (
-      <TouchableOpacity activeOpacity={0.8}>
+      <TouchableOpacity
+        activeOpacity={0.8}
+        onPress={() => handleServicePress(item)}
+      >
         <LinearGradient
           colors={
             useOrange
@@ -44,7 +62,7 @@ const ServiceGrid = ({ services }: { services: Service[] }) => {
           )}
 
           <Text style={styles.title}>
-            {item?.acf?.service_name || "Service"}
+            {item?.acf_legacy?.service_name || "Service"}
           </Text>
         </LinearGradient>
       </TouchableOpacity>
@@ -106,7 +124,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#fff",
     paddingBottom: 20,
-    // marginTop: -10,
   },
 
   empty: {
