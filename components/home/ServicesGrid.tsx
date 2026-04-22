@@ -19,8 +19,8 @@ const ServiceGrid = ({ services }: { services: Service[] }) => {
   const router = useRouter();
 
   const handleServicePress = (item: Service) => {
-    const serviceType = item.type?.toLowerCase();
-    if (serviceType === "accommodation") {
+    const name = item?.acf?.service_name?.toLowerCase()?.trim();
+    if (name === "accommodation") {
       router.push("/services/accommodation" as any);
     } else {
       router.push("/coming-soon");
@@ -28,7 +28,7 @@ const ServiceGrid = ({ services }: { services: Service[] }) => {
   };
 
   const renderItem = ({ item, index }: { item: Service; index: number }) => {
-    const icon = item?.acf_legacy?.service_icon;
+    const icon = item?.acf?.service_icon;
 
     // 🔥 Zig-zag logic
     const row = Math.floor(index / 2);
@@ -62,7 +62,7 @@ const ServiceGrid = ({ services }: { services: Service[] }) => {
           )}
 
           <Text style={styles.title}>
-            {item?.acf_legacy?.service_name || "Service"}
+            {item?.acf?.service_name || "Service"}
           </Text>
         </LinearGradient>
       </TouchableOpacity>

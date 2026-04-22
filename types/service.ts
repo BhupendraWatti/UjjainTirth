@@ -3,9 +3,8 @@ export interface Service {
   title: string;
   content: string;
   featured_image: string;
-  type?: string;
 
-  acf_legacy: {
+  acf: {
     service_name: string;
     service_short_dis: string;
     service_icon: string;
