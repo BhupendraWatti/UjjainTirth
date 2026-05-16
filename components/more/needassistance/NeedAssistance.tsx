@@ -61,7 +61,7 @@ export default function NeedAssistance() {
         <View style={styles.textBlock}>
           <Text style={styles.title}>Need Assistance?</Text>
           <Text style={styles.subtitle}>
-            We're here to help you 24/7
+            We&apos;re here to help you 24/7
           </Text>
         </View>
       </View>

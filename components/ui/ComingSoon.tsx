@@ -70,6 +70,7 @@ const ComingSoon = forwardRef<ComingSoonRef, ComingSoonProps>(
   },
 );
 
+ComingSoon.displayName = "ComingSoon";
 export default ComingSoon;
 
 const styles = StyleSheet.create({
