@@ -1,27 +1,39 @@
 import { icons } from "@/components/ui/Icons";
 import { Tabs } from "expo-router";
-import { Image } from "react-native"; // ✅ MISSING IMPORT
+import { Image } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function TabLayout() {
+  const insets = useSafeAreaInsets();
+
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: "#EB5C49",
         tabBarLabelStyle: {
-          fontSize: 12, // 🔹 control text size
-          fontWeight: "600", // 🔹 control weight (500, 600, 700)
-          marginTop: 0, // optional: adjust spacing
+          fontSize: 11, // 🔹 control text size
+          fontWeight: "600", // 🔹 control weight
+          marginBottom: 6, // adjust spacing
+        },
+        tabBarIconStyle: {
+          marginTop: 6,
         },
         tabBarStyle: {
           position: "absolute",
-          bottom: 0,
-          left: 15,
-          right: 15,
-          height: 70,
-          borderRadius: 0,
+          bottom: insets.bottom > 0 ? insets.bottom : 12,
+          left: 16,
+          right: 16,
+          height: 64,
+          borderRadius: 16,
           backgroundColor: "#fff",
-          elevation: 10,
+          elevation: 8,
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: 0.06,
+          shadowRadius: 8,
+          borderWidth: 1,
+          borderColor: "rgba(0,0,0,0.04)",
         },
       }}
     >

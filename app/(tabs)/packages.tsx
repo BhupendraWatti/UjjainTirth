@@ -17,9 +17,15 @@ import {
   StyleSheet,
   Text,
   View,
+  useWindowDimensions,
 } from "react-native";
 
 export default function PackagesScreen() {
+  const { width } = useWindowDimensions();
+  const isTablet = width >= 768;
+  const numColumns = isTablet ? 2 : 1;
+  const cardWidth = isTablet ? (width - 44) / 2 : "100%";
+
   // Default tab is "custom" (My Package/My Cost) as requested
   const [activeTab, setActiveTab] = useState<PackageTab>("custom");
   const { packages, loading, error, reload } = usePackages();
@@ -61,7 +67,10 @@ export default function PackagesScreen() {
 
     return (
       <FlatList
+        key={numColumns} // Re-bind on column change to prevent runtime error
         data={packages}
+        numColumns={numColumns}
+        columnWrapperStyle={isTablet ? styles.tabletRow : null}
         keyExtractor={(item) => item.id.toString()}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
@@ -72,6 +81,7 @@ export default function PackagesScreen() {
           <PackageCard
             item={item}
             onPress={() => handlePackagePress(item)}
+            style={isTablet ? { width: cardWidth, marginHorizontal: 0 } : undefined}
           />
         )}
         refreshControl={
@@ -151,6 +161,11 @@ export default function PackagesScreen() {
 }
 
 const styles = StyleSheet.create({
+  tabletRow: {
+    justifyContent: "space-between",
+    paddingHorizontal: 14,
+    marginBottom: 0,
+  },
   tabContainer: {
     marginTop: 8,
     marginBottom: 4,

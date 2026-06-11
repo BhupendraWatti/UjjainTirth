@@ -12,18 +12,20 @@ import {
   Text,
   TouchableOpacity,
   View,
+  ViewStyle,
 } from "react-native";
 
 interface Props {
   item: Package;
   onPress: () => void;
+  style?: ViewStyle;
 }
 
 // Placeholder image when none provided
 const PLACEHOLDER_IMAGE =
   "https://images.unsplash.com/photo-1609766418204-df41e949e4a3?w=800&q=80";
 
-export default function PackageCard({ item, onPress }: Props) {
+export default function PackageCard({ item, onPress, style }: Props) {
   const imageUri =
     item.image && item.image.trim() !== "" ? item.image : PLACEHOLDER_IMAGE;
 
@@ -50,7 +52,7 @@ export default function PackageCard({ item, onPress }: Props) {
 
   return (
     <TouchableOpacity
-      style={styles.card}
+      style={[styles.card, style]}
       onPress={onPress}
       activeOpacity={0.92}
     >

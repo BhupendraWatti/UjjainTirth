@@ -1,7 +1,7 @@
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import React, { memo, useCallback } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, ViewStyle } from "react-native";
 
 import Badge from "@/components/ui/Badge";
 import Card from "@/components/ui/Card";
@@ -14,9 +14,10 @@ interface TempleCardProps {
   distance?: number | null;
   /** GPS status to show appropriate fallback text */
   locationStatus?: LocationStatus;
+  style?: ViewStyle;
 }
 
-const TempleCard = ({ temple, distance, locationStatus }: TempleCardProps) => {
+const TempleCard = ({ temple, distance, locationStatus, style }: TempleCardProps) => {
   const router = useRouter();
 
   const image =
@@ -76,6 +77,7 @@ const TempleCard = ({ temple, distance, locationStatus }: TempleCardProps) => {
       onPress={handlePress}
       accessibilityRole="button"
       accessibilityLabel={`View ${title} details`}
+      style={style}
     >
       <Card style={styles.card}>
         <View style={styles.container}>

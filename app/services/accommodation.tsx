@@ -9,9 +9,13 @@ import { COLORS } from "@/constants/colors";
 import { useAccommodation } from "@/hooks/useAccommodation";
 import { Hotel } from "@/types/service";
 import React, { useCallback, useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View, useWindowDimensions } from "react-native";
 
 export default function AccommodationScreen() {
+  const { width } = useWindowDimensions();
+  const isTablet = width >= 768;
+  const cardWidth = isTablet ? (width - 44) / 2 : "100%";
+
   const { data, isLoading, isError, refetch } = useAccommodation();
   const [selectedHotel, setSelectedHotel] = useState<Hotel | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -62,13 +66,16 @@ export default function AccommodationScreen() {
           <Text style={styles.sectionTitle}>Where to Stay</Text>
 
           {hasHotels ? (
-            data.hotels.map((hotel) => (
-              <HotelCard
-                key={hotel.id}
-                hotel={hotel}
-                onPress={handleHotelPress}
-              />
-            ))
+            <View style={isTablet ? styles.hotelsGrid : undefined}>
+              {data.hotels.map((hotel) => (
+                <HotelCard
+                  key={hotel.id}
+                  hotel={hotel}
+                  onPress={handleHotelPress}
+                  style={isTablet ? { width: cardWidth, marginHorizontal: 0 } : undefined}
+                />
+              ))}
+            </View>
           ) : (
             <View style={styles.emptyState}>
               <Text style={styles.emptyIcon}>🏨</Text>
@@ -109,6 +116,12 @@ const styles = StyleSheet.create({
 
   hotelsSection: {
     marginTop: 24,
+  },
+  hotelsGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    paddingHorizontal: 16,
   },
 
   sectionTitle: {

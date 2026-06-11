@@ -16,6 +16,7 @@ export const API_ENDPOINTS = {
   ONBOARDING: "/onboarding",
   PACKAGES: "/packages",
   SHARE_APP: "/share-app",
+  JYOTIRLING_TOURS: "/jyotirling-tours",
 };
 
 /**

@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, Text, View, useWindowDimensions } from "react-native";
 
 import LoadingSkeleton from "@/components/layout/LoadingSkeleton";
 import ScreenContainer from "@/components/layout/ScreenContainer";
@@ -16,6 +16,11 @@ import { useTemples } from "@/hooks/useTemples";
 export default function TemplesScreen() {
   const [search, setSearch] = useState("");
   const [selectedTag, setSelectedTag] = useState<number | null>(null);
+
+  const { width } = useWindowDimensions();
+  const isTablet = width >= 768;
+  const numColumns = isTablet ? 2 : 1;
+  const cardWidth = isTablet ? (width - 44) / 2 : "100%";
 
   const {
     data,
@@ -93,13 +98,17 @@ export default function TemplesScreen() {
   return (
     <ScreenContainer>
       <FlatList
+        key={numColumns} // Re-bind on column change to prevent runtime error
         data={filteredData}
+        numColumns={numColumns}
+        columnWrapperStyle={isTablet ? styles.tabletRow : null}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <TempleCard
             temple={item}
             distance={distances[item.id]}
             locationStatus={locationStatus}
+            style={isTablet ? { width: cardWidth, marginHorizontal: 0 } : undefined}
           />
         )}
         ListHeaderComponent={
@@ -156,6 +165,10 @@ export default function TemplesScreen() {
 }
 
 const styles = StyleSheet.create({
+  tabletRow: {
+    justifyContent: "space-between",
+    marginBottom: 0,
+  },
   title: {
     fontSize: 22,
     fontWeight: "600",

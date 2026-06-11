@@ -2,11 +2,12 @@ import { Hotel } from "@/types/service";
 import { COLORS } from "@/constants/colors";
 import { Image } from "expo-image";
 import React, { memo, useCallback } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, ViewStyle } from "react-native";
 
 interface Props {
   hotel: Hotel;
   onPress: (hotel: Hotel) => void;
+  style?: ViewStyle;
 }
 
 const PLACEHOLDER_IMAGE =
@@ -42,7 +43,7 @@ const StarRating = ({ rating }: { rating: number }) => {
   );
 };
 
-const HotelCard = ({ hotel, onPress }: Props) => {
+const HotelCard = ({ hotel, onPress, style }: Props) => {
   const imageUri = hotel.thumbnail || PLACEHOLDER_IMAGE;
 
   const handlePress = useCallback(() => {
@@ -51,7 +52,7 @@ const HotelCard = ({ hotel, onPress }: Props) => {
 
   return (
     <TouchableOpacity
-      style={styles.card}
+      style={[styles.card, style]}
       activeOpacity={0.85}
       onPress={handlePress}
     >
