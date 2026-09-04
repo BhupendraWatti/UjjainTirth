@@ -3,7 +3,7 @@
 # dependencies
 node_modules/
 
-# Expo
+# Expo & Web
 .expo/
 dist/
 web-build/
@@ -18,26 +18,42 @@ expo-env.d.ts
 *.key
 *.mobileprovision
 
-# Metro
+# Metro & Debug
 .metro-health-check*
-
-# debug
 npm-debug.*
 yarn-debug.*
 yarn-error.*
+*.log
 
-# macOS
+# OS & IDE
 .DS_Store
-*.pem
+Thumbs.db
+.vscode/
+.idea/
 
-# local env files
+# Environment files
+.env
 .env*.local
+.env.production
+.env.development
 
-# typescript
+# TypeScript & Build
 *.tsbuildinfo
+coverage/
+.nyc_output/
+
+# Tooling, Plugins & Scratch Folders
+mcp-server-guide/
+figma-gemini-cli-extension/
+.sisyphus/
+
+# Python Cache
+__pycache__/
+*.pyc
 
 app-example
 
 # generated native folders
 /ios
 /android
+

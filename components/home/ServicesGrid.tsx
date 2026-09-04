@@ -1,28 +1,24 @@
 import { Service } from "@/types/service";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import React, { useCallback } from "react";
+import React from "react";
 import {
+  Dimensions,
+  FlatList,
   Image,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-  useWindowDimensions,
 } from "react-native";
+
+const { width } = Dimensions.get("window");
+const CARD_WIDTH = (width - 45) / 2;
 
 const ServiceGrid = ({ services }: { services: Service[] }) => {
   const router = useRouter();
-  const { width } = useWindowDimensions();
-  const isTablet = width >= 768;
-  const numColumns = isTablet ? 3 : 2;
-  
-  // Calculate dynamic card width
-  const cardWidth = isTablet 
-    ? (width - 32 - (12 * 2)) / 3 
-    : (width - 45) / 2;
 
-  const handleServicePress = useCallback((item: Service) => {
+  const handleServicePress = (item: Service) => {
     const name = item?.acf?.service_name?.toLowerCase()?.trim();
     if (name === "accommodation") {
       router.push("/services/accommodation" as any);
@@ -37,20 +33,19 @@ const ServiceGrid = ({ services }: { services: Service[] }) => {
     } else {
       router.push("/coming-soon");
     }
-  }, [router]);
+  };
 
-  const renderItem = useCallback(({ item, index }: { item: Service; index: number }) => {
+  const renderItem = ({ item, index }: { item: Service; index: number }) => {
     const icon = item?.acf?.service_icon;
 
     // 🔥 Zig-zag logic
-    const row = Math.floor(index / numColumns);
+    const row = Math.floor(index / 2);
     const isEvenRow = row % 2 === 0;
-    const isLeft = index % numColumns === 0;
+    const isLeft = index % 2 === 0;
     const useOrange = isEvenRow ? isLeft : !isLeft;
 
     return (
       <TouchableOpacity
-        key={item.id}
         activeOpacity={0.8}
         onPress={() => handleServicePress(item)}
       >
@@ -62,7 +57,7 @@ const ServiceGrid = ({ services }: { services: Service[] }) => {
           }
           start={{ x: 1, y: 0 }}
           end={{ x: 1, y: 1 }}
-          style={[styles.card, { width: cardWidth }]}
+          style={styles.card}
         >
           {icon ? (
             <Image
@@ -80,29 +75,18 @@ const ServiceGrid = ({ services }: { services: Service[] }) => {
         </LinearGradient>
       </TouchableOpacity>
     );
-  }, [numColumns, cardWidth, handleServicePress]);
-
-  const rows = [];
-  const safeServices = services || [];
-  for (let i = 0; i < safeServices.length; i += numColumns) {
-    rows.push(safeServices.slice(i, i + numColumns));
-  }
+  };
 
   return (
-    <View style={styles.container}>
-      {rows.map((row, rowIndex) => (
-        <View key={rowIndex} style={styles.row}>
-          {row.map((item, colIndex) => {
-            const index = rowIndex * numColumns + colIndex;
-            return renderItem({ item, index });
-          })}
-          {row.length < numColumns &&
-            Array.from({ length: numColumns - row.length }).map((_, index) => (
-              <View key={`empty-${index}`} style={{ width: cardWidth }} />
-            ))}
-        </View>
-      ))}
-    </View>
+    <FlatList
+      data={services || []}
+      keyExtractor={(item) => item.id.toString()}
+      renderItem={renderItem}
+      numColumns={2}
+      columnWrapperStyle={styles.row}
+      contentContainerStyle={styles.container}
+      showsVerticalScrollIndicator={false}
+    />
   );
 };
 
@@ -119,6 +103,7 @@ const styles = StyleSheet.create({
   },
 
   card: {
+    width: CARD_WIDTH,
     marginTop: 8,
     borderRadius: 16,
     paddingVertical: 10,
@@ -128,8 +113,8 @@ const styles = StyleSheet.create({
   },
 
   icon: {
-    width: "85%",
-    height: 100,
+    width: 200,
+    height: 130,
     marginBottom: 10,
   },
 

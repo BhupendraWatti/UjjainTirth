@@ -1,56 +1,33 @@
-import { isOnboardingDone } from "@/utils/storage";
+import React from "react";
 import { useRouter } from "expo-router";
-import { useEffect, useRef } from "react";
-import { Animated, View } from "react-native";
+import { isOnboardingDone } from "@/utils/storage";
+import SplashAnimation from "@/components/splash/SplashAnimation";
+import SecondSplashAnimation from "@/components/splash/SecondSplashAnimation";
+
+// Set to true to test the cinematic alternative splash screen (Stage 2)
+// Set to false to use the default refined temple-silhouette splash screen (Stage 1)
+const USE_ALTERNATIVE_SPLASH = true;
+
 export default function Intro() {
   const router = useRouter();
-  const logoOpacity = useRef(new Animated.Value(0)).current;
-  const buttonOpacity = useRef(new Animated.Value(0)).current;
 
-  useEffect(() => {
-    const init = async () => {
-      // Play animation
-      Animated.timing(logoOpacity, {
-        toValue: 1,
-        duration: 1200,
-        useNativeDriver: true,
-      }).start();
+  const handleFinish = async () => {
+    try {
+      const done = await isOnboardingDone();
+      // Navigate to home if onboarding is done, else go to onboarding
+      // currently default to onboarding as per current logic
+      router.replace("/(auth)/onboarding" as any);
+    } catch (error) {
+      console.log("Storage error:", error);
+      router.replace("/(auth)/onboarding" as any);
+    }
+  };
 
-      // Wait for animation
-      await new Promise((resolve) => setTimeout(resolve, 1300));
+  if (USE_ALTERNATIVE_SPLASH) {
+    return <SecondSplashAnimation onFinish={handleFinish} />;
+  }
 
-      try {
-        const done = await isOnboardingDone();
-
-        // if (done) {
-        //   router.replace("/(tabs)");
-        // } else {
-        //   router.replace("/(auth)/onboarding" as any);
-        // }
-        router.replace("/(auth)/onboarding" as any);
-      } catch (error) {
-        console.log("Storage error:", error);
-        router.replace("/(auth)/onboarding" as any);
-      }
-    };
-
-    init();
-  }, []);
-
-  return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: "#fff",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Animated.Image
-        source={require("../assets/images/ujjain_tirth_logo.png")}
-        style={{ width: "80%", height: 260, opacity: logoOpacity }}
-        resizeMode="contain"
-      />
-    </View>
-  );
+  return <SplashAnimation onFinish={handleFinish} />;
 }
+
+
