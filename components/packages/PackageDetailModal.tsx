@@ -5,11 +5,11 @@ import { Package } from "@/types/product";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Linking from "expo-linking";
 import React, { useEffect, useRef } from "react";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   ActivityIndicator,
   Alert,
   Animated,
-  Dimensions,
   Image,
   Modal,
   Platform,
@@ -17,10 +17,9 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from "react-native";
-
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 interface Props {
   visible: boolean;
@@ -76,6 +75,9 @@ function cleanHtmlEntities(text: string): string {
 }
 
 export default function PackageDetailModal({ visible, item, onClose }: Props) {
+  const { height } = useWindowDimensions();
+  const insets = useSafeAreaInsets();
+  const heroHeight = Math.min(320, Math.max(220, height * 0.4));
   // Fetch full details when modal opens
   const { packageDetail, loading: detailLoading } = usePackageDetail(
     visible && item ? item.id : null
@@ -105,7 +107,7 @@ export default function PackageDetailModal({ visible, item, onClose }: Props) {
         }),
       ]).start();
     }
-  }, [visible, detailLoading]);
+  }, [detailLoading, fadeAnim, pkg, slideAnim, visible]);
 
   const handleCall = async () => {
     const telUrl = Platform.select({
@@ -182,7 +184,7 @@ export default function PackageDetailModal({ visible, item, onClose }: Props) {
         {detailLoading && (
           <View style={styles.loadingOverlay}>
             {/* Show basic info while loading */}
-            <View style={styles.heroContainer}>
+            <View style={[styles.heroContainer, { height: heroHeight }]}>
               <Image
                 source={{ uri: imageUri }}
                 style={styles.heroImage}
@@ -193,7 +195,7 @@ export default function PackageDetailModal({ visible, item, onClose }: Props) {
                 style={styles.heroGradient}
               />
               <TouchableOpacity
-                style={styles.closeButton}
+                style={[styles.closeButton, { top: Math.max(12, insets.top + 8) }]}
                 onPress={onClose}
                 activeOpacity={0.7}
               >
@@ -218,7 +220,7 @@ export default function PackageDetailModal({ visible, item, onClose }: Props) {
             bounces={false}
           >
             {/* Hero Image */}
-            <View style={styles.heroContainer}>
+            <View style={[styles.heroContainer, { height: heroHeight }]}>
               <Image
                 source={{ uri: imageUri }}
                 style={styles.heroImage}
@@ -231,7 +233,7 @@ export default function PackageDetailModal({ visible, item, onClose }: Props) {
 
               {/* Close button */}
               <TouchableOpacity
-                style={styles.closeButton}
+                style={[styles.closeButton, { top: Math.max(12, insets.top + 8) }]}
                 onPress={onClose}
                 activeOpacity={0.7}
               >
@@ -538,7 +540,6 @@ const styles = StyleSheet.create({
 
   // Hero
   heroContainer: {
-    height: 320,
     position: "relative",
   },
 
@@ -557,7 +558,6 @@ const styles = StyleSheet.create({
 
   closeButton: {
     position: "absolute",
-    top: 52,
     right: 16,
     width: 44,
     height: 44,
@@ -794,7 +794,8 @@ const styles = StyleSheet.create({
   },
 
   gridItem: {
-    width: (SCREEN_WIDTH - 56) / 2,
+    flexBasis: "45%",
+    flexGrow: 1,
     backgroundColor: "#FFF",
     borderRadius: 18,
     paddingVertical: 18,

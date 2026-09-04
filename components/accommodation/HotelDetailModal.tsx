@@ -4,10 +4,10 @@ import { APP_CONFIG } from "@/constants/appConfig";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Linking from "expo-linking";
 import React, { useEffect, useRef, useState } from "react";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
   Alert,
   Animated,
-  Dimensions,
   Image,
   Modal,
   Platform,
@@ -15,10 +15,9 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from "react-native";
-
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 interface Props {
   visible: boolean;
@@ -27,6 +26,9 @@ interface Props {
 }
 
 export default function HotelDetailModal({ visible, hotel, onClose }: Props) {
+  const { width, height } = useWindowDimensions();
+  const insets = useSafeAreaInsets();
+  const sliderHeight = Math.min(300, Math.max(220, height * 0.38));
   const [activeSlide, setActiveSlide] = useState(0);
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(30)).current;
@@ -49,7 +51,7 @@ export default function HotelDetailModal({ visible, hotel, onClose }: Props) {
         }),
       ]).start();
     }
-  }, [visible]);
+  }, [fadeAnim, hotel, slideAnim, visible]);
 
   const handleCall = async () => {
     const telUrl = Platform.select({
@@ -80,7 +82,7 @@ export default function HotelDetailModal({ visible, hotel, onClose }: Props) {
 
   const handleScroll = (event: any) => {
     const slideIndex = Math.round(
-      event.nativeEvent.contentOffset.x / SCREEN_WIDTH
+      event.nativeEvent.contentOffset.x / width
     );
     setActiveSlide(slideIndex);
   };
@@ -113,7 +115,7 @@ export default function HotelDetailModal({ visible, hotel, onClose }: Props) {
         >
           {/* Image Slider */}
           {images.length > 0 && (
-            <View style={styles.sliderContainer}>
+            <View style={[styles.sliderContainer, { height: sliderHeight }]}>
               <ScrollView
                 horizontal
                 pagingEnabled
@@ -125,7 +127,7 @@ export default function HotelDetailModal({ visible, hotel, onClose }: Props) {
                   <Image
                     key={idx}
                     source={{ uri }}
-                    style={styles.sliderImage}
+                    style={[styles.sliderImage, { width, height: sliderHeight }]}
                     resizeMode="cover"
                   />
                 ))}
@@ -139,7 +141,7 @@ export default function HotelDetailModal({ visible, hotel, onClose }: Props) {
 
               {/* Close button */}
               <TouchableOpacity
-                style={styles.closeButton}
+                style={[styles.closeButton, { top: Math.max(12, insets.top + 8) }]}
                 onPress={onClose}
                 activeOpacity={0.7}
               >
@@ -263,13 +265,10 @@ const styles = StyleSheet.create({
 
   // Slider
   sliderContainer: {
-    height: 300,
     position: "relative",
   },
 
   sliderImage: {
-    width: SCREEN_WIDTH,
-    height: 300,
   },
 
   sliderGradient: {
@@ -282,7 +281,6 @@ const styles = StyleSheet.create({
 
   closeButton: {
     position: "absolute",
-    top: 50,
     right: 16,
     width: 44,
     height: 44,
