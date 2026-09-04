@@ -90,7 +90,7 @@ export default function MoreScreen() {
 
 const styles = StyleSheet.create({
   scrollContent: {
-    paddingBottom: 100, // room for bottom tab bar
+    paddingBottom: 16,
   },
   sectionSpacing: {
     marginTop: 16,

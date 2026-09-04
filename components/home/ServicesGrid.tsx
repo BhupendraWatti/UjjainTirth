@@ -15,7 +15,7 @@ import {
 const ServiceGrid = ({ services }: { services: Service[] }) => {
   const router = useRouter();
   const { width } = useWindowDimensions();
-  const cardWidth = (width - 76) / 2;
+  const cardWidth = (width - 44) / 2;
   const iconWidth = Math.min(200, cardWidth - 20);
 
   const handleServicePress = (item: Service) => {
@@ -96,17 +96,16 @@ export default ServiceGrid;
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
+    paddingVertical: 12,
   },
 
   row: {
     justifyContent: "space-between",
-    marginBottom: 16,
+    marginBottom: 12,
   },
 
   card: {
     width: "100%",
-    marginTop: 8,
     borderRadius: 16,
     paddingVertical: 10,
     alignItems: "center",

@@ -7,9 +7,7 @@ import LoadingSkeleton from "@/components/layout/LoadingSkeleton";
 import ScreenContainer from "@/components/layout/ScreenContainer";
 import { useServices } from "@/hooks/useServices";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-// import { FlatList } from "react-native-reanimated/lib/typescript/Animated";
-import { FlatList } from "react-native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 export default function HomeScreen() {
   const { data: services, refetch, isLoading, isError } = useServices();
   // const services: Service[] = [];
@@ -49,7 +47,7 @@ export default function HomeScreen() {
         }
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
-          paddingBottom: 60,
+          paddingBottom: 12,
         }}
       />
     </ScreenContainer>

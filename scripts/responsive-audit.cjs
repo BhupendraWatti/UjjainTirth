@@ -302,6 +302,18 @@ fs.mkdirSync(path.join(outputDir, "screenshots"), { recursive: true });
           ),
           fullPage: true,
         });
+        if (process.env.AUDIT_HOME_BOTTOM === "1") {
+          await page.mouse.wheel(0, 10_000);
+          await page.waitForTimeout(500);
+          await page.screenshot({
+            path: path.join(
+              outputDir,
+              "screenshots",
+              `home-bottom-${viewportName}.png`,
+            ),
+            fullPage: true,
+          });
+        }
         let homeCtaFlow = null;
         if (process.env.AUDIT_HOME_CTA === "1") {
           await page.getByText("Explore Now", { exact: true }).click();

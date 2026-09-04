@@ -74,7 +74,7 @@ export default function PackagesScreen() {
         keyExtractor={(item) => item.id.toString()}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
-          paddingBottom: 100,
+          paddingBottom: 16,
           paddingTop: 8,
         }}
         renderItem={({ item }) => (
