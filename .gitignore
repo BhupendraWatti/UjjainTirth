@@ -46,6 +46,7 @@ coverage/
 mcp-server-guide/
 figma-gemini-cli-extension/
 .sisyphus/
+.gstack/
 
 # Python Cache
 __pycache__/
@@ -56,4 +57,3 @@ app-example
 # generated native folders
 /ios
 /android
-
