@@ -34,13 +34,10 @@ const TIMING_CONFIG = {
 export default function TabSwitcher({ tabs, active, onChange }: Props) {
   const translateX = useSharedValue(0);
   const [tabWidth, setTabWidth] = useState(0);
-  const [containerWidth, setContainerWidth] = useState(0);
 
   const handleLayout = (e: LayoutChangeEvent) => {
-    const totalWidth = e.nativeEvent.layout.width;
-    const singleTabWidth = totalWidth / tabs.length;
+    const singleTabWidth = (e.nativeEvent.layout.width - 8) / tabs.length;
     setTabWidth(singleTabWidth);
-    setContainerWidth(totalWidth);
 
     // Set initial position based on active tab
     const index = tabs.findIndex((t) => t.value === active);
@@ -120,6 +117,7 @@ const styles = StyleSheet.create({
 
   tab: {
     flex: 1,
+    minHeight: 44,
     alignItems: "center",
     justifyContent: "center",
     paddingVertical: 12,
