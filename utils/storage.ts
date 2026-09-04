@@ -4,7 +4,7 @@ const ONBOARDING_KEY = "onboarding_done";
 
 export const setOnboardingDone = async () => {
   try {
-    // await AsyncStorage.setItem(ONBOARDING_KEY, "true");
+    await AsyncStorage.setItem(ONBOARDING_KEY, "true");
   } catch (e) {
     console.log("Storage error:", e);
   }

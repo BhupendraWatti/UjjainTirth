@@ -1,43 +1,49 @@
 import { fetchOnboarding } from "@/services/onboarding";
+import { setOnboardingDone } from "@/utils/storage";
 import { useRouter } from "expo-router";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
+  ActivityIndicator,
   Animated,
-  Dimensions,
   FlatList,
+  StyleSheet,
   Text,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Svg, { Path } from "react-native-svg";
-const { width } = Dimensions.get("window");
 
 export default function Onboarding() {
   const [data, setData] = useState<any[]>([]);
-
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const { width, height } = useWindowDimensions();
+  const insets = useSafeAreaInsets();
+  const isShort = height < 650;
   const router = useRouter();
   const scrollX = useRef(new Animated.Value(0)).current;
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const flatListRef = useRef<FlatList>(null);
 
-  const [loading, setLoading] = useState(true);
+  const load = useCallback(async () => {
+    setLoading(true);
+    setError(false);
+    try {
+      setData(await fetchOnboarding());
+    } catch (e) {
+      console.log("Error:", e);
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    const load = async () => {
-      try {
-        const res = await fetchOnboarding();
-        // console.log("API DATA:", res);
-        setData(res);
-      } catch (e) {
-        console.log("Error:", e);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     load();
-  }, []);
+  }, [load]);
   const viewConfig = {
     viewAreaCoveragePercentThreshold: 50,
   };
@@ -48,7 +54,7 @@ export default function Onboarding() {
   });
   const handleNext = async () => {
     if (currentIndex === data.length - 1) {
-      // await setOnboardingDone();
+      await setOnboardingDone();
       router.replace("/(tabs)");
     } else {
       flatListRef.current?.scrollToIndex({
@@ -67,40 +73,10 @@ export default function Onboarding() {
       extrapolate: "clamp",
     });
 
-    // 🔥 Content Animation
-    const scale = scrollX.interpolate({
-      inputRange,
-      outputRange: [0.9, 1, 0.9],
-      extrapolate: "clamp",
-    });
-
-    const opacity = scrollX.interpolate({
-      inputRange,
-      outputRange: [0.3, 1, 0.3],
-      extrapolate: "clamp",
-    });
-    if (loading) {
-      return (
-        <View
-          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-        >
-          <Text>Loading...</Text>
-        </View>
-      );
-    }
-    if (!data || data.length === 0) {
-      return (
-        <View
-          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-        >
-          <Text>No onboarding data found</Text>
-        </View>
-      );
-    }
     return (
       <View style={{ width, flex: 1 }}>
         {/* IMAGE */}
-        <View style={{ height: "60%" }}>
+        <View style={{ height: isShort ? "52%" : "60%" }}>
           <Animated.Image
             source={{ uri: item.image }}
             style={{
@@ -113,7 +89,7 @@ export default function Onboarding() {
 
           {/* CURVE */}
           <Svg
-            height={140}
+            height={isShort ? 110 : 140}
             width={width}
             style={{
               position: "absolute",
@@ -129,17 +105,18 @@ export default function Onboarding() {
           {/* SKIP */}
           <TouchableOpacity
             onPress={async () => {
-              // await setOnboardingDone();
+              await setOnboardingDone();
               router.replace("/(tabs)");
             }}
             style={{
               position: "absolute",
-              top: 50,
+              top: insets.top + 12,
               right: 20,
               backgroundColor: "#ffffffaa",
               paddingHorizontal: 14,
-              paddingVertical: 6,
+              minHeight: 44,
               borderRadius: 20,
+              justifyContent: "center",
             }}
           >
             <Text style={{ color: "#333" }}>Skip</Text>
@@ -153,13 +130,13 @@ export default function Onboarding() {
             backgroundColor: "#F5EFE7",
             alignItems: "center",
             justifyContent: "flex-start",
-            paddingTop: 40,
+            paddingTop: isShort ? 20 : 40,
             paddingHorizontal: 24,
           }}
         >
           <Text
             style={{
-              fontSize: 28,
+              fontSize: isShort ? 24 : 28,
               fontWeight: "700",
               letterSpacing: 0.5,
               color: "#3A3A3A",
@@ -172,10 +149,10 @@ export default function Onboarding() {
 
           <Text
             style={{
-              marginTop: 17,
+              marginTop: isShort ? 12 : 17,
               paddingHorizontal: 20,
-              fontSize: 18,
-              lineHeight: 20,
+              fontSize: isShort ? 16 : 18,
+              lineHeight: isShort ? 22 : 24,
               textAlign: "center",
               color: "#444",
               maxWidth: 300,
@@ -186,7 +163,7 @@ export default function Onboarding() {
           </Text>
 
           {/* DOTS (Animated) */}
-          <View style={{ flexDirection: "row", marginTop: 20 }}>
+          <View style={{ flexDirection: "row", marginTop: isShort ? 12 : 20 }}>
             {data.map((_, indexDot) => {
               const inputRange = [
                 (indexDot - 1) * width,
@@ -227,12 +204,13 @@ export default function Onboarding() {
           <TouchableOpacity
             onPress={handleNext}
             style={{
-              position: "absolute",
-              bottom: 50,
-              right: 24,
+              marginTop: isShort ? 16 : "auto",
+              marginBottom: Math.max(insets.bottom + 16, isShort ? 20 : 32),
+              marginRight: 24,
+              alignSelf: "flex-end",
               backgroundColor: "#FF6B00",
-              width: 60,
-              height: 60,
+              width: isShort ? 54 : 60,
+              height: isShort ? 54 : 60,
               borderRadius: 30,
               alignItems: "center",
               justifyContent: "center",
@@ -258,6 +236,27 @@ export default function Onboarding() {
     );
   };
 
+  if (loading) {
+    return (
+      <View style={styles.stateContainer}>
+        <ActivityIndicator size="large" color="#FF6B00" />
+        <Text style={styles.stateText}>Preparing your pilgrimage…</Text>
+      </View>
+    );
+  }
+
+  if (error || data.length === 0) {
+    return (
+      <View style={styles.stateContainer}>
+        <Text style={styles.stateTitle}>We couldn&apos;t load the introduction</Text>
+        <Text style={styles.stateText}>Check your connection and try again.</Text>
+        <TouchableOpacity style={styles.retryButton} onPress={load}>
+          <Text style={styles.retryText}>Try again</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
   return (
     <Animated.FlatList
       ref={flatListRef}
@@ -277,3 +276,40 @@ export default function Onboarding() {
     />
   );
 }
+
+const styles = StyleSheet.create({
+  stateContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 24,
+    backgroundColor: "#F5EFE7",
+  },
+  stateTitle: {
+    color: "#3A3A3A",
+    fontSize: 20,
+    fontWeight: "700",
+    textAlign: "center",
+    marginBottom: 8,
+  },
+  stateText: {
+    color: "#555",
+    fontSize: 16,
+    lineHeight: 24,
+    textAlign: "center",
+    marginTop: 12,
+  },
+  retryButton: {
+    minHeight: 48,
+    justifyContent: "center",
+    backgroundColor: "#FF6B00",
+    borderRadius: 24,
+    paddingHorizontal: 24,
+    marginTop: 20,
+  },
+  retryText: {
+    color: "#FFF",
+    fontSize: 16,
+    fontWeight: "700",
+  },
+});

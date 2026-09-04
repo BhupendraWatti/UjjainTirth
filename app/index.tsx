@@ -14,9 +14,7 @@ export default function Intro() {
   const handleFinish = async () => {
     try {
       const done = await isOnboardingDone();
-      // Navigate to home if onboarding is done, else go to onboarding
-      // currently default to onboarding as per current logic
-      router.replace("/(auth)/onboarding" as any);
+      router.replace(done ? "/(tabs)" : "/(auth)/onboarding");
     } catch (error) {
       console.log("Storage error:", error);
       router.replace("/(auth)/onboarding" as any);
