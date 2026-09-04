@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, View, Dimensions, Image, Text } from "react-native";
 import Animated, {
   useSharedValue,
@@ -6,143 +6,127 @@ import Animated, {
   withTiming,
   withDelay,
   Easing,
-  interpolateColor,
 } from "react-native-reanimated";
+import Svg, { Circle, Defs, RadialGradient, Stop } from "react-native-svg";
 import ParticleSystem from "./ParticleSystem";
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
+
+// Logo dimensions and center Y calculation
+const LOGO_WIDTH = SCREEN_WIDTH * 0.72;
+const LOGO_HEIGHT = LOGO_WIDTH / 4.16;
+const LOGO_TOP = SCREEN_HEIGHT * 0.26;
+const LOGO_CENTER_Y = LOGO_TOP + LOGO_HEIGHT / 2;
+
+// Soft sunrise aura size and exact centered coordinates
+const GLOW_SIZE = SCREEN_WIDTH * 1.35;
+const GLOW_TOP = LOGO_CENTER_Y - GLOW_SIZE / 2;
+const GLOW_LEFT = (SCREEN_WIDTH - GLOW_SIZE) / 2;
 
 interface SecondSplashAnimationProps {
   onFinish: () => void;
 }
 
 export default function SecondSplashAnimation({ onFinish }: SecondSplashAnimationProps) {
-  // Animation Triggers
-  const [stage, setStage] = useState(1); // 1 = Shivling, 2 = Saffron Flash, 3 = Trishul/Temple Reveal on Maroon, 4 = Final Cream Reveal
-
   // Reanimated Shared Values
-  const bgProgress = useSharedValue(0); // 0 = Maroon, 1 = Saffron (Flash), 1.5 = Maroon, 2 = Cream
   const containerOpacity = useSharedValue(1);
 
-  // Shivling phase values
-  const shivlingOpacity = useSharedValue(0);
-  const shivlingScale = useSharedValue(0.85);
-
-  // Tripundra on Shivling values
-  const tripundraOpacity = useSharedValue(0);
-  const tripundraScale = useSharedValue(0.8);
-
-  // Fiery Trishul on Shivling values
-  const fieryTrishulOpacity = useSharedValue(0);
-  const fieryTrishulScale = useSharedValue(0.5);
-  const fieryTrishulTranslateY = useSharedValue(20);
-
-  // Glow values
-  const glowScale = useSharedValue(0.5);
+  // Background Sunrise Glow (Soft radial gradient - no hard circle outline)
   const glowOpacity = useSharedValue(0);
+  const glowScale = useSharedValue(0.7);
 
-  // Trishul Straight rise values
-  const trishulOpacity = useSharedValue(0);
-  const trishulScale = useSharedValue(0.85);
-  const trishulTranslateY = useSharedValue(SCREEN_HEIGHT * 0.7); // Starts completely below screen
+  // Top Sacred Tripundra
+  const tripundraOpacity = useSharedValue(0);
+  const tripundraScale = useSharedValue(0.85);
 
-  // Temple silhouette rise values
-  const templeOpacity = useSharedValue(0);
-  const templeTranslateY = useSharedValue(SCREEN_WIDTH * 0.95); // Starts completely below screen
-
-  // Final Logo & Tagline values
+  // Main Brand Logo & Tagline (Fade-in animation)
   const logoOpacity = useSharedValue(0);
-  const logoTranslateY = useSharedValue(-25);
-  
-  const finalTripundraOpacity = useSharedValue(0);
-  const finalTripundraScale = useSharedValue(0.8);
-  
+  const logoScale = useSharedValue(0.92);
+  const logoTranslateY = useSharedValue(20);
   const taglineOpacity = useSharedValue(0);
 
+  // Temple Towers Illustration (Bottom-to-Up rising animation)
+  const templeOpacity = useSharedValue(0);
+  const templeTranslateY = useSharedValue(SCREEN_HEIGHT * 0.35); // Starts below the screen bottom
+
   useEffect(() => {
-    // ─── STAGE 1: SHIVLING & SUNRISE GLOW (0ms - 4000ms) ───
-    bgProgress.value = withTiming(0, { duration: 0 });
+    // ─── STREAMLINED ELEGANT SPLASH SEQUENCE (~3.4s) ───
 
-    // Shivling and Tripundra fade in and scale gently over 4 seconds
-    shivlingOpacity.value = withTiming(1, { duration: 1500, easing: Easing.out(Easing.quad) });
-    shivlingScale.value = withTiming(1.0, { duration: 4000, easing: Easing.out(Easing.sin) });
+    // 1. Soft Ambient Sunrise Glow fade-in & gentle scale
+    glowOpacity.value = withTiming(0.65, {
+      duration: 1600,
+      easing: Easing.out(Easing.quad),
+    });
+    glowScale.value = withTiming(1.15, {
+      duration: 2500,
+      easing: Easing.out(Easing.sin),
+    });
 
-    tripundraOpacity.value = withDelay(800, withTiming(0.95, { duration: 1500 }));
-    tripundraScale.value = withDelay(800, withTiming(1.0, { duration: 3200, easing: Easing.out(Easing.quad) }));
+    // 2. Temple Illustration rises smoothly from BOTTOM to TOP
+    templeOpacity.value = withDelay(
+      200,
+      withTiming(1, {
+        duration: 1400,
+        easing: Easing.out(Easing.cubic),
+      })
+    );
+    templeTranslateY.value = withDelay(
+      200,
+      withTiming(0, {
+        duration: 1500,
+        easing: Easing.out(Easing.cubic),
+      })
+    );
 
-    // Fiery Trishul rises out of the top of the Shivling
-    fieryTrishulOpacity.value = withDelay(1200, withTiming(0.85, { duration: 1800 }));
-    fieryTrishulScale.value = withDelay(1200, withTiming(1.15, { duration: 2500, easing: Easing.out(Easing.quad) }));
-    fieryTrishulTranslateY.value = withDelay(1200, withTiming(-35, { duration: 2500, easing: Easing.out(Easing.quad) }));
+    // 3. Top Tripundra symbol fades in gently
+    tripundraOpacity.value = withDelay(
+      400,
+      withTiming(1, {
+        duration: 1000,
+        easing: Easing.out(Easing.quad),
+      })
+    );
+    tripundraScale.value = withDelay(
+      400,
+      withTiming(1.0, {
+        duration: 1000,
+        easing: Easing.out(Easing.back(1.1)),
+      })
+    );
 
-    // Saffron Glow behind Shivling appears and expands
-    glowOpacity.value = withDelay(600, withTiming(0.7, { duration: 1500 }));
-    glowScale.value = withDelay(600, withTiming(1.1, { duration: 3400, easing: Easing.out(Easing.quad) }));
+    // 4. Main UjjainTirth Logo image & Tagline fade in
+    logoOpacity.value = withDelay(
+      600,
+      withTiming(1, {
+        duration: 1100,
+        easing: Easing.out(Easing.ease),
+      })
+    );
+    logoScale.value = withDelay(
+      600,
+      withTiming(1.0, {
+        duration: 1100,
+        easing: Easing.out(Easing.back(1.05)),
+      })
+    );
+    logoTranslateY.value = withDelay(
+      600,
+      withTiming(0, {
+        duration: 1100,
+        easing: Easing.out(Easing.back(1.05)),
+      })
+    );
 
-    // ─── STAGE 2: SAFFRON ENERGY FLASH TRANSITION (4000ms - 5200ms) ───
-    const tFlash = setTimeout(() => {
-      setStage(2);
-      bgProgress.value = withTiming(1, { duration: 800, easing: Easing.out(Easing.ease) });
+    // Tagline text fades in with a slight delay
+    taglineOpacity.value = withDelay(
+      1100,
+      withTiming(1, {
+        duration: 1000,
+        easing: Easing.out(Easing.ease),
+      })
+    );
 
-      glowScale.value = withTiming(2.5, { duration: 1000, easing: Easing.out(Easing.quad) });
-      glowOpacity.value = withTiming(0, { duration: 1000 });
-
-      shivlingOpacity.value = withTiming(0, { duration: 800 });
-      shivlingScale.value = withTiming(1.25, { duration: 1000 });
-
-      tripundraOpacity.value = withTiming(0, { duration: 800 });
-      tripundraScale.value = withTiming(1.25, { duration: 1000 });
-
-      fieryTrishulOpacity.value = withTiming(0, { duration: 800 });
-      fieryTrishulScale.value = withTiming(2.5, { duration: 1000 });
-      fieryTrishulTranslateY.value = withTiming(-100, { duration: 1000 });
-    }, 4000);
-
-    // ─── STAGE 3: RETURN TO MAROON & REVEAL TRISHUL & TEMPLE (5200ms - 9700ms) ───
-    const tReturnMaroon = setTimeout(() => {
-      setStage(3);
-      // Transition background back to Maroon
-      bgProgress.value = withTiming(1.5, { duration: 800, easing: Easing.out(Easing.ease) });
-
-      // Reset and trigger Glow behind the Temple
-      glowScale.value = 0.5;
-      glowOpacity.value = withDelay(600, withTiming(0.75, { duration: 1500 }));
-      glowScale.value = withDelay(600, withTiming(1.3, { duration: 2500, easing: Easing.out(Easing.quad) }));
-
-      // Straight Trishul rises majestically from bottom center to upper center
-      trishulOpacity.value = withTiming(1, { duration: 1500 });
-      trishulScale.value = withTiming(1.0, { duration: 2500, easing: Easing.out(Easing.back(1.05)) });
-      trishulTranslateY.value = withTiming(0, { duration: 2500, easing: Easing.out(Easing.back(1.05)) });
-
-      // Temple Illustration rises elegantly from below the screen bottom
-      templeOpacity.value = withTiming(1, { duration: 2200 });
-      templeTranslateY.value = withTiming(0, { duration: 2200, easing: Easing.out(Easing.cubic) });
-    }, 5200);
-
-    // ─── STAGE 4: TRANSITION TO CREAM & REVEAL FINAL BRAND (9700ms - 12200ms) ───
-    const tFinalReveal = setTimeout(() => {
-      setStage(4);
-      // Transition background to Cream
-      bgProgress.value = withTiming(2, { duration: 1200, easing: Easing.out(Easing.quad) });
-
-      // Straight Trishul rises completely off the top of the screen
-      trishulOpacity.value = withTiming(0, { duration: 1200, easing: Easing.in(Easing.ease) });
-      trishulScale.value = withTiming(1.15, { duration: 1200 });
-      trishulTranslateY.value = withTiming(-SCREEN_HEIGHT * 0.45, { duration: 1500, easing: Easing.out(Easing.quad) });
-
-      // Logo fades and slides down from top
-      logoOpacity.value = withDelay(400, withTiming(1, { duration: 1000 }));
-      logoTranslateY.value = withDelay(400, withTiming(0, { duration: 1000, easing: Easing.out(Easing.ease) }));
-
-      // Tripundra fades in above the logo text
-      finalTripundraOpacity.value = withDelay(400, withTiming(1, { duration: 1000 }));
-      finalTripundraScale.value = withDelay(400, withTiming(1.0, { duration: 1000, easing: Easing.out(Easing.back(1.1)) }));
-
-      // Tagline fades in
-      taglineOpacity.value = withDelay(1100, withTiming(1, { duration: 1000 }));
-    }, 9700);
-
-    // ─── STAGE 5: FADE OUT AND FINISH (12200ms - 12700ms) ───
+    // 5. Exit Transition to Main App (3200ms trigger, 500ms fade)
     const tExit = setTimeout(() => {
       containerOpacity.value = withTiming(0, {
         duration: 450,
@@ -152,46 +136,16 @@ export default function SecondSplashAnimation({ onFinish }: SecondSplashAnimatio
       setTimeout(() => {
         onFinish();
       }, 500);
-    }, 12200);
+    }, 3200);
 
     return () => {
-      clearTimeout(tFlash);
-      clearTimeout(tReturnMaroon);
-      clearTimeout(tFinalReveal);
       clearTimeout(tExit);
     };
   }, []);
 
   // Animated Styles
-  const animatedBg = useAnimatedStyle(() => {
-    const backgroundColor = interpolateColor(
-      bgProgress.value,
-      [0, 1, 1.5, 2],
-      ["#5c2528", "#E88B5A", "#5c2528", "#F8F3EA"] // Maroon -> Saffron -> Maroon -> Cream
-    );
-    return { backgroundColor };
-  });
-
   const containerStyle = useAnimatedStyle(() => ({
     opacity: containerOpacity.value,
-  }));
-
-  const shivlingStyle = useAnimatedStyle(() => ({
-    opacity: shivlingOpacity.value,
-    transform: [{ scale: shivlingScale.value }],
-  }));
-
-  const tripundraStyle = useAnimatedStyle(() => ({
-    opacity: tripundraOpacity.value,
-    transform: [{ scale: tripundraScale.value }],
-  }));
-
-  const fieryTrishulStyle = useAnimatedStyle(() => ({
-    opacity: fieryTrishulOpacity.value,
-    transform: [
-      { scale: fieryTrishulScale.value },
-      { translateY: fieryTrishulTranslateY.value }
-    ],
   }));
 
   const glowStyle = useAnimatedStyle(() => ({
@@ -199,12 +153,21 @@ export default function SecondSplashAnimation({ onFinish }: SecondSplashAnimatio
     transform: [{ scale: glowScale.value }],
   }));
 
-  const trishulStyle = useAnimatedStyle(() => ({
-    opacity: trishulOpacity.value,
+  const tripundraStyle = useAnimatedStyle(() => ({
+    opacity: tripundraOpacity.value,
+    transform: [{ scale: tripundraScale.value }],
+  }));
+
+  const logoStyle = useAnimatedStyle(() => ({
+    opacity: logoOpacity.value,
     transform: [
-      { scale: trishulScale.value },
-      { translateY: trishulTranslateY.value },
+      { scale: logoScale.value },
+      { translateY: logoTranslateY.value },
     ],
+  }));
+
+  const taglineStyle = useAnimatedStyle(() => ({
+    opacity: taglineOpacity.value,
   }));
 
   const templeStyle = useAnimatedStyle(() => ({
@@ -212,107 +175,54 @@ export default function SecondSplashAnimation({ onFinish }: SecondSplashAnimatio
     transform: [{ translateY: templeTranslateY.value }],
   }));
 
-  const logoStyle = useAnimatedStyle(() => ({
-    opacity: logoOpacity.value,
-    transform: [{ translateY: logoTranslateY.value }],
-  }));
-
-  const finalTripundraStyle = useAnimatedStyle(() => ({
-    opacity: finalTripundraOpacity.value,
-    transform: [{ scale: finalTripundraScale.value }],
-  }));
-
-  const taglineStyle = useAnimatedStyle(() => ({
-    opacity: taglineOpacity.value,
-  }));
-
-  // Border Frame style
-  const frameStyle = useAnimatedStyle(() => {
-    const borderColor = interpolateColor(
-      bgProgress.value,
-      [0, 1, 1.5, 2],
-      [
-        "rgba(255, 224, 130, 0.8)", // Soft gold on Maroon
-        "rgba(255, 224, 130, 0)",   // Fades out during Saffron Flash
-        "rgba(255, 224, 130, 0.8)", // Returns to soft gold on Maroon return
-        "rgba(212, 163, 115, 0.5)"  // Saffron/gold frame on Cream bg
-      ]
-    );
-    return { borderColor };
-  });
-
   return (
-    <Animated.View style={[styles.container, animatedBg, containerStyle]}>
+    <Animated.View style={[styles.container, containerStyle]}>
       {/* Golden Frame Border */}
-      <Animated.View style={[styles.outerFrame, frameStyle]}>
+      <View style={styles.outerFrame}>
         <View style={styles.innerFrame}>
           <View style={[styles.cornerDot, styles.topLeftDot]} />
           <View style={[styles.cornerDot, styles.topRightDot]} />
           <View style={[styles.cornerDot, styles.bottomLeftDot]} />
           <View style={[styles.cornerDot, styles.bottomRightDot]} />
         </View>
+      </View>
+
+      {/* Floating Ambient Saffron/Gold Particles */}
+      <ParticleSystem count={14} />
+
+      {/* Soft Sunrise Aura (Seamless radial gradient without any hard circle borders) */}
+      <Animated.View style={[styles.sunriseGlow, glowStyle]}>
+        <Svg width={GLOW_SIZE} height={GLOW_SIZE} viewBox="0 0 200 200">
+          <Defs>
+            <RadialGradient
+              id="softSunriseGrad"
+              cx="100"
+              cy="100"
+              r="100"
+              fx="100"
+              fy="100"
+              gradientUnits="userSpaceOnUse"
+            >
+              <Stop offset="0%" stopColor="#E88B5A" stopOpacity="0.45" />
+              <Stop offset="45%" stopColor="#F5D5C0" stopOpacity="0.30" />
+              <Stop offset="75%" stopColor="#F5D5C0" stopOpacity="0.10" />
+              <Stop offset="100%" stopColor="#F8F3EA" stopOpacity="0" />
+            </RadialGradient>
+          </Defs>
+          <Circle cx="100" cy="100" r="100" fill="url(#softSunriseGrad)" />
+        </Svg>
       </Animated.View>
 
-      {/* Slow floating gold/saffron ambient particles */}
-      <ParticleSystem count={12} />
-
-      {/* ─── PHASE 1: SHIVLING & CENTER GLOW (Visible during first 4s) ─── */}
-      <Animated.View style={[styles.centerGlow, glowStyle]} />
-
-      <Animated.View style={[styles.shivlingContainer, shivlingStyle]}>
-        <Image
-          source={require("../../assets/images/splash_shivling.png")}
-          style={styles.shivlingImage}
-          resizeMode="contain"
-        />
-        {/* Sacred Tripundra on Shivling */}
-        <Animated.View style={[styles.tripundraWrapper, tripundraStyle]}>
-          <Image
-            source={require("../../assets/images/splash_tripundra.png")}
-            style={styles.tripundraImage}
-            resizeMode="contain"
-          />
-        </Animated.View>
-        {/* Fiery Trishul rising out of Shivling */}
-        <Animated.View style={[styles.fieryTrishulWrapper, fieryTrishulStyle]}>
-          <Image
-            source={require("../../assets/images/splash_trishul_straight.png")}
-            style={styles.fieryTrishulImage}
-            resizeMode="contain"
-          />
-        </Animated.View>
-      </Animated.View>
-
-      {/* ─── PHASE 2: TRISHUL RISE (Visible during Maroon stage 3) ─── */}
-      <Animated.View style={[styles.trishulWrapper, trishulStyle]}>
-        <Image
-          source={require("../../assets/images/splash_trishul_straight.png")}
-          style={styles.trishulImage}
-          resizeMode="contain"
-        />
-      </Animated.View>
-
-      {/* ─── PHASE 3: TEMPLE ILLUSTRATION (Rises in stage 3, stays in stage 4) ─── */}
-      <Animated.View style={[styles.templeWrapper, templeStyle]}>
-        <Image
-          source={require("../../assets/images/splash_temple.png")}
-          style={styles.templeImage}
-          resizeMode="contain"
-        />
-      </Animated.View>
-
-      {/* ─── PHASE 4: FINAL CREAM BRAND REVEAL (Rises & Fades in after 9.7s) ─── */}
-      
-      {/* A. Top: Tripundra above Logo Text */}
-      <Animated.View style={[styles.finalTripundraWrapper, finalTripundraStyle]}>
+      {/* Top Sacred Tripundra */}
+      <Animated.View style={[styles.tripundraWrapper, tripundraStyle]}>
         <Image
           source={require("../../assets/images/splash_tripundra.png")}
-          style={styles.finalTripundraImage}
+          style={styles.tripundraImage}
           resizeMode="contain"
         />
       </Animated.View>
 
-      {/* B. Center: Logo Text */}
+      {/* Center UjjainTirth Logo (Fade-In Animation) */}
       <Animated.View style={[styles.logoWrapper, logoStyle]}>
         <Image
           source={require("../../assets/images/splash_logo_new.png")}
@@ -321,13 +231,22 @@ export default function SecondSplashAnimation({ onFinish }: SecondSplashAnimatio
         />
       </Animated.View>
 
-      {/* C. Bottom Tagline */}
+      {/* Center Tagline Text */}
       <Animated.View style={[styles.taglineWrapper, taglineStyle]}>
-        <View style={[styles.line, { backgroundColor: stage < 4 ? "rgba(255, 224, 130, 0.25)" : "rgba(232, 139, 90, 0.25)" }]} />
-        <Text style={[styles.tagline, { color: stage < 4 ? "#FFE082" : "#555555" }]}>
+        <View style={styles.dividerLine} />
+        <Text style={styles.taglineText}>
           उज्जैन तीर्थ - आध्यात्मिक यात्रा की शुरुआत
         </Text>
-        <View style={[styles.line, { backgroundColor: stage < 4 ? "rgba(255, 224, 130, 0.25)" : "rgba(232, 139, 90, 0.25)" }]} />
+        <View style={styles.dividerLine} />
+      </Animated.View>
+
+      {/* Bottom Temple Illustration (Bottom-to-Up Animation) */}
+      <Animated.View style={[styles.templeWrapper, templeStyle]}>
+        <Image
+          source={require("../../assets/images/splash_temple.png")}
+          style={styles.templeImage}
+          resizeMode="contain"
+        />
       </Animated.View>
     </Animated.View>
   );
@@ -336,31 +255,33 @@ export default function SecondSplashAnimation({ onFinish }: SecondSplashAnimatio
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#F8F3EA", // Warm light paper/sand background
     justifyContent: "center",
     alignItems: "center",
     overflow: "hidden",
   },
   outerFrame: {
     position: "absolute",
-    top: 16,
-    left: 16,
-    right: 16,
-    bottom: 16,
-    borderWidth: 1.5,
-    padding: 3,
+    top: 18,
+    left: 18,
+    right: 18,
+    bottom: 18,
+    borderWidth: 1.2,
+    borderColor: "rgba(212, 163, 115, 0.45)",
+    padding: 4,
     pointerEvents: "none",
     zIndex: 10,
   },
   innerFrame: {
     flex: 1,
     borderWidth: 0.5,
-    borderColor: "rgba(255, 224, 130, 0.3)",
+    borderColor: "rgba(232, 139, 90, 0.25)",
     position: "relative",
   },
   cornerDot: {
     position: "absolute",
-    width: 6,
-    height: 6,
+    width: 5,
+    height: 5,
     backgroundColor: "#FFE082",
     borderWidth: 0.5,
     borderColor: "#E88B5A",
@@ -369,39 +290,20 @@ const styles = StyleSheet.create({
   topRightDot: { top: -3, right: -3 },
   bottomLeftDot: { bottom: -3, left: -3 },
   bottomRightDot: { bottom: -3, right: -3 },
-  centerGlow: {
+  sunriseGlow: {
     position: "absolute",
-    width: 250,
-    height: 250,
-    borderRadius: 125,
-    backgroundColor: "#E88B5A",
-    shadowColor: "#E88B5A",
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.8,
-    shadowRadius: 50,
-    elevation: 10,
-    opacity: 0.7,
-    left: (SCREEN_WIDTH - 250) / 2,
-    top: (SCREEN_HEIGHT - 250) / 2,
-  },
-  shivlingContainer: {
-    position: "absolute",
-    width: 220,
-    height: 220,
-    left: (SCREEN_WIDTH - 220) / 2,
-    top: (SCREEN_HEIGHT - 220) / 2,
+    top: GLOW_TOP,
+    left: GLOW_LEFT,
+    width: GLOW_SIZE,
+    height: GLOW_SIZE,
     justifyContent: "center",
     alignItems: "center",
   },
-  shivlingImage: {
-    width: "100%",
-    height: "100%",
-  },
   tripundraWrapper: {
     position: "absolute",
-    top: "32%",
-    width: 70,
-    height: 35,
+    top: SCREEN_HEIGHT * 0.12,
+    width: 90,
+    height: 70,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -409,64 +311,11 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
   },
-  fieryTrishulWrapper: {
-    position: "absolute",
-    top: -50,
-    width: 60,
-    height: 90,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  fieryTrishulImage: {
-    width: "100%",
-    height: "100%",
-    tintColor: "#FFE082",
-  },
-  trishulWrapper: {
-    position: "absolute",
-    top: SCREEN_HEIGHT * 0.15,
-    left: (SCREEN_WIDTH - 120) / 2,
-    width: 120,
-    height: 180,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  trishulImage: {
-    width: "100%",
-    height: "100%",
-  },
-  templeWrapper: {
-    position: "absolute",
-    bottom: 0,
-    left: (SCREEN_WIDTH - SCREEN_WIDTH * 0.95) / 2,
-    width: SCREEN_WIDTH * 0.95,
-    height: SCREEN_WIDTH * 0.95,
-    justifyContent: "flex-end",
-    alignItems: "center",
-  },
-  templeImage: {
-    width: "100%",
-    height: "100%",
-  },
-  finalTripundraWrapper: {
-    position: "absolute",
-    top: SCREEN_HEIGHT * 0.12,
-    left: (SCREEN_WIDTH - 90) / 2,
-    width: 90,
-    height: 72,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  finalTripundraImage: {
-    width: "100%",
-    height: "100%",
-  },
   logoWrapper: {
     position: "absolute",
-    top: SCREEN_HEIGHT * 0.28,
-    left: (SCREEN_WIDTH - SCREEN_WIDTH * 0.7) / 2,
-    width: SCREEN_WIDTH * 0.7,
-    height: (SCREEN_WIDTH * 0.7) / 4.16,
+    top: SCREEN_HEIGHT * 0.26,
+    width: SCREEN_WIDTH * 0.72,
+    height: (SCREEN_WIDTH * 0.72) / 4.16,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -476,22 +325,36 @@ const styles = StyleSheet.create({
   },
   taglineWrapper: {
     position: "absolute",
-    top: SCREEN_HEIGHT * 0.40,
+    top: SCREEN_HEIGHT * 0.38,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    paddingHorizontal: 32,
+    paddingHorizontal: 28,
     width: "100%",
   },
-  line: {
+  dividerLine: {
     flex: 1,
     height: 1,
+    backgroundColor: "rgba(232, 139, 90, 0.3)",
   },
-  tagline: {
-    fontSize: 12,
+  taglineText: {
+    fontSize: 13,
     fontWeight: "600",
+    color: "#4A4A4A",
     textAlign: "center",
-    marginHorizontal: 12,
+    marginHorizontal: 10,
     letterSpacing: 0.5,
+  },
+  templeWrapper: {
+    position: "absolute",
+    bottom: 0,
+    width: SCREEN_WIDTH * 0.96,
+    height: SCREEN_WIDTH * 0.96,
+    justifyContent: "flex-end",
+    alignItems: "center",
+  },
+  templeImage: {
+    width: "100%",
+    height: "100%",
   },
 });
