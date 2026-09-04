@@ -407,7 +407,7 @@ export default function JyotirlingasScreen() {
               <View style={styles.emptyContainer}>
                 <Ionicons name="search-outline" size={48} color="#888" />
                 <Text style={styles.emptyText}>
-                  No Jyotirlingas found matching "{search}"
+                  No Jyotirlingas found matching “{search}”
                 </Text>
               </View>
             }
@@ -504,9 +504,9 @@ const styles = StyleSheet.create({
     marginVertical: 12,
   },
   backButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     backgroundColor: "#FDE8E5",
     justifyContent: "center",
     alignItems: "center",
@@ -524,7 +524,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   headerSpacer: {
-    width: 40,
+    width: 44,
   },
   searchContainer: {
     flexDirection: "row",
@@ -660,9 +660,9 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 12,
     right: 12,
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     backgroundColor: "rgba(0, 0, 0, 0.5)",
     justifyContent: "center",
     alignItems: "center",
