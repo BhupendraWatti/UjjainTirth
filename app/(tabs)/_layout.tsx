@@ -1,31 +1,34 @@
 import { icons } from "@/components/ui/Icons";
 import { Tabs } from "expo-router";
-import { Image } from "react-native";
+import { Image, useWindowDimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function TabLayout() {
   const insets = useSafeAreaInsets();
+  const { width } = useWindowDimensions();
+  const isCompact = width < 360;
+  const iconSize = isCompact ? 23 : 30;
 
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
+        tabBarShowLabel: true,
         tabBarActiveTintColor: "#EB5C49",
         tabBarLabelStyle: {
-          fontSize: 11, // 🔹 control text size
+          fontSize: isCompact ? 9 : 11,
           fontWeight: "600", // 🔹 control weight
-          marginBottom: 6, // adjust spacing
+          marginBottom: isCompact ? 2 : 6,
         },
         tabBarIconStyle: {
-          marginTop: 6,
+          marginTop: isCompact ? 0 : 4,
         },
         tabBarStyle: {
-          position: "absolute",
-          bottom: insets.bottom > 0 ? insets.bottom : 12,
-          left: 16,
-          right: 16,
-          height: 64,
-          borderRadius: 16,
+          height: (isCompact ? 56 : 64) + insets.bottom,
+          paddingBottom: insets.bottom,
+          marginHorizontal: isCompact ? 0 : 16,
+          marginBottom: isCompact ? 0 : 12,
+          borderRadius: isCompact ? 0 : 16,
           backgroundColor: "#fff",
           elevation: 8,
           shadowColor: "#000",
@@ -45,7 +48,7 @@ export default function TabLayout() {
           tabBarIcon: ({ focused }) => (
             <Image
               source={focused ? icons.home.active : icons.home.inactive}
-              style={{ width: 30, height: 30 }}
+              style={{ width: iconSize, height: iconSize }}
             />
           ),
         }}
@@ -59,7 +62,7 @@ export default function TabLayout() {
           tabBarIcon: ({ focused }) => (
             <Image
               source={focused ? icons.temple.active : icons.temple.inactive}
-              style={{ width: 30, height: 30 }}
+              style={{ width: iconSize, height: iconSize }}
             />
           ),
         }}
@@ -73,7 +76,7 @@ export default function TabLayout() {
           tabBarIcon: ({ focused }) => (
             <Image
               source={focused ? icons.packages.active : icons.packages.inactive}
-              style={{ width: 30, height: 30 }}
+              style={{ width: iconSize, height: iconSize }}
             />
           ),
         }}
@@ -87,7 +90,7 @@ export default function TabLayout() {
           tabBarIcon: ({ focused }) => (
             <Image
               source={focused ? icons.puja.active : icons.puja.inactive}
-              style={{ width: 35, height: 35 }}
+              style={{ width: iconSize, height: iconSize }}
             />
           ),
         }}
@@ -101,7 +104,7 @@ export default function TabLayout() {
           tabBarIcon: ({ focused }) => (
             <Image
               source={focused ? icons.more.active : icons.more.inactive}
-              style={{ width: 35, height: 35 }}
+              style={{ width: iconSize, height: iconSize }}
             />
           ),
         }}
