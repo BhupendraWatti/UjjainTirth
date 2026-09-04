@@ -90,6 +90,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     borderRadius: 20,
     alignSelf: "flex-start",
+    minHeight: 44,
+    justifyContent: "center",
   },
 
   buttonText: {

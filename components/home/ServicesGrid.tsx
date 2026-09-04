@@ -3,20 +3,20 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React from "react";
 import {
-  Dimensions,
   FlatList,
   Image,
   StyleSheet,
   Text,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from "react-native";
 
-const { width } = Dimensions.get("window");
-const CARD_WIDTH = (width - 45) / 2;
-
 const ServiceGrid = ({ services }: { services: Service[] }) => {
   const router = useRouter();
+  const { width } = useWindowDimensions();
+  const cardWidth = (width - 76) / 2;
+  const iconWidth = Math.min(200, cardWidth - 20);
 
   const handleServicePress = (item: Service) => {
     const name = item?.acf?.service_name?.toLowerCase()?.trim();
@@ -48,6 +48,7 @@ const ServiceGrid = ({ services }: { services: Service[] }) => {
       <TouchableOpacity
         activeOpacity={0.8}
         onPress={() => handleServicePress(item)}
+        style={{ width: cardWidth }}
       >
         <LinearGradient
           colors={
@@ -62,7 +63,7 @@ const ServiceGrid = ({ services }: { services: Service[] }) => {
           {icon ? (
             <Image
               source={{ uri: icon }}
-              style={styles.icon}
+              style={[styles.icon, { width: iconWidth }]}
               resizeMode="contain"
             />
           ) : (
@@ -86,6 +87,7 @@ const ServiceGrid = ({ services }: { services: Service[] }) => {
       columnWrapperStyle={styles.row}
       contentContainerStyle={styles.container}
       showsVerticalScrollIndicator={false}
+      scrollEnabled={false}
     />
   );
 };
@@ -103,7 +105,7 @@ const styles = StyleSheet.create({
   },
 
   card: {
-    width: CARD_WIDTH,
+    width: "100%",
     marginTop: 8,
     borderRadius: 16,
     paddingVertical: 10,
@@ -113,7 +115,6 @@ const styles = StyleSheet.create({
   },
 
   icon: {
-    width: 200,
     height: 130,
     marginBottom: 10,
   },

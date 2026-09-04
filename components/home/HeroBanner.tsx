@@ -4,23 +4,27 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from "react-native";
 export default function HeroBanner() {
-  const comingsoon = () => router.push("/packages/form");
+  const { height } = useWindowDimensions();
+  const heroHeight = Math.min(350, Math.max(240, height * 0.48));
+  const explorePackages = () => router.push("/(tabs)/packages");
   return (
     <View style={styles.wrapper}>
       <ImageBackground
         source={require("@/assets/images/Mahakaleshwar-1.jpeg")}
-        style={styles.container}
+        style={[styles.container, { height: heroHeight }]}
         imageStyle={styles.image}
+        resizeMode="cover"
       >
         <View style={styles.overlay}>
           <Text style={styles.title}>Book Darshan & {"\n"}Tour Packages</Text>
 
           <Text style={styles.subtitle}>Ujjain Trusted Tirth App</Text>
 
-          <TouchableOpacity onPress={comingsoon} style={styles.button}>
+          <TouchableOpacity onPress={explorePackages} style={styles.button}>
             <Text style={styles.buttonText}>Explore Now</Text>
           </TouchableOpacity>
         </View>
@@ -36,14 +40,12 @@ const styles = StyleSheet.create({
   },
 
   container: {
-    height: 350,
     width: "100%",
     justifyContent: "flex-end",
   },
 
   image: {
     borderRadius: 20,
-    objectFit: "fill",
   },
 
   overlay: {
@@ -71,6 +73,8 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     borderRadius: 20,
     alignSelf: "flex-start",
+    minHeight: 44,
+    justifyContent: "center",
   },
 
   buttonText: {
