@@ -11,14 +11,14 @@
       "supportsTablet": true
     },
     "android": {
-      "versionCode": 2,
+      "versionCode": 3,
       "adaptiveIcon": {
         "backgroundColor": "#ffffff",
         "foregroundImage": "./assets/images/icon.png"
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.GranthInfotech.UjjainTirth"
+      "package": "com.ujjaintirth.app"
     },
     "web": {
       "output": "static",
