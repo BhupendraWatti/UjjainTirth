@@ -30,6 +30,28 @@ const ServiceGrid = ({ services }: { services: Service[] }) => {
       name === "jyotirlingas"
     ) {
       router.push("/services/jyotirlingas" as any);
+    } else if (
+      name === "transport" ||
+      name === "transport service" ||
+      name === "transport services" ||
+      name === "cabs" ||
+      name === "taxi"
+    ) {
+      router.push("/services/transport" as any);
+    } else if (
+      name === "pooja" ||
+      name === "puja" ||
+      name === "poojas" ||
+      name === "online puja" ||
+      name === "sacred pooja"
+    ) {
+      router.push("/services/pooja" as any);
+    } else if (
+      name.includes("narmada") ||
+      name.includes("parikrama") ||
+      name.includes("parikarma")
+    ) {
+      router.push("/services/narmada-parikrama" as any);
     } else {
       router.push("/coming-soon");
     }

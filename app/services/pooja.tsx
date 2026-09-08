@@ -1,6 +1,6 @@
 import PoojaScreenContent from "@/components/pooja/PoojaScreenContent";
 import React from "react";
 
-export default function PujaScreen() {
-  return <PoojaScreenContent showBackButton={false} />;
+export default function PoojaScreen() {
+  return <PoojaScreenContent showBackButton={true} />;
 }

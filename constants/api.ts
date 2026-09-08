@@ -17,6 +17,10 @@ export const API_ENDPOINTS = {
   PACKAGES: "/packages",
   SHARE_APP: "/share-app",
   JYOTIRLING_TOURS: "/jyotirling-tours",
+  TRANSPORT_SERVICE: "/transport_service",
+  POOJA: "/pooja",
+  NARMADA_LOCATION: "/narmada_location",
+  PARIKRAMA_MODE: "/parikrama_mode",
 };
 
 /**
