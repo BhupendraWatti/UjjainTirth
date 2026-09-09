@@ -2,6 +2,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
 import * as Updates from "expo-updates";
 import { useEffect, useState } from "react";
+import { AuthProvider } from "@/context/AuthContext";
+
 export default function RootLayout() {
   // Create a single query client instance
   const checkForUpdate = async () => {
@@ -35,11 +37,13 @@ export default function RootLayout() {
   }, []);
   return (
     <QueryClientProvider client={queryClient}>
-      <Stack
-        screenOptions={{
-          headerShown: false,
-        }}
-      />
+      <AuthProvider>
+        <Stack
+          screenOptions={{
+            headerShown: false,
+          }}
+        />
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

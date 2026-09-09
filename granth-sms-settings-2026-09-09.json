@@ -1,0 +1,197 @@
+{
+    "plugin": "Granth Bulk SMS",
+    "version": "1.5.0",
+    "exported_at": "2026-09-09 08:29:54",
+    "settings": {
+        "enabled": "1",
+        "username": "ginfotech",
+        "api_key": "ad217eb4-e4bd-4034-82ea-792efad215eb",
+        "sender_id": "GNTINF",
+        "gateway_url": "http:\/\/sms.bulksmsind.in\/v2\/sendSMS",
+        "entity_id": "1701178498237938257",
+        "telemarketer_id": "1402418310000010014",
+        "default_prefix": "+91",
+        "shiprocket_webhook_secret": "",
+        "delhivery_api_token": "",
+        "delhivery_webhook_secret": "",
+        "delhivery_environment": "production",
+        "admin_phone": ""
+    },
+    "templates": {
+        "placed": {
+            "id": "placed",
+            "title": "Order Placed Status",
+            "event_type": "placed",
+            "enabled": "1",
+            "dlt_template_id": "",
+            "content": "Hi {customer_first_name}, your order #{order_id} worth {order_total} at {site_title} has been placed successfully!"
+        },
+        "order_confirmed": {
+            "id": "order_confirmed",
+            "title": "Order Confirmed Status",
+            "event_type": "order_confirmed",
+            "enabled": "1",
+            "dlt_template_id": "",
+            "content": "Hi {customer_first_name}, your order #{order_id} at {site_title} is confirmed and is being prepared."
+        },
+        "picking_items": {
+            "id": "picking_items",
+            "title": "Picking Items Status",
+            "event_type": "picking_items",
+            "enabled": "1",
+            "dlt_template_id": "",
+            "content": "Hi {customer_first_name}, items for your order #{order_id} are being picked up by courier ({courier_name})."
+        },
+        "shipped": {
+            "id": "shipped",
+            "title": "Order Shipped Status",
+            "event_type": "shipped",
+            "enabled": "1",
+            "dlt_template_id": "",
+            "content": "Hi {customer_first_name}, order #{order_id} has been shipped via {courier_name}. AWB: {awb_code}. Track: {tracking_url}"
+        },
+        "out_for_delivery": {
+            "id": "out_for_delivery",
+            "title": "Out for Delivery Status",
+            "event_type": "out_for_delivery",
+            "enabled": "1",
+            "dlt_template_id": "",
+            "content": "Hi {customer_first_name}, your order #{order_id} from {site_title} is out for delivery today with {courier_name}!"
+        },
+        "delivered": {
+            "id": "delivered",
+            "title": "Order Delivered Status",
+            "event_type": "delivered",
+            "enabled": "1",
+            "dlt_template_id": "",
+            "content": "Hi {customer_first_name}, your order #{order_id} has been delivered. Thank you for shopping with {site_title}!"
+        },
+        "completed": {
+            "id": "completed",
+            "title": "Completed Order Status",
+            "event_type": "completed",
+            "enabled": "1",
+            "dlt_template_id": "",
+            "content": "Hi {customer_first_name}, your order #{order_id} from {site_title} is marked completed. Thank you!"
+        },
+        "pending": {
+            "id": "pending",
+            "title": "Pending Payment Order Status",
+            "event_type": "pending",
+            "enabled": "1",
+            "dlt_template_id": "",
+            "content": "Hi {customer_first_name}, your order #{order_id} at {site_title} is pending payment of {order_total}."
+        },
+        "processing": {
+            "id": "processing",
+            "title": "Processing Order Status",
+            "event_type": "processing",
+            "enabled": "1",
+            "dlt_template_id": "",
+            "content": "Hi {customer_first_name}, thank you for your order #{order_id} worth {order_total} at {site_title}. We are processing it now!"
+        },
+        "on-hold": {
+            "id": "on-hold",
+            "title": "On-Hold Order Status",
+            "event_type": "on-hold",
+            "enabled": "1",
+            "dlt_template_id": "",
+            "content": "Hi {customer_first_name}, your order #{order_id} at {site_title} has been placed on hold."
+        },
+        "cancelled": {
+            "id": "cancelled",
+            "title": "Cancelled Order Status",
+            "event_type": "cancelled",
+            "enabled": "1",
+            "dlt_template_id": "",
+            "content": "Hi {customer_first_name}, your order #{order_id} at {site_title} has been cancelled."
+        },
+        "refunded": {
+            "id": "refunded",
+            "title": "Refunded Order Status",
+            "event_type": "refunded",
+            "enabled": "1",
+            "dlt_template_id": "",
+            "content": "Hi {customer_first_name}, your order #{order_id} at {site_title} has been refunded."
+        },
+        "failed": {
+            "id": "failed",
+            "title": "Failed Order Status",
+            "event_type": "failed",
+            "enabled": "1",
+            "dlt_template_id": "",
+            "content": "Hi {customer_first_name}, payment for order #{order_id} at {site_title} failed."
+        }
+    },
+    "otp_settings": {
+        "otp_length": 6,
+        "otp_expiry_minutes": 5,
+        "wc_override_enabled": "0",
+        "otp_dlt_template_id": "",
+        "otp_template": "Your {site_title} OTP is {otp}. Valid for {expiry} minutes. Do not share.",
+        "session_sms_enabled": "1",
+        "session_dlt_template_id": "",
+        "session_template": "Notice: {action} was performed on your {site_title} account (Mobile: {mobile})."
+    },
+    "cf7_settings": {
+        "enabled": "1",
+        "admin_sms_enabled": "1",
+        "admin_phone": "7723030628",
+        "default_phone_field": "your-phone",
+        "forms": {
+            "4597": {
+                "customer_enabled": "1",
+                "customer_dlt_template_id": "",
+                "customer_template": "Hi {your-name}, thank you for submitting {form_title} at {site_title}. We will contact you shortly!",
+                "admin_dlt_template_id": "",
+                "admin_template": "Notice: New lead on {site_title} from {your-name} ({your-phone}) for {form_title}. Please check Gmail!"
+            },
+            "3294": {
+                "customer_dlt_template_id": "",
+                "customer_template": "Hi {your-name}, thank you for submitting {form_title} at {site_title}. We will contact you shortly!",
+                "admin_dlt_template_id": "",
+                "admin_template": "Notice: New lead on {site_title} from {your-name} ({your-phone}) for {form_title}. Please check Gmail!"
+            },
+            "2564": {
+                "customer_enabled": "1",
+                "customer_dlt_template_id": "1777178713065823820",
+                "customer_template": "Dear {your-name}, your package enquiry for Ujjain Darshan has been received by UjjainTirth. Our team will contact you with the package details and cost. Thank you, UjjainTirth Powered by Granth Infotech.",
+                "admin_dlt_template_id": "",
+                "admin_template": "Notice: New lead on {site_title} from {your-name} ({your-phone}) for {form_title}. Please check Gmail!"
+            },
+            "2556": {
+                "customer_enabled": "1",
+                "customer_dlt_template_id": "1777178713063351305",
+                "customer_template": "Dear {your-name}, your enquiry has been received by UjjainTirth. Our team will review your request and contact you shortly. Thank you for contacting UjjainTirth Powered by Granth Infotech.",
+                "admin_dlt_template_id": "",
+                "admin_template": "Notice: New lead on {site_title} from {your-name} ({your-phone}) for {form_title}. Please check Gmail!"
+            },
+            "6": {
+                "customer_enabled": "1",
+                "customer_dlt_template_id": "1777178713063351305",
+                "customer_template": "Dear {your-name}, your enquiry has been received by UjjainTirth. Our team will review your request and contact you shortly. Thank you for contacting UjjainTirth Powered by Granth Infotech.",
+                "admin_dlt_template_id": "",
+                "admin_template": "Notice: New lead on {site_title} from {your-name} ({your-phone}) for {form_title}. Please check Gmail!"
+            },
+            "2373": {
+                "customer_dlt_template_id": "",
+                "customer_template": "Hi {your-name}, thank you for submitting {form_title} at {site_title}. We will contact you shortly!",
+                "admin_dlt_template_id": "",
+                "admin_template": "Notice: New lead on {site_title} from {your-name} ({your-phone}) for {form_title}. Please check Gmail!"
+            },
+            "88": {
+                "customer_dlt_template_id": "",
+                "customer_template": "Hi {your-name}, thank you for submitting {form_title} at {site_title}. We will contact you shortly!",
+                "admin_dlt_template_id": "",
+                "admin_template": "Notice: New lead on {site_title} from {your-name} ({your-phone}) for {form_title}. Please check Gmail!"
+            },
+            "87": {
+                "customer_enabled": "1",
+                "customer_dlt_template_id": "1777178713063351305",
+                "customer_template": "Dear {your-name}, your enquiry has been received by UjjainTirth. Our team will review your request and contact you shortly. Thank you for contacting UjjainTirth Powered by Granth Infotech.",
+                "admin_dlt_template_id": "",
+                "admin_template": "Notice: New lead on {site_title} from {your-name} ({your-phone}) for {form_title}. Please check Gmail!"
+            }
+        }
+    }
+}

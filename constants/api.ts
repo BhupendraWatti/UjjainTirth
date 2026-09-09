@@ -5,6 +5,8 @@
 export const API_BASE_URL = "https://ujjaintirth.com/wp-json/wp/v2";
 
 export const API_CUSTOM_URL = "https://ujjaintirth.com/wp-json/custom/v1";
+export const API_GRANTH_URL = "https://ujjaintirth.com/wp-json/granth/v1";
+
 /**
  * API endpoints used across the app
  */
@@ -21,6 +23,10 @@ export const API_ENDPOINTS = {
   POOJA: "/pooja",
   NARMADA_LOCATION: "/narmada_location",
   PARIKRAMA_MODE: "/parikrama_mode",
+  // Granth OTP Auth endpoints
+  SEND_OTP: "/auth/send-otp",
+  RESEND_OTP: "/auth/resend-otp",
+  VERIFY_OTP: "/auth/verify-otp",
 };
 
 /**

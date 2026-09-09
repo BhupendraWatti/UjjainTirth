@@ -2,7 +2,7 @@ import React from "react";
 import { useRouter } from "expo-router";
 import AuthVerificationView from "@/components/auth/AuthVerificationView";
 
-export default function OnboardingScreen() {
+export default function LoginScreen() {
   const router = useRouter();
 
   return (
@@ -12,7 +12,7 @@ export default function OnboardingScreen() {
         router.replace("/(tabs)");
       }}
       onSkip={() => {
-        router.replace("/(tabs)");
+        router.back();
       }}
     />
   );

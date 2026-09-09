@@ -1,4 +1,3 @@
-import { COLORS } from "@/constants/colors";
 import MenuItem from "@/components/ui/MenuItem";
 import { router } from "expo-router";
 import React from "react";

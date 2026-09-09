@@ -1,6 +1,6 @@
 import React from "react";
 import { useRouter } from "expo-router";
-import { isOnboardingDone } from "@/utils/storage";
+import { getStoredUser } from "@/utils/storage";
 import SplashAnimation from "@/components/splash/SplashAnimation";
 import SecondSplashAnimation from "@/components/splash/SecondSplashAnimation";
 
@@ -13,8 +13,12 @@ export default function Intro() {
 
   const handleFinish = async () => {
     try {
-      const done = await isOnboardingDone();
-      router.replace(done ? "/(tabs)" : "/(auth)/onboarding");
+      const user = await getStoredUser();
+      if (user?.isLoggedIn) {
+        router.replace("/(tabs)");
+      } else {
+        router.replace("/(auth)/onboarding");
+      }
     } catch (error) {
       console.log("Storage error:", error);
       router.replace("/(auth)/onboarding" as any);
