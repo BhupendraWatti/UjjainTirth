@@ -17,11 +17,11 @@ export default function Intro() {
       if (user?.isLoggedIn) {
         router.replace("/(tabs)");
       } else {
-        router.replace("/(auth)/onboarding");
+        router.replace("/(auth)/login");
       }
     } catch (error) {
       console.log("Storage error:", error);
-      router.replace("/(auth)/onboarding" as any);
+      router.replace("/(auth)/login" as any);
     }
   };
 

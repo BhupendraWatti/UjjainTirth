@@ -1,19 +1,6 @@
 import React from "react";
-import { useRouter } from "expo-router";
-import AuthVerificationView from "@/components/auth/AuthVerificationView";
+import OnboardingView from "@/components/onboarding/OnboardingView";
 
 export default function OnboardingScreen() {
-  const router = useRouter();
-
-  return (
-    <AuthVerificationView
-      showSkip={true}
-      onSuccess={() => {
-        router.replace("/(tabs)");
-      }}
-      onSkip={() => {
-        router.replace("/(tabs)");
-      }}
-    />
-  );
+  return <OnboardingView />;
 }
