@@ -20,7 +20,12 @@ const PoojaCard = ({ item, onRequest, style }: Props) => {
       {/* Top Banner Image with Sacred Temple Badge */}
       <View style={styles.imageWrapper}>
         <Image
-          source={{ uri: item.image }}
+          source={{
+            uri:
+              item.image && typeof item.image === "string" && item.image.trim() !== ""
+                ? item.image.trim()
+                : "https://ujjaintirth.com/wp-content/uploads/2026/09/Ujjain-sacred-skyline-1.png",
+          }}
           style={styles.image}
           contentFit="cover"
           transition={250}

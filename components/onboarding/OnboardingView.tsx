@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
-  Animated,
   FlatList,
   Platform,
   StyleSheet,
@@ -12,43 +11,376 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import Svg, { Path } from "react-native-svg";
+import { Image } from "expo-image";
+import { LinearGradient } from "expo-linear-gradient";
+import { StatusBar } from "expo-status-bar";
+import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
-import { fetchOnboarding } from "@/services/onboarding";
+import Animated, {
+  Extrapolation,
+  interpolate,
+  runOnJS,
+  useAnimatedScrollHandler,
+  useAnimatedStyle,
+  useSharedValue,
+  type SharedValue,
+} from "react-native-reanimated";
+import {
+  fetchOnboarding,
+  DEFAULT_ONBOARDING_ITEMS,
+} from "@/services/onboarding";
 import { setOnboardingDone } from "@/utils/storage";
 import { OnboardingItem } from "@/types/onboarding";
 
+const LOCAL_FALLBACK_IMAGE = require("@/assets/images/Mahakaleshwar-1.jpeg");
+
+const DEFAULT_FALLBACK_IMAGES = [
+  "https://ujjaintirth.com/wp-content/uploads/2026/03/1.png",
+  "https://ujjaintirth.com/wp-content/uploads/2026/03/2.jpeg",
+  "https://ujjaintirth.com/wp-content/uploads/2026/03/3.png",
+];
+
+const IMAGE_HEADERS = {
+  Accept: "image/webp,image/apng,image/*,*/*;q=0.8",
+};
+
+interface BackdropItemProps {
+  item: OnboardingItem;
+  index: number;
+  scrollX: SharedValue<number>;
+  itemSize: number;
+}
+
+const BackdropItem = React.memo(
+  ({ item, index, scrollX, itemSize }: BackdropItemProps) => {
+    const [hasError, setHasError] = useState(false);
+
+    const animatedStyle = useAnimatedStyle(() => {
+      const opacity = interpolate(
+        scrollX.value,
+        [(index - 1) * itemSize, index * itemSize, (index + 1) * itemSize],
+        [0, 1, 0],
+        Extrapolation.CLAMP
+      );
+      return { opacity };
+    });
+
+    const rawUri =
+      typeof item.image === "string" && item.image.trim().length > 0
+        ? item.image.trim()
+        : DEFAULT_FALLBACK_IMAGES[index % DEFAULT_FALLBACK_IMAGES.length];
+
+    const imageSource = hasError
+      ? LOCAL_FALLBACK_IMAGE
+      : {
+          uri: rawUri,
+          headers: IMAGE_HEADERS,
+        };
+
+    return (
+      <Animated.View
+        style={[StyleSheet.absoluteFillObject, animatedStyle]}
+        collapsable={false}
+      >
+        <Image
+          source={imageSource}
+          style={StyleSheet.absoluteFillObject}
+          contentFit="cover"
+          // Keep within Android RenderEffect limit (<= 25)
+          blurRadius={Platform.OS === "android" ? 18 : 35}
+          priority="high"
+          cachePolicy="memory-disk"
+          transition={300}
+          onError={() => setHasError(true)}
+        />
+      </Animated.View>
+    );
+  }
+);
+BackdropItem.displayName = "BackdropItem";
+
+interface HeaderItemProps {
+  item: OnboardingItem;
+  index: number;
+  scrollX: SharedValue<number>;
+  itemSize: number;
+  isShort: boolean;
+}
+
+const HeaderItem = React.memo(
+  ({ item, index, scrollX, itemSize, isShort }: HeaderItemProps) => {
+    const animatedStyle = useAnimatedStyle(() => {
+      const opacity = interpolate(
+        scrollX.value,
+        [
+          (index - 0.55) * itemSize,
+          index * itemSize,
+          (index + 0.55) * itemSize,
+        ],
+        [0, 1, 0],
+        Extrapolation.CLAMP
+      );
+      const translateY = interpolate(
+        scrollX.value,
+        [(index - 1) * itemSize, index * itemSize, (index + 1) * itemSize],
+        [20, 0, -20],
+        Extrapolation.CLAMP
+      );
+      return {
+        opacity,
+        transform: [{ translateY }],
+      };
+    });
+
+    return (
+      <Animated.View
+        style={[styles.headerItemContainer, animatedStyle]}
+        pointerEvents="none"
+        collapsable={false}
+      >
+        <Text
+          style={[
+            styles.itemTitle,
+            { fontSize: isShort ? 22 : 26, lineHeight: isShort ? 28 : 32 },
+          ]}
+          numberOfLines={2}
+        >
+          {item.title}
+        </Text>
+        <Text
+          style={[
+            styles.itemDescription,
+            {
+              fontSize: isShort ? 13 : 14.5,
+              lineHeight: isShort ? 18 : 21,
+              marginTop: isShort ? 4 : 6,
+            },
+          ]}
+          numberOfLines={2}
+        >
+          {item.description}
+        </Text>
+      </Animated.View>
+    );
+  }
+);
+HeaderItem.displayName = "HeaderItem";
+
+interface CarouselCardProps {
+  item: OnboardingItem;
+  index: number;
+  scrollX: SharedValue<number>;
+  itemSize: number;
+  spacing: number;
+  cardWidth: number;
+  cardHeight: number;
+}
+
+const CarouselCard = React.memo(
+  ({
+    item,
+    index,
+    scrollX,
+    itemSize,
+    spacing,
+    cardWidth,
+    cardHeight,
+  }: CarouselCardProps) => {
+    const [hasError, setHasError] = useState(false);
+
+    const animatedCardStyle = useAnimatedStyle(() => {
+      const inputRange = [
+        (index - 1) * itemSize,
+        index * itemSize,
+        (index + 1) * itemSize,
+      ];
+      const scale = interpolate(
+        scrollX.value,
+        inputRange,
+        [0.88, 1, 0.88],
+        Extrapolation.CLAMP
+      );
+      const opacity = interpolate(
+        scrollX.value,
+        inputRange,
+        [0.65, 1, 0.65],
+        Extrapolation.CLAMP
+      );
+      // Magnetic peek shift: brings side cards into the viewport so the user clearly sees the preview of previous & next slide
+      const translateX = interpolate(
+        scrollX.value,
+        inputRange,
+        [-24, 0, 24],
+        Extrapolation.CLAMP
+      );
+      return {
+        transform: [{ translateX }, { scale }],
+        opacity,
+      };
+    });
+
+    const animatedImageStyle = useAnimatedStyle(() => {
+      const inputRange = [
+        (index - 1) * itemSize,
+        index * itemSize,
+        (index + 1) * itemSize,
+      ];
+      const translateX = interpolate(
+        scrollX.value,
+        inputRange,
+        [-cardWidth * 0.38, 0, cardWidth * 0.38],
+        Extrapolation.CLAMP
+      );
+      const scale = interpolate(
+        scrollX.value,
+        inputRange,
+        [1.20, 1.34, 1.20],
+        Extrapolation.CLAMP
+      );
+      return {
+        transform: [{ translateX }, { scale }],
+      };
+    });
+
+    const rawUri =
+      typeof item.image === "string" && item.image.trim().length > 0
+        ? item.image.trim()
+        : DEFAULT_FALLBACK_IMAGES[index % DEFAULT_FALLBACK_IMAGES.length];
+
+    const imageSource = hasError
+      ? LOCAL_FALLBACK_IMAGE
+      : {
+          uri: rawUri,
+          headers: IMAGE_HEADERS,
+        };
+
+    return (
+      <View
+        style={{ width: cardWidth, marginHorizontal: spacing / 2 }}
+        collapsable={false}
+      >
+        <Animated.View
+          style={[
+            styles.cardContainer,
+            { width: cardWidth, height: cardHeight },
+            animatedCardStyle,
+          ]}
+          collapsable={false}
+        >
+          <Animated.View
+            style={[StyleSheet.absoluteFillObject, animatedImageStyle]}
+            collapsable={false}
+          >
+            <Image
+              source={imageSource}
+              style={StyleSheet.absoluteFillObject}
+              contentFit="cover"
+              priority="high"
+              cachePolicy="memory-disk"
+              transition={300}
+              onError={() => setHasError(true)}
+            />
+          </Animated.View>
+          <LinearGradient
+            colors={["transparent", "rgba(0,0,0,0.12)", "rgba(0,0,0,0.42)"]}
+            style={StyleSheet.absoluteFillObject}
+            pointerEvents="none"
+          />
+        </Animated.View>
+      </View>
+    );
+  }
+);
+CarouselCard.displayName = "CarouselCard";
+
+interface DotIndicatorProps {
+  index: number;
+  scrollX: SharedValue<number>;
+  itemSize: number;
+}
+
+const DotIndicator = React.memo(
+  ({ index, scrollX, itemSize }: DotIndicatorProps) => {
+    const animatedDotStyle = useAnimatedStyle(() => {
+      const inputRange = [
+        (index - 1) * itemSize,
+        index * itemSize,
+        (index + 1) * itemSize,
+      ];
+      const width = interpolate(
+        scrollX.value,
+        inputRange,
+        [8, 28, 8],
+        Extrapolation.CLAMP
+      );
+      const opacity = interpolate(
+        scrollX.value,
+        inputRange,
+        [0.35, 1, 0.35],
+        Extrapolation.CLAMP
+      );
+      return {
+        width,
+        opacity,
+      };
+    });
+
+    return (
+      <Animated.View
+        style={[styles.dot, animatedDotStyle]}
+        collapsable={false}
+      />
+    );
+  }
+);
+DotIndicator.displayName = "DotIndicator";
+
 export default function OnboardingView() {
-  const [data, setData] = useState<OnboardingItem[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const [data, setData] = useState<OnboardingItem[]>(DEFAULT_ONBOARDING_ITEMS);
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
-  const isShort = height < 650;
   const router = useRouter();
-  const scrollX = useRef(new Animated.Value(0)).current;
 
+  const isShort = height < 680;
+
+  // Responsive Carousel Dimensions
+  // Catalin Miron Wallpaper Animated Carousel proportions:
+  // Tall, commanding mobile wallpaper frame that fills the available vertical space
+  const headerTop = insets.top + (isShort ? 44 : 52);
+  const headerHeight = isShort ? 72 : 84;
+  const carouselMarginTop = headerTop + headerHeight + (isShort ? 6 : 12);
+  const bottomPadding = Math.max(insets.bottom + 12, isShort ? 16 : 24);
+  const bottomControlsHeight = 58;
+  const availableHeight = height - carouselMarginTop - (bottomPadding + bottomControlsHeight);
+
+  // Card height occupies 94% of available space (540-580px on standard phones, ~62% of screen)
+  const cardHeight = Math.round(
+    isShort ? height * 0.48 : Math.min(availableHeight * 0.94, height * 0.63)
+  );
+
+  // Card width matches mobile wallpaper ratio (slightly wider for commanding presence, ~0.76 of screen width)
+  // Maintains clear preview peeking on edges while giving cards more horizontal body
+  const cardWidth = Math.round(
+    Math.min(width * 0.76, 325)
+  );
+
+  const spacing = 14;
+  const itemSize = cardWidth + spacing;
+  const sideSpacer = (width - cardWidth) / 2;
+
+  const scrollX = useSharedValue(0);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const flatListRef = useRef<FlatList>(null);
+  const currentIndexRef = useRef(0);
+  const flatListRef = useRef<FlatList<OnboardingItem>>(null);
 
   const load = useCallback(async () => {
-    setLoading(true);
-    setError(false);
     try {
-      const rawData = await fetchOnboarding();
-      // Filter out invalid items (such as test posts without descriptions)
-      const validItems = (rawData || []).filter(
-        (item) =>
-          item.description &&
-          item.description.trim().length > 0 &&
-          !item.title.toLowerCase().includes("screen one otp")
-      );
-      setData(validItems);
+      const items = await fetchOnboarding();
+      if (items && items.length > 0) {
+        setData(items);
+      }
     } catch (e) {
-      console.log("Onboarding fetch error:", e);
-      setError(true);
-    } finally {
-      setLoading(false);
+      console.log("Onboarding fetch fallback:", e);
     }
   }, []);
 
@@ -56,14 +388,31 @@ export default function OnboardingView() {
     load();
   }, [load]);
 
-  const viewConfig = {
-    viewAreaCoveragePercentThreshold: 50,
-  };
+  const updateIndex = useCallback(
+    (newIdx: number) => {
+      if (
+        newIdx >= 0 &&
+        newIdx < data.length &&
+        newIdx !== currentIndexRef.current
+      ) {
+        currentIndexRef.current = newIdx;
+        setCurrentIndex(newIdx);
+        try {
+          Haptics.selectionAsync();
+        } catch {
+          // Haptics fallback
+        }
+      }
+    },
+    [data.length]
+  );
 
-  const onViewRef = useRef(({ viewableItems }: any) => {
-    if (viewableItems.length > 0) {
-      setCurrentIndex(viewableItems[0].index);
-    }
+  const scrollHandler = useAnimatedScrollHandler({
+    onScroll: (event) => {
+      scrollX.value = event.contentOffset.x;
+      const idx = Math.round(event.contentOffset.x / itemSize);
+      runOnJS(updateIndex)(idx);
+    },
   });
 
   const handleFinish = async () => {
@@ -76,294 +425,341 @@ export default function OnboardingView() {
     router.replace("/(tabs)");
   };
 
-  const handleNext = async () => {
+  const handleNext = () => {
     try {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     } catch {
       // Haptics fallback
     }
-    if (currentIndex === data.length - 1) {
+    if (currentIndex >= data.length - 1) {
       handleFinish();
     } else {
-      flatListRef.current?.scrollToIndex({
-        index: currentIndex + 1,
+      const nextIndex = currentIndex + 1;
+      flatListRef.current?.scrollToOffset({
+        offset: nextIndex * itemSize,
         animated: true,
       });
     }
   };
 
-  const renderItem = ({ item, index: i }: { item: OnboardingItem; index: number }) => {
-    const inputRange = [(i - 1) * width, i * width, (i + 1) * width];
-
-    // Image Parallax Effect
-    const translateX = scrollX.interpolate({
-      inputRange,
-      outputRange: [-50, 0, 50],
-      extrapolate: "clamp",
-    });
-
-    return (
-      <View style={{ width, flex: 1 }}>
-        {/* Top Image */}
-        <View style={{ height: isShort ? "52%" : "60%" }}>
-          <Animated.Image
-            source={{ uri: item.image }}
-            style={{
-              width: "100%",
-              height: "100%",
-              transform: [{ translateX }],
-            }}
-            resizeMode="cover"
-          />
-
-          {/* Curved Transition Wave */}
-          <Svg
-            height={isShort ? 110 : 140}
-            width={width}
-            style={{
-              position: "absolute",
-              bottom: -1,
-            }}
-          >
-            <Path
-              d={`M0,60 Q${width / 2},220 ${width},60 L${width},160 L0,160 Z`}
-              fill="#F5EFE7"
-            />
-          </Svg>
-
-          {/* Skip Button */}
-          <TouchableOpacity
-            onPress={handleFinish}
-            style={[styles.skipButton, { top: insets.top + 12 }]}
-            activeOpacity={0.7}
-          >
-            <Text style={styles.skipText}>Skip</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* Content Section */}
-        <Animated.View
-          style={[
-            styles.contentContainer,
-            { paddingTop: isShort ? 20 : 40 },
-          ]}
-        >
-          <Text style={[styles.itemTitle, { fontSize: isShort ? 24 : 28 }]}>
-            {item.title}
-          </Text>
-
-          <Text
-            style={[
-              styles.itemDescription,
-              {
-                fontSize: isShort ? 15 : 17,
-                lineHeight: isShort ? 22 : 25,
-                marginTop: isShort ? 10 : 16,
-              },
-            ]}
-          >
-            {item.description}
-          </Text>
-
-          {/* Animated Indicator Dots */}
-          <View style={[styles.dotsRow, { marginTop: isShort ? 14 : 22 }]}>
-            {data.map((_, indexDot) => {
-              const dotInputRange = [
-                (indexDot - 1) * width,
-                indexDot * width,
-                (indexDot + 1) * width,
-              ];
-
-              const scaleDot = scrollX.interpolate({
-                inputRange: dotInputRange,
-                outputRange: [0.8, 1.4, 0.8],
-                extrapolate: "clamp",
-              });
-
-              const opacityDot = scrollX.interpolate({
-                inputRange: dotInputRange,
-                outputRange: [0.35, 1, 0.35],
-                extrapolate: "clamp",
-              });
-
-              return (
-                <Animated.View
-                  key={indexDot}
-                  style={[
-                    styles.dot,
-                    {
-                      transform: [{ scale: scaleDot }],
-                      opacity: opacityDot,
-                      backgroundColor: "#0E5E43",
-                    },
-                  ]}
-                />
-              );
-            })}
-          </View>
-
-          {/* Next Button */}
-          <TouchableOpacity
-            onPress={handleNext}
-            style={[
-              styles.nextButton,
-              {
-                marginTop: isShort ? 16 : "auto",
-                marginBottom: Math.max(insets.bottom + 16, isShort ? 20 : 32),
-                width: isShort ? 54 : 60,
-                height: isShort ? 54 : 60,
-                borderRadius: isShort ? 27 : 30,
-              },
-            ]}
-            activeOpacity={0.85}
-          >
-            <Text style={styles.nextButtonArrow}>→</Text>
-          </TouchableOpacity>
-        </Animated.View>
-      </View>
-    );
-  };
-
-  if (loading) {
-    return (
-      <View style={styles.stateContainer}>
-        <ActivityIndicator size="large" color="#0E5E43" />
-        <Text style={styles.stateText}>Preparing your pilgrimage…</Text>
-      </View>
-    );
-  }
-
-  if (error || data.length === 0) {
-    return (
-      <View style={styles.stateContainer}>
-        <Text style={styles.stateTitle}>We couldn&apos;t load the introduction</Text>
-        <Text style={styles.stateText}>Check your connection and try again.</Text>
-        <TouchableOpacity style={styles.retryButton} onPress={load} activeOpacity={0.8}>
-          <Text style={styles.retryText}>Try again</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
+  const isLast = data.length > 0 && currentIndex === data.length - 1;
 
   return (
-    <Animated.FlatList
-      ref={flatListRef}
-      data={data}
-      renderItem={renderItem}
-      horizontal
-      pagingEnabled
-      showsHorizontalScrollIndicator={false}
-      keyExtractor={(item) => item.id.toString()}
-      scrollEventThrottle={16}
-      onViewableItemsChanged={onViewRef.current}
-      viewabilityConfig={viewConfig}
-      onScroll={Animated.event(
-        [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-        { useNativeDriver: false }
-      )}
-    />
+    <View style={styles.container}>
+      <StatusBar style="light" />
+
+      {/* 1. Backdrop Layer: Full-screen stack of cross-fading blurred wallpapers */}
+      <View style={StyleSheet.absoluteFillObject} pointerEvents="none">
+        {data.map((item, idx) => (
+          <BackdropItem
+            key={item.id}
+            item={item}
+            index={idx}
+            scrollX={scrollX}
+            itemSize={itemSize}
+          />
+        ))}
+        <LinearGradient
+          colors={[
+            "rgba(8, 14, 11, 0.48)",
+            "rgba(8, 14, 11, 0.72)",
+            "rgba(6, 10, 8, 0.94)",
+          ]}
+          style={StyleSheet.absoluteFillObject}
+        />
+      </View>
+
+      {/* 2. Top Bar Layer: Step Indicator & Skip Button */}
+      <View
+        style={[
+          styles.topBar,
+          {
+            top: insets.top + (Platform.OS === "ios" ? 8 : 14),
+          },
+        ]}
+      >
+        <View style={styles.stepBadge}>
+          <Text style={styles.stepBadgeText}>
+            {`0${currentIndex + 1} / 0${data.length}`}
+          </Text>
+        </View>
+
+        <TouchableOpacity
+          onPress={handleFinish}
+          style={styles.skipButton}
+          activeOpacity={0.7}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+        >
+          <Text style={styles.skipText}>Skip</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* 3. Header Text Layer: Titles & Descriptions cross-fading */}
+      <View
+        style={[
+          styles.headerSection,
+          {
+            top: headerTop,
+            height: headerHeight,
+          },
+        ]}
+        pointerEvents="none"
+      >
+        {data.map((item, idx) => (
+          <HeaderItem
+            key={item.id}
+            item={item}
+            index={idx}
+            scrollX={scrollX}
+            itemSize={itemSize}
+            isShort={isShort}
+          />
+        ))}
+      </View>
+
+      {/* 4. Carousel Cards Layer: Snapping horizontal Animated.FlatList */}
+      <View
+        style={[
+          styles.carouselSection,
+          {
+            marginTop: carouselMarginTop,
+            height: cardHeight + 14,
+          },
+        ]}
+      >
+        <Animated.FlatList
+          ref={flatListRef}
+          data={data}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          snapToInterval={itemSize}
+          decelerationRate="fast"
+          bounces={false}
+          removeClippedSubviews={false}
+          initialNumToRender={data.length}
+          maxToRenderPerBatch={data.length}
+          windowSize={5}
+          getItemLayout={(_, index) => ({
+            length: itemSize,
+            offset: itemSize * index,
+            index,
+          })}
+          keyExtractor={(item) => item.id.toString()}
+          scrollEventThrottle={16}
+          onScroll={scrollHandler}
+          onMomentumScrollEnd={(e) => {
+            const idx = Math.round(e.nativeEvent.contentOffset.x / itemSize);
+            updateIndex(idx);
+          }}
+          contentContainerStyle={{
+            paddingHorizontal: sideSpacer - spacing / 2,
+            alignItems: "center",
+          }}
+          renderItem={({ item, index }) => (
+            <CarouselCard
+              item={item}
+              index={index}
+              scrollX={scrollX}
+              itemSize={itemSize}
+              spacing={spacing}
+              cardWidth={cardWidth}
+              cardHeight={cardHeight}
+            />
+          )}
+        />
+      </View>
+
+      {/* 5. Bottom Controls Layer: Dynamic indicators & CTA Button */}
+      <View
+        style={[
+          styles.bottomControls,
+          {
+            paddingBottom: bottomPadding,
+          },
+        ]}
+      >
+        {/* Dynamic Expanding Pill Indicators */}
+        <View style={styles.dotsRow}>
+          {data.map((item, idx) => (
+            <DotIndicator
+              key={item.id}
+              index={idx}
+              scrollX={scrollX}
+              itemSize={itemSize}
+            />
+          ))}
+        </View>
+
+        {/* Action Button: Next Arrow -> Begin Pilgrimage */}
+        <TouchableOpacity
+          onPress={handleNext}
+          style={[styles.actionButton, isLast && styles.actionButtonExpanded]}
+          activeOpacity={0.85}
+        >
+          {isLast ? (
+            <View style={styles.actionButtonExpandedContent}>
+              <Text style={styles.actionButtonExpandedText}>
+                Begin Pilgrimage
+              </Text>
+              <Ionicons name="arrow-forward" size={18} color="#0A100D" />
+            </View>
+          ) : (
+            <Ionicons name="arrow-forward" size={22} color="#0A100D" />
+          )}
+        </TouchableOpacity>
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  contentContainer: {
+  container: {
     flex: 1,
-    backgroundColor: "#F5EFE7",
+    backgroundColor: "#0A100D",
+  },
+  topBar: {
+    position: "absolute",
+    left: 20,
+    right: 20,
+    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
-    justifyContent: "flex-start",
-    paddingHorizontal: 24,
+    zIndex: 20,
+  },
+  stepBadge: {
+    backgroundColor: "rgba(255, 255, 255, 0.12)",
+    borderColor: "rgba(255, 255, 255, 0.18)",
+    borderWidth: 1,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+  },
+  stepBadgeText: {
+    color: "#E2E8F0",
+    fontSize: 12,
+    fontWeight: "700",
+    letterSpacing: 1.2,
   },
   skipButton: {
-    position: "absolute",
-    right: 20,
-    backgroundColor: "rgba(255, 255, 255, 0.75)",
+    backgroundColor: "rgba(255, 255, 255, 0.16)",
+    borderColor: "rgba(255, 255, 255, 0.28)",
+    borderWidth: 1,
     paddingHorizontal: 16,
-    minHeight: 40,
-    borderRadius: 20,
+    paddingVertical: 7,
+    borderRadius: 18,
+  },
+  skipText: {
+    color: "#FFFFFF",
+    fontSize: 13,
+    fontWeight: "600",
+    letterSpacing: 0.3,
+  },
+  headerSection: {
+    position: "absolute",
+    left: 20,
+    right: 20,
+    zIndex: 10,
     justifyContent: "center",
     alignItems: "center",
   },
-  skipText: {
-    color: "#333",
-    fontWeight: "600",
-    fontSize: 14,
+  headerItemContainer: {
+    position: "absolute",
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
   },
   itemTitle: {
+    color: "#FFFFFF",
     fontWeight: "800",
-    letterSpacing: 0.3,
-    color: "#2C251D",
     textAlign: "center",
-    marginTop: 10,
+    letterSpacing: 0.3,
     fontFamily: Platform.OS === "ios" ? "Georgia" : "serif",
   },
   itemDescription: {
-    paddingHorizontal: 20,
+    color: "#CBD5E1",
     textAlign: "center",
-    color: "#554E45",
-    maxWidth: 320,
-    fontWeight: "500",
+    paddingHorizontal: 12,
+    maxWidth: 340,
+    fontWeight: "400",
+  },
+  carouselSection: {
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  cardContainer: {
+    borderRadius: 26,
+    overflow: "hidden",
+    borderWidth: 1.5,
+    borderColor: "rgba(255, 255, 255, 0.22)",
+    backgroundColor: "#141D18",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 14 },
+    shadowOpacity: 0.55,
+    shadowRadius: 22,
+    elevation: 12,
+  },
+  bottomControls: {
+    position: "absolute",
+    bottom: 0,
+    left: 24,
+    right: 24,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   dotsRow: {
     flexDirection: "row",
     alignItems: "center",
+    height: 24,
   },
   dot: {
-    width: 9,
-    height: 9,
-    borderRadius: 4.5,
-    marginHorizontal: 4,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: "#E5B869",
+    marginRight: 8,
   },
-  nextButton: {
-    marginRight: 24,
-    alignSelf: "flex-end",
-    backgroundColor: "#0E5E43",
-    alignItems: "center",
+  actionButton: {
+    width: 54,
+    height: 54,
+    borderRadius: 27,
+    backgroundColor: "#E5B869",
     justifyContent: "center",
-    elevation: 5,
-    shadowColor: "#0E5E43",
-    shadowOpacity: 0.35,
-    shadowRadius: 6,
-    shadowOffset: { width: 0, height: 3 },
+    alignItems: "center",
+    shadowColor: "#E5B869",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.4,
+    shadowRadius: 10,
+    elevation: 6,
   },
-  nextButtonArrow: {
-    color: "#fff",
-    fontSize: 32,
-    fontWeight: "500",
-    marginTop: -4,
+  actionButtonExpanded: {
+    width: "auto",
+    paddingHorizontal: 22,
+    borderRadius: 27,
+  },
+  actionButtonExpandedContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  actionButtonExpandedText: {
+    color: "#0A100D",
+    fontSize: 15,
+    fontWeight: "700",
+    letterSpacing: 0.4,
   },
   stateContainer: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: 24,
-    backgroundColor: "#F5EFE7",
-  },
-  stateTitle: {
-    color: "#3A3A3A",
-    fontSize: 20,
-    fontWeight: "700",
-    textAlign: "center",
-    marginBottom: 8,
-    fontFamily: Platform.OS === "ios" ? "Georgia" : "serif",
+    backgroundColor: "#0A100D",
   },
   stateText: {
-    color: "#555",
-    fontSize: 16,
-    lineHeight: 24,
+    color: "#94A3B8",
+    fontSize: 15,
+    lineHeight: 22,
     textAlign: "center",
     marginTop: 12,
-  },
-  retryButton: {
-    minHeight: 48,
-    justifyContent: "center",
-    backgroundColor: "#0E5E43",
-    borderRadius: 24,
-    paddingHorizontal: 26,
-    marginTop: 20,
-  },
-  retryText: {
-    color: "#FFF",
-    fontSize: 16,
-    fontWeight: "700",
   },
 });

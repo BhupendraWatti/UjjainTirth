@@ -270,7 +270,10 @@ export default function OtpVerificationView({
 
               {/* Success state: Light green verification card */}
               {(otpCode.length === 6 || animState !== "waiting") && (
-                <Animated.View style={[styles.verifiedCard, { opacity: cardOpacity }]}>
+                <Animated.View
+                  style={[styles.verifiedCard, { opacity: cardOpacity }]}
+                  collapsable={false}
+                >
                   <View style={styles.verifiedRow}>
                     <Ionicons name="checkmark-circle" size={20} color="#15803D" />
                     <Text style={styles.verifiedText}>
@@ -278,7 +281,10 @@ export default function OtpVerificationView({
                     </Text>
                   </View>
                   <View style={styles.progressTrack}>
-                    <Animated.View style={[styles.progressFill, { width: progressWidth }]} />
+                    <Animated.View
+                      style={[styles.progressFill, { width: progressWidth }]}
+                      collapsable={false}
+                    />
                   </View>
                 </Animated.View>
               )}

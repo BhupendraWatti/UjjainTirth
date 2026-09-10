@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { Keyboard, StyleSheet, View } from "react-native";
 import { useRouter } from "expo-router";
 import { resendOtp, sendOtp, verifyOtp } from "@/services/authService";
 import { fetchOtpScreens } from "@/services/otpScreenService";
@@ -145,11 +145,14 @@ export default function AuthVerificationView({
 
   // Navigate immediately after the verified session has been saved.
   const navigateAfterVerification = () => {
-    if (onSuccess) {
-      onSuccess();
-    } else {
-      router.replace("/(auth)/onboarding");
-    }
+    Keyboard.dismiss();
+    setTimeout(() => {
+      if (onSuccess) {
+        onSuccess();
+      } else {
+        router.replace("/(auth)/onboarding");
+      }
+    }, 120);
   };
 
   // Step 4: Resend OTP

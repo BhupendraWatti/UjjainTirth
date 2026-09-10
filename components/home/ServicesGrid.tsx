@@ -82,9 +82,9 @@ const ServiceGrid = ({ services }: { services: Service[] }) => {
           end={{ x: 1, y: 1 }}
           style={styles.card}
         >
-          {icon ? (
+          {typeof icon === "string" && icon.trim() !== "" ? (
             <Image
-              source={{ uri: icon }}
+              source={{ uri: icon.trim() }}
               style={[styles.icon, { width: iconWidth }]}
               resizeMode="contain"
             />

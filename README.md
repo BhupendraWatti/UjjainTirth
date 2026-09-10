@@ -25,6 +25,22 @@ In the output, you'll find options to open the app in a
 
 You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
+## Development build: missing images or ExpoAsset empty URL
+
+If local images and icons disappear together and `ExpoAsset.downloadAsync` reports
+`Unable to download asset from url:` with nothing after the colon, fully close
+the development build and reopen the project through the development-client
+launcher. In the observed failure, a fresh launcher session restored the Metro
+manifest and asset URLs; Fast Refresh alone did not recover the session.
+
+Start Metro with `npm run start:dev`. For an Android phone connected by USB, run
+`adb reverse tcp:8081 tcp:8081`, then open `http://127.0.0.1:8081` from the
+development-client launcher. Use the actual Metro port in both places if it is
+different. `adb devices` must show `device` before forwarding works.
+
+Verify the splash artwork, home banner, and tab icons after reopening. If the
+error persists, capture `adb logcat` before changing asset paths or dependencies.
+
 ## Get a fresh project
 
 When you're ready, run:

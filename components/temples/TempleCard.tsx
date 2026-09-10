@@ -21,9 +21,9 @@ const TempleCard = ({ temple, distance, locationStatus, style }: TempleCardProps
   const router = useRouter();
 
   const image =
-    temple?.image && temple.image.trim() !== ""
-      ? temple.image
-      : "https://via.placeholder.com/300";
+    temple?.image && typeof temple.image === "string" && temple.image.trim() !== ""
+      ? temple.image.trim()
+      : "https://ujjaintirth.com/wp-content/uploads/2026/09/Ujjain-sacred-skyline-1.png";
   const title = temple.title;
   const tag = temple?.acf?.temple_tag?.name || "No Tag";
   const description = temple?.acf?.temple_short_description
