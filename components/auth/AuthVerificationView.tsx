@@ -66,7 +66,7 @@ export default function AuthVerificationView({
     };
   }, [cooldown]);
 
-  // Step 1: Send OTP
+  // Step 1: Send OTP via live backend
   const handleSendOtp = async (phone: string) => {
     const raw = phone.replace(/\D/g, "");
     if (raw.length !== 10) {
@@ -79,37 +79,32 @@ export default function AuthVerificationView({
     setErrorMessage(null);
 
     try {
-      const res = await sendOtp(raw, "Yatri").catch(() => null);
+      const res = await sendOtp(raw, "Yatri");
       if (res && res.success) {
         setCooldown(res.cooldown || 60);
+        setStep("otp");
       } else {
-        // Fallback for development/testing so user can reach OTP screen
-        setCooldown(60);
+        setErrorMessage(res.message || "Failed to send OTP. Please check your number.");
       }
-      setStep("otp");
-    } catch {
-      setCooldown(60);
-      setStep("otp");
+    } catch (e: any) {
+      setErrorMessage(e?.message || "Network error. Please check your connection.");
     } finally {
       setLoading(false);
     }
   };
 
-  // Step 2: Verify OTP (Temporary OTP function to showcase animations)
+  // Step 2: Verify OTP via live WordPress backend
   const handleVerifyOtp = async (code: string): Promise<boolean> => {
     if (code.length !== 6) return false;
     setLoading(true);
     setErrorMessage(null);
-
-    // Realistic verification delay so user sees "OTP detected! Verifying..." progress bar
-    await new Promise((resolve) => setTimeout(resolve, 750));
 
     try {
       const res = await verifyOtp(phoneNumber, code);
       if (res.success) {
         const fullNumber = phoneNumber.startsWith("+91")
           ? phoneNumber
-          : `+91${phoneNumber || "9876543210"}`;
+          : `+91${phoneNumber}`;
 
         await login({
           id: res.userId || 1,
@@ -123,10 +118,9 @@ export default function AuthVerificationView({
         setErrorMessage(res.message || "Invalid OTP. Please check and try again.");
         return false;
       }
-    } catch {
-      // If error occurs, still allow demoing animation
-      setAuthSuccess(true);
-      return true;
+    } catch (e: any) {
+      setErrorMessage(e?.message || "Verification failed. Please check your network.");
+      return false;
     } finally {
       setLoading(false);
     }

@@ -27,6 +27,7 @@ export const API_ENDPOINTS = {
   SEND_OTP: "/auth/send-otp",
   RESEND_OTP: "/auth/resend-otp",
   VERIFY_OTP: "/auth/verify-otp",
+  OTP_SETTINGS: "/auth/settings",
   // Custom Dynamic OTP Screens
   OTP_SCREENS: "/otp-screens",
 };

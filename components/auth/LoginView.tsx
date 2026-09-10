@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Dimensions,
@@ -49,9 +49,23 @@ export default function LoginView({
   const [imageLoadFailed, setImageLoadFailed] = useState(false);
 
   const phoneInputRef = useRef<TextInput | null>(null);
-
   const cleanPhone = phoneNumber.replace(/\D/g, "");
   const isValid = cleanPhone.length === 10;
+  const hasTriggeredRef = useRef(false);
+
+  useEffect(() => {
+    if (errorMessage) {
+      hasTriggeredRef.current = false;
+    }
+  }, [errorMessage]);
+
+  useEffect(() => {
+    const numeric = initialPhone.replace(/\D/g, "").slice(0, 10);
+    if (numeric.length === 10 && !loading && !hasTriggeredRef.current) {
+      hasTriggeredRef.current = true;
+      onSendOtp(numeric);
+    }
+  }, [initialPhone]);
 
   const handlePhoneChange = (val: string) => {
     const numeric = val.replace(/\D/g, "").slice(0, 10);
@@ -63,6 +77,12 @@ export default function LoginView({
       } catch {
         // Haptics fallback
       }
+      if (!loading && !hasTriggeredRef.current) {
+        hasTriggeredRef.current = true;
+        onSendOtp(numeric);
+      }
+    } else {
+      hasTriggeredRef.current = false;
     }
   };
 
@@ -73,6 +93,7 @@ export default function LoginView({
     } catch {
       // Haptics fallback
     }
+    hasTriggeredRef.current = true;
     onSendOtp(cleanPhone);
   };
 
@@ -161,6 +182,8 @@ export default function LoginView({
                     onChangeText={handlePhoneChange}
                     returnKeyType="done"
                     onSubmitEditing={handlePressSend}
+                    autoComplete="tel"
+                    textContentType="telephoneNumber"
                   />
 
                   {/* Green Verified Circle Checkmark */}

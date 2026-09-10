@@ -22,6 +22,57 @@ export interface UserProfileInput {
   city: string;
 }
 
+export interface OtpSettingsResponse {
+  success: boolean;
+  otp_length: number;
+  otp_expiry_minutes: number;
+  otp_template: string;
+  otp_dlt_template_id: string;
+}
+
+/**
+ * Native fetch wrapper with request timeout protection (Expo data fetching standard)
+ */
+async function fetchWithTimeout(
+  url: string,
+  options: RequestInit,
+  timeoutMs = 12000
+): Promise<Response> {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const res = await fetch(url, { ...options, signal: controller.signal });
+    clearTimeout(id);
+    return res;
+  } catch (err: any) {
+    clearTimeout(id);
+    if (err.name === "AbortError") {
+      throw new Error("Request timed out. Please check your internet connection.");
+    }
+    throw err;
+  }
+}
+
+/**
+ * Fetch live dynamic OTP settings & template directly from WordPress backend.
+ */
+export async function fetchOtpSettings(): Promise<OtpSettingsResponse | null> {
+  try {
+    const url = `${API_GRANTH_URL}${API_ENDPOINTS.OTP_SETTINGS}`;
+    const response = await fetchWithTimeout(url, {
+      method: "GET",
+      headers: DEFAULT_HEADERS,
+    }, 6000);
+    if (response.ok) {
+      return await response.json();
+    }
+    return null;
+  } catch (error) {
+    console.warn("[authService] fetchOtpSettings error:", error);
+    return null;
+  }
+}
+
 /**
  * Format any mobile input to E.164 (+91 standard for India)
  */
@@ -37,9 +88,7 @@ export function formatPhoneNumber(mobile: string): string {
 }
 
 /**
- * Request OTP for mobile number.
- * Note: Granth Bulk SMS requires a non-empty customer_name in live API.
- * We provide "Yatri" as default to keep the initial phone input lightning-fast.
+ * Request OTP for mobile number directly from WordPress backend.
  */
 export async function sendOtp(
   mobileNumber: string,
@@ -49,14 +98,14 @@ export async function sendOtp(
 
   try {
     const url = `${API_GRANTH_URL}${API_ENDPOINTS.SEND_OTP}`;
-    const response = await fetch(url, {
+    const response = await fetchWithTimeout(url, {
       method: "POST",
       headers: DEFAULT_HEADERS,
       body: JSON.stringify({
         mobile_number: cleanMobile,
         customer_name: customerName,
       }),
-    });
+    }, 12000);
 
     const data = await response.json();
 
@@ -68,37 +117,16 @@ export async function sendOtp(
       };
     }
 
-    // Handle case where DLT Template ID is missing on WordPress
-    if (__DEV__ && data.message && data.message.includes("DLT Template ID")) {
-      console.warn(
-        "[authService] WordPress SMS Gateway error: DLT Template ID not set. Providing Dev OTP (123456)."
-      );
-      return {
-        success: true,
-        message: "Development Mode: SMS DLT template missing in WP. Use OTP 123456 to test.",
-        cooldown: 60,
-        isMock: true,
-      };
-    }
-
     return {
       success: false,
       message: data.message || "Failed to send OTP. Please check your number.",
       cooldown: data.cooldown,
     };
-  } catch (error) {
+  } catch (error: any) {
     console.error("[authService] sendOtp error:", error);
-    if (__DEV__) {
-      return {
-        success: true,
-        message: "Dev offline mode: Use OTP 123456 to test.",
-        cooldown: 60,
-        isMock: true,
-      };
-    }
     return {
       success: false,
-      message: "Network error. Please check your connection and try again.",
+      message: error?.message || "Network error. Please check your connection and try again.",
     };
   }
 }
@@ -114,14 +142,14 @@ export async function resendOtp(
 
   try {
     const url = `${API_GRANTH_URL}${API_ENDPOINTS.RESEND_OTP}`;
-    const response = await fetch(url, {
+    const response = await fetchWithTimeout(url, {
       method: "POST",
       headers: DEFAULT_HEADERS,
       body: JSON.stringify({
         mobile_number: cleanMobile,
         customer_name: customerName,
       }),
-    });
+    }, 12000);
 
     const data = await response.json();
 
@@ -133,31 +161,22 @@ export async function resendOtp(
       };
     }
 
-    if (__DEV__ && data.message && data.message.includes("DLT Template ID")) {
-      return {
-        success: true,
-        message: "Dev Mode: Use OTP 123456.",
-        cooldown: 60,
-        isMock: true,
-      };
-    }
-
     return {
       success: false,
       message: data.message || "Failed to resend OTP.",
       cooldown: data.cooldown,
     };
-  } catch (error) {
+  } catch (error: any) {
     console.error("[authService] resendOtp error:", error);
     return {
       success: false,
-      message: "Network error while resending OTP.",
+      message: error?.message || "Network error while resending OTP.",
     };
   }
 }
 
 /**
- * Verify OTP entered by user.
+ * Verify OTP entered by user via live WordPress REST API.
  */
 export async function verifyOtp(
   mobileNumber: string,
@@ -166,34 +185,16 @@ export async function verifyOtp(
   const cleanMobile = formatPhoneNumber(mobileNumber);
   const trimmedOtp = otpCode.trim();
 
-  // Temporary test OTP bypass: Allow 123456 or any 6-digit code to demonstrate animations
-  if (trimmedOtp.length === 6) {
-    const devUser: StoredUser = {
-      id: 99999,
-      mobile: cleanMobile || "+919876543210",
-      name: "Pilgrim Yatri",
-      isLoggedIn: true,
-    };
-    await setStoredUser(devUser);
-
-    return {
-      success: true,
-      message: "Development verification successful.",
-      userId: devUser.id,
-      isMock: true,
-    };
-  }
-
   try {
     const url = `${API_GRANTH_URL}${API_ENDPOINTS.VERIFY_OTP}`;
-    const response = await fetch(url, {
+    const response = await fetchWithTimeout(url, {
       method: "POST",
       headers: DEFAULT_HEADERS,
       body: JSON.stringify({
         mobile_number: cleanMobile,
         otp_code: trimmedOtp,
       }),
-    });
+    }, 10000);
 
     const data = await response.json();
 
