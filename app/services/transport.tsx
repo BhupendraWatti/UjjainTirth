@@ -1,5 +1,5 @@
 import ErrorState from "@/components/common/ErrorState";
-import LoadingSkeleton from "@/components/layout/LoadingSkeleton";
+import { AvailabilityScreen } from "@/components/common/AvailabilityLoader";
 import ScreenContainer from "@/components/layout/ScreenContainer";
 import TransportCard from "@/components/transport/TransportCard";
 import TransportCategoryFilter from "@/components/transport/TransportCategoryFilter";
@@ -42,18 +42,13 @@ export default function TransportScreen() {
     });
   }, [transportItems, selectedCategory]);
 
-  if (isLoading) {
-    return (
-      <ScreenContainer>
-        <TransportHeader />
-        <View style={styles.loadingWrapper}>
-          <LoadingSkeleton />
-        </View>
-      </ScreenContainer>
-    );
-  }
+  const transportImages = useMemo(() => {
+    return (transportItems || [])
+      .map((item) => item.image)
+      .filter(Boolean);
+  }, [transportItems]);
 
-  if (isError || !transportItems) {
+  if (isError && (!transportItems || transportItems.length === 0)) {
     return (
       <ScreenContainer>
         <TransportHeader />
@@ -64,47 +59,56 @@ export default function TransportScreen() {
 
   return (
     <ScreenContainer>
-      <FlatList
-        data={filteredItems}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <TransportCard item={item} onEnquire={handleEnquire} />
-        )}
-        ListHeaderComponent={
-          <>
-            <TransportHeader />
-            <TransportCategoryFilter
-              selectedCategory={selectedCategory}
-              onSelectCategory={handleSelectCategory}
-            />
-            <View style={styles.countRow}>
-              <Text style={styles.countText}>
-                Available Options ({filteredItems.length})
+      <AvailabilityScreen
+        isLoading={isLoading}
+        count={transportItems?.length || 3}
+        label="Vehicles Available"
+        subtitle="Innova, Sedans & Tempo Travellers"
+        images={transportImages}
+        revealDurationMs={650}
+      >
+        <FlatList
+          data={filteredItems}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <TransportCard item={item} onEnquire={handleEnquire} />
+          )}
+          ListHeaderComponent={
+            <>
+              <TransportHeader />
+              <TransportCategoryFilter
+                selectedCategory={selectedCategory}
+                onSelectCategory={handleSelectCategory}
+              />
+              <View style={styles.countRow}>
+                <Text style={styles.countText}>
+                  Available Options ({filteredItems.length})
+                </Text>
+              </View>
+            </>
+          }
+          ListEmptyComponent={
+            <View style={styles.emptyContainer}>
+              <Text style={styles.emptyTitle}>No vehicles in this category</Text>
+              <Text style={styles.emptySub}>
+                Try selecting another category or view all vehicles
               </Text>
             </View>
-          </>
-        }
-        ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <Text style={styles.emptyTitle}>No vehicles in this category</Text>
-            <Text style={styles.emptySub}>
-              Try selecting another category or view all vehicles
-            </Text>
-          </View>
-        }
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.listContent}
-        initialNumToRender={4}
-        maxToRenderPerBatch={4}
-        windowSize={5}
-      />
+          }
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.listContent}
+          initialNumToRender={4}
+          maxToRenderPerBatch={4}
+          windowSize={5}
+        />
 
-      {/* Enquiry Modal */}
-      <TransportEnquiryModal
-        visible={modalVisible}
-        item={selectedItem}
-        onClose={handleCloseModal}
-      />
+        {/* Enquiry Modal */}
+        <TransportEnquiryModal
+          visible={modalVisible}
+          item={selectedItem}
+          onClose={handleCloseModal}
+        />
+      </AvailabilityScreen>
     </ScreenContainer>
   );
 }

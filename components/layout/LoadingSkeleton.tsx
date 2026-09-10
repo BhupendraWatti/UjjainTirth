@@ -1,12 +1,22 @@
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import React from "react";
+import { View, StyleSheet } from "react-native";
+import { AvailabilityLoader } from "@/components/common/AvailabilityLoader";
 
-const LoadingSkeleton = () => {
+interface LoadingSkeletonProps {
+  label?: string;
+}
+
+const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({
+  label = "Gathering Sacred Details...",
+}) => {
   return (
     <View style={styles.container}>
-      {[1,2,3,4].map((item) => (
-        <View key={item} style={styles.card} />
-      ))}
+      <AvailabilityLoader
+        isLoading={true}
+        label={label}
+        count={0}
+        images={[]}
+      />
     </View>
   );
 };
@@ -15,12 +25,10 @@ export default LoadingSkeleton;
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 20,
-  },
-  card: {
-    height: 90,
-    backgroundColor: '#E5E5E5',
-    borderRadius: 14,
-    marginBottom: 16,
+    flex: 1,
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingBottom: 40,
   },
 });

@@ -1,5 +1,5 @@
 import ErrorState from "@/components/common/ErrorState";
-import LoadingSkeleton from "@/components/layout/LoadingSkeleton";
+import { AvailabilityScreen } from "@/components/common/AvailabilityLoader";
 import ScreenContainer from "@/components/layout/ScreenContainer";
 import ParikramaEnquiryModal from "@/components/parikrama/ParikramaEnquiryModal";
 import ParikramaHero from "@/components/parikrama/ParikramaHero";
@@ -7,7 +7,7 @@ import ParikramaModeCarousel from "@/components/parikrama/ParikramaModeCarousel"
 import RiverSpineTimeline from "@/components/parikrama/RiverSpineTimeline";
 import { useParikrama } from "@/hooks/useParikrama";
 import { NarmadaLocationItem, ParikramaModeItem } from "@/types/parikrama";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 
 export default function NarmadaParikramaScreen() {
@@ -35,18 +35,13 @@ export default function NarmadaParikramaScreen() {
     setSelectedLocation(null);
   }, []);
 
-  if (isLoading) {
-    return (
-      <ScreenContainer>
-        <ParikramaHero />
-        <View style={styles.loadingWrapper}>
-          <LoadingSkeleton />
-        </View>
-      </ScreenContainer>
-    );
-  }
+  const locationImages = useMemo(() => {
+    return (data?.locations || [])
+      .map((l) => l.image)
+      .filter(Boolean);
+  }, [data?.locations]);
 
-  if (isError || !data) {
+  if (isError && (!data || !data.locations || data.locations.length === 0)) {
     return (
       <ScreenContainer>
         <ParikramaHero />
@@ -57,37 +52,46 @@ export default function NarmadaParikramaScreen() {
 
   return (
     <ScreenContainer>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContainer}
-        bounces={false}
+      <AvailabilityScreen
+        isLoading={isLoading}
+        count={data?.locations?.length || 5}
+        label="Sacred River Stops"
+        subtitle="Amarkantak, Omkareshwar & Maheshwar"
+        images={locationImages}
+        revealDurationMs={650}
       >
-        {/* Sacred River Banner Header */}
-        <ParikramaHero />
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.scrollContainer}
+          bounces={false}
+        >
+          {/* Sacred River Banner Header */}
+          <ParikramaHero />
 
-        {/* 1. Mode Selection Carousel */}
-        <ParikramaModeCarousel
-          modes={data.modes}
-          selectedModeId={selectedMode?.id ?? null}
-          onSelectMode={handleSelectMode}
+          {/* 1. Mode Selection Carousel */}
+          <ParikramaModeCarousel
+            modes={data?.modes || []}
+            selectedModeId={selectedMode?.id ?? null}
+            onSelectMode={handleSelectMode}
+          />
+
+          {/* 2. Chronological Sacred River Spine Timeline */}
+          <RiverSpineTimeline
+            locations={data?.locations || []}
+            onSelectLocation={handleSelectLocation}
+          />
+
+          <View style={{ height: 32 }} />
+        </ScrollView>
+
+        {/* Yatra Enquiry Modal */}
+        <ParikramaEnquiryModal
+          visible={modalVisible}
+          mode={selectedMode}
+          location={selectedLocation}
+          onClose={handleCloseModal}
         />
-
-        {/* 2. Chronological Sacred River Spine Timeline */}
-        <RiverSpineTimeline
-          locations={data.locations}
-          onSelectLocation={handleSelectLocation}
-        />
-
-        <View style={{ height: 32 }} />
-      </ScrollView>
-
-      {/* Yatra Enquiry Modal */}
-      <ParikramaEnquiryModal
-        visible={modalVisible}
-        mode={selectedMode}
-        location={selectedLocation}
-        onClose={handleCloseModal}
-      />
+      </AvailabilityScreen>
     </ScreenContainer>
   );
 }

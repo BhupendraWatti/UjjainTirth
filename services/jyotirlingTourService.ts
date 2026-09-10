@@ -22,6 +22,9 @@ export const fetchJyotirlingTours = async ({
   search,
   locationTag,
 }: FetchJyotirlingToursParams = {}): Promise<PaginatedJyotirlingTourResponse> => {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 5000);
+
   try {
     const params = new URLSearchParams();
     params.append("page", page.toString());
@@ -42,7 +45,9 @@ export const fetchJyotirlingTours = async ({
 
     const response = await fetch(url, {
       headers: DEFAULT_HEADERS,
+      signal: controller.signal,
     });
+    clearTimeout(timeoutId);
 
     if (!response.ok) {
       if (response.status === 400) {
@@ -51,16 +56,18 @@ export const fetchJyotirlingTours = async ({
           totalPages: page - 1,
         };
       }
-      throw new Error(`API Error: ${response.status}`);
+      console.warn(`Jyotirling tours API error: ${response.status}`);
+      return { data: [], totalPages: 1 };
     }
 
     const totalPages = Number(response.headers.get("X-WP-TotalPages") || 1);
     const data: JyotirlingTour[] = await response.json();
 
-    return { data, totalPages };
+    return { data: Array.isArray(data) ? data : [], totalPages };
   } catch (error) {
-    console.error("Jyotirling tours fetch failed:", error);
-    throw error;
+    clearTimeout(timeoutId);
+    console.warn("Jyotirling tours fetch failed, using fallback tours:", error);
+    return { data: [], totalPages: 1 };
   }
 };
 

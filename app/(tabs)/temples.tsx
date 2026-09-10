@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from "react";
 import { FlatList, StyleSheet, Text, View, useWindowDimensions } from "react-native";
 
-import LoadingSkeleton from "@/components/layout/LoadingSkeleton";
 import ScreenContainer from "@/components/layout/ScreenContainer";
+import { AvailabilityScreen } from "@/components/common/AvailabilityLoader";
 import CategoryFilter from "@/components/temples/CategoryFilter";
 import TempleCard from "@/components/temples/TempleCard";
 import TempleSearch from "@/components/temples/TempleSearch";
@@ -79,13 +79,11 @@ export default function TemplesScreen() {
     return result;
   }, [temples, selectedTag, search]);
 
-  if (isLoading) {
-    return (
-      <ScreenContainer>
-        <LoadingSkeleton />
-      </ScreenContainer>
-    );
-  }
+  const templeImages = useMemo(() => {
+    return temples
+      .map((t) => t.image || t._embedded?.["wp:featuredmedia"]?.[0]?.source_url)
+      .filter(Boolean) as string[];
+  }, [temples]);
 
   if (isError) {
     return (
@@ -97,7 +95,15 @@ export default function TemplesScreen() {
 
   return (
     <ScreenContainer>
-      <FlatList
+      <AvailabilityScreen
+        isLoading={isLoading}
+        count={temples.length}
+        label="Sacred Temples Available"
+        subtitle="Jyotirlinga, Shaktipeeths & Shrines"
+        images={templeImages}
+        revealDurationMs={650}
+      >
+        <FlatList
         key={numColumns} // Re-bind on column change to prevent runtime error
         data={filteredData}
         numColumns={numColumns}
@@ -160,6 +166,7 @@ export default function TemplesScreen() {
           />
         }
       />
+      </AvailabilityScreen>
     </ScreenContainer>
   );
 }

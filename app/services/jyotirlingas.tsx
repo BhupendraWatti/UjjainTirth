@@ -8,8 +8,6 @@ import {
   Image,
   TouchableOpacity,
   useWindowDimensions,
-  ActivityIndicator,
-  SafeAreaView,
   Modal,
   ScrollView,
   Linking,
@@ -17,6 +15,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import ScreenContainer from "@/components/layout/ScreenContainer";
+import { AvailabilityScreen } from "@/components/common/AvailabilityLoader";
 import { fetchJyotirlingTours } from "@/services/jyotirlingTourService";
 import { JyotirlingTour } from "@/types/jyotirlingTour";
  
@@ -353,47 +352,55 @@ export default function JyotirlingasScreen() {
     );
   }, [cardWidth]);
 
+  const jyotirlingaImages = useMemo(() => {
+    return (tours || [])
+      .map((t) => t.image || t.featured_image || t.acf?.jyotirling_image)
+      .filter((img): img is string => typeof img === "string" && img.trim().length > 0);
+  }, [tours]);
+
   return (
     <ScreenContainer>
-      <SafeAreaView style={styles.mainArea}>
-        {/* Header Block */}
-        <View style={styles.header}>
-          <TouchableOpacity
-            style={styles.backButton}
-            activeOpacity={0.7}
-            onPress={() => router.back()}
-          >
-            <Ionicons name="arrow-back" size={20} color="#8B1E1E" />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>12 Jyotirlingas</Text>
-          <View style={styles.headerSpacer} />
-        </View>
-
-        {/* Search Bar */}
-        <View style={styles.searchContainer}>
-          <Ionicons
-            name="search"
-            size={18}
-            color="#8B1E1E"
-            style={styles.searchIcon}
-          />
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Search 12 Jyotirlingas..."
-            placeholderTextColor="#888"
-            value={search}
-            onChangeText={setSearch}
-            clearButtonMode="while-editing"
-          />
-        </View>
-
-        {/* List representation */}
-        {loading && tours.length === 0 ? (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#FF6A00" />
-            <Text style={styles.loadingText}>Loading sacred shrines...</Text>
+      <AvailabilityScreen
+        isLoading={loading}
+        count={tours.length || 12}
+        label="Jyotirlingas Available"
+        subtitle="Somnath, Mahakaleshwar & Sacred Shrines"
+        images={jyotirlingaImages}
+        revealDurationMs={650}
+      >
+        <View style={styles.mainArea}>
+          {/* Header Block */}
+          <View style={styles.header}>
+            <TouchableOpacity
+              style={styles.backButton}
+              activeOpacity={0.7}
+              onPress={() => router.back()}
+            >
+              <Ionicons name="arrow-back" size={20} color="#8B1E1E" />
+            </TouchableOpacity>
+            <Text style={styles.headerTitle}>12 Jyotirlingas</Text>
+            <View style={styles.headerSpacer} />
           </View>
-        ) : (
+
+          {/* Search Bar */}
+          <View style={styles.searchContainer}>
+            <Ionicons
+              name="search"
+              size={18}
+              color="#8B1E1E"
+              style={styles.searchIcon}
+            />
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Search 12 Jyotirlingas..."
+              placeholderTextColor="#888"
+              value={search}
+              onChangeText={setSearch}
+              clearButtonMode="while-editing"
+            />
+          </View>
+
+          {/* List representation */}
           <FlatList
             key={numColumns} // Re-bind on column change to prevent runtime error
             data={filteredTours}
@@ -412,83 +419,83 @@ export default function JyotirlingasScreen() {
               </View>
             }
           />
-        )}
 
-        {/* Detail Modal */}
-        <Modal
-          visible={selectedTour !== null}
-          transparent={true}
-          animationType="slide"
-          onRequestClose={() => setSelectedTour(null)}
-        >
-          <View style={styles.modalBackdrop}>
-            <View style={styles.modalContent}>
-              {selectedTour && (
-                <>
-                  <View style={styles.modalHeaderImageContainer}>
-                    {/* Blurred background image to fill space beautifully */}
-                    <Image
-                      source={selectedTour.image || selectedTour.acf?.jyotirling_image ? { uri: selectedTour.image || selectedTour.acf?.jyotirling_image } : require("../../assets/images/ujjain_tirth_logo.png")}
-                      style={StyleSheet.absoluteFillObject}
-                      resizeMode="cover"
-                      blurRadius={15}
-                    />
-                    {/* Semi-transparent dark overlay for contrast */}
-                    <View style={[StyleSheet.absoluteFillObject, { backgroundColor: "rgba(0, 0, 0, 0.15)" }]} />
-                    {/* Sharp, full image in the foreground */}
-                    <Image
-                      source={selectedTour.image || selectedTour.acf?.jyotirling_image ? { uri: selectedTour.image || selectedTour.acf?.jyotirling_image } : require("../../assets/images/ujjain_tirth_logo.png")}
-                      style={styles.modalImage}
-                      resizeMode="contain"
-                    />
+          {/* Detail Modal */}
+          <Modal
+            visible={selectedTour !== null}
+            transparent={true}
+            animationType="slide"
+            onRequestClose={() => setSelectedTour(null)}
+          >
+            <View style={styles.modalBackdrop}>
+              <View style={styles.modalContent}>
+                {selectedTour && (
+                  <>
+                    <View style={styles.modalHeaderImageContainer}>
+                      {/* Blurred background image to fill space beautifully */}
+                      <Image
+                        source={selectedTour.image || selectedTour.acf?.jyotirling_image ? { uri: selectedTour.image || selectedTour.acf?.jyotirling_image } : require("../../assets/images/ujjain_tirth_logo.png")}
+                        style={StyleSheet.absoluteFillObject}
+                        resizeMode="cover"
+                        blurRadius={15}
+                      />
+                      {/* Semi-transparent dark overlay for contrast */}
+                      <View style={[StyleSheet.absoluteFillObject, { backgroundColor: "rgba(0, 0, 0, 0.15)" }]} />
+                      {/* Sharp, full image in the foreground */}
+                      <Image
+                        source={selectedTour.image || selectedTour.acf?.jyotirling_image ? { uri: selectedTour.image || selectedTour.acf?.jyotirling_image } : require("../../assets/images/ujjain_tirth_logo.png")}
+                        style={styles.modalImage}
+                        resizeMode="contain"
+                      />
+                      <TouchableOpacity
+                        style={styles.modalCloseBtn}
+                        onPress={() => setSelectedTour(null)}
+                      >
+                        <Ionicons name="close" size={24} color="#FFF" />
+                      </TouchableOpacity>
+                    </View>
+
+                    <ScrollView style={styles.modalScroll} showsVerticalScrollIndicator={false}>
+                      {selectedTour.acf?.jyotirling_location_tag ? (
+                        <View style={styles.modalTagBadge}>
+                          <Text style={styles.modalTagText}>
+                            {typeof selectedTour.acf.jyotirling_location_tag === "string"
+                              ? selectedTour.acf.jyotirling_location_tag
+                              : selectedTour.acf.jyotirling_location_tag.name}
+                          </Text>
+                        </View>
+                      ) : null}
+
+                      <Text style={styles.modalTitle}>{selectedTour.title}</Text>
+
+                      <Text style={styles.modalDescription}>
+                        {selectedTour.acf?.jyotirling_description}
+                      </Text>
+                      
+                      {selectedTour.acf?.jyotirling_location ? (
+                        <View style={styles.locationContainer}>
+                          <Ionicons name="location-sharp" size={16} color="#8B1E1E" />
+                          <Text style={styles.locationText}>
+                            {cleanLocationText(selectedTour.acf.jyotirling_location)}
+                          </Text>
+                        </View>
+                      ) : null}
+                    </ScrollView>
+
                     <TouchableOpacity
-                      style={styles.modalCloseBtn}
-                      onPress={() => setSelectedTour(null)}
+                      style={styles.mapButton}
+                      onPress={() => handleViewMap(selectedTour)}
                     >
-                      <Ionicons name="close" size={24} color="#FFF" />
+                      <Ionicons name="map-outline" size={18} color="#FFF" style={{ marginRight: 6 }} />
+                      <Text style={styles.mapButtonText}>View on Map</Text>
                     </TouchableOpacity>
-                  </View>
-
-                  <ScrollView style={styles.modalScroll} showsVerticalScrollIndicator={false}>
-                    {selectedTour.acf?.jyotirling_location_tag ? (
-                      <View style={styles.modalTagBadge}>
-                        <Text style={styles.modalTagText}>
-                          {typeof selectedTour.acf.jyotirling_location_tag === "string"
-                            ? selectedTour.acf.jyotirling_location_tag
-                            : selectedTour.acf.jyotirling_location_tag.name}
-                        </Text>
-                      </View>
-                    ) : null}
-
-                    <Text style={styles.modalTitle}>{selectedTour.title}</Text>
-
-                    <Text style={styles.modalDescription}>
-                      {selectedTour.acf?.jyotirling_description}
-                    </Text>
-                    
-                    {selectedTour.acf?.jyotirling_location ? (
-                      <View style={styles.locationContainer}>
-                        <Ionicons name="location-sharp" size={16} color="#8B1E1E" />
-                        <Text style={styles.locationText}>
-                          {cleanLocationText(selectedTour.acf.jyotirling_location)}
-                        </Text>
-                      </View>
-                    ) : null}
-                  </ScrollView>
-
-                  <TouchableOpacity
-                    style={styles.mapButton}
-                    onPress={() => handleViewMap(selectedTour)}
-                  >
-                    <Ionicons name="map-outline" size={18} color="#FFF" style={{ marginRight: 6 }} />
-                    <Text style={styles.mapButtonText}>View on Map</Text>
-                  </TouchableOpacity>
-                </>
-              )}
+                  </>
+                )}
+              </View>
             </View>
-          </View>
-        </Modal>
-      </SafeAreaView>
+          </Modal>
+        </View>
+      </AvailabilityScreen>
     </ScreenContainer>
   );
 }

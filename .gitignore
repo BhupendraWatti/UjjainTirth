@@ -63,3 +63,4 @@ build/
 modules/*/android/build/
 modules/*/android/.gradle/
 scratch
+.playwright-mcp

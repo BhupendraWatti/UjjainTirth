@@ -1,6 +1,6 @@
 import ErrorState from "@/components/common/ErrorState";
-import LoadingSkeleton from "@/components/layout/LoadingSkeleton";
 import ScreenContainer from "@/components/layout/ScreenContainer";
+import { AvailabilityScreen } from "@/components/common/AvailabilityLoader";
 import PoojaBookingModal from "@/components/pooja/PoojaBookingModal";
 import PoojaCard from "@/components/pooja/PoojaCard";
 import PoojaCategoryFilter from "@/components/pooja/PoojaCategoryFilter";
@@ -61,18 +61,11 @@ const PoojaScreenContent = ({ showBackButton = true }: Props) => {
     });
   }, [poojas, selectedCategory]);
 
-  if (isLoading) {
-    return (
-      <ScreenContainer>
-        <PoojaHeader showBackButton={showBackButton} />
-        <View style={styles.loadingWrapper}>
-          <LoadingSkeleton />
-        </View>
-      </ScreenContainer>
-    );
-  }
+  const poojaImages = useMemo(() => {
+    return (poojas || []).map((p) => p.image).filter(Boolean);
+  }, [poojas]);
 
-  if (isError || !poojas) {
+  if (isError || (!isLoading && !poojas)) {
     return (
       <ScreenContainer>
         <PoojaHeader showBackButton={showBackButton} />
@@ -83,7 +76,15 @@ const PoojaScreenContent = ({ showBackButton = true }: Props) => {
 
   return (
     <ScreenContainer>
-      <FlatList
+      <AvailabilityScreen
+        isLoading={isLoading}
+        count={poojas?.length || 0}
+        label="Vedic Rituals Available"
+        subtitle="Rudrabhishek, Kaal Sarp & Shanti Poojas"
+        images={poojaImages}
+        revealDurationMs={650}
+      >
+        <FlatList
         data={filteredPoojas}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
@@ -118,12 +119,13 @@ const PoojaScreenContent = ({ showBackButton = true }: Props) => {
         windowSize={5}
       />
 
-      {/* Booking Modal */}
-      <PoojaBookingModal
-        visible={modalVisible}
-        item={selectedPooja}
-        onClose={handleCloseModal}
-      />
+        {/* Booking Modal */}
+        <PoojaBookingModal
+          visible={modalVisible}
+          item={selectedPooja}
+          onClose={handleCloseModal}
+        />
+      </AvailabilityScreen>
     </ScreenContainer>
   );
 };

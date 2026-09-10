@@ -1,16 +1,16 @@
 import ScreenContainer from "@/components/layout/ScreenContainer";
 import PackageCard from "@/components/packages/PackageCards";
 import PackageDetailModal from "@/components/packages/PackageDetailModal";
-import PackageLoadingSkeleton from "@/components/packages/PackageLoadingSkeleton";
 import TabSwitcher from "@/components/packages/TabSwitcher";
 import EmptyState from "@/components/common/EmptyState";
 import ErrorState from "@/components/common/ErrorState";
 // import ComingSoon from "@/components/ui/ComingSoon";
+import { AvailabilityScreen } from "@/components/common/AvailabilityLoader";
 import { COLORS } from "@/constants/colors";
 import { usePackages } from "@/hooks/useProducts";
 import { Package } from "@/types/product";
 import { PackageTab } from "@/types/tab";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   FlatList,
   RefreshControl,
@@ -44,11 +44,11 @@ export default function PackagesScreen() {
     setRefreshing(false);
   };
 
-  const renderListContent = () => {
-    if (loading && !refreshing) {
-      return <PackageLoadingSkeleton />;
-    }
+  const packageImages = useMemo(() => {
+    return (packages || []).map((p) => p.image).filter(Boolean);
+  }, [packages]);
 
+  const renderListContent = () => {
     if (error) {
       return (
         <View style={styles.stateContainer}>
@@ -57,7 +57,7 @@ export default function PackagesScreen() {
       );
     }
 
-    if (!packages || packages.length === 0) {
+    if (!loading && (!packages || packages.length === 0)) {
       return (
         <View style={styles.stateContainer}>
           <EmptyState message="No packages available yet" />
@@ -66,33 +66,42 @@ export default function PackagesScreen() {
     }
 
     return (
-      <FlatList
-        key={numColumns} // Re-bind on column change to prevent runtime error
-        data={packages}
-        numColumns={numColumns}
-        columnWrapperStyle={isTablet ? styles.tabletRow : null}
-        keyExtractor={(item) => item.id.toString()}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{
-          paddingBottom: 16,
-          paddingTop: 8,
-        }}
-        renderItem={({ item }) => (
-          <PackageCard
-            item={item}
-            onPress={() => handlePackagePress(item)}
-            style={isTablet ? { width: cardWidth, marginHorizontal: 0 } : undefined}
-          />
-        )}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={handleRefresh}
-            tintColor={COLORS.primary}
-            colors={[COLORS.primary]}
-          />
-        }
-      />
+      <AvailabilityScreen
+        isLoading={loading && !refreshing}
+        count={packages?.length || 0}
+        label="Yatra Packages Available"
+        subtitle="Curated 2-3 Day Spiritual Tours"
+        images={packageImages}
+        revealDurationMs={650}
+      >
+        <FlatList
+          key={numColumns} // Re-bind on column change to prevent runtime error
+          data={packages}
+          numColumns={numColumns}
+          columnWrapperStyle={isTablet ? styles.tabletRow : null}
+          keyExtractor={(item) => item.id.toString()}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingBottom: 16,
+            paddingTop: 8,
+          }}
+          renderItem={({ item }) => (
+            <PackageCard
+              item={item}
+              onPress={() => handlePackagePress(item)}
+              style={isTablet ? { width: cardWidth, marginHorizontal: 0 } : undefined}
+            />
+          )}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={handleRefresh}
+              tintColor={COLORS.primary}
+              colors={[COLORS.primary]}
+            />
+          }
+        />
+      </AvailabilityScreen>
     );
   };
 
