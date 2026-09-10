@@ -18,6 +18,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Haptics from "expo-haptics";
+import { requestPhoneNumberHint } from "@/services/otpAutofill";
 import {
   LotusBlessingMotif,
   TempleSkylineArt,
@@ -52,6 +53,22 @@ export default function LoginView({
   const cleanPhone = phoneNumber.replace(/\D/g, "");
   const isValid = cleanPhone.length === 10;
   const hasTriggeredRef = useRef(false);
+  const hasRequestedHintRef = useRef(false);
+
+  useEffect(() => {
+    if (initialPhone || hasRequestedHintRef.current) return;
+    hasRequestedHintRef.current = true;
+
+    requestPhoneNumberHint().then((selectedPhone) => {
+      if (!selectedPhone) return;
+      const numeric = selectedPhone.replace(/\D/g, "").slice(-10);
+      setPhoneNumber(numeric);
+      if (numeric.length === 10 && !hasTriggeredRef.current) {
+        hasTriggeredRef.current = true;
+        onSendOtp(numeric);
+      }
+    });
+  }, [initialPhone, onSendOtp]);
 
   useEffect(() => {
     if (errorMessage) {

@@ -53,8 +53,13 @@ __pycache__/
 *.pyc
 
 app-example
-
 # generated native folders
 /ios
 /android
+.gradle/
+**/.gradle/
+build/
+**/build/
+modules/*/android/build/
+modules/*/android/.gradle/
 scratch

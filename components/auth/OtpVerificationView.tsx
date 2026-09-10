@@ -17,25 +17,13 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
-import Svg, {
-  Circle,
-  Defs,
-  RadialGradient,
-  Stop,
-} from "react-native-svg";
-import OnboardingView from "@/components/onboarding/OnboardingView";
 import { JaiMahakalDivider, TempleSkylineArt, TrishulLogo } from "./SacredArtwork";
 
-const { width: SW, height: SH } = Dimensions.get("window");
+const { width: SW } = Dimensions.get("window");
 const CHAKRA_FALLBACK =
   "https://ujjaintirth.com/wp-content/uploads/2026/09/Golden-Om-Mandala-Medallion-1.png";
 
-// Transition speed configuration:
-// Set to true for demo/testing (~4.5s total)
-// Set to false for production (~1.8s total)
-const IS_DEMO_TIMING = true;
-
-type AnimState = "waiting" | "otpDetected" | "verifying" | "verified" | "veiling";
+type AnimState = "waiting" | "otpDetected" | "verifying";
 
 interface OtpVerificationViewProps {
   phoneNumber: string;
@@ -50,8 +38,7 @@ interface OtpVerificationViewProps {
   rightMandalaUrl?: string;
   centerOhmUrl?: string;
   centerChakraUrl?: string;
-  isAuthSuccess?: boolean;
-  onAnimationFinish?: () => void;
+  autoFillCode?: string;
 }
 
 export default function OtpVerificationView({
@@ -64,14 +51,12 @@ export default function OtpVerificationView({
   cooldownSeconds,
   bottomImageUrl,
   centerChakraUrl,
-  isAuthSuccess = false,
-  onAnimationFinish,
+  autoFillCode = "",
 }: OtpVerificationViewProps) {
   const insets = useSafeAreaInsets();
   const [otpCode, setOtpCode] = useState("");
   const [bottomImgFailed, setBottomImgFailed] = useState(false);
   const [animState, setAnimState] = useState<AnimState>("waiting");
-  const hasStartedAnimation = useRef(false);
   const inputRef = useRef<TextInput | null>(null);
 
   // Status & spinner animations
@@ -79,19 +64,9 @@ export default function OtpVerificationView({
   const progressVal = useRef(new Animated.Value(0)).current;
   const cardOpacity = useRef(new Animated.Value(0)).current;
 
-  // Mandala Veil Reveal animations
-  const otpContentOpacity = useRef(new Animated.Value(1)).current;
-  const mandalaGlowOpacity = useRef(new Animated.Value(0)).current;
-  const mandalaGlowScale = useRef(new Animated.Value(0.95)).current;
-  const veilScale = useRef(new Animated.Value(0.4)).current;
-  const veilOpacity = useRef(new Animated.Value(0)).current;
-  const onboardingOpacity = useRef(new Animated.Value(0)).current;
-  const onboardingScale = useRef(new Animated.Value(0.985)).current;
-
   // Grand enlarged mandala
   const MANDALA = Math.min(SW * 1.15, 450);
   const chakraUrl = centerChakraUrl || CHAKRA_FALLBACK;
-  const VEIL_SIZE = Math.max(SW, SH) * 1.6;
 
   const spin = spinVal.interpolate({ inputRange: [0, 1], outputRange: ["0deg", "360deg"] });
   const progressWidth = progressVal.interpolate({ inputRange: [0, 1], outputRange: ["0%", "100%"] });
@@ -110,6 +85,10 @@ export default function OtpVerificationView({
     const t = setTimeout(() => inputRef.current?.focus(), 250);
     return () => clearTimeout(t);
   }, []);
+
+  useEffect(() => {
+    if (/^\d{6}$/.test(autoFillCode)) setOtpCode(autoFillCode);
+  }, [autoFillCode]);
 
   // OTP entered — trigger card fade-in & verify call
   useEffect(() => {
@@ -149,120 +128,6 @@ export default function OtpVerificationView({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [errorMessage]);
 
-  // Verified — Mandala Veil Reveal Transition (Calm, Sacred, Premium)
-  useEffect(() => {
-    if (!isAuthSuccess || hasStartedAnimation.current) return;
-    hasStartedAnimation.current = true;
-    setAnimState("verified");
-    try { Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success); } catch {}
-
-    const successDuration = IS_DEMO_TIMING ? 700 : 300;
-    const veilExpandDuration = IS_DEMO_TIMING ? 1800 : 700;
-    const veilDissolveDuration = IS_DEMO_TIMING ? 1700 : 700;
-
-    // Phase 1 (0.0s – 0.7s): Show success state + subtle warm mandala glow
-    Animated.parallel([
-      Animated.timing(cardOpacity, {
-        toValue: 1,
-        duration: 250,
-        useNativeDriver: true,
-      }),
-      Animated.timing(progressVal, {
-        toValue: 1,
-        duration: 350,
-        useNativeDriver: false,
-      }),
-      Animated.timing(mandalaGlowOpacity, {
-        toValue: 0.45, // Subtle warm glow (10–20% visual intensity, never bright)
-        duration: 600,
-        easing: Easing.inOut(Easing.quad),
-        useNativeDriver: true,
-      }),
-      Animated.timing(mandalaGlowScale, {
-        toValue: 1.15,
-        duration: 700,
-        easing: Easing.out(Easing.quad),
-        useNativeDriver: true,
-      }),
-    ]).start();
-
-    // Phase 2 (0.7s – 2.5s): Fade OTP content & expand soft semi-transparent ivory veil from mandala
-    const phase2Timer = setTimeout(() => {
-      setAnimState("veiling");
-
-      Animated.parallel([
-        // Fade OTP foreground content gradually
-        Animated.timing(otpContentOpacity, {
-          toValue: 0,
-          duration: IS_DEMO_TIMING ? 1100 : 450,
-          easing: Easing.out(Easing.quad),
-          useNativeDriver: true,
-        }),
-
-        // Soft ivory veil expands gently from mandala center without hard edges
-        Animated.timing(veilScale, {
-          toValue: 2.6,
-          duration: veilExpandDuration,
-          easing: Easing.bezier(0.25, 0.1, 0.25, 1.0),
-          useNativeDriver: true,
-        }),
-        Animated.timing(veilOpacity, {
-          toValue: 1.0,
-          duration: IS_DEMO_TIMING ? 1400 : 550,
-          easing: Easing.inOut(Easing.quad),
-          useNativeDriver: true,
-        }),
-      ]).start();
-    }, successDuration);
-
-    // Phase 3 (2.5s – 4.2s): Gradually reduce veil opacity to reveal existing Onboarding screen (scale 0.985 -> 1.0)
-    const phase3Timer = setTimeout(() => {
-      Animated.parallel([
-        // Onboarding screen fades in and gently settles from 0.985 to 1.0
-        Animated.timing(onboardingOpacity, {
-          toValue: 1.0,
-          duration: IS_DEMO_TIMING ? 1300 : 550,
-          easing: Easing.inOut(Easing.quad),
-          useNativeDriver: true,
-        }),
-        Animated.timing(onboardingScale, {
-          toValue: 1.0,
-          duration: veilDissolveDuration,
-          easing: Easing.bezier(0.25, 0.1, 0.25, 1.0),
-          useNativeDriver: true,
-        }),
-
-        // Veil gently dissolves
-        Animated.timing(veilOpacity, {
-          toValue: 0,
-          duration: IS_DEMO_TIMING ? 1300 : 550,
-          easing: Easing.inOut(Easing.quad),
-          useNativeDriver: true,
-        }),
-
-        // Mandala glow gently resolves
-        Animated.timing(mandalaGlowOpacity, {
-          toValue: 0,
-          duration: IS_DEMO_TIMING ? 1000 : 400,
-          easing: Easing.out(Easing.quad),
-          useNativeDriver: true,
-        }),
-      ]).start();
-    }, successDuration + veilExpandDuration);
-
-    // Phase 4: Settle & transition callback
-    const finishTimer = setTimeout(() => {
-      onAnimationFinish?.();
-    }, successDuration + veilExpandDuration + (IS_DEMO_TIMING ? 2000 : 800));
-
-    return () => {
-      clearTimeout(phase2Timer);
-      clearTimeout(phase3Timer);
-      clearTimeout(finishTimer);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuthSuccess]);
-
   const handleTextChange = (text: string) => {
     setOtpCode(text.replace(/\D/g, "").slice(0, 6));
   };
@@ -292,30 +157,6 @@ export default function OtpVerificationView({
           resizeMode="contain"
         />
 
-        {/* Subtle Warm Glow (10–20% Visual Intensity, never bright) */}
-        <Animated.View
-          style={[
-            StyleSheet.absoluteFillObject,
-            styles.mandalaGlowLayer,
-            {
-              opacity: mandalaGlowOpacity,
-              transform: [{ scale: mandalaGlowScale }],
-            },
-          ]}
-          pointerEvents="none"
-        >
-          <Svg width={MANDALA} height={MANDALA} viewBox="0 0 300 300" fill="none">
-            <Defs>
-              <RadialGradient id="warmMandalaAura" cx="50%" cy="50%" r="50%">
-                <Stop offset="0%" stopColor="#FFF8E7" stopOpacity="0.6" />
-                <Stop offset="35%" stopColor="#FFECC7" stopOpacity="0.35" />
-                <Stop offset="70%" stopColor="#F7DFB0" stopOpacity="0.12" />
-                <Stop offset="100%" stopColor="#FAF7F0" stopOpacity="0" />
-              </RadialGradient>
-            </Defs>
-            <Circle cx="150" cy="150" r="145" fill="url(#warmMandalaAura)" />
-          </Svg>
-        </Animated.View>
       </View>
 
       {/* OTPInputRow: 6 clean boxes positioned over lower portion of mandala (~58% from top) */}
@@ -326,7 +167,7 @@ export default function OtpVerificationView({
             top: Math.round(MANDALA * 0.58),
           },
         ]}
-        pointerEvents={isAuthSuccess ? "none" : "auto"}
+        pointerEvents={loading ? "none" : "auto"}
       >
         <TouchableOpacity
           style={{ alignItems: "center" }}
@@ -346,7 +187,7 @@ export default function OtpVerificationView({
           />
           <View style={styles.boxesRow}>
             {digits.map((digit, idx) => {
-              const isCurrent = !isAuthSuccess && otpCode.length === idx;
+              const isCurrent = !loading && otpCode.length === idx;
               return (
                 <View
                   key={idx}
@@ -395,7 +236,7 @@ export default function OtpVerificationView({
 
         {/* ── PhoneVerificationTitle ── */}
         <Text style={styles.title}>Verifying Your Number</Text>
-        <Text style={styles.subtitle}>We've sent a 6-digit code to</Text>
+        <Text style={styles.subtitle}>{"We've sent a 6-digit code to"}</Text>
 
         {/* Phone number + pencil — inline */}
         <View style={styles.phoneRow}>
@@ -423,7 +264,7 @@ export default function OtpVerificationView({
                 </Animated.View>
                 <View style={{ marginLeft: 8 }}>
                   <Text style={styles.detectTitle}>Detecting OTP automatically...</Text>
-                  <Text style={styles.detectSub}>(Usually within 3 seconds)</Text>
+                  <Text style={styles.detectSub}>You can also enter the code manually</Text>
                 </View>
               </View>
 
@@ -433,9 +274,7 @@ export default function OtpVerificationView({
                   <View style={styles.verifiedRow}>
                     <Ionicons name="checkmark-circle" size={20} color="#15803D" />
                     <Text style={styles.verifiedText}>
-                      {animState === "verified" || animState === "veiling"
-                        ? "OTP verified!"
-                        : "OTP detected! Verifying…"}
+                      OTP detected! Verifying…
                     </Text>
                   </View>
                   <View style={styles.progressTrack}>
@@ -455,7 +294,7 @@ export default function OtpVerificationView({
             {/* ── ResendSection: compact centered row ── */}
             <View style={styles.resendRow}>
               <Ionicons name="information-circle-outline" size={15} color="#6E6961" />
-              <Text style={styles.resendInfo}>Didn't receive the code?</Text>
+              <Text style={styles.resendInfo}>{"Didn't receive the code?"}</Text>
               {cooldownSeconds > 0 ? (
                 <Text style={styles.resendTimer}>Resend in {cooldownSeconds}s</Text>
               ) : (
@@ -496,93 +335,12 @@ export default function OtpVerificationView({
   );
 
   return (
-    <View style={styles.screenContainer}>
-      {/* ── Layer 1: Actual Existing Onboarding Screen Underneath ── */}
-      {isAuthSuccess && (
-        <Animated.View
-          style={[
-            StyleSheet.absoluteFillObject,
-            styles.onboardingUnderlay,
-            {
-              opacity: onboardingOpacity,
-              transform: [{ scale: onboardingScale }],
-            },
-          ]}
-          pointerEvents={animState === "veiling" ? "auto" : "none"}
-        >
-          <OnboardingView />
-        </Animated.View>
-      )}
-
-      {/* ── Layer 2: Current OTP Screen Content (Fades out gently) ── */}
-      <Animated.View
-        style={[
-          StyleSheet.absoluteFillObject,
-          {
-            opacity: otpContentOpacity,
-          },
-        ]}
-        pointerEvents={isAuthSuccess ? "none" : "auto"}
-      >
-        <View style={[styles.screen, { paddingTop: insets.top }]}>
-          {renderScreenContent()}
-        </View>
-      </Animated.View>
-
-      {/* ── Layer 3: Soft Semi-Transparent Ivory Veil (Expands from mandala without hard edge) ── */}
-      {isAuthSuccess && (
-        <Animated.View
-          style={[
-            styles.veilWrapper,
-            {
-              width: VEIL_SIZE,
-              height: VEIL_SIZE,
-              left: (SW - VEIL_SIZE) / 2,
-              top: Math.round(SH * 0.38) - VEIL_SIZE / 2,
-              opacity: veilOpacity,
-              transform: [{ scale: veilScale }],
-            },
-          ]}
-          pointerEvents="none"
-        >
-          <Svg width={VEIL_SIZE} height={VEIL_SIZE} viewBox={`0 0 ${VEIL_SIZE} ${VEIL_SIZE}`} fill="none">
-            <Defs>
-              <RadialGradient id="ivoryVeilGrad" cx="50%" cy="50%" r="50%">
-                <Stop offset="0%" stopColor="#FFFDF6" stopOpacity="0.98" />
-                <Stop offset="30%" stopColor="#FAF5EA" stopOpacity="0.95" />
-                <Stop offset="60%" stopColor="#F5EFE7" stopOpacity="0.88" />
-                <Stop offset="85%" stopColor="#F5EFE7" stopOpacity="0.5" />
-                <Stop offset="100%" stopColor="#F5EFE7" stopOpacity="0" />
-              </RadialGradient>
-            </Defs>
-            <Circle cx={VEIL_SIZE / 2} cy={VEIL_SIZE / 2} r={VEIL_SIZE / 2} fill="url(#ivoryVeilGrad)" />
-          </Svg>
-        </Animated.View>
-      )}
+    <View style={[styles.screen, { paddingTop: insets.top }]}>
+      {renderScreenContent()}
     </View>
   );
 }
-
 const styles = StyleSheet.create({
-  screenContainer: {
-    flex: 1,
-    backgroundColor: "#FAF7F0",
-    overflow: "hidden",
-  },
-  onboardingUnderlay: {
-    backgroundColor: "#F5EFE7",
-  },
-  veilWrapper: {
-    position: "absolute",
-    alignItems: "center",
-    justifyContent: "center",
-    zIndex: 20,
-  },
-  mandalaGlowLayer: {
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
   screen: { flex: 1, backgroundColor: "#FAF7F0" },
   contentFlex: { flex: 1 },
 

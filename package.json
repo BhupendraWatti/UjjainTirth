@@ -3,8 +3,10 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
-    "start": "expo start --go",
+    "start": "expo start --dev-client",
     "start:dev": "expo start --dev-client",
+    "start:go": "expo start --go",
+    "check:otp-native": "node scripts/check-otp-native-runtime.cjs",
     "start:mcp": "cross-env EXPO_UNSTABLE_MCP_SERVER=1 expo start",
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo run:android",

@@ -47,7 +47,7 @@ async function fetchWithTimeout(
   } catch (err: any) {
     clearTimeout(id);
     if (err.name === "AbortError") {
-      throw new Error("Request timed out. Please check your internet connection.");
+      throw new Error("The server took too long to respond. Please try again.");
     }
     throw err;
   }
@@ -200,14 +200,6 @@ export async function verifyOtp(
 
     if (response.ok && data.success) {
       const userId = data.user_id ?? 1;
-      const user: StoredUser = {
-        id: userId,
-        mobile: cleanMobile,
-        name: "Yatri",
-        isLoggedIn: true,
-      };
-      await setStoredUser(user);
-
       return {
         success: true,
         message: data.message || "OTP verified successfully.",
@@ -224,7 +216,7 @@ export async function verifyOtp(
     console.error("[authService] verifyOtp error:", error);
     return {
       success: false,
-      message: "Verification failed due to a network issue.",
+      message: error instanceof Error ? error.message : "Verification failed due to a network issue.",
     };
   }
 }

@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { useRouter } from "expo-router";
 import { resendOtp, sendOtp, verifyOtp } from "@/services/authService";
 import { fetchOtpScreens } from "@/services/otpScreenService";
 import { useAuth } from "@/context/AuthContext";
+import { startOtpAutofill } from "@/services/otpAutofill";
 import LoginView from "./LoginView";
 import OtpVerificationView from "./OtpVerificationView";
 
@@ -34,7 +35,18 @@ export default function AuthVerificationView({
   const [screen2RightMandalaUrl, setScreen2RightMandalaUrl] = useState<string | undefined>(undefined);
   const [screen2CenterOhmUrl, setScreen2CenterOhmUrl] = useState<string | undefined>(undefined);
   const [screen2CenterChakraUrl, setScreen2CenterChakraUrl] = useState<string | undefined>(undefined);
-  const [authSuccess, setAuthSuccess] = useState(false);
+  const [detectedOtp, setDetectedOtp] = useState("");
+  const stopOtpAutofillRef = useRef<() => void>(() => {});
+  const verificationPendingRef = useRef(false);
+  const verifiedRef = useRef(false);
+
+  const listenForOtp = useCallback(async () => {
+    stopOtpAutofillRef.current();
+    setDetectedOtp("");
+    stopOtpAutofillRef.current = await startOtpAutofill(setDetectedOtp);
+  }, []);
+
+  useEffect(() => () => stopOtpAutofillRef.current(), []);
 
   useEffect(() => {
     let isMounted = true;
@@ -79,6 +91,7 @@ export default function AuthVerificationView({
     setErrorMessage(null);
 
     try {
+      await listenForOtp();
       const res = await sendOtp(raw, "Yatri");
       if (res && res.success) {
         setCooldown(res.cooldown || 60);
@@ -95,7 +108,8 @@ export default function AuthVerificationView({
 
   // Step 2: Verify OTP via live WordPress backend
   const handleVerifyOtp = async (code: string): Promise<boolean> => {
-    if (code.length !== 6) return false;
+    if (!/^\d{6}$/.test(code) || verificationPendingRef.current || verifiedRef.current) return false;
+    verificationPendingRef.current = true;
     setLoading(true);
     setErrorMessage(null);
 
@@ -112,7 +126,9 @@ export default function AuthVerificationView({
           isLoggedIn: true,
         });
 
-        setAuthSuccess(true);
+        verifiedRef.current = true;
+        stopOtpAutofillRef.current();
+        navigateAfterVerification();
         return true;
       } else {
         setErrorMessage(res.message || "Invalid OTP. Please check and try again.");
@@ -122,12 +138,13 @@ export default function AuthVerificationView({
       setErrorMessage(e?.message || "Verification failed. Please check your network.");
       return false;
     } finally {
+      verificationPendingRef.current = false;
       setLoading(false);
     }
   };
 
-  // Step 3: Transition to Onboarding after Mandala Veil Reveal completes
-  const handleAnimationFinish = () => {
+  // Navigate immediately after the verified session has been saved.
+  const navigateAfterVerification = () => {
     if (onSuccess) {
       onSuccess();
     } else {
@@ -142,6 +159,7 @@ export default function AuthVerificationView({
     setErrorMessage(null);
 
     try {
+      await listenForOtp();
       const res = await resendOtp(phoneNumber, "Yatri");
       if (res.success) {
         setCooldown(res.cooldown || 60);
@@ -173,7 +191,6 @@ export default function AuthVerificationView({
           onBack={() => {
             setStep("phone");
             setErrorMessage(null);
-            setAuthSuccess(false);
           }}
           loading={loading}
           errorMessage={errorMessage}
@@ -183,8 +200,7 @@ export default function AuthVerificationView({
           rightMandalaUrl={screen2RightMandalaUrl}
           centerOhmUrl={screen2CenterOhmUrl}
           centerChakraUrl={screen2CenterChakraUrl}
-          isAuthSuccess={authSuccess}
-          onAnimationFinish={handleAnimationFinish}
+          autoFillCode={detectedOtp}
         />
       )}
     </View>
