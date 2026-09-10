@@ -336,6 +336,9 @@ const DotIndicator = React.memo(
 DotIndicator.displayName = "DotIndicator";
 
 export default function OnboardingView() {
+  // Start with defaults immediately — avoids blank flash and keeps the
+  // FlatList stable. Fetched data replaces only *content*, keys stay
+  // index-based so Fabric never destroys/re-inserts animated nodes.
   const [data, setData] = useState<OnboardingItem[]>(DEFAULT_ONBOARDING_ITEMS);
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
@@ -344,8 +347,6 @@ export default function OnboardingView() {
   const isShort = height < 680;
 
   // Responsive Carousel Dimensions
-  // Catalin Miron Wallpaper Animated Carousel proportions:
-  // Tall, commanding mobile wallpaper frame that fills the available vertical space
   const headerTop = insets.top + (isShort ? 44 : 52);
   const headerHeight = isShort ? 72 : 84;
   const carouselMarginTop = headerTop + headerHeight + (isShort ? 6 : 12);
@@ -353,16 +354,11 @@ export default function OnboardingView() {
   const bottomControlsHeight = 58;
   const availableHeight = height - carouselMarginTop - (bottomPadding + bottomControlsHeight);
 
-  // Card height occupies 94% of available space (540-580px on standard phones, ~62% of screen)
   const cardHeight = Math.round(
     isShort ? height * 0.48 : Math.min(availableHeight * 0.94, height * 0.63)
   );
 
-  // Card width matches mobile wallpaper ratio (slightly wider for commanding presence, ~0.76 of screen width)
-  // Maintains clear preview peeking on edges while giving cards more horizontal body
-  const cardWidth = Math.round(
-    Math.min(width * 0.76, 325)
-  );
+  const cardWidth = Math.round(Math.min(width * 0.76, 325));
 
   const spacing = 14;
   const itemSize = cardWidth + spacing;
@@ -377,6 +373,9 @@ export default function OnboardingView() {
     try {
       const items = await fetchOnboarding();
       if (items && items.length > 0) {
+        // Only update if the item *count* matches; if count changes a full
+        // remount is unavoidable anyway, but same-count swaps are safe with
+        // index-based keys because no node is destroyed.
         setData(items);
       }
     } catch (e) {
@@ -452,7 +451,7 @@ export default function OnboardingView() {
       <View style={StyleSheet.absoluteFillObject} pointerEvents="none">
         {data.map((item, idx) => (
           <BackdropItem
-            key={item.id}
+            key={`backdrop-${idx}`}
             item={item}
             index={idx}
             scrollX={scrollX}
@@ -507,7 +506,7 @@ export default function OnboardingView() {
       >
         {data.map((item, idx) => (
           <HeaderItem
-            key={item.id}
+            key={`header-${idx}`}
             item={item}
             index={idx}
             scrollX={scrollX}
@@ -536,6 +535,9 @@ export default function OnboardingView() {
           decelerationRate="fast"
           bounces={false}
           removeClippedSubviews={false}
+          // Index-based key: prevents Fabric from destroying animated
+          // nodes when data content swaps (default → fetched from API).
+          keyExtractor={(_, index) => `slide-${index}`}
           initialNumToRender={data.length}
           maxToRenderPerBatch={data.length}
           windowSize={5}
@@ -544,7 +546,6 @@ export default function OnboardingView() {
             offset: itemSize * index,
             index,
           })}
-          keyExtractor={(item) => item.id.toString()}
           scrollEventThrottle={16}
           onScroll={scrollHandler}
           onMomentumScrollEnd={(e) => {
@@ -580,9 +581,9 @@ export default function OnboardingView() {
       >
         {/* Dynamic Expanding Pill Indicators */}
         <View style={styles.dotsRow}>
-          {data.map((item, idx) => (
+          {data.map((_, idx) => (
             <DotIndicator
-              key={item.id}
+              key={`dot-${idx}`}
               index={idx}
               scrollX={scrollX}
               itemSize={itemSize}

@@ -78,7 +78,7 @@ export default function AuthVerificationView({
     };
   }, [cooldown]);
 
-  // Step 1: Send OTP via live backend
+  // Step 1: Send OTP via live backend with optimistic screen transition
   const handleSendOtp = async (phone: string) => {
     const raw = phone.replace(/\D/g, "");
     if (raw.length !== 10) {
@@ -87,6 +87,7 @@ export default function AuthVerificationView({
     }
 
     setPhoneNumber(raw);
+    setStep("otp");
     setLoading(true);
     setErrorMessage(null);
 
@@ -95,11 +96,12 @@ export default function AuthVerificationView({
       const res = await sendOtp(raw, "Yatri");
       if (res && res.success) {
         setCooldown(res.cooldown || 60);
-        setStep("otp");
       } else {
+        setStep("phone");
         setErrorMessage(res.message || "Failed to send OTP. Please check your number.");
       }
     } catch (e: any) {
+      setStep("phone");
       setErrorMessage(e?.message || "Network error. Please check your connection.");
     } finally {
       setLoading(false);
@@ -145,14 +147,18 @@ export default function AuthVerificationView({
 
   // Navigate immediately after the verified session has been saved.
   const navigateAfterVerification = () => {
-    Keyboard.dismiss();
-    setTimeout(() => {
-      if (onSuccess) {
-        onSuccess();
-      } else {
-        router.replace("/(auth)/onboarding");
+    try {
+      if (Keyboard && typeof Keyboard.dismiss === "function") {
+        Keyboard.dismiss();
       }
-    }, 120);
+    } catch {
+      // Safe fallback
+    }
+    if (onSuccess) {
+      onSuccess();
+    } else {
+      router.replace("/(auth)/onboarding");
+    }
   };
 
   // Step 4: Resend OTP

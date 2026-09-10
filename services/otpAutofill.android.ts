@@ -11,7 +11,12 @@ export async function requestPhoneNumberHint(): Promise<string | null> {
 }
 
 export async function startOtpAutofill(
-  onOtp: (code: string) => void
+  onOtp: (code: string) => void,
+  // Pass null so Google's SMS User Consent accepts SMS from any sender.
+  // The DLT-registered header (e.g. GNTINF / GM-GNTINF) may not exactly
+  // match a literal string filter, causing the consent dialog to be silently
+  // skipped. null = show the consent bottom-sheet for any incoming SMS.
+  _senderId?: string
 ): Promise<() => void> {
   const module = OtpAutofill;
   if (!module) return () => {};
@@ -21,7 +26,12 @@ export async function startOtpAutofill(
   });
 
   try {
-    await module.startSmsRetrieverAsync();
+    if (typeof module.startSmsUserConsentAsync === "function") {
+      // null → no sender filter → consent dialog fires for any SMS
+      await module.startSmsUserConsentAsync(null);
+    } else {
+      await module.startSmsRetrieverAsync();
+    }
     return () => {
       subscription.remove();
       module.stopSmsRetriever();

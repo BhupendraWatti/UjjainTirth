@@ -59,20 +59,66 @@ class OtpAutofillModule : Module() {
     }.runOnQueue(Queues.MAIN)
 
     OnActivityResult { activity, result ->
-      if (result.requestCode != PHONE_HINT_REQUEST_CODE) return@OnActivityResult
+      if (result.requestCode == PHONE_HINT_REQUEST_CODE) {
+        val promise = phoneHintPromise ?: return@OnActivityResult
+        phoneHintPromise = null
+        if (result.resultCode != Activity.RESULT_OK || result.data == null) {
+          promise.reject("ERR_PHONE_HINT_CANCELLED", "Phone-number selection was cancelled.", null)
+          return@OnActivityResult
+        }
 
-      val promise = phoneHintPromise ?: return@OnActivityResult
-      phoneHintPromise = null
-      if (result.resultCode != Activity.RESULT_OK || result.data == null) {
-        promise.reject("ERR_PHONE_HINT_CANCELLED", "Phone-number selection was cancelled.", null)
+        try {
+          promise.resolve(Identity.getSignInClient(activity).getPhoneNumberFromIntent(result.data))
+        } catch (error: Exception) {
+          promise.reject("ERR_PHONE_HINT", "Unable to read the selected phone number.", error)
+        }
         return@OnActivityResult
       }
 
-      try {
-        promise.resolve(Identity.getSignInClient(activity).getPhoneNumberFromIntent(result.data))
-      } catch (error: Exception) {
-        promise.reject("ERR_PHONE_HINT", "Unable to read the selected phone number.", error)
+      if (result.requestCode == SMS_CONSENT_REQUEST_CODE) {
+        if (result.resultCode == Activity.RESULT_OK && result.data != null) {
+          val message = result.data?.getStringExtra(SmsRetriever.EXTRA_SMS_MESSAGE).orEmpty()
+          SIX_DIGIT_CODE.find(message)?.value?.let { code ->
+            sendEvent("onOtpReceived", mapOf("code" to code, "message" to message))
+          }
+        }
+        unregisterSmsReceiver()
+        return@OnActivityResult
       }
+    }
+
+    AsyncFunction("startSmsUserConsentAsync") { sender: String?, promise: Promise ->
+      val context = appContext.reactContext
+      if (context == null) {
+        promise.reject("ERR_NO_CONTEXT", "SMS User Consent is unavailable.", null)
+        return@AsyncFunction
+      }
+
+      unregisterSmsReceiver()
+      val receiver = createSmsReceiver()
+      smsReceiver = receiver
+      ContextCompat.registerReceiver(
+        context,
+        receiver,
+        IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION),
+        SmsRetriever.SEND_PERMISSION,
+        null,
+        ContextCompat.RECEIVER_EXPORTED
+      )
+
+      val client = SmsRetriever.getClient(context)
+      val task = if (sender.isNullOrBlank()) {
+        client.startSmsUserConsent(null)
+      } else {
+        client.startSmsUserConsent(sender.trim())
+      }
+
+      task
+        .addOnSuccessListener { promise.resolve() }
+        .addOnFailureListener { error ->
+          unregisterSmsReceiver()
+          promise.reject("ERR_SMS_USER_CONSENT", "Unable to start SMS User Consent.", error)
+        }
     }
 
     AsyncFunction("startSmsRetrieverAsync") { promise: Promise ->
@@ -120,9 +166,25 @@ class OtpAutofillModule : Module() {
       val extras = intent.extras ?: return
       val status = extras.get(SmsRetriever.EXTRA_STATUS) as? Status ?: return
       if (status.statusCode == CommonStatusCodes.SUCCESS) {
-        val message = extras.getString(SmsRetriever.EXTRA_SMS_MESSAGE).orEmpty()
-        SIX_DIGIT_CODE.find(message)?.value?.let { code ->
-          sendEvent("onOtpReceived", mapOf("code" to code, "message" to message))
+        val directMessage = extras.getString(SmsRetriever.EXTRA_SMS_MESSAGE)
+        if (!directMessage.isNullOrEmpty()) {
+          SIX_DIGIT_CODE.find(directMessage)?.value?.let { code ->
+            sendEvent("onOtpReceived", mapOf("code" to code, "message" to directMessage))
+          }
+          unregisterSmsReceiver()
+          return
+        }
+
+        // SMS User Consent path: launch native one-tap consent prompt
+        val consentIntent = extras.getParcelable<Intent>(SmsRetriever.EXTRA_CONSENT_INTENT)
+        val activity = appContext.currentActivity
+        if (consentIntent != null && activity != null) {
+          try {
+            activity.startActivityForResult(consentIntent, SMS_CONSENT_REQUEST_CODE)
+            return
+          } catch (_: Exception) {
+            // Activity cannot launch consent intent
+          }
         }
       }
       unregisterSmsReceiver()
@@ -146,6 +208,7 @@ class OtpAutofillModule : Module() {
 
   private companion object {
     const val PHONE_HINT_REQUEST_CODE = 8107
+    const val SMS_CONSENT_REQUEST_CODE = 8108
     val SIX_DIGIT_CODE = Regex("(?<!\\d)\\d{6}(?!\\d)")
   }
 }

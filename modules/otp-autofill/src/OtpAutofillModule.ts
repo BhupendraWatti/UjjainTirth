@@ -5,6 +5,7 @@ import { OtpAutofillModuleEvents } from './OtpAutofill.types';
 declare class OtpAutofillModule extends NativeModule<OtpAutofillModuleEvents> {
   requestPhoneNumberHintAsync(): Promise<string>;
   startSmsRetrieverAsync(): Promise<void>;
+  startSmsUserConsentAsync(senderPhoneNumber?: string): Promise<void>;
   stopSmsRetriever(): void;
 }
 
