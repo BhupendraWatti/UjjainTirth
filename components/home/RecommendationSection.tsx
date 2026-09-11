@@ -1,5 +1,8 @@
 import { useRouter } from "expo-router";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { COLORS } from "@/constants/colors";
+import { FONTS } from "@/constants/typography";
+import { RADIUS, SHADOWS } from "@/constants/theme";
 
 export default function RecommendationSection() {
   const router = useRouter();
@@ -9,6 +12,7 @@ export default function RecommendationSection() {
   const goToPackages = () => {
     router.push("/(tabs)/packages");
   };
+
   return (
     <View style={styles.container}>
       <Text style={styles.sectionTitle}>Recommendation</Text>
@@ -22,7 +26,13 @@ export default function RecommendationSection() {
           one place.
         </Text>
 
-        <TouchableOpacity style={styles.button} onPress={goToPackages}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={goToPackages}
+          activeOpacity={0.85}
+          accessibilityRole="button"
+          accessibilityLabel="Plan My Trip"
+        >
           <Text style={styles.buttonText}>Plan My Trip</Text>
         </TouchableOpacity>
       </View>
@@ -36,7 +46,13 @@ export default function RecommendationSection() {
           coordination.
         </Text>
 
-        <TouchableOpacity style={styles.button} onPress={goToPuja}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={goToPuja}
+          activeOpacity={0.85}
+          accessibilityRole="button"
+          accessibilityLabel="Book Puja Instantly"
+        >
           <Text style={styles.buttonText}>Book Puja Instantly</Text>
         </TouchableOpacity>
       </View>
@@ -52,51 +68,50 @@ const styles = StyleSheet.create({
   },
 
   sectionTitle: {
-    fontSize: 18,
-    fontWeight: "600",
-    color: "#8B1E1E",
+    fontSize: 20,
+    fontFamily: FONTS.display.semiBold,
+    color: COLORS.sacred,
     marginBottom: 12,
   },
 
   card: {
-    backgroundColor: "#F5F5F5",
-    padding: 14,
-    borderRadius: 14,
+    backgroundColor: COLORS.surfaceMuted,
+    padding: 16,
+    borderRadius: RADIUS.md,
     marginBottom: 12,
-
-    elevation: 2,
-    shadowColor: "#00000077",
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    shadowOffset: { width: 0, height: 2 },
+    borderWidth: 1,
+    borderColor: COLORS.hairline,
+    ...SHADOWS.subtle,
   },
 
   title: {
-    fontSize: 16,
-    fontWeight: "600",
+    fontSize: 17,
+    fontFamily: FONTS.display.regular,
     marginBottom: 6,
-    color: "#333",
+    color: COLORS.ink,
   },
 
   desc: {
-    fontSize: 14,
-    color: "#666",
-    marginBottom: 10,
+    fontSize: 13.5,
+    fontFamily: FONTS.body.regular,
+    color: COLORS.inkBody,
+    lineHeight: 19,
+    marginBottom: 12,
   },
 
   button: {
-    backgroundColor: "#FF7A00",
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 20,
+    backgroundColor: COLORS.primary,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: RADIUS.sm,
     alignSelf: "flex-start",
     minHeight: 44,
     justifyContent: "center",
   },
 
   buttonText: {
-    color: "#fff",
-    fontSize: 13,
-    fontWeight: "600",
+    color: "#FFFFFF",
+    fontSize: 13.5,
+    fontFamily: FONTS.body.semiBold,
   },
 });

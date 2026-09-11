@@ -1,4 +1,7 @@
 import { PoojaItem } from "@/types/pooja";
+import { COLORS } from "@/constants/colors";
+import { FONTS } from "@/constants/typography";
+import { RADIUS, SHADOWS } from "@/constants/theme";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import React, { memo, useCallback } from "react";
@@ -33,7 +36,7 @@ const PoojaCard = ({ item, onRequest, style }: Props) => {
 
         {/* Temple Badge */}
         <View style={styles.templeBadge}>
-          <Ionicons name="business" size={12} color="#922C45" />
+          <Ionicons name="business" size={12} color={COLORS.sacred} />
           <Text style={styles.templeText} numberOfLines={1}>
             {item.temple}
           </Text>
@@ -101,23 +104,23 @@ export default memo(PoojaCard);
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 20,
-    marginHorizontal: 16,
-    marginBottom: 16,
+    backgroundColor: COLORS.surface,
+    borderRadius: RADIUS.md,
     overflow: "hidden",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.08,
-    shadowRadius: 12,
-    elevation: 4,
+    marginBottom: 16,
+    marginHorizontal: 16,
     borderWidth: 1,
-    borderColor: "rgba(0, 0, 0, 0.04)",
+    borderColor: COLORS.hairline,
+    shadowColor: "#2B2420",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 3,
   },
   imageWrapper: {
     width: "100%",
     height: 160,
-    backgroundColor: "#EFE8E1",
+    backgroundColor: COLORS.surfaceMuted,
     position: "relative",
   },
   image: {
@@ -134,18 +137,18 @@ const styles = StyleSheet.create({
     gap: 4,
     paddingHorizontal: 10,
     paddingVertical: 5,
-    borderRadius: 12,
-    shadowColor: "#000",
+    borderRadius: RADIUS.sm,
+    shadowColor: "#2B2420",
     shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.08,
     shadowRadius: 3,
     elevation: 2,
     maxWidth: "75%",
   },
   templeText: {
     fontSize: 11,
-    fontWeight: "700",
-    color: "#922C45",
+    fontFamily: FONTS.body.bold,
+    color: COLORS.sacred,
   },
   durationBadge: {
     position: "absolute",
@@ -157,11 +160,11 @@ const styles = StyleSheet.create({
     gap: 4,
     paddingHorizontal: 9,
     paddingVertical: 4,
-    borderRadius: 10,
+    borderRadius: RADIUS.sm,
   },
   durationText: {
     fontSize: 11,
-    fontWeight: "600",
+    fontFamily: FONTS.body.semiBold,
     color: "#FFFFFF",
   },
   content: {
@@ -175,26 +178,27 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
-    fontWeight: "800",
-    color: "#222222",
+    fontFamily: FONTS.display.regular,
+    color: COLORS.ink,
     flex: 1,
     letterSpacing: -0.2,
   },
   featuredBadge: {
-    backgroundColor: "#FEF3C7",
-    paddingHorizontal: 7,
-    paddingVertical: 2,
-    borderRadius: 6,
+    backgroundColor: COLORS.bgStone,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: RADIUS.sm,
     marginLeft: 8,
   },
   featuredText: {
     fontSize: 10,
-    fontWeight: "800",
-    color: "#92400E",
+    fontFamily: FONTS.body.bold,
+    color: COLORS.gold,
   },
   purpose: {
     fontSize: 13,
-    color: "#666666",
+    fontFamily: FONTS.body.regular,
+    color: COLORS.inkBody,
     lineHeight: 18,
     marginBottom: 14,
   },
@@ -204,15 +208,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: "#F4EFEA",
+    borderTopColor: COLORS.hairline,
   },
   priceContainer: {
     justifyContent: "center",
   },
   priceLabel: {
     fontSize: 11,
-    fontWeight: "600",
-    color: "#888888",
+    fontFamily: FONTS.body.medium,
+    color: COLORS.inkMuted,
     marginBottom: 2,
   },
   priceRow: {
@@ -221,37 +225,33 @@ const styles = StyleSheet.create({
   },
   currencySymbol: {
     fontSize: 14,
-    fontWeight: "700",
-    color: "#922C45",
+    fontFamily: FONTS.body.bold,
+    color: COLORS.sacred,
   },
   priceAmount: {
     fontSize: 19,
-    fontWeight: "800",
-    color: "#922C45",
+    fontFamily: FONTS.display.semiBold,
+    color: COLORS.sacred,
     letterSpacing: -0.3,
   },
   customPrice: {
     fontSize: 13,
-    fontWeight: "700",
-    color: "#922C45",
+    fontFamily: FONTS.body.bold,
+    color: COLORS.sacred,
   },
   ctaButton: {
-    backgroundColor: "#922C45",
+    backgroundColor: COLORS.primary,
     paddingHorizontal: 16,
     paddingVertical: 10,
-    borderRadius: 12,
+    borderRadius: RADIUS.sm,
     flexDirection: "row",
     alignItems: "center",
     gap: 5,
-    shadowColor: "#922C45",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 3,
+    ...SHADOWS.subtle,
   },
   ctaText: {
     fontSize: 13,
-    fontWeight: "700",
+    fontFamily: FONTS.body.bold,
     color: "#FFFFFF",
   },
 });

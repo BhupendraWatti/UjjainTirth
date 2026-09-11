@@ -1,5 +1,8 @@
 import React, { memo } from "react";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { COLORS } from "@/constants/colors";
+import { FONTS } from "@/constants/typography";
+import { RADIUS, SHADOWS } from "@/constants/theme";
 
 export interface PoojaCategoryTab {
   id: string;
@@ -35,6 +38,8 @@ const PoojaCategoryFilter = ({ selectedCategory, onSelectCategory }: Props) => {
               key={cat.id}
               activeOpacity={0.75}
               onPress={() => onSelectCategory(cat.id)}
+              accessibilityRole="tab"
+              accessibilityState={{ selected: isSelected }}
               style={[styles.pill, isSelected ? styles.pillActive : styles.pillInactive]}
             >
               <Text
@@ -66,30 +71,30 @@ const styles = StyleSheet.create({
   pill: {
     paddingHorizontal: 16,
     paddingVertical: 8,
-    borderRadius: 20,
+    borderRadius: RADIUS.sm,
     borderWidth: 1,
+    minHeight: 40,
+    justifyContent: "center",
+    alignItems: "center",
   },
   pillActive: {
-    backgroundColor: "#922C45",
-    borderColor: "#922C45",
-    shadowColor: "#922C45",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 3,
+    backgroundColor: COLORS.sacred,
+    borderColor: COLORS.sacred,
+    ...SHADOWS.subtle,
   },
   pillInactive: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "rgba(0, 0, 0, 0.08)",
+    backgroundColor: COLORS.bgStone,
+    borderColor: COLORS.hairline,
   },
   pillText: {
     fontSize: 13,
-    fontWeight: "600",
   },
   pillTextActive: {
     color: "#FFFFFF",
+    fontFamily: FONTS.body.bold,
   },
   pillTextInactive: {
-    color: "#555555",
+    color: COLORS.inkBody,
+    fontFamily: FONTS.body.medium,
   },
 });

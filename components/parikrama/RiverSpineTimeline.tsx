@@ -1,3 +1,6 @@
+import { COLORS } from "@/constants/colors";
+import { RADIUS, SHADOWS } from "@/constants/theme";
+import { FONTS } from "@/constants/typography";
 import { NarmadaLocationItem } from "@/types/parikrama";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
@@ -23,9 +26,9 @@ const getNodeConfig = (locationType: string): NodeStyleConfig => {
   if (type.includes("origin")) {
     return {
       iconName: "sparkles",
-      bgColor: "#FEF3C7",
-      borderColor: "#F59E0B",
-      iconColor: "#B45309",
+      bgColor: COLORS.bgStone,
+      borderColor: COLORS.gold,
+      iconColor: COLORS.gold,
       label: "SACRED ORIGIN",
     };
   }
@@ -33,9 +36,9 @@ const getNodeConfig = (locationType: string): NodeStyleConfig => {
   if (type.includes("ghat")) {
     return {
       iconName: "water",
-      bgColor: "#E0F2FE",
-      borderColor: "#0284C7",
-      iconColor: "#0369A1",
+      bgColor: COLORS.journeyTint,
+      borderColor: COLORS.journey,
+      iconColor: COLORS.journey,
       label: "SACRED GHAT",
     };
   }
@@ -43,18 +46,18 @@ const getNodeConfig = (locationType: string): NodeStyleConfig => {
   if (type.includes("important") || type.includes("destination")) {
     return {
       iconName: "business",
-      bgColor: "#FEE2E2",
-      borderColor: "#EF4444",
-      iconColor: "#B91C1C",
+      bgColor: COLORS.sacredTint,
+      borderColor: COLORS.sacred,
+      iconColor: COLORS.sacred,
       label: "JYOTIRLINGA / SANGAM",
     };
   }
 
   return {
     iconName: "location",
-    bgColor: "#F3F4F6",
-    borderColor: "#9CA3AF",
-    iconColor: "#4B5563",
+    bgColor: COLORS.bgStone,
+    borderColor: COLORS.inkMuted,
+    iconColor: COLORS.inkBody,
     label: "NABHI STHAN / STOP",
   };
 };
@@ -133,7 +136,7 @@ const RiverSpineTimeline = ({ locations, onSelectLocation }: Props) => {
 
                     <View style={styles.footerRow}>
                       <Text style={styles.actionPrompt}>Yatra Details & Stays</Text>
-                      <Ionicons name="arrow-forward" size={12} color="#088395" />
+                      <Ionicons name="chevron-forward" size={13} color={COLORS.journey} />
                     </View>
                   </View>
                 </View>
@@ -158,13 +161,14 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
-    fontWeight: "800",
-    color: "#222222",
+    fontFamily: FONTS.display.semiBold,
+    color: COLORS.sacred,
     letterSpacing: -0.2,
   },
   subtitle: {
     fontSize: 12,
-    color: "#6B7280",
+    fontFamily: FONTS.body.regular,
+    color: COLORS.inkMuted,
     marginTop: 2,
     lineHeight: 16,
   },
@@ -187,19 +191,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     zIndex: 2,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 2,
+    ...SHADOWS.subtle,
   },
   riverLine: {
     width: 3,
     flex: 1,
-    backgroundColor: "#088395",
+    backgroundColor: COLORS.journey,
     marginVertical: 4,
     borderRadius: 2,
-    opacity: 0.6,
+    opacity: 0.5,
   },
   cardContainer: {
     flex: 1,
@@ -207,16 +207,12 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   locationCard: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 18,
+    backgroundColor: COLORS.surface,
+    borderRadius: RADIUS.md,
     overflow: "hidden",
     borderWidth: 1,
-    borderColor: "rgba(0, 0, 0, 0.05)",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    elevation: 3,
+    borderColor: COLORS.hairline,
+    ...SHADOWS.card,
   },
   cardHeader: {
     padding: 12,
@@ -230,54 +226,55 @@ const styles = StyleSheet.create({
   typeBadge: {
     paddingHorizontal: 7,
     paddingVertical: 2,
-    borderRadius: 6,
+    borderRadius: RADIUS.sm,
   },
   typeBadgeText: {
     fontSize: 9,
-    fontWeight: "800",
+    fontFamily: FONTS.body.bold,
     letterSpacing: 0.5,
   },
   stageText: {
     fontSize: 11,
-    fontWeight: "700",
-    color: "#6B7280",
+    fontFamily: FONTS.body.semiBold,
+    color: COLORS.inkMuted,
   },
   locationTitle: {
     fontSize: 16,
-    fontWeight: "700",
-    color: "#1F2937",
+    fontFamily: FONTS.display.semiBold,
+    color: COLORS.ink,
     marginBottom: 2,
   },
   regionText: {
     fontSize: 11,
-    color: "#4B5563",
-    fontWeight: "500",
+    fontFamily: FONTS.body.medium,
+    color: COLORS.inkMuted,
   },
   locationImage: {
     width: "100%",
     height: 110,
-    backgroundColor: "#E2E8F0",
+    backgroundColor: COLORS.bgStone,
   },
   cardBody: {
     padding: 12,
   },
   locationDesc: {
     fontSize: 12,
-    color: "#6B7280",
+    fontFamily: FONTS.body.regular,
+    color: COLORS.inkBody,
     lineHeight: 16,
     marginBottom: 8,
   },
   footerRow: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 4,
-    paddingTop: 6,
+    justifyContent: "space-between",
+    paddingTop: 8,
     borderTopWidth: 1,
-    borderTopColor: "#F3F4F6",
+    borderTopColor: COLORS.hairline,
   },
   actionPrompt: {
     fontSize: 11,
-    fontWeight: "700",
-    color: "#088395",
+    fontFamily: FONTS.body.bold,
+    color: COLORS.journey,
   },
 });

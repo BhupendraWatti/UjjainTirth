@@ -1,3 +1,6 @@
+import { COLORS } from "@/constants/colors";
+import { RADIUS, SHADOWS } from "@/constants/theme";
+import { FONTS } from "@/constants/typography";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
@@ -28,11 +31,11 @@ const ParikramaHero = ({ onBack }: Props) => {
         accessibilityRole="button"
         accessibilityLabel="Go back"
       >
-        <Ionicons name="arrow-back" size={20} color="#2C2C2C" />
+        <Ionicons name="arrow-back" size={20} color={COLORS.ink} />
       </TouchableOpacity>
 
       <LinearGradient
-        colors={["#0A4D68", "#088395", "#05BFDB"]}
+        colors={[COLORS.journey, "#158498"]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.heroBanner}
@@ -65,26 +68,20 @@ const styles = StyleSheet.create({
     width: 42,
     height: 42,
     borderRadius: 21,
-    backgroundColor: "#F4E5BE",
+    backgroundColor: COLORS.bgStone,
+    borderWidth: 1,
+    borderColor: COLORS.hairline,
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 12,
-    elevation: 2,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
+    ...SHADOWS.subtle,
   },
   heroBanner: {
-    borderRadius: 20,
+    borderRadius: RADIUS.md,
     padding: 18,
     flexDirection: "row",
     alignItems: "center",
-    shadowColor: "#088395",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25,
-    shadowRadius: 10,
-    elevation: 4,
+    ...SHADOWS.elevated,
   },
   waterDropBadge: {
     width: 50,
@@ -100,19 +97,20 @@ const styles = StyleSheet.create({
   },
   sacredChant: {
     fontSize: 10,
-    fontWeight: "800",
-    color: "#E0F7FA",
+    fontFamily: FONTS.body.bold,
+    color: COLORS.journeyTint,
     letterSpacing: 1.2,
     marginBottom: 2,
   },
   bannerTitle: {
     fontSize: 20,
-    fontWeight: "800",
+    fontFamily: FONTS.display.bold,
     color: "#FFFFFF",
     letterSpacing: -0.3,
   },
   bannerSubtitle: {
     fontSize: 12,
+    fontFamily: FONTS.body.regular,
     color: "rgba(255, 255, 255, 0.9)",
     marginTop: 4,
     lineHeight: 16,

@@ -9,6 +9,8 @@ import TempleSearch from "@/components/temples/TempleSearch";
 
 import EmptyState from "@/components/common/EmptyState";
 import ErrorState from "@/components/common/ErrorState";
+import { COLORS } from "@/constants/colors";
+import { FONTS } from "@/constants/typography";
 
 import { useTempleDistances } from "@/hooks/useTempleDistances";
 import { useTemples } from "@/hooks/useTemples";
@@ -119,7 +121,7 @@ export default function TemplesScreen() {
         )}
         ListHeaderComponent={
           <>
-            <Text style={styles.title}>Temples in Ujjain</Text>
+            <Text style={styles.header}>Temples in Ujjain</Text>
 
             <TempleSearch onSearch={setSearch} />
 
@@ -176,10 +178,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginBottom: 0,
   },
-  title: {
-    fontSize: 22,
-    fontWeight: "600",
-    color: "#8B0000",
+  header: {
+    fontSize: 24,
+    fontFamily: FONTS.display.semiBold,
+    color: COLORS.sacred,
     marginBottom: 10,
   },
 
@@ -189,19 +191,21 @@ const styles = StyleSheet.create({
   },
   resultCount: {
     fontSize: 12,
-    color: "#999",
+    fontFamily: FONTS.body.medium,
+    color: COLORS.inkFaint,
     marginBottom: 10,
   },
   filterInfo: {
     fontSize: 13,
-    color: "#666",
+    fontFamily: FONTS.body.regular,
+    color: COLORS.inkMuted,
     marginBottom: 6,
   },
   clearFilter: {
-    color: "#EB5C49",
+    color: COLORS.primary,
+    fontFamily: FONTS.body.medium,
     fontSize: 13,
     marginBottom: 10,
-    fontWeight: "500",
   },
   filterBox: {
     flexDirection: "row",

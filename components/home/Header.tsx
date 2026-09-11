@@ -1,5 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { COLORS } from "@/constants/colors";
+import { FONTS } from "@/constants/typography";
 
 export default function Header() {
   return (
@@ -7,18 +9,12 @@ export default function Header() {
       <View>
         <Text style={styles.title}>Jai Shree Mahakal</Text>
         <Text style={styles.subtitle}>
-          Welcome to{" "}
-          <Text
-          // style={styles.link}
-          // onPress={() => Linking.openURL("https://ujjaintirth.com")}
-          >
-            Ujjaintirth.com
-          </Text>
+          Welcome to <Text style={styles.link}>Ujjaintirth.com</Text>
         </Text>
       </View>
 
-      <TouchableOpacity style={styles.searchBtn}>
-        <Ionicons name="search" size={20} color="#333" />
+      <TouchableOpacity style={styles.searchBtn} accessibilityRole="button" accessibilityLabel="Search">
+        <Ionicons name="search" size={20} color={COLORS.inkBody} />
       </TouchableOpacity>
     </View>
   );
@@ -34,29 +30,29 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: 18,
-    fontWeight: "700",
-    color: "#8B1E1E",
+    fontSize: 20,
+    fontFamily: FONTS.display.semiBold,
+    color: COLORS.sacred,
   },
 
   subtitle: {
     fontSize: 14,
-    color: "#777",
+    fontFamily: FONTS.body.regular,
+    color: COLORS.inkMuted,
     marginTop: 2,
-    fontWeight: "400",
   },
 
   searchBtn: {
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: "#F1F1F1",
+    backgroundColor: COLORS.surfaceMuted,
     justifyContent: "center",
     alignItems: "center",
   },
+
   link: {
-    color: "#777",
-    textDecorationLine: "none",
-    fontWeight: 500,
+    color: COLORS.inkMuted,
+    fontFamily: FONTS.body.medium,
   },
 });

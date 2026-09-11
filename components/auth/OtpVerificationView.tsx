@@ -17,6 +17,9 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
+import { COLORS } from "@/constants/colors";
+import { RADIUS, SHADOWS } from "@/constants/theme";
+import { FONTS } from "@/constants/typography";
 import { JaiMahakalDivider, TempleSkylineArt, TrishulLogo } from "./SacredArtwork";
 
 const { width: SW } = Dimensions.get("window");
@@ -156,7 +159,6 @@ export default function OtpVerificationView({
           style={{ width: MANDALA, height: MANDALA, opacity: 0.20 }}
           resizeMode="contain"
         />
-
       </View>
 
       {/* OTPInputRow: 6 clean boxes positioned over lower portion of mandala (~58% from top) */}
@@ -221,11 +223,11 @@ export default function OtpVerificationView({
             activeOpacity={0.7}
             hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
           >
-            <Ionicons name="arrow-back" size={22} color="#2A241C" />
+            <Ionicons name="arrow-back" size={22} color={COLORS.ink} />
           </TouchableOpacity>
           <View style={styles.headerCenter}>
             <View style={styles.brandRow}>
-              <TrishulLogo size={26} color="#C47D2B" />
+              <TrishulLogo size={26} color={COLORS.gold} />
               <Text style={styles.brandName}>UjjainTirth</Text>
             </View>
             <Text style={styles.headerMantra}>ॐ नमः शिवाय</Text>
@@ -242,7 +244,7 @@ export default function OtpVerificationView({
         <View style={styles.phoneRow}>
           <Text style={styles.phoneText}>{formattedPhone}</Text>
           <TouchableOpacity onPress={onBack} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-            <Ionicons name="pencil" size={15} color="#0E7A52" />
+            <Ionicons name="pencil" size={15} color={COLORS.primary} />
           </TouchableOpacity>
         </View>
 
@@ -260,7 +262,7 @@ export default function OtpVerificationView({
               {/* Detecting text */}
               <View style={styles.detectRow}>
                 <Animated.View style={{ transform: [{ rotate: spin }] }}>
-                  <Ionicons name="sync" size={16} color="#0E5E43" />
+                  <Ionicons name="sync" size={16} color={COLORS.primary} />
                 </Animated.View>
                 <View style={{ marginLeft: 8 }}>
                   <Text style={styles.detectTitle}>Detecting OTP automatically...</Text>
@@ -268,14 +270,14 @@ export default function OtpVerificationView({
                 </View>
               </View>
 
-              {/* Success state: Light green verification card */}
+              {/* Success state: Verification card */}
               {(otpCode.length === 6 || animState !== "waiting") && (
                 <Animated.View
                   style={[styles.verifiedCard, { opacity: cardOpacity }]}
                   collapsable={false}
                 >
                   <View style={styles.verifiedRow}>
-                    <Ionicons name="checkmark-circle" size={20} color="#15803D" />
+                    <Ionicons name="checkmark-circle" size={20} color={COLORS.success} />
                     <Text style={styles.verifiedText}>
                       OTP detected! Verifying…
                     </Text>
@@ -292,14 +294,14 @@ export default function OtpVerificationView({
 
             {errorMessage ? (
               <View style={styles.errorRow}>
-                <Ionicons name="alert-circle" size={15} color="#C83232" />
+                <Ionicons name="alert-circle" size={15} color={COLORS.error} />
                 <Text style={styles.errorText}> {errorMessage}</Text>
               </View>
             ) : null}
 
             {/* ── ResendSection: compact centered row ── */}
             <View style={styles.resendRow}>
-              <Ionicons name="information-circle-outline" size={15} color="#6E6961" />
+              <Ionicons name="information-circle-outline" size={15} color={COLORS.inkMuted} />
               <Text style={styles.resendInfo}>{"Didn't receive the code?"}</Text>
               {cooldownSeconds > 0 ? (
                 <Text style={styles.resendTimer}>Resend in {cooldownSeconds}s</Text>
@@ -346,8 +348,9 @@ export default function OtpVerificationView({
     </View>
   );
 }
+
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: "#FAF7F0" },
+  screen: { flex: 1, backgroundColor: COLORS.bg },
   contentFlex: { flex: 1 },
 
   // Header
@@ -371,15 +374,14 @@ const styles = StyleSheet.create({
   brandRow: { flexDirection: "row", alignItems: "center", gap: 6 },
   brandName: {
     fontSize: 18,
-    fontWeight: "800",
-    color: "#1E2320",
+    fontFamily: FONTS.display.semiBold,
+    color: COLORS.ink,
     letterSpacing: 0.1,
-    fontFamily: Platform.OS === "ios" ? "Georgia" : "serif",
   },
   headerMantra: {
     fontSize: 11,
-    fontWeight: "700",
-    color: "#B27725",
+    fontFamily: FONTS.body.bold,
+    color: COLORS.gold,
     letterSpacing: 1,
     marginTop: 1,
   },
@@ -387,15 +389,19 @@ const styles = StyleSheet.create({
   // Title
   title: {
     fontSize: 22,
-    fontWeight: "800",
-    color: "#1A1A1A",
+    fontFamily: FONTS.display.semiBold,
+    color: COLORS.ink,
     textAlign: "center",
     letterSpacing: -0.3,
-    fontFamily: Platform.OS === "ios" ? "Georgia" : "serif",
     marginTop: 8,
     marginBottom: 4,
   },
-  subtitle: { fontSize: 13, color: "#6E6961", textAlign: "center" },
+  subtitle: {
+    fontSize: 13,
+    fontFamily: FONTS.body.regular,
+    color: COLORS.inkMuted,
+    textAlign: "center",
+  },
   phoneRow: {
     flexDirection: "row",
     alignItems: "center",
@@ -403,7 +409,12 @@ const styles = StyleSheet.create({
     gap: 6,
     marginTop: 3,
   },
-  phoneText: { fontSize: 14, fontWeight: "700", color: "#1E2320", letterSpacing: 0.3 },
+  phoneText: {
+    fontSize: 14,
+    fontFamily: FONTS.body.bold,
+    color: COLORS.ink,
+    letterSpacing: 0.3,
+  },
 
   kav: { flex: 1 },
 
@@ -449,37 +460,33 @@ const styles = StyleSheet.create({
   digitBox: {
     width: 46,
     height: 54,
-    borderRadius: 12,
-    backgroundColor: "#FFFFFF",
+    borderRadius: RADIUS.sm,
+    backgroundColor: COLORS.surface,
     borderWidth: 1.5,
-    borderColor: "#EAD4A2",
+    borderColor: COLORS.hairline,
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: "#E29C38",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.16,
-    shadowRadius: 5,
-    elevation: 3,
+    ...SHADOWS.subtle,
   },
   digitBoxActive: {
-    borderColor: "#C47D2B",
+    borderColor: COLORS.gold,
+    shadowColor: COLORS.gold,
     shadowOpacity: 0.35,
     shadowRadius: 8,
     elevation: 5,
   },
   digitBoxFilled: {
-    borderColor: "#DDAE54",
+    borderColor: COLORS.gold,
   },
   digitBoxError: {
-    borderColor: "#D94242",
+    borderColor: COLORS.error,
     backgroundColor: "#FFF8F8",
   },
   digitText: {
     fontSize: 22,
-    fontWeight: "700",
-    color: "#1E2320",
+    fontFamily: FONTS.display.semiBold,
+    color: COLORS.ink,
     letterSpacing: 0.5,
-    fontFamily: Platform.OS === "ios" ? "Georgia" : "serif",
   },
   activeDash: {
     position: "absolute",
@@ -487,7 +494,7 @@ const styles = StyleSheet.create({
     width: 14,
     height: 2,
     borderRadius: 1,
-    backgroundColor: "#C47D2B",
+    backgroundColor: COLORS.gold,
   },
 
   // Status & Verification Card
@@ -502,23 +509,25 @@ const styles = StyleSheet.create({
   },
   detectTitle: {
     fontSize: 13,
-    fontWeight: "600",
-    color: "#2C2822",
+    fontFamily: FONTS.body.semiBold,
+    color: COLORS.ink,
   },
   detectSub: {
     fontSize: 11,
-    color: "#7E7569",
+    fontFamily: FONTS.body.regular,
+    color: COLORS.inkMuted,
     marginTop: 1,
   },
   verifiedCard: {
     width: "100%",
-    backgroundColor: "#EAF5EE",
-    borderRadius: 14,
+    backgroundColor: COLORS.surface,
+    borderRadius: RADIUS.md,
     borderWidth: 1,
-    borderColor: "#CBE6D6",
+    borderColor: COLORS.hairline,
     paddingVertical: 12,
     paddingHorizontal: 16,
     marginTop: 12,
+    ...SHADOWS.subtle,
   },
   verifiedRow: {
     flexDirection: "row",
@@ -527,20 +536,20 @@ const styles = StyleSheet.create({
   },
   verifiedText: {
     fontSize: 13.5,
-    fontWeight: "600",
-    color: "#183D29",
+    fontFamily: FONTS.body.semiBold,
+    color: COLORS.success,
     letterSpacing: 0.1,
   },
   progressTrack: {
     height: 3,
-    backgroundColor: "#D0E8D9",
+    backgroundColor: COLORS.hairline,
     borderRadius: 2,
     marginTop: 8,
     overflow: "hidden",
   },
   progressFill: {
     height: "100%" as any,
-    backgroundColor: "#16A34A",
+    backgroundColor: COLORS.success,
     borderRadius: 2,
   },
 
@@ -554,8 +563,8 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 12,
-    color: "#C83232",
-    fontWeight: "500",
+    fontFamily: FONTS.body.medium,
+    color: COLORS.error,
   },
 
   // Resend
@@ -569,18 +578,19 @@ const styles = StyleSheet.create({
   },
   resendInfo: {
     fontSize: 12.5,
-    color: "#6E6961",
+    fontFamily: FONTS.body.regular,
+    color: COLORS.inkMuted,
   },
   resendTimer: {
     fontSize: 12.5,
-    fontWeight: "600",
-    color: "#8B704E",
+    fontFamily: FONTS.body.semiBold,
+    color: COLORS.gold,
     textDecorationLine: "underline",
   },
   resendLink: {
     fontSize: 12.5,
-    fontWeight: "700",
-    color: "#0E5E43",
+    fontFamily: FONTS.body.bold,
+    color: COLORS.primary,
     textDecorationLine: "underline",
   },
 

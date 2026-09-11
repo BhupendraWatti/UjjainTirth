@@ -1,3 +1,6 @@
+import { COLORS } from "@/constants/colors";
+import { RADIUS, SHADOWS } from "@/constants/theme";
+import { FONTS } from "@/constants/typography";
 import { ParikramaModeItem } from "@/types/parikrama";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
@@ -73,11 +76,11 @@ const ParikramaModeCarousel = ({
 
                 <View style={styles.metaRow}>
                   <View style={styles.metaBadge}>
-                    <Ionicons name="calendar-outline" size={12} color="#088395" />
+                    <Ionicons name="calendar-outline" size={12} color={COLORS.journey} />
                     <Text style={styles.metaText}>{mode.duration}</Text>
                   </View>
                   <View style={styles.metaBadge}>
-                    <Ionicons name="trail-sign-outline" size={12} color="#088395" />
+                    <Ionicons name="trail-sign-outline" size={12} color={COLORS.journey} />
                     <Text style={styles.metaText} numberOfLines={1}>
                       {mode.distance}
                     </Text>
@@ -95,7 +98,7 @@ const ParikramaModeCarousel = ({
                       isSelected ? styles.selectTextActive : styles.selectTextInactive,
                     ]}
                   >
-                    {isSelected ? "Selected Yatra ✓" : "View Itinerary & Book →"}
+                    {isSelected ? "Selected Yatra ✓" : "View Itinerary & Book"}
                   </Text>
                 </View>
               </View>
@@ -122,13 +125,14 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: "800",
-    color: "#222222",
+    fontFamily: FONTS.display.semiBold,
+    color: COLORS.sacred,
     letterSpacing: -0.2,
   },
   sectionHint: {
     fontSize: 12,
-    color: "#888888",
+    fontFamily: FONTS.body.regular,
+    color: COLORS.inkMuted,
   },
   scrollContent: {
     paddingHorizontal: 16,
@@ -136,26 +140,22 @@ const styles = StyleSheet.create({
   },
   modeCard: {
     width: 280,
-    backgroundColor: "#FFFFFF",
-    borderRadius: 18,
+    backgroundColor: COLORS.surface,
+    borderRadius: RADIUS.md,
     overflow: "hidden",
     borderWidth: 1.5,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 3,
+    ...SHADOWS.card,
   },
   modeCardActive: {
-    borderColor: "#088395",
+    borderColor: COLORS.journey,
   },
   modeCardInactive: {
-    borderColor: "rgba(0, 0, 0, 0.05)",
+    borderColor: COLORS.hairline,
   },
   imageBox: {
     width: "100%",
     height: 125,
-    backgroundColor: "#E2E8F0",
+    backgroundColor: COLORS.bgStone,
     position: "relative",
   },
   cardImage: {
@@ -166,15 +166,15 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 10,
     left: 10,
-    backgroundColor: "rgba(10, 77, 104, 0.88)",
+    backgroundColor: COLORS.journey,
     paddingHorizontal: 8,
     paddingVertical: 3,
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
   },
   typeBadgeText: {
     fontSize: 9,
-    fontWeight: "800",
-    color: "#E0F7FA",
+    fontFamily: FONTS.body.bold,
+    color: "#FFFFFF",
     letterSpacing: 0.6,
   },
   cardBody: {
@@ -182,8 +182,8 @@ const styles = StyleSheet.create({
   },
   modeTitle: {
     fontSize: 16,
-    fontWeight: "700",
-    color: "#1F2937",
+    fontFamily: FONTS.display.semiBold,
+    color: COLORS.ink,
     marginBottom: 6,
   },
   metaRow: {
@@ -196,35 +196,36 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 4,
-    backgroundColor: "#F0FDFA",
+    backgroundColor: COLORS.journeyTint,
     paddingHorizontal: 7,
     paddingVertical: 3,
-    borderRadius: 6,
+    borderRadius: RADIUS.sm,
   },
   metaText: {
     fontSize: 11,
-    fontWeight: "600",
-    color: "#088395",
+    fontFamily: FONTS.body.semiBold,
+    color: COLORS.journey,
   },
   modeDescription: {
     fontSize: 12,
-    color: "#6B7280",
+    fontFamily: FONTS.body.regular,
+    color: COLORS.inkMuted,
     lineHeight: 16,
     marginBottom: 10,
   },
   cardFooter: {
     paddingTop: 8,
     borderTopWidth: 1,
-    borderTopColor: "#F3F4F6",
+    borderTopColor: COLORS.hairline,
   },
   selectText: {
     fontSize: 12,
-    fontWeight: "700",
+    fontFamily: FONTS.body.bold,
   },
   selectTextActive: {
-    color: "#088395",
+    color: COLORS.journey,
   },
   selectTextInactive: {
-    color: "#6B7280",
+    color: COLORS.inkMuted,
   },
 });

@@ -11,6 +11,9 @@ import {
   useWindowDimensions,
   View,
 } from "react-native";
+import { COLORS } from "@/constants/colors";
+import { FONTS } from "@/constants/typography";
+import { RADIUS, SHADOWS } from "@/constants/theme";
 
 const ServiceGrid = ({ services }: { services: Service[] }) => {
   const router = useRouter();
@@ -60,7 +63,7 @@ const ServiceGrid = ({ services }: { services: Service[] }) => {
   const renderItem = ({ item, index }: { item: Service; index: number }) => {
     const icon = item?.acf?.service_icon;
 
-    // 🔥 Zig-zag logic
+    // Zig-zag logic preserved
     const row = Math.floor(index / 2);
     const isEvenRow = row % 2 === 0;
     const isLeft = index % 2 === 0;
@@ -71,15 +74,17 @@ const ServiceGrid = ({ services }: { services: Service[] }) => {
         activeOpacity={0.8}
         onPress={() => handleServicePress(item)}
         style={{ width: cardWidth }}
+        accessibilityRole="button"
+        accessibilityLabel={item?.acf?.service_name || "Service"}
       >
         <LinearGradient
           colors={
             useOrange
-              ? ["#f9c3a2", "#fb9353"] // ORANGE
-              : ["#c45e71", "#922c45"] // MAROON
+              ? [COLORS.primary, COLORS.primaryDeep]
+              : ["#9E2A3A", COLORS.sacred]
           }
-          start={{ x: 1, y: 0 }}
-          end={{ x: 1, y: 1 }}
+          start={{ x: 0.8, y: 0 }}
+          end={{ x: 0.2, y: 1 }}
           style={styles.card}
         >
           {typeof icon === "string" && icon.trim() !== "" ? (
@@ -128,11 +133,11 @@ const styles = StyleSheet.create({
 
   card: {
     width: "100%",
-    borderRadius: 16,
+    borderRadius: RADIUS.md,
     paddingVertical: 10,
     alignItems: "center",
     justifyContent: "center",
-    elevation: 4,
+    ...SHADOWS.card,
   },
 
   icon: {
@@ -143,22 +148,16 @@ const styles = StyleSheet.create({
   placeholder: {
     width: 50,
     height: 50,
-    backgroundColor: "#eee",
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
     borderRadius: 25,
     marginBottom: 10,
   },
 
   title: {
     fontSize: 15,
-    fontWeight: "600",
+    fontFamily: FONTS.display.semiBold,
     textAlign: "center",
-    color: "#fff",
+    color: "#FFFFFF",
     paddingBottom: 20,
-  },
-
-  empty: {
-    textAlign: "center",
-    marginTop: 40,
-    color: "#999",
   },
 });

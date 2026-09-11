@@ -6,6 +6,8 @@ import LinkedPackages from "@/components/accommodation/LinkedPackages";
 import ErrorState from "@/components/common/ErrorState";
 import LoadingSkeleton from "@/components/layout/LoadingSkeleton";
 import { COLORS } from "@/constants/colors";
+import { FONTS } from "@/constants/typography";
+import { RADIUS, SHADOWS } from "@/constants/theme";
 import { useAccommodation } from "@/hooks/useAccommodation";
 import { Hotel } from "@/types/service";
 import React, { useCallback, useState } from "react";
@@ -107,7 +109,7 @@ export default function AccommodationScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F5F2EA",
+    backgroundColor: COLORS.bg,
   },
 
   scrollContent: {
@@ -126,8 +128,8 @@ const styles = StyleSheet.create({
 
   sectionTitle: {
     fontSize: 18,
-    fontWeight: "700",
-    color: COLORS.textDark,
+    fontFamily: FONTS.display.semiBold,
+    color: COLORS.ink,
     marginBottom: 14,
     paddingHorizontal: 16,
     letterSpacing: -0.2,
@@ -138,13 +140,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 40,
     marginHorizontal: 16,
-    backgroundColor: "#FFF",
-    borderRadius: 18,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
+    backgroundColor: COLORS.surface,
+    borderRadius: RADIUS.md,
+    borderWidth: 1,
+    borderColor: COLORS.hairline,
+    ...SHADOWS.subtle,
   },
 
   emptyIcon: {
@@ -154,13 +154,14 @@ const styles = StyleSheet.create({
 
   emptyText: {
     fontSize: 16,
-    fontWeight: "600",
-    color: COLORS.textDark,
+    fontFamily: FONTS.body.semiBold,
+    color: COLORS.ink,
     marginBottom: 4,
   },
 
   emptySubtext: {
     fontSize: 13,
-    color: COLORS.textLight,
+    fontFamily: FONTS.body.regular,
+    color: COLORS.inkMuted,
   },
 });

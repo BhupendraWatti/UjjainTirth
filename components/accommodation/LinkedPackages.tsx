@@ -1,5 +1,7 @@
 import { LinkedPackage } from "@/types/service";
 import { COLORS } from "@/constants/colors";
+import { FONTS } from "@/constants/typography";
+import { RADIUS, SHADOWS } from "@/constants/theme";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import React from "react";
@@ -36,19 +38,21 @@ const LinkedPackages = ({ packages }: Props) => {
             key={index}
             activeOpacity={0.85}
             onPress={handlePress}
+            accessibilityRole="button"
+            accessibilityLabel={pkg.title}
           >
             <LinearGradient
               colors={
                 index % 2 === 0
-                  ? [COLORS.primary, "#D94535"]
-                  : ["#c45e71", "#922c45"]
+                  ? [COLORS.primary, COLORS.primaryDeep]
+                  : ["#9E2A3A", COLORS.sacred]
               }
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={styles.card}
             >
               <Text style={styles.cardTitle}>{pkg.title}</Text>
-              <Text style={styles.cardCta}>View Details →</Text>
+              <Text style={styles.cardCta}>View Details</Text>
             </LinearGradient>
           </TouchableOpacity>
         ))}
@@ -67,8 +71,8 @@ const styles = StyleSheet.create({
 
   sectionTitle: {
     fontSize: 18,
-    fontWeight: "700",
-    color: COLORS.textDark,
+    fontFamily: FONTS.display.semiBold,
+    color: COLORS.ink,
     marginBottom: 14,
     paddingHorizontal: 16,
     letterSpacing: -0.2,
@@ -82,26 +86,21 @@ const styles = StyleSheet.create({
   card: {
     width: 180,
     height: 100,
-    borderRadius: 16,
+    borderRadius: RADIUS.md,
     padding: 16,
     justifyContent: "space-between",
-    // Shadow
-    shadowColor: COLORS.primary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 10,
-    elevation: 5,
+    ...SHADOWS.card,
   },
 
   cardTitle: {
-    fontSize: 16,
-    fontWeight: "700",
+    fontSize: 15,
+    fontFamily: FONTS.display.regular,
     color: "#FFFFFF",
   },
 
   cardCta: {
     fontSize: 12,
-    fontWeight: "600",
-    color: "rgba(255,255,255,0.8)",
+    fontFamily: FONTS.body.semiBold,
+    color: "rgba(255,255,255,0.85)",
   },
 });

@@ -218,6 +218,8 @@ const TempleReveal = React.memo(({ startTrigger }: TempleRevealProps) => {
   );
 });
 
+TempleReveal.displayName = "TempleReveal";
+
 export default TempleReveal;
 
 const styles = StyleSheet.create({

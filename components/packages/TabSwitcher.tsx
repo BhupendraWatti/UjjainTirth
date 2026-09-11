@@ -1,16 +1,16 @@
 import { COLORS } from "@/constants/colors";
+import { FONTS } from "@/constants/typography";
+import { RADIUS } from "@/constants/theme";
 import { PackageTab } from "@/types/tab";
 import { useState } from "react";
 import {
   LayoutChangeEvent,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from "react-native";
 import Animated, {
   Easing,
-  interpolateColor,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
@@ -92,8 +92,8 @@ const styles = StyleSheet.create({
   },
   container: {
     flexDirection: "row",
-    backgroundColor: "#F0E6E4",
-    borderRadius: 14,
+    backgroundColor: COLORS.bgStone,
+    borderRadius: RADIUS.sm,
     padding: 4,
     overflow: "hidden",
     position: "relative",
@@ -105,14 +105,14 @@ const styles = StyleSheet.create({
     bottom: 4,
     left: 4,
     backgroundColor: COLORS.primary,
-    borderRadius: 11,
+    borderRadius: 10,
     // iOS shadow
     shadowColor: COLORS.primary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.25,
+    shadowRadius: 6,
     // Android shadow
-    elevation: 6,
+    elevation: 4,
   },
 
   tab: {
@@ -126,13 +126,13 @@ const styles = StyleSheet.create({
 
   text: {
     fontSize: 13,
-    color: "#8B6B66",
-    fontWeight: "600",
+    fontFamily: FONTS.body.medium,
+    color: COLORS.inkMuted,
     letterSpacing: 0.2,
   },
 
   activeText: {
     color: "#FFFFFF",
-    fontWeight: "700",
+    fontFamily: FONTS.body.bold,
   },
 });

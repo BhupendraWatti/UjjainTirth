@@ -18,6 +18,9 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Haptics from "expo-haptics";
+import { COLORS } from "@/constants/colors";
+import { RADIUS, SHADOWS } from "@/constants/theme";
+import { FONTS } from "@/constants/typography";
 import { requestPhoneNumberHint } from "@/services/otpAutofill";
 import {
   LotusBlessingMotif,
@@ -145,7 +148,7 @@ export default function LoginView({
             {/* Fallback Artwork if dynamic image fails to load */}
             {imageLoadFailed && (
               <View style={styles.artworkFallbackWindow}>
-                <TrishulLogo size={34} color="#C47D2B" />
+                <TrishulLogo size={34} color={COLORS.gold} />
                 <TempleSkylineArt width={Math.min(SCREEN_WIDTH - 24, 380)} height={160} />
               </View>
             )}
@@ -192,7 +195,7 @@ export default function LoginView({
                     ref={phoneInputRef}
                     style={styles.phoneInput}
                     placeholder="Enter 10-digit number"
-                    placeholderTextColor="#948B7E"
+                    placeholderTextColor={COLORS.inkFaint}
                     keyboardType="phone-pad"
                     maxLength={10}
                     value={phoneNumber}
@@ -214,7 +217,7 @@ export default function LoginView({
                 {/* Error Message */}
                 {errorMessage && (
                   <View style={styles.errorContainer}>
-                    <Ionicons name="alert-circle" size={16} color="#C83232" />
+                    <Ionicons name="alert-circle" size={16} color={COLORS.error} />
                     <Text style={styles.errorText}>{errorMessage}</Text>
                   </View>
                 )}
@@ -229,8 +232,8 @@ export default function LoginView({
                   <LinearGradient
                     colors={
                       isValid
-                        ? ["#0B4D36", "#11674A", "#0E563C"]
-                        : ["#3D6B57", "#345C4B", "#2D5242"]
+                        ? [COLORS.primary, COLORS.primaryDeep]
+                        : [COLORS.primary + "99", COLORS.primaryDeep + "99"]
                     }
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 0 }}
@@ -255,7 +258,7 @@ export default function LoginView({
                 {/* Badge 1: Secure */}
                 <View style={styles.trustItem}>
                   <View style={styles.trustIconCircle}>
-                    <Ionicons name="shield-checkmark-outline" size={19} color="#C47D2B" />
+                    <Ionicons name="shield-checkmark-outline" size={19} color={COLORS.gold} />
                   </View>
                   <Text style={styles.trustTitle}>{"Secure"}</Text>
                   <Text style={styles.trustSubtitle}>{"& Private"}</Text>
@@ -266,7 +269,7 @@ export default function LoginView({
                 {/* Badge 2: Quick Verification */}
                 <View style={styles.trustItem}>
                   <View style={styles.trustIconCircle}>
-                    <Ionicons name="flash-outline" size={19} color="#C47D2B" />
+                    <Ionicons name="flash-outline" size={19} color={COLORS.gold} />
                   </View>
                   <Text style={styles.trustTitle}>{"Quick"}</Text>
                   <Text style={styles.trustSubtitle}>{"Verification"}</Text>
@@ -277,7 +280,7 @@ export default function LoginView({
                 {/* Badge 3: Account Auto Created */}
                 <View style={styles.trustItem}>
                   <View style={styles.trustIconCircle}>
-                    <Ionicons name="people-outline" size={19} color="#C47D2B" />
+                    <Ionicons name="people-outline" size={19} color={COLORS.gold} />
                   </View>
                   <Text style={styles.trustTitle}>{"Your Account"}</Text>
                   <Text style={styles.trustSubtitle}>{"Created Automatically"}</Text>
@@ -299,7 +302,7 @@ export default function LoginView({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F4ECE0", // Matches warm holy parchment
+    backgroundColor: COLORS.bg,
   },
   backgroundImage: {
     position: "absolute",
@@ -309,7 +312,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     width: "100%",
     height: "100%",
-    opacity: 0.55, // Minimized opacity for subtle holy watermark effect
+    opacity: 0.55,
   },
   scrollContent: {
     flexGrow: 1,
@@ -331,14 +334,14 @@ const styles = StyleSheet.create({
   },
   divineHindiText: {
     fontSize: 12,
-    fontWeight: "800",
-    color: "#8E551A",
+    fontFamily: FONTS.body.bold,
+    color: COLORS.gold,
     letterSpacing: 1.4,
   },
   divineSubText: {
     fontSize: 9.5,
-    fontWeight: "700",
-    color: "#6A5E50",
+    fontFamily: FONTS.body.semiBold,
+    color: COLORS.inkMuted,
     letterSpacing: 2,
     marginTop: 2,
   },
@@ -351,16 +354,16 @@ const styles = StyleSheet.create({
   ornamentLine: {
     flex: 1,
     height: 1,
-    backgroundColor: "#DFD2BC",
+    backgroundColor: COLORS.hairline,
   },
   ornamentDiamond: {
     fontSize: 8,
-    color: "#C47D2B",
+    color: COLORS.gold,
     marginHorizontal: 6,
   },
   middleSpacer: {
     flex: 1,
-    minHeight: 30, // Responsive breathing space showcasing temple skyline and sun
+    minHeight: 30,
   },
   bottomSection: {
     width: "100%",
@@ -373,24 +376,23 @@ const styles = StyleSheet.create({
   },
   mainHeading: {
     fontSize: 28,
-    fontWeight: "800",
-    color: "#1B201D",
+    fontFamily: FONTS.display.bold,
+    color: COLORS.ink,
     letterSpacing: -0.5,
-    fontFamily: Platform.OS === "ios" ? "Georgia" : "serif",
     textAlign: "center",
   },
   mainHeadingAccent: {
     fontSize: 28,
-    fontWeight: "800",
-    color: "#1B201D",
+    fontFamily: FONTS.display.bold,
+    color: COLORS.sacred,
     letterSpacing: -0.5,
-    fontFamily: Platform.OS === "ios" ? "Georgia" : "serif",
     textAlign: "center",
     marginTop: -3,
   },
   subHeading: {
     fontSize: 13.5,
-    color: "#5A5348",
+    fontFamily: FONTS.body.regular,
+    color: COLORS.inkMuted,
     textAlign: "center",
     lineHeight: 19,
     marginTop: 6,
@@ -404,42 +406,38 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#FFFFFF",
-    borderRadius: 18,
+    backgroundColor: COLORS.surface,
+    borderRadius: RADIUS.md,
     borderWidth: 1.5,
-    borderColor: "#DFD5BF",
+    borderColor: COLORS.hairline,
     height: 54,
     paddingHorizontal: 14,
-    shadowColor: "#806132",
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.08,
-    shadowRadius: 6,
-    elevation: 2,
+    ...SHADOWS.subtle,
   },
   phoneInputRowValid: {
-    borderColor: "#18865F",
-    backgroundColor: "#F8FCFA",
+    borderColor: COLORS.gold,
+    backgroundColor: COLORS.surface,
   },
   countryCodeBox: {
     paddingRight: 10,
   },
   countryCodeText: {
     fontSize: 17,
-    fontWeight: "700",
-    color: "#1F2320",
+    fontFamily: FONTS.body.bold,
+    color: COLORS.ink,
     letterSpacing: 0.5,
   },
   inputDivider: {
     width: 1.2,
     height: 24,
-    backgroundColor: "#DED6C1",
+    backgroundColor: COLORS.hairline,
     marginRight: 12,
   },
   phoneInput: {
     flex: 1,
     fontSize: 17,
-    fontWeight: "600",
-    color: "#1F2320",
+    fontFamily: FONTS.body.semiBold,
+    color: COLORS.ink,
     letterSpacing: 1,
     paddingVertical: 0,
   },
@@ -447,7 +445,7 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: "#118055",
+    backgroundColor: COLORS.success,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -461,22 +459,18 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 12.5,
-    color: "#C83232",
-    fontWeight: "500",
+    fontFamily: FONTS.body.medium,
+    color: COLORS.error,
   },
   ctaButtonWrapper: {
     width: "100%",
     marginTop: 14,
-    borderRadius: 18,
+    borderRadius: RADIUS.md,
     overflow: "hidden",
-    shadowColor: "#0C4F38",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 4,
+    ...SHADOWS.card,
   },
   ctaButtonDisabled: {
-    shadowOpacity: 0.15,
+    shadowOpacity: 0.1,
     elevation: 1,
   },
   ctaButtonGradient: {
@@ -493,7 +487,7 @@ const styles = StyleSheet.create({
   },
   ctaText: {
     fontSize: 16,
-    fontWeight: "700",
+    fontFamily: FONTS.body.bold,
     color: "#FFFFFF",
     letterSpacing: 0.3,
   },
@@ -521,29 +515,30 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: "#F6EDE0",
+    backgroundColor: COLORS.bgStone,
     borderWidth: 1,
-    borderColor: "#EADBCA",
+    borderColor: COLORS.hairline,
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 6,
   },
   trustTitle: {
     fontSize: 11.5,
-    fontWeight: "700",
-    color: "#2C2822",
+    fontFamily: FONTS.body.bold,
+    color: COLORS.ink,
     textAlign: "center",
   },
   trustSubtitle: {
     fontSize: 10,
-    color: "#746E65",
+    fontFamily: FONTS.body.regular,
+    color: COLORS.inkMuted,
     textAlign: "center",
     marginTop: 1,
   },
   trustDivider: {
     width: 1,
     height: 34,
-    backgroundColor: "#DFD3BC",
+    backgroundColor: COLORS.hairline,
   },
   footerSpacing: {
     marginTop: 20,

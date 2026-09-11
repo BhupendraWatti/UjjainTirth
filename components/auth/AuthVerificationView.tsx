@@ -5,6 +5,7 @@ import { resendOtp, sendOtp, verifyOtp } from "@/services/authService";
 import { fetchOtpScreens } from "@/services/otpScreenService";
 import { useAuth } from "@/context/AuthContext";
 import { startOtpAutofill } from "@/services/otpAutofill";
+import { COLORS } from "@/constants/colors";
 import LoginView from "./LoginView";
 import OtpVerificationView from "./OtpVerificationView";
 
@@ -219,6 +220,6 @@ export default function AuthVerificationView({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FAF7F0",
+    backgroundColor: COLORS.bg,
   },
 });

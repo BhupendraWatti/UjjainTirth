@@ -5,6 +5,8 @@ import TransportCard from "@/components/transport/TransportCard";
 import TransportCategoryFilter from "@/components/transport/TransportCategoryFilter";
 import TransportEnquiryModal from "@/components/transport/TransportEnquiryModal";
 import TransportHeader from "@/components/transport/TransportHeader";
+import { COLORS } from "@/constants/colors";
+import { FONTS } from "@/constants/typography";
 import { useTransportServices } from "@/hooks/useTransport";
 import { TransportServiceItem } from "@/types/transport";
 import React, { useCallback, useMemo, useState } from "react";
@@ -127,8 +129,8 @@ const styles = StyleSheet.create({
   },
   countText: {
     fontSize: 13,
-    fontWeight: "700",
-    color: "#6B7280",
+    fontFamily: FONTS.body.bold,
+    color: COLORS.inkMuted,
     textTransform: "uppercase",
     letterSpacing: 0.5,
   },
@@ -139,13 +141,14 @@ const styles = StyleSheet.create({
   },
   emptyTitle: {
     fontSize: 16,
-    fontWeight: "700",
-    color: "#374151",
+    fontFamily: FONTS.display.semiBold,
+    color: COLORS.ink,
     marginBottom: 6,
   },
   emptySub: {
     fontSize: 13,
-    color: "#9CA3AF",
+    fontFamily: FONTS.body.regular,
+    color: COLORS.inkMuted,
     textAlign: "center",
   },
 });

@@ -1,3 +1,6 @@
+import { COLORS } from "@/constants/colors";
+import { RADIUS, SHADOWS } from "@/constants/theme";
+import { FONTS } from "@/constants/typography";
 import React, { memo } from "react";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
@@ -65,30 +68,26 @@ const styles = StyleSheet.create({
   pill: {
     paddingHorizontal: 16,
     paddingVertical: 8,
-    borderRadius: 20,
+    borderRadius: RADIUS.sm,
     borderWidth: 1,
   },
   pillActive: {
-    backgroundColor: "#EB5C49",
-    borderColor: "#EB5C49",
-    shadowColor: "#EB5C49",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 3,
+    backgroundColor: COLORS.journey,
+    borderColor: COLORS.journey,
+    ...SHADOWS.subtle,
   },
   pillInactive: {
-    backgroundColor: "#FFFFFF",
-    borderColor: "rgba(0, 0, 0, 0.08)",
+    backgroundColor: COLORS.bgStone,
+    borderColor: COLORS.hairline,
   },
   pillText: {
     fontSize: 13,
-    fontWeight: "600",
+    fontFamily: FONTS.body.semiBold,
   },
   pillTextActive: {
     color: "#FFFFFF",
   },
   pillTextInactive: {
-    color: "#555555",
+    color: COLORS.inkBody,
   },
 });

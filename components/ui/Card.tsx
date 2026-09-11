@@ -1,5 +1,7 @@
-import React from 'react';
-import { View, StyleSheet, ViewStyle } from 'react-native';
+import React from "react";
+import { View, StyleSheet, ViewStyle } from "react-native";
+import { COLORS } from "@/constants/colors";
+import { RADIUS, SHADOWS } from "@/constants/theme";
 
 interface CardProps {
   children: React.ReactNode;
@@ -14,13 +16,11 @@ export default Card;
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
+    backgroundColor: COLORS.surface,
+    borderRadius: RADIUS.md,
     padding: 14,
-    shadowColor: '#000',
-    shadowOpacity: 0.08,
-    shadowOffset: { width: 0, height: 3 },
-    shadowRadius: 8,
-    elevation: 3,
+    borderWidth: 1,
+    borderColor: COLORS.hairline,
+    ...SHADOWS.card,
   },
 });

@@ -28,7 +28,7 @@ export async function startOtpAutofill(
   try {
     if (typeof module.startSmsUserConsentAsync === "function") {
       // null → no sender filter → consent dialog fires for any SMS
-      await module.startSmsUserConsentAsync(null);
+      await module.startSmsUserConsentAsync(null as any);
     } else {
       await module.startSmsRetrieverAsync();
     }

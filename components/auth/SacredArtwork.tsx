@@ -1,5 +1,7 @@
 import React from "react";
-import { View, Text as RNText, StyleSheet, ViewStyle, Platform } from "react-native";
+import { View, Text as RNText, StyleSheet, ViewStyle } from "react-native";
+import { COLORS } from "@/constants/colors";
+import { FONTS } from "@/constants/typography";
 import Svg, {
   Path,
   Circle,
@@ -607,16 +609,14 @@ export function MahakalGhatSilhouette({
 const styles = StyleSheet.create({
   omSunText: {
     fontSize: 32,
-    fontWeight: "bold",
-    color: "#B27725",
-    fontFamily: Platform.OS === "ios" ? "Georgia" : "serif",
+    fontFamily: FONTS.display.bold,
+    color: COLORS.gold,
     textAlign: "center",
   },
   mandalaOmText: {
     fontSize: 38,
-    fontWeight: "bold",
-    color: "#B27725",
-    fontFamily: Platform.OS === "ios" ? "Georgia" : "serif",
+    fontFamily: FONTS.display.bold,
+    color: COLORS.gold,
     textAlign: "center",
   },
   lotusContainer: {
@@ -634,8 +634,8 @@ const styles = StyleSheet.create({
   },
   blessingText: {
     fontSize: 12.5,
-    fontWeight: "600",
-    color: "#99621E",
+    fontFamily: FONTS.body.semiBold,
+    color: COLORS.gold,
     letterSpacing: 0.2,
   },
   jaiMahakalRow: {
@@ -649,12 +649,12 @@ const styles = StyleSheet.create({
     flex: 1,
     maxWidth: 60,
     height: 1,
-    backgroundColor: "#E2CFB4",
+    backgroundColor: COLORS.hairline,
   },
   jaiMahakalText: {
     fontSize: 13,
-    fontWeight: "700",
-    color: "#A26822",
+    fontFamily: FONTS.body.bold,
+    color: COLORS.gold,
     letterSpacing: 1.5,
   },
 });

@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
-  ActivityIndicator,
   FlatList,
   Platform,
   StyleSheet,
@@ -31,6 +30,7 @@ import {
 } from "@/services/onboarding";
 import { setOnboardingDone } from "@/utils/storage";
 import { OnboardingItem } from "@/types/onboarding";
+import { FONTS } from "@/constants/typography";
 
 const LOCAL_FALLBACK_IMAGE = require("@/assets/images/Mahakaleshwar-1.jpeg");
 
@@ -671,17 +671,16 @@ const styles = StyleSheet.create({
   },
   itemTitle: {
     color: "#FFFFFF",
-    fontWeight: "800",
     textAlign: "center",
     letterSpacing: 0.3,
-    fontFamily: Platform.OS === "ios" ? "Georgia" : "serif",
+    fontFamily: FONTS.display.bold,
   },
   itemDescription: {
     color: "#CBD5E1",
     textAlign: "center",
     paddingHorizontal: 12,
     maxWidth: 340,
-    fontWeight: "400",
+    fontFamily: FONTS.body.regular,
   },
   carouselSection: {
     width: "100%",

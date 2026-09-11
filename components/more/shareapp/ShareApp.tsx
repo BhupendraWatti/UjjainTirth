@@ -1,4 +1,6 @@
 import { COLORS } from "@/constants/colors";
+import { RADIUS, SHADOWS } from "@/constants/theme";
+import { FONTS } from "@/constants/typography";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { Share, StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -60,17 +62,13 @@ export default function ShareApp({ shareMessage, shareData }: ShareAppProps) {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "#FFF",
-    borderRadius: 18,
+    backgroundColor: COLORS.surface,
+    borderRadius: RADIUS.md,
     padding: 18,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.04,
-    shadowRadius: 4,
-    elevation: 2,
     borderWidth: 1,
-    borderColor: "rgba(0,0,0,0.03)",
+    borderColor: COLORS.hairline,
     marginBottom: 20,
+    ...SHADOWS.card,
   },
 
   headerRow: {
@@ -84,7 +82,7 @@ const styles = StyleSheet.create({
     width: 46,
     height: 46,
     borderRadius: 23,
-    backgroundColor: "#FBF0EE",
+    backgroundColor: COLORS.primaryTint,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -95,35 +93,31 @@ const styles = StyleSheet.create({
 
   title: {
     fontSize: 16,
-    fontWeight: "700",
-    color: COLORS.textDark,
+    fontFamily: FONTS.display.semiBold,
+    color: COLORS.ink,
     marginBottom: 2,
   },
 
   subtitle: {
     fontSize: 12,
-    color: "#999",
-    fontWeight: "400",
+    fontFamily: FONTS.body.regular,
+    color: COLORS.inkMuted,
   },
 
   shareBtn: {
     flexDirection: "row",
     backgroundColor: COLORS.primary,
-    paddingVertical: 14,
-    borderRadius: 14,
+    paddingVertical: 13,
+    borderRadius: RADIUS.sm,
     justifyContent: "center",
     alignItems: "center",
     gap: 8,
-    shadowColor: COLORS.primary,
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.2,
-    shadowRadius: 6,
-    elevation: 3,
+    ...SHADOWS.subtle,
   },
 
   shareText: {
     color: "#FFF",
-    fontWeight: "700",
+    fontFamily: FONTS.body.bold,
     fontSize: 15,
     letterSpacing: 0.2,
   },

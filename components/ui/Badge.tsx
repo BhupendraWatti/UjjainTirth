@@ -1,5 +1,8 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { COLORS } from "@/constants/colors";
+import { FONTS } from "@/constants/typography";
+import { RADIUS } from "@/constants/theme";
 
 interface BadgeProps {
   label: string;
@@ -17,14 +20,14 @@ export default Badge;
 
 const styles = StyleSheet.create({
   badge: {
-    backgroundColor: "#FFE6D5",
-    paddingHorizontal: 15,
+    backgroundColor: COLORS.primaryTint,
+    paddingHorizontal: 12,
     paddingVertical: 4,
-    borderRadius: 12,
+    borderRadius: RADIUS.sm,
   },
   text: {
-    fontSize: 13,
-    color: "#FF6A00",
-    fontWeight: "800",
+    fontSize: 12,
+    color: COLORS.primaryDeep,
+    fontFamily: FONTS.body.bold,
   },
 });

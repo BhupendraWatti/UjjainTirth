@@ -1,4 +1,6 @@
 import { COLORS } from "@/constants/colors";
+import { FONTS } from "@/constants/typography";
+import { RADIUS } from "@/constants/theme";
 import { APP_CONFIG } from "@/constants/appConfig";
 import { usePackageDetail } from "@/hooks/useProducts";
 import { Package } from "@/types/product";
@@ -511,7 +513,7 @@ export default function PackageDetailModal({ visible, item, onClose }: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F5F2EA",
+    backgroundColor: COLORS.bg,
   },
 
   scrollContent: {
@@ -674,22 +676,22 @@ const styles = StyleSheet.create({
   },
 
   priceAmount: {
-    fontSize: 34,
-    fontWeight: "900",
+    fontSize: 32,
+    fontFamily: FONTS.display.semiBold,
     color: COLORS.primary,
     letterSpacing: -0.5,
   },
 
   priceBadge: {
-    backgroundColor: "#E8F5E9",
+    backgroundColor: COLORS.surfaceMuted,
     paddingHorizontal: 14,
     paddingVertical: 8,
-    borderRadius: 24,
+    borderRadius: RADIUS.sm,
     flexDirection: "row",
     alignItems: "center",
     gap: 4,
     borderWidth: 1,
-    borderColor: "rgba(46,125,50,0.12)",
+    borderColor: COLORS.hairline,
   },
 
   priceBadgeEmoji: {
@@ -698,15 +700,15 @@ const styles = StyleSheet.create({
 
   priceBadgeText: {
     fontSize: 12,
-    fontWeight: "800",
-    color: "#2E7D32",
+    fontFamily: FONTS.body.bold,
+    color: COLORS.success,
     letterSpacing: 0.3,
   },
 
   // Section divider
   sectionDivider: {
     height: 1,
-    backgroundColor: "rgba(0,0,0,0.05)",
+    backgroundColor: COLORS.hairline,
     marginHorizontal: 32,
     marginTop: 24,
   },
@@ -733,30 +735,30 @@ const styles = StyleSheet.create({
 
   sectionTitle: {
     fontSize: 18,
-    fontWeight: "800",
-    color: COLORS.textDark,
+    fontFamily: FONTS.display.semiBold,
+    color: COLORS.ink,
     letterSpacing: -0.2,
   },
 
   // Description Card
   descriptionCard: {
-    backgroundColor: "#FFF",
-    borderRadius: 18,
+    backgroundColor: COLORS.surface,
+    borderRadius: RADIUS.md,
     padding: 20,
-    shadowColor: "#000",
+    shadowColor: "#2B2420",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.06,
     shadowRadius: 8,
     elevation: 3,
     borderWidth: 1,
-    borderColor: "rgba(0,0,0,0.03)",
+    borderColor: COLORS.hairline,
   },
 
   descriptionText: {
     fontSize: 15,
-    color: "#555",
+    fontFamily: FONTS.body.regular,
+    color: COLORS.inkBody,
     lineHeight: 24,
-    letterSpacing: 0.1,
   },
 
   shortDescRow: {

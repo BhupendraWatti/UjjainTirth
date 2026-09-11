@@ -1,3 +1,6 @@
+import { COLORS } from "@/constants/colors";
+import { RADIUS, SHADOWS } from "@/constants/theme";
+import { FONTS } from "@/constants/typography";
 import { NarmadaLocationItem, ParikramaModeItem } from "@/types/parikrama";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
@@ -81,7 +84,7 @@ const ParikramaEnquiryModal = ({
                   onPress={onClose}
                   accessibilityLabel="Close modal"
                 >
-                  <Ionicons name="close" size={20} color="#4A4A4A" />
+                  <Ionicons name="close" size={20} color={COLORS.inkBody} />
                 </TouchableOpacity>
               </View>
 
@@ -115,25 +118,25 @@ const ParikramaEnquiryModal = ({
                 <View style={styles.inclusionsBox}>
                   <Text style={styles.inclusionsTitle}>Yatra Assistance Includes:</Text>
                   <View style={styles.inclusionRow}>
-                    <Ionicons name="shield-checkmark" size={16} color="#088395" />
+                    <Ionicons name="shield-checkmark" size={16} color={COLORS.journey} />
                     <Text style={styles.inclusionText}>
                       Dedicated AC vehicle (Innova / Tempo) suited for Ghat routes
                     </Text>
                   </View>
                   <View style={styles.inclusionRow}>
-                    <Ionicons name="shield-checkmark" size={16} color="#088395" />
+                    <Ionicons name="shield-checkmark" size={16} color={COLORS.journey} />
                     <Text style={styles.inclusionText}>
                       Pre-verified Ashram, Dharamshala & Hotel night halts
                     </Text>
                   </View>
                   <View style={styles.inclusionRow}>
-                    <Ionicons name="shield-checkmark" size={16} color="#088395" />
+                    <Ionicons name="shield-checkmark" size={16} color={COLORS.journey} />
                     <Text style={styles.inclusionText}>
                       Assistance for Holy Snan, Narmada Jal Sankalp & Aarti vidhi
                     </Text>
                   </View>
                   <View style={styles.inclusionRow}>
-                    <Ionicons name="shield-checkmark" size={16} color="#088395" />
+                    <Ionicons name="shield-checkmark" size={16} color={COLORS.journey} />
                     <Text style={styles.inclusionText}>
                       Boat crossing assistance at Narmada Sagar Sangam (Bharuch)
                     </Text>
@@ -156,7 +159,7 @@ const ParikramaEnquiryModal = ({
                     activeOpacity={0.8}
                     onPress={handleCall}
                   >
-                    <Ionicons name="call-outline" size={18} color="#088395" />
+                    <Ionicons name="call-outline" size={18} color={COLORS.journey} />
                     <Text style={styles.callText}>Talk to Yatra Guide</Text>
                   </TouchableOpacity>
                 </View>
@@ -176,13 +179,13 @@ export default memo(ParikramaEnquiryModal);
 const styles = StyleSheet.create({
   backdrop: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.55)",
+    backgroundColor: "rgba(43, 36, 32, 0.55)",
     justifyContent: "flex-end",
   },
   sheet: {
-    backgroundColor: "#FFFFFF",
-    borderTopLeftRadius: 26,
-    borderTopRightRadius: 26,
+    backgroundColor: COLORS.bg,
+    borderTopLeftRadius: RADIUS.lg,
+    borderTopRightRadius: RADIUS.lg,
     paddingHorizontal: 20,
     paddingTop: 12,
     maxHeight: "85%",
@@ -191,7 +194,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 4,
     borderRadius: 2,
-    backgroundColor: "#E0E0E0",
+    backgroundColor: COLORS.inkFaint,
     alignSelf: "center",
     marginBottom: 12,
   },
@@ -203,31 +206,31 @@ const styles = StyleSheet.create({
   },
   sheetTitle: {
     fontSize: 20,
-    fontWeight: "700",
-    color: "#222222",
+    fontFamily: FONTS.display.semiBold,
+    color: COLORS.ink,
   },
   closeButton: {
     width: 34,
     height: 34,
     borderRadius: 17,
-    backgroundColor: "#F2F2F2",
+    backgroundColor: COLORS.bgStone,
     justifyContent: "center",
     alignItems: "center",
   },
   summaryCard: {
     flexDirection: "row",
-    backgroundColor: "#F0FDFA",
-    borderRadius: 16,
+    backgroundColor: COLORS.surface,
+    borderRadius: RADIUS.md,
     padding: 12,
     marginBottom: 14,
     borderWidth: 1,
-    borderColor: "#CCFBF1",
+    borderColor: COLORS.hairline,
   },
   thumbnail: {
     width: 80,
     height: 70,
-    borderRadius: 12,
-    backgroundColor: "#CCFBF1",
+    borderRadius: RADIUS.sm,
+    backgroundColor: COLORS.bgStone,
   },
   summaryDetails: {
     flex: 1,
@@ -236,48 +239,49 @@ const styles = StyleSheet.create({
   },
   summaryTitle: {
     fontSize: 16,
-    fontWeight: "700",
-    color: "#134E4A",
+    fontFamily: FONTS.display.semiBold,
+    color: COLORS.ink,
     marginBottom: 2,
   },
   summarySub: {
     fontSize: 12,
-    color: "#0F766E",
-    fontWeight: "600",
+    fontFamily: FONTS.body.semiBold,
+    color: COLORS.journey,
     marginBottom: 4,
   },
   badge: {
     alignSelf: "flex-start",
-    backgroundColor: "#0D9488",
-    paddingHorizontal: 7,
-    paddingVertical: 2,
-    borderRadius: 6,
+    backgroundColor: COLORS.journeyTint,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: RADIUS.sm,
   },
   badgeText: {
     fontSize: 9,
-    fontWeight: "800",
-    color: "#FFFFFF",
+    fontFamily: FONTS.body.bold,
+    color: COLORS.journey,
     letterSpacing: 0.5,
   },
   descriptionText: {
     fontSize: 13,
-    color: "#4B5563",
+    fontFamily: FONTS.body.regular,
+    color: COLORS.inkMuted,
     lineHeight: 19,
     marginBottom: 16,
   },
   inclusionsBox: {
-    backgroundColor: "#F8FAFC",
-    borderRadius: 14,
+    backgroundColor: COLORS.surface,
+    borderRadius: RADIUS.md,
     padding: 14,
     gap: 8,
     marginBottom: 20,
     borderWidth: 1,
-    borderColor: "#E2E8F0",
+    borderColor: COLORS.hairline,
   },
   inclusionsTitle: {
     fontSize: 13,
-    fontWeight: "700",
-    color: "#088395",
+    fontFamily: FONTS.body.bold,
+    color: COLORS.journey,
     marginBottom: 4,
   },
   inclusionRow: {
@@ -287,7 +291,8 @@ const styles = StyleSheet.create({
   },
   inclusionText: {
     fontSize: 12,
-    color: "#334155",
+    fontFamily: FONTS.body.medium,
+    color: COLORS.inkBody,
     flex: 1,
     lineHeight: 16,
   },
@@ -295,38 +300,34 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   whatsappButton: {
-    backgroundColor: "#25D366",
+    backgroundColor: COLORS.whatsapp,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     gap: 8,
     paddingVertical: 14,
-    borderRadius: 14,
-    shadowColor: "#25D366",
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-    elevation: 3,
+    borderRadius: RADIUS.sm,
+    ...SHADOWS.subtle,
   },
   whatsappText: {
     color: "#FFFFFF",
     fontSize: 15,
-    fontWeight: "700",
+    fontFamily: FONTS.body.bold,
   },
   callButton: {
-    backgroundColor: "#F0FDFA",
+    backgroundColor: COLORS.journeyTint,
     borderWidth: 1.5,
-    borderColor: "#088395",
+    borderColor: COLORS.journey,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     gap: 8,
     paddingVertical: 13,
-    borderRadius: 14,
+    borderRadius: RADIUS.sm,
   },
   callText: {
-    color: "#088395",
+    color: COLORS.journey,
     fontSize: 14,
-    fontWeight: "700",
+    fontFamily: FONTS.body.bold,
   },
 });

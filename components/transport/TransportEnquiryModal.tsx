@@ -1,3 +1,6 @@
+import { COLORS } from "@/constants/colors";
+import { RADIUS, SHADOWS } from "@/constants/theme";
+import { FONTS } from "@/constants/typography";
 import { TransportServiceItem } from "@/types/transport";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
@@ -61,7 +64,7 @@ const TransportEnquiryModal = ({ visible, item, onClose }: Props) => {
                   onPress={onClose}
                   accessibilityLabel="Close modal"
                 >
-                  <Ionicons name="close" size={20} color="#4A4A4A" />
+                  <Ionicons name="close" size={20} color={COLORS.inkBody} />
                 </TouchableOpacity>
               </View>
 
@@ -91,19 +94,19 @@ const TransportEnquiryModal = ({ visible, item, onClose }: Props) => {
                 {/* Pilgrimage Guarantees */}
                 <View style={styles.guaranteeBox}>
                   <View style={styles.guaranteeRow}>
-                    <Ionicons name="checkmark-circle" size={18} color="#10B981" />
+                    <Ionicons name="checkmark-circle" size={18} color={COLORS.success} />
                     <Text style={styles.guaranteeText}>
                       Experienced local drivers familiar with temple routes
                     </Text>
                   </View>
                   <View style={styles.guaranteeRow}>
-                    <Ionicons name="checkmark-circle" size={18} color="#10B981" />
+                    <Ionicons name="checkmark-circle" size={18} color={COLORS.success} />
                     <Text style={styles.guaranteeText}>
                       Door-to-door pickup from Ujjain Station, Airport, or Hotel
                     </Text>
                   </View>
                   <View style={styles.guaranteeRow}>
-                    <Ionicons name="checkmark-circle" size={18} color="#10B981" />
+                    <Ionicons name="checkmark-circle" size={18} color={COLORS.success} />
                     <Text style={styles.guaranteeText}>
                       Transparent pricing with zero hidden charges
                     </Text>
@@ -131,7 +134,7 @@ const TransportEnquiryModal = ({ visible, item, onClose }: Props) => {
                     activeOpacity={0.8}
                     onPress={handleCall}
                   >
-                    <Ionicons name="call-outline" size={18} color="#EB5C49" />
+                    <Ionicons name="call-outline" size={18} color={COLORS.journey} />
                     <Text style={styles.callText}>Call Support Helpdesk</Text>
                   </TouchableOpacity>
                 </View>
@@ -151,13 +154,13 @@ export default memo(TransportEnquiryModal);
 const styles = StyleSheet.create({
   backdrop: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.55)",
+    backgroundColor: "rgba(43, 36, 32, 0.55)",
     justifyContent: "flex-end",
   },
   sheet: {
-    backgroundColor: "#FFFFFF",
-    borderTopLeftRadius: 26,
-    borderTopRightRadius: 26,
+    backgroundColor: COLORS.bg,
+    borderTopLeftRadius: RADIUS.lg,
+    borderTopRightRadius: RADIUS.lg,
     paddingHorizontal: 20,
     paddingTop: 12,
     maxHeight: "85%",
@@ -166,7 +169,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 4,
     borderRadius: 2,
-    backgroundColor: "#E0E0E0",
+    backgroundColor: COLORS.inkFaint,
     alignSelf: "center",
     marginBottom: 12,
   },
@@ -178,31 +181,31 @@ const styles = StyleSheet.create({
   },
   sheetTitle: {
     fontSize: 20,
-    fontWeight: "700",
-    color: "#222222",
+    fontFamily: FONTS.display.semiBold,
+    color: COLORS.ink,
   },
   closeButton: {
     width: 34,
     height: 34,
     borderRadius: 17,
-    backgroundColor: "#F2F2F2",
+    backgroundColor: COLORS.bgStone,
     justifyContent: "center",
     alignItems: "center",
   },
   vehicleSummary: {
     flexDirection: "row",
-    backgroundColor: "#FAF7F2",
-    borderRadius: 16,
+    backgroundColor: COLORS.surface,
+    borderRadius: RADIUS.md,
     padding: 12,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: "#EFEBE3",
+    borderColor: COLORS.hairline,
   },
   vehicleThumbnail: {
     width: 80,
     height: 64,
-    borderRadius: 10,
-    backgroundColor: "#E2DCD2",
+    borderRadius: RADIUS.sm,
+    backgroundColor: COLORS.bgStone,
   },
   vehicleDetails: {
     flex: 1,
@@ -211,35 +214,36 @@ const styles = StyleSheet.create({
   },
   vehicleName: {
     fontSize: 16,
-    fontWeight: "700",
-    color: "#222222",
+    fontFamily: FONTS.display.semiBold,
+    color: COLORS.ink,
     marginBottom: 2,
   },
   vehicleSub: {
     fontSize: 12,
-    color: "#666666",
+    fontFamily: FONTS.body.regular,
+    color: COLORS.inkMuted,
     marginBottom: 4,
   },
   tag: {
     alignSelf: "flex-start",
-    backgroundColor: "#F0EAE1",
-    paddingHorizontal: 7,
-    paddingVertical: 2,
-    borderRadius: 6,
+    backgroundColor: COLORS.journeyTint,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: RADIUS.sm,
   },
   tagText: {
     fontSize: 10,
-    fontWeight: "700",
-    color: "#7C6339",
+    fontFamily: FONTS.body.bold,
+    color: COLORS.journey,
   },
   guaranteeBox: {
-    backgroundColor: "#F0FDF4",
-    borderRadius: 14,
+    backgroundColor: COLORS.surface,
+    borderRadius: RADIUS.md,
     padding: 12,
     gap: 8,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: "#DCFCE7",
+    borderColor: COLORS.hairline,
   },
   guaranteeRow: {
     flexDirection: "row",
@@ -248,13 +252,15 @@ const styles = StyleSheet.create({
   },
   guaranteeText: {
     fontSize: 12,
-    color: "#166534",
+    fontFamily: FONTS.body.medium,
+    color: COLORS.inkBody,
     flex: 1,
     lineHeight: 16,
   },
   descriptionText: {
     fontSize: 13,
-    color: "#666666",
+    fontFamily: FONTS.body.regular,
+    color: COLORS.inkMuted,
     lineHeight: 20,
     marginBottom: 20,
   },
@@ -262,38 +268,34 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   whatsappButton: {
-    backgroundColor: "#25D366",
+    backgroundColor: COLORS.whatsapp,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     gap: 8,
     paddingVertical: 14,
-    borderRadius: 14,
-    shadowColor: "#25D366",
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-    elevation: 3,
+    borderRadius: RADIUS.sm,
+    ...SHADOWS.subtle,
   },
   whatsappText: {
     color: "#FFFFFF",
     fontSize: 15,
-    fontWeight: "700",
+    fontFamily: FONTS.body.bold,
   },
   callButton: {
-    backgroundColor: "#FFF5F2",
+    backgroundColor: COLORS.journeyTint,
     borderWidth: 1.5,
-    borderColor: "#EB5C49",
+    borderColor: COLORS.journey,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     gap: 8,
     paddingVertical: 13,
-    borderRadius: 14,
+    borderRadius: RADIUS.sm,
   },
   callText: {
-    color: "#EB5C49",
+    color: COLORS.journey,
     fontSize: 14,
-    fontWeight: "700",
+    fontFamily: FONTS.body.bold,
   },
 });

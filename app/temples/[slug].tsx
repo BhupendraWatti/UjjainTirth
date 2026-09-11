@@ -17,6 +17,9 @@ import { useTempleDistances, formatDistance } from "@/hooks/useTempleDistances";
 import { fetchTempleBySlug } from "@/services/templeService";
 import { Temple } from "@/types/temple";
 import { router } from "expo-router";
+import { COLORS } from "@/constants/colors";
+import { FONTS } from "@/constants/typography";
+import { RADIUS, SHADOWS } from "@/constants/theme";
 
 const TempleDetailScreen = () => {
   const { slug } = useLocalSearchParams<{ slug: string }>();
@@ -199,62 +202,66 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   badge: {
-    backgroundColor: "#EB5C49",
+    backgroundColor: COLORS.primary,
     paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
+    paddingVertical: 5,
+    borderRadius: RADIUS.sm,
     alignSelf: "flex-start",
   },
   badgeText: {
-    color: "#fff",
-    fontSize: 14,
-    fontWeight: "700",
+    color: "#FFFFFF",
+    fontSize: 12,
+    fontFamily: FONTS.body.bold,
   },
   distanceBadge: {
-    backgroundColor: "rgba(255,255,255,0.2)",
+    backgroundColor: "rgba(255,255,255,0.25)",
     paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
+    paddingVertical: 5,
+    borderRadius: RADIUS.sm,
     alignSelf: "flex-start",
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.15)",
+    borderColor: "rgba(255,255,255,0.2)",
   },
   distanceBadgeText: {
-    color: "#fff",
-    fontSize: 13,
-    fontWeight: "700",
+    color: "#FFFFFF",
+    fontSize: 12,
+    fontFamily: FONTS.body.bold,
   },
   title: {
-    color: "#fff",
-    fontSize: 24,
-    fontWeight: "700",
+    color: "#FFFFFF",
+    fontSize: 26,
+    fontFamily: FONTS.display.semiBold,
   },
   section: {
     padding: 16,
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: "600",
+    fontFamily: FONTS.display.semiBold,
+    color: COLORS.ink,
     marginBottom: 8,
   },
   description: {
-    color: "#444",
+    color: COLORS.inkBody,
+    fontFamily: FONTS.body.regular,
     lineHeight: 22,
+    fontSize: 14,
   },
   cta: {
     position: "absolute",
     bottom: 20,
     left: 16,
     right: 16,
-    backgroundColor: "#EB5C49",
+    backgroundColor: COLORS.primary,
     padding: 16,
-    borderRadius: 30,
+    borderRadius: RADIUS.md,
     alignItems: "center",
-    elevation: 5,
+    ...SHADOWS.elevated,
   },
   ctaText: {
-    color: "#fff",
-    fontWeight: "600",
+    color: "#FFFFFF",
+    fontFamily: FONTS.body.bold,
+    fontSize: 15,
   },
   center: {
     flex: 1,

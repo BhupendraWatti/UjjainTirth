@@ -1,5 +1,7 @@
 import { Hotel } from "@/types/service";
 import { COLORS } from "@/constants/colors";
+import { FONTS } from "@/constants/typography";
+import { RADIUS } from "@/constants/theme";
 import { Image } from "expo-image";
 import React, { memo, useCallback } from "react";
 import { StyleSheet, Text, TouchableOpacity, View, ViewStyle } from "react-native";
@@ -109,17 +111,19 @@ export default memo(HotelCard);
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 18,
+    backgroundColor: COLORS.surface,
+    borderRadius: RADIUS.md,
     marginHorizontal: 16,
     marginBottom: 14,
     padding: 12,
-    // Shadow
-    shadowColor: "#000",
+    borderWidth: 1,
+    borderColor: COLORS.hairline,
+    // Warm Shadow
+    shadowColor: "#2B2420",
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.08,
     shadowRadius: 10,
-    elevation: 4,
+    elevation: 3,
   },
 
   row: {
@@ -129,8 +133,8 @@ const styles = StyleSheet.create({
   thumbnail: {
     width: 100,
     height: 120,
-    borderRadius: 14,
-    backgroundColor: "#eee",
+    borderRadius: RADIUS.sm,
+    backgroundColor: COLORS.surfaceMuted,
   },
 
   content: {
@@ -141,8 +145,8 @@ const styles = StyleSheet.create({
 
   name: {
     fontSize: 16,
-    fontWeight: "700",
-    color: COLORS.textDark,
+    fontFamily: FONTS.display.regular,
+    color: COLORS.ink,
     marginBottom: 3,
   },
 
@@ -159,7 +163,8 @@ const styles = StyleSheet.create({
 
   location: {
     fontSize: 12,
-    color: COLORS.textLight,
+    fontFamily: FONTS.body.regular,
+    color: COLORS.inkMuted,
     flex: 1,
   },
 
@@ -173,12 +178,13 @@ const styles = StyleSheet.create({
 
   starFilled: {
     fontSize: 14,
-    color: "#F5A623",
+    color: COLORS.gold,
   },
 
   starHalf: {
     fontSize: 14,
-    color: "#F5C86380",
+    color: COLORS.gold,
+    opacity: 0.6,
   },
 
   starEmpty: {
@@ -188,8 +194,8 @@ const styles = StyleSheet.create({
 
   ratingText: {
     fontSize: 12,
-    fontWeight: "700",
-    color: COLORS.textDark,
+    fontFamily: FONTS.body.bold,
+    color: COLORS.ink,
     marginLeft: 4,
   },
 
@@ -202,16 +208,16 @@ const styles = StyleSheet.create({
   },
 
   amenityTag: {
-    backgroundColor: "#F0F0F0",
+    backgroundColor: COLORS.surfaceMuted,
     paddingHorizontal: 8,
     paddingVertical: 3,
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
   },
 
   amenityText: {
     fontSize: 10,
-    fontWeight: "600",
-    color: COLORS.textLight,
+    fontFamily: FONTS.body.medium,
+    color: COLORS.inkMuted,
   },
 
   // Price
@@ -228,14 +234,15 @@ const styles = StyleSheet.create({
 
   priceAmount: {
     fontSize: 18,
-    fontWeight: "800",
+    fontFamily: FONTS.display.semiBold,
     color: COLORS.primary,
     letterSpacing: -0.3,
   },
 
   priceUnit: {
     fontSize: 11,
-    color: COLORS.textLight,
+    fontFamily: FONTS.body.regular,
+    color: COLORS.inkMuted,
     marginLeft: 2,
   },
 });

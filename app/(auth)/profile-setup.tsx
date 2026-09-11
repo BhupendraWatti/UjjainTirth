@@ -16,6 +16,8 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "@/constants/colors";
+import { RADIUS, SHADOWS } from "@/constants/theme";
+import { FONTS } from "@/constants/typography";
 import { useAuth } from "@/context/AuthContext";
 
 type GenderOption = "Male" | "Female" | "Other";
@@ -103,13 +105,13 @@ export default function ProfileSetupScreen() {
             {/* Row 1: Verified Mobile */}
             <View style={styles.tableRow}>
               <View style={styles.rowLabelCol}>
-                <Ionicons name="call-outline" size={18} color="#777" />
+                <Ionicons name="call-outline" size={18} color={COLORS.inkMuted} />
                 <Text style={styles.rowLabel}>Mobile</Text>
               </View>
               <View style={styles.rowValueCol}>
                 <Text style={styles.verifiedPhone}>{displayMobile || "Verified"}</Text>
                 <View style={styles.verifiedBadge}>
-                  <Ionicons name="checkmark-circle" size={16} color="#2E7D32" />
+                  <Ionicons name="checkmark-circle" size={16} color={COLORS.success} />
                   <Text style={styles.verifiedText}>Verified</Text>
                 </View>
               </View>
@@ -120,14 +122,14 @@ export default function ProfileSetupScreen() {
             {/* Row 2: Name */}
             <View style={styles.tableRow}>
               <View style={styles.rowLabelCol}>
-                <Ionicons name="person-outline" size={18} color="#777" />
+                <Ionicons name="person-outline" size={18} color={COLORS.inkMuted} />
                 <Text style={styles.rowLabel}>Full Name</Text>
               </View>
               <View style={styles.rowValueCol}>
                 <TextInput
                   style={styles.tableInput}
                   placeholder="e.g. Ramesh Sharma"
-                  placeholderTextColor="#AAA"
+                  placeholderTextColor={COLORS.inkFaint}
                   value={name}
                   onChangeText={(val) => {
                     setName(val);
@@ -143,7 +145,7 @@ export default function ProfileSetupScreen() {
             {/* Row 3: Gender (Tabular Segmented Tabs) */}
             <View style={[styles.tableRow, { alignItems: "flex-start", paddingVertical: 14 }]}>
               <View style={[styles.rowLabelCol, { paddingTop: 6 }]}>
-                <Ionicons name="transgender-outline" size={18} color="#777" />
+                <Ionicons name="transgender-outline" size={18} color={COLORS.inkMuted} />
                 <Text style={styles.rowLabel}>Gender</Text>
               </View>
               <View style={styles.genderTabsContainer}>
@@ -178,14 +180,14 @@ export default function ProfileSetupScreen() {
             {/* Row 4: Home City / Address */}
             <View style={styles.tableRow}>
               <View style={styles.rowLabelCol}>
-                <Ionicons name="location-outline" size={18} color="#777" />
+                <Ionicons name="location-outline" size={18} color={COLORS.inkMuted} />
                 <Text style={styles.rowLabel}>City / Town</Text>
               </View>
               <View style={styles.rowValueCol}>
                 <TextInput
                   style={styles.tableInput}
                   placeholder="e.g. Indore, Bhopal, Delhi"
-                  placeholderTextColor="#AAA"
+                  placeholderTextColor={COLORS.inkFaint}
                   value={city}
                   onChangeText={setCity}
                 />
@@ -228,7 +230,7 @@ export default function ProfileSetupScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F5EFE7",
+    backgroundColor: COLORS.bg,
   },
   header: {
     flexDirection: "row",
@@ -239,26 +241,24 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 18,
-    fontWeight: "700",
-    color: COLORS.textDark,
+    fontFamily: FONTS.display.semiBold,
+    color: COLORS.ink,
   },
   skipHeaderBtn: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.surface,
     paddingHorizontal: 14,
     paddingVertical: 7,
-    borderRadius: 16,
+    borderRadius: RADIUS.sm,
     gap: 2,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.08,
-    shadowRadius: 3,
-    elevation: 2,
+    borderWidth: 1,
+    borderColor: COLORS.hairline,
+    ...SHADOWS.subtle,
   },
   skipHeaderText: {
     fontSize: 13,
-    fontWeight: "700",
+    fontFamily: FONTS.body.bold,
     color: COLORS.primary,
   },
   scrollContent: {
@@ -266,16 +266,14 @@ const styles = StyleSheet.create({
     paddingBottom: 24,
   },
   introCard: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 20,
+    backgroundColor: COLORS.surface,
+    borderRadius: RADIUS.md,
     padding: 20,
     alignItems: "center",
     marginVertical: 12,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
+    borderWidth: 1,
+    borderColor: COLORS.hairline,
+    ...SHADOWS.card,
   },
   iconBadge: {
     width: 48,
@@ -285,36 +283,29 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 10,
-    shadowColor: COLORS.primary,
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.3,
-    shadowRadius: 6,
-    elevation: 3,
+    ...SHADOWS.subtle,
   },
   introTitle: {
     fontSize: 20,
-    fontWeight: "700",
-    color: COLORS.textDark,
+    fontFamily: FONTS.display.semiBold,
+    color: COLORS.sacred,
     marginBottom: 6,
   },
   introSubtitle: {
     fontSize: 13,
-    color: "#666",
+    fontFamily: FONTS.body.regular,
+    color: COLORS.inkMuted,
     textAlign: "center",
     lineHeight: 18,
   },
   tableCard: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 20,
+    backgroundColor: COLORS.surface,
+    borderRadius: RADIUS.md,
     paddingVertical: 8,
     marginVertical: 12,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
     borderWidth: 1,
-    borderColor: "rgba(0,0,0,0.03)",
+    borderColor: COLORS.hairline,
+    ...SHADOWS.card,
   },
   tableHeaderRow: {
     flexDirection: "row",
@@ -323,22 +314,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: "#F0EBE1",
+    borderBottomColor: COLORS.hairline,
   },
   tableHeaderTitle: {
     fontSize: 12,
-    fontWeight: "700",
+    fontFamily: FONTS.body.bold,
     letterSpacing: 1,
-    color: "#888",
+    color: COLORS.inkMuted,
   },
   optionalBadge: {
     fontSize: 11,
-    fontWeight: "600",
-    color: "#999",
-    backgroundColor: "#F5F0E8",
+    fontFamily: FONTS.body.semiBold,
+    color: COLORS.inkMuted,
+    backgroundColor: COLORS.bgStone,
     paddingHorizontal: 8,
     paddingVertical: 2,
-    borderRadius: 6,
+    borderRadius: RADIUS.sm,
   },
   tableRow: {
     flexDirection: "row",
@@ -354,8 +345,8 @@ const styles = StyleSheet.create({
   },
   rowLabel: {
     fontSize: 14,
-    fontWeight: "600",
-    color: "#555",
+    fontFamily: FONTS.body.semiBold,
+    color: COLORS.inkBody,
   },
   rowValueCol: {
     flex: 1,
@@ -365,8 +356,8 @@ const styles = StyleSheet.create({
   },
   verifiedPhone: {
     fontSize: 15,
-    fontWeight: "600",
-    color: COLORS.textDark,
+    fontFamily: FONTS.body.semiBold,
+    color: COLORS.ink,
   },
   verifiedBadge: {
     flexDirection: "row",
@@ -375,23 +366,23 @@ const styles = StyleSheet.create({
     backgroundColor: "#E8F5E9",
     paddingHorizontal: 8,
     paddingVertical: 3,
-    borderRadius: 12,
+    borderRadius: RADIUS.sm,
   },
   verifiedText: {
     fontSize: 11,
-    fontWeight: "700",
-    color: "#2E7D32",
+    fontFamily: FONTS.body.bold,
+    color: COLORS.success,
   },
   tableInput: {
     flex: 1,
     fontSize: 15,
-    fontWeight: "600",
-    color: COLORS.textDark,
+    fontFamily: FONTS.body.regular,
+    color: COLORS.ink,
     paddingVertical: 2,
   },
   rowDivider: {
     height: 1,
-    backgroundColor: "#F4EFE6",
+    backgroundColor: COLORS.hairline,
     marginLeft: 18,
   },
   genderTabsContainer: {
@@ -402,52 +393,48 @@ const styles = StyleSheet.create({
   genderPill: {
     flex: 1,
     paddingVertical: 7,
-    borderRadius: 10,
+    borderRadius: RADIUS.sm,
     borderWidth: 1.5,
-    borderColor: "#E6DEC8",
-    backgroundColor: "#FCFAF7",
+    borderColor: COLORS.hairline,
+    backgroundColor: COLORS.bgStone,
     alignItems: "center",
     justifyContent: "center",
   },
   genderPillActive: {
     borderColor: COLORS.primary,
-    backgroundColor: "#FDE8E5",
+    backgroundColor: COLORS.primaryTint,
   },
   genderText: {
     fontSize: 13,
-    fontWeight: "600",
-    color: "#666",
+    fontFamily: FONTS.body.medium,
+    color: COLORS.inkBody,
   },
   genderTextActive: {
     color: COLORS.primary,
-    fontWeight: "700",
+    fontFamily: FONTS.body.bold,
   },
   errorBanner: {
-    color: "#D9383A",
+    color: COLORS.error,
     fontSize: 13,
+    fontFamily: FONTS.body.medium,
     textAlign: "center",
     marginTop: 8,
-    fontWeight: "500",
   },
   saveBtn: {
     flexDirection: "row",
     backgroundColor: COLORS.primary,
     height: 52,
-    borderRadius: 16,
+    borderRadius: RADIUS.sm,
     alignItems: "center",
     justifyContent: "center",
     gap: 8,
     marginTop: 18,
-    shadowColor: COLORS.primary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 4,
+    ...SHADOWS.subtle,
   },
   saveBtnText: {
     color: "#FFF",
     fontSize: 16,
-    fontWeight: "700",
+    fontFamily: FONTS.body.bold,
   },
   skipSecondaryBtn: {
     paddingVertical: 14,
@@ -456,7 +443,7 @@ const styles = StyleSheet.create({
   },
   skipSecondaryText: {
     fontSize: 14,
-    fontWeight: "600",
-    color: "#777",
+    fontFamily: FONTS.body.semiBold,
+    color: COLORS.inkMuted,
   },
 });

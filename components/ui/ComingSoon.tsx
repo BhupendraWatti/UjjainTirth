@@ -3,9 +3,10 @@ import React, {
   useEffect,
   useImperativeHandle,
   useRef,
-  useState,
 } from "react";
 import { Animated, StyleSheet, Text, View } from "react-native";
+import { COLORS } from "@/constants/colors";
+import { FONTS } from "@/constants/typography";
 
 export type ComingSoonRef = {
   startAnimation: () => void;
@@ -21,14 +22,10 @@ const ComingSoon = forwardRef<ComingSoonRef, ComingSoonProps>(
     { title = "🚀 Coming Soon", subtitle = "Something exciting is on the way" },
     ref,
   ) => {
-    const [showText, setShowText] = useState(false);
-
     const opacity = useRef(new Animated.Value(0)).current;
     const scale = useRef(new Animated.Value(0.8)).current;
 
     const startAnimation = () => {
-      setShowText(true);
-
       Animated.parallel([
         Animated.timing(opacity, {
           toValue: 1,
@@ -70,12 +67,14 @@ const ComingSoon = forwardRef<ComingSoonRef, ComingSoonProps>(
   },
 );
 
+ComingSoon.displayName = "ComingSoon";
+
 export default ComingSoon;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F5F2EA",
+    backgroundColor: COLORS.bg,
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
@@ -87,14 +86,15 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: 28,
-    fontWeight: "700",
-    color: "#1A1A1A",
+    fontSize: 26,
+    fontFamily: FONTS.display.semiBold,
+    color: COLORS.ink,
   },
 
   subtitle: {
-    fontSize: 16,
-    color: "#6B6B6B",
+    fontSize: 15,
+    fontFamily: FONTS.body.regular,
+    color: COLORS.inkMuted,
     marginTop: 8,
   },
 });

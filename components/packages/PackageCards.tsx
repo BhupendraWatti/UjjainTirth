@@ -1,5 +1,7 @@
 import { APP_CONFIG } from "@/constants/appConfig";
 import { COLORS } from "@/constants/colors";
+import { FONTS } from "@/constants/typography";
+import { RADIUS } from "@/constants/theme";
 import { Package } from "@/types/product";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Linking from "expo-linking";
@@ -128,7 +130,6 @@ export default function PackageCard({ item, onPress, style }: Props) {
             onPress={onPress}
           >
             <Text style={styles.viewDetailsText}>View Details</Text>
-            <Text style={styles.viewDetailsArrow}>→</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -137,7 +138,7 @@ export default function PackageCard({ item, onPress, style }: Props) {
             onPress={handleCall}
           >
             <LinearGradient
-              colors={[COLORS.primary, "#D94535"]}
+              colors={[COLORS.primary, COLORS.primaryDeep]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={styles.bookButtonGradient}
@@ -154,17 +155,18 @@ export default function PackageCard({ item, onPress, style }: Props) {
 const styles = StyleSheet.create({
   card: {
     backgroundColor: "#FFFFFF",
-    borderRadius: 18,
+    borderRadius: RADIUS.md,
     overflow: "hidden",
     marginBottom: 16,
     marginHorizontal: 14,
-    // iOS shadow
-    shadowColor: "#000",
+    borderWidth: 1,
+    borderColor: COLORS.hairline,
+    // Warm shadow
+    shadowColor: "#2B2420",
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 12,
-    // Android shadow
-    elevation: 5,
+    shadowOpacity: 0.08,
+    shadowRadius: 10,
+    elevation: 3,
   },
 
   imageContainer: {
@@ -230,13 +232,14 @@ const styles = StyleSheet.create({
 
   priceAmount: {
     fontSize: 20,
-    fontWeight: "800",
-    color: "#FFF",
+    fontFamily: FONTS.display.semiBold,
+    color: "#FFFFFF",
   },
 
   pricePer: {
     fontSize: 11,
-    color: "rgba(255,255,255,0.8)",
+    fontFamily: FONTS.body.medium,
+    color: "rgba(255,255,255,0.85)",
     marginLeft: 2,
   },
 
@@ -246,14 +249,15 @@ const styles = StyleSheet.create({
 
   title: {
     fontSize: 18,
-    fontWeight: "700",
-    color: COLORS.textDark,
+    fontFamily: FONTS.display.regular,
+    color: COLORS.ink,
     marginBottom: 6,
   },
 
   description: {
     fontSize: 13,
-    color: COLORS.textLight,
+    fontFamily: FONTS.body.regular,
+    color: COLORS.inkMuted,
     lineHeight: 19,
     marginBottom: 14,
   },
@@ -268,10 +272,10 @@ const styles = StyleSheet.create({
   chip: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: COLORS.secondary,
+    backgroundColor: COLORS.primaryTint,
     paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 20,
+    paddingVertical: 5,
+    borderRadius: RADIUS.sm,
     gap: 4,
   },
 
@@ -281,8 +285,8 @@ const styles = StyleSheet.create({
 
   chipText: {
     fontSize: 11,
-    fontWeight: "600",
-    color: COLORS.textDark,
+    fontFamily: FONTS.body.semiBold,
+    color: COLORS.ink,
   },
 
   actionRow: {
@@ -295,7 +299,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     paddingVertical: 12,
-    borderRadius: 12,
+    borderRadius: RADIUS.sm,
     borderWidth: 1.5,
     borderColor: COLORS.primary,
     alignItems: "center",
@@ -305,7 +309,7 @@ const styles = StyleSheet.create({
 
   viewDetailsText: {
     fontSize: 14,
-    fontWeight: "600",
+    fontFamily: FONTS.body.semiBold,
     color: COLORS.primary,
   },
 
@@ -317,7 +321,7 @@ const styles = StyleSheet.create({
 
   bookButton: {
     flex: 1,
-    borderRadius: 12,
+    borderRadius: RADIUS.sm,
     overflow: "hidden",
   },
 
@@ -325,12 +329,12 @@ const styles = StyleSheet.create({
     paddingVertical: 13,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 12,
+    borderRadius: RADIUS.sm,
   },
 
   bookButtonText: {
     fontSize: 14,
-    fontWeight: "700",
+    fontFamily: FONTS.body.bold,
     color: "#FFFFFF",
   },
 });

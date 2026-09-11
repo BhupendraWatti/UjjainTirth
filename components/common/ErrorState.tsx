@@ -1,5 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { COLORS } from '@/constants/colors';
+import { RADIUS, SHADOWS } from '@/constants/theme';
+import { FONTS } from '@/constants/typography';
 
 interface ErrorStateProps {
   onRetry?: () => void;
@@ -11,7 +14,7 @@ const ErrorState = ({ onRetry }: ErrorStateProps) => {
       <Text style={styles.text}>Something went wrong</Text>
 
       {onRetry && (
-        <TouchableOpacity style={styles.button} onPress={onRetry}>
+        <TouchableOpacity style={styles.button} onPress={onRetry} activeOpacity={0.8}>
           <Text style={styles.buttonText}>Retry</Text>
         </TouchableOpacity>
       )}
@@ -28,19 +31,21 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 16,
-    color: '#777',
-    marginBottom: 10,
+    fontFamily: FONTS.body.regular,
+    color: COLORS.inkMuted,
+    marginBottom: 12,
   },
   button: {
-    backgroundColor: '#FF6A00',
+    backgroundColor: COLORS.primary,
     minHeight: 44,
     justifyContent: 'center',
-    paddingHorizontal: 20,
+    paddingHorizontal: 22,
     paddingVertical: 10,
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
+    ...SHADOWS.subtle,
   },
   buttonText: {
-    color: '#fff',
-    fontWeight: '600',
+    color: '#FFFFFF',
+    fontFamily: FONTS.body.bold,
   },
 });

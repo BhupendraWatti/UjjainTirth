@@ -1,3 +1,6 @@
+import { COLORS } from "@/constants/colors";
+import { RADIUS, SHADOWS } from "@/constants/theme";
+import { FONTS } from "@/constants/typography";
 import { TransportHighlight, TransportServiceItem } from "@/types/transport";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
@@ -26,7 +29,7 @@ const HighlightBadge = ({ highlight }: { highlight: TransportHighlight }) => {
   const iconName = getHighlightIconName(highlight.icon);
   return (
     <View style={styles.highlightBadge}>
-      <Ionicons name={iconName} size={13} color="#6C5331" style={styles.highlightIcon} />
+      <Ionicons name={iconName} size={13} color={COLORS.journey} style={styles.highlightIcon} />
       <Text style={styles.highlightText} numberOfLines={1}>
         {highlight.label}
       </Text>
@@ -95,7 +98,7 @@ const TransportCard = ({ item, onEnquire, style }: Props) => {
         {/* Action Footer */}
         <View style={styles.footer}>
           <View style={styles.featureNote}>
-            <Ionicons name="shield-checkmark" size={15} color="#10B981" />
+            <Ionicons name="shield-checkmark" size={15} color={COLORS.success} />
             <Text style={styles.featureNoteText}>Sanitized & GPS Tracked</Text>
           </View>
 
@@ -119,23 +122,19 @@ export default memo(TransportCard);
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 20,
+    backgroundColor: COLORS.surface,
+    borderRadius: RADIUS.md,
     marginHorizontal: 16,
     marginBottom: 16,
     overflow: "hidden",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.08,
-    shadowRadius: 12,
-    elevation: 4,
     borderWidth: 1,
-    borderColor: "rgba(0, 0, 0, 0.04)",
+    borderColor: COLORS.hairline,
+    ...SHADOWS.card,
   },
   imageWrapper: {
     width: "100%",
     height: 170,
-    backgroundColor: "#EAE6DE",
+    backgroundColor: COLORS.bgStone,
     position: "relative",
   },
   image: {
@@ -147,36 +146,34 @@ const styles = StyleSheet.create({
     top: 12,
     right: 12,
     backgroundColor: "rgba(255, 255, 255, 0.94)",
-    paddingHorizontal: 11,
-    paddingVertical: 5,
-    borderRadius: 14,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.12,
-    shadowRadius: 4,
-    elevation: 2,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: RADIUS.sm,
+    borderWidth: 1,
+    borderColor: COLORS.hairline,
+    ...SHADOWS.subtle,
   },
   badgeText: {
     fontSize: 11,
-    fontWeight: "700",
-    color: "#2C2C2C",
+    fontFamily: FONTS.body.bold,
+    color: COLORS.journey,
     letterSpacing: 0.3,
   },
   capacityPill: {
     position: "absolute",
     bottom: 12,
     left: 12,
-    backgroundColor: "rgba(35, 35, 35, 0.85)",
+    backgroundColor: "rgba(43, 36, 32, 0.85)",
     paddingHorizontal: 10,
     paddingVertical: 4,
-    borderRadius: 12,
+    borderRadius: RADIUS.sm,
     flexDirection: "row",
     alignItems: "center",
     gap: 4,
   },
   capacityText: {
     fontSize: 11,
-    fontWeight: "700",
+    fontFamily: FONTS.body.bold,
     color: "#FFFFFF",
   },
   content: {
@@ -190,27 +187,30 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
-    fontWeight: "700",
-    color: "#222222",
+    fontFamily: FONTS.display.semiBold,
+    color: COLORS.ink,
     flex: 1,
     letterSpacing: -0.2,
   },
   recBadge: {
-    backgroundColor: "#FDF0D5",
+    backgroundColor: COLORS.gold + "1A",
     paddingHorizontal: 8,
     paddingVertical: 3,
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
     marginLeft: 8,
+    borderWidth: 1,
+    borderColor: COLORS.gold + "33",
   },
   recText: {
     fontSize: 10,
-    fontWeight: "800",
-    color: "#B45309",
+    fontFamily: FONTS.body.bold,
+    color: COLORS.gold,
     letterSpacing: 0.5,
   },
   description: {
     fontSize: 13,
-    color: "#666666",
+    fontFamily: FONTS.body.regular,
+    color: COLORS.inkMuted,
     lineHeight: 18,
     marginBottom: 12,
   },
@@ -223,10 +223,10 @@ const styles = StyleSheet.create({
   highlightBadge: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#F5F2EA",
+    backgroundColor: COLORS.journeyTint,
     paddingHorizontal: 9,
     paddingVertical: 5,
-    borderRadius: 8,
+    borderRadius: RADIUS.sm,
     maxWidth: "100%",
   },
   highlightIcon: {
@@ -234,8 +234,8 @@ const styles = StyleSheet.create({
   },
   highlightText: {
     fontSize: 11,
-    fontWeight: "600",
-    color: "#4A3B24",
+    fontFamily: FONTS.body.semiBold,
+    color: COLORS.journey,
   },
   footer: {
     flexDirection: "row",
@@ -243,7 +243,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: "#F2EFEB",
+    borderTopColor: COLORS.hairline,
   },
   featureNote: {
     flexDirection: "row",
@@ -252,26 +252,22 @@ const styles = StyleSheet.create({
   },
   featureNoteText: {
     fontSize: 12,
-    fontWeight: "600",
-    color: "#4B5563",
+    fontFamily: FONTS.body.medium,
+    color: COLORS.inkMuted,
   },
   ctaButton: {
-    backgroundColor: "#EB5C49",
+    backgroundColor: COLORS.journey,
     paddingHorizontal: 16,
     paddingVertical: 9,
-    borderRadius: 12,
+    borderRadius: RADIUS.sm,
     flexDirection: "row",
     alignItems: "center",
     gap: 4,
-    shadowColor: "#EB5C49",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 2,
+    ...SHADOWS.subtle,
   },
   ctaText: {
     fontSize: 13,
-    fontWeight: "700",
+    fontFamily: FONTS.body.bold,
     color: "#FFFFFF",
   },
 });

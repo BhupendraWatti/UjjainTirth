@@ -159,6 +159,8 @@ const BrandReveal = React.memo(({ startTrigger }: BrandRevealProps) => {
   );
 });
 
+BrandReveal.displayName = "BrandReveal";
+
 export default BrandReveal;
 
 const styles = StyleSheet.create({

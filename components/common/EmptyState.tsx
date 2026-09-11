@@ -1,5 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { COLORS } from '@/constants/colors';
+import { FONTS } from '@/constants/typography';
 
 interface EmptyStateProps {
   message?: string;
@@ -22,6 +24,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 16,
-    color: '#777',
+    fontFamily: FONTS.body.regular,
+    color: COLORS.inkMuted,
   },
 });

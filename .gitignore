@@ -64,3 +64,4 @@ modules/*/android/build/
 modules/*/android/.gradle/
 scratch
 .playwright-mcp
+CURRENT_UI_UX_DESIGN_SYSTEM.md

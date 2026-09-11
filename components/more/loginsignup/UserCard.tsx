@@ -1,9 +1,11 @@
+import { COLORS } from "@/constants/colors";
+import { RADIUS, SHADOWS } from "@/constants/theme";
+import { FONTS } from "@/constants/typography";
+import { useAuth } from "@/context/AuthContext";
+import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import React from "react";
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { router } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
-import { COLORS } from "@/constants/colors";
-import { useAuth } from "@/context/AuthContext";
 
 interface UserCardProps {
   /** Whether the user is logged in (optional override) */
@@ -65,7 +67,7 @@ export default function UserCard({
             onPress={handleLogout}
             accessibilityLabel="Sign out"
           >
-            <Ionicons name="log-out-outline" size={20} color="#999" />
+            <Ionicons name="log-out-outline" size={20} color={COLORS.inkMuted} />
           </TouchableOpacity>
         )}
       </View>
@@ -84,7 +86,7 @@ export default function UserCard({
         </TouchableOpacity>
       ) : (
         <View style={styles.authenticatedBadgeRow}>
-          <Ionicons name="shield-checkmark" size={14} color="#2E7D32" />
+          <Ionicons name="shield-checkmark" size={14} color={COLORS.success} />
           <Text style={styles.authenticatedText}>Verified Pilgrimage Account</Text>
         </View>
       )}
@@ -94,17 +96,13 @@ export default function UserCard({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "#FFF",
-    borderRadius: 18,
+    backgroundColor: COLORS.surface,
+    borderRadius: RADIUS.md,
     padding: 18,
     marginBottom: 14,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    elevation: 3,
     borderWidth: 1,
-    borderColor: "rgba(0,0,0,0.03)",
+    borderColor: COLORS.hairline,
+    ...SHADOWS.card,
   },
   infoRow: {
     flexDirection: "row",
@@ -119,48 +117,40 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.primary,
     justifyContent: "center",
     alignItems: "center",
-    shadowColor: COLORS.primary,
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.25,
-    shadowRadius: 6,
-    elevation: 4,
+    ...SHADOWS.subtle,
   },
   textBlock: {
     flex: 1,
   },
   name: {
     fontSize: 17,
-    fontWeight: "700",
-    color: COLORS.textDark,
+    fontFamily: FONTS.display.semiBold,
+    color: COLORS.ink,
     marginBottom: 2,
   },
   subtitle: {
     fontSize: 13,
-    color: COLORS.textLight,
-    fontWeight: "500",
+    fontFamily: FONTS.body.regular,
+    color: COLORS.inkMuted,
   },
   logoutIconBtn: {
     padding: 8,
     borderRadius: 20,
-    backgroundColor: "#F7F5F2",
+    backgroundColor: COLORS.bgStone,
   },
   loginBtn: {
     flexDirection: "row",
     backgroundColor: COLORS.primary,
     paddingVertical: 13,
-    borderRadius: 14,
+    borderRadius: RADIUS.sm,
     alignItems: "center",
     justifyContent: "center",
     gap: 8,
-    shadowColor: COLORS.primary,
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.2,
-    shadowRadius: 6,
-    elevation: 3,
+    ...SHADOWS.subtle,
   },
   loginText: {
     color: "#FFF",
-    fontWeight: "700",
+    fontFamily: FONTS.body.bold,
     fontSize: 15,
     letterSpacing: 0.2,
   },
@@ -168,15 +158,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 6,
-    backgroundColor: "#F1F8E9",
+    backgroundColor: COLORS.surfaceMuted,
     paddingVertical: 6,
     paddingHorizontal: 12,
-    borderRadius: 10,
+    borderRadius: RADIUS.sm,
     alignSelf: "flex-start",
   },
   authenticatedText: {
     fontSize: 12,
-    fontWeight: "600",
-    color: "#2E7D32",
+    fontFamily: FONTS.body.semiBold,
+    color: COLORS.success,
   },
 });

@@ -5,6 +5,9 @@ import { StyleSheet, Text, TouchableOpacity, View, ViewStyle } from "react-nativ
 
 import Badge from "@/components/ui/Badge";
 import Card from "@/components/ui/Card";
+import { COLORS } from "@/constants/colors";
+import { FONTS } from "@/constants/typography";
+import { RADIUS } from "@/constants/theme";
 import { formatDistance, LocationStatus } from "@/hooks/useTempleDistances";
 import { Temple } from "@/types/temple";
 
@@ -103,7 +106,7 @@ const TempleCard = ({ temple, distance, locationStatus, style }: TempleCardProps
                 {renderDistanceBadge()}
               </View>
 
-              <Text style={styles.viewDetails}>View Details →</Text>
+              <Text style={styles.viewDetails}>View Details</Text>
             </View>
           </View>
         </View>
@@ -127,8 +130,8 @@ const styles = StyleSheet.create({
   image: {
     width: 90,
     height: 100,
-    borderRadius: 14,
-    backgroundColor: "#eee",
+    borderRadius: RADIUS.sm,
+    backgroundColor: COLORS.surfaceMuted,
   },
 
   content: {
@@ -138,15 +141,16 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#8B0000",
+    fontSize: 17,
+    fontFamily: FONTS.display.regular,
+    color: COLORS.sacred,
     marginBottom: 4,
   },
 
   description: {
     fontSize: 13,
-    color: "#555",
+    fontFamily: FONTS.body.regular,
+    color: COLORS.inkMuted,
     marginBottom: 8,
     lineHeight: 18,
   },
@@ -170,11 +174,13 @@ const styles = StyleSheet.create({
   distanceBadge: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#E8F5E9",
+    backgroundColor: COLORS.surfaceMuted,
     paddingHorizontal: 8,
     paddingVertical: 3,
-    borderRadius: 10,
+    borderRadius: RADIUS.sm,
     gap: 3,
+    borderWidth: 1,
+    borderColor: COLORS.hairline,
   },
 
   distanceIcon: {
@@ -183,18 +189,18 @@ const styles = StyleSheet.create({
 
   distanceText: {
     fontSize: 11,
-    fontWeight: "700",
-    color: "#2E7D32",
+    fontFamily: FONTS.body.semiBold,
+    color: COLORS.success,
   },
 
   // ── Distance Badge (loading) ──
   distanceBadgeLoading: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#F5F5F5",
+    backgroundColor: COLORS.surfaceMuted,
     paddingHorizontal: 8,
     paddingVertical: 3,
-    borderRadius: 10,
+    borderRadius: RADIUS.sm,
     gap: 3,
   },
 
@@ -204,18 +210,18 @@ const styles = StyleSheet.create({
 
   distanceTextLoading: {
     fontSize: 11,
-    fontWeight: "600",
-    color: "#999",
+    fontFamily: FONTS.body.medium,
+    color: COLORS.inkFaint,
   },
 
   // ── Distance Badge (GPS off) ──
   distanceBadgeOff: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#FFF3E0",
+    backgroundColor: COLORS.bgStone,
     paddingHorizontal: 8,
     paddingVertical: 3,
-    borderRadius: 10,
+    borderRadius: RADIUS.sm,
     gap: 3,
   },
 
@@ -225,15 +231,14 @@ const styles = StyleSheet.create({
 
   distanceTextOff: {
     fontSize: 11,
-    fontWeight: "600",
-    color: "#E65100",
+    fontFamily: FONTS.body.medium,
+    color: COLORS.inkMuted,
   },
 
   viewDetails: {
-    color: "#FF6A00",
-    fontWeight: "500",
+    color: COLORS.primary,
+    fontFamily: FONTS.body.semiBold,
     fontSize: 13,
     flexShrink: 0,
-
   },
 });

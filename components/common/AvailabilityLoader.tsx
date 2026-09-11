@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
 import {
-  Platform,
   StyleSheet,
   Text,
   View,
   ViewStyle,
 } from "react-native";
+import { FONTS } from "@/constants/typography";
 import Animated, {
   Easing,
   FadeIn,
@@ -368,7 +368,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     paddingBottom: 40,
-    backgroundColor: "#F5F2EA",
+    backgroundColor: COLORS.bg,
   },
   bannerRow: {
     flexDirection: "row",
@@ -436,21 +436,20 @@ const styles = StyleSheet.create({
   },
   countNumber: {
     fontSize: 24,
-    fontWeight: "800",
-    color: COLORS.primary, // #EB5C49 brand saffron
-    fontFamily: Platform.OS === "ios" ? "Georgia" : "serif",
+    color: COLORS.primary,
+    fontFamily: FONTS.display.semiBold,
   },
   labelText: {
     fontSize: 16,
-    fontWeight: "700",
-    color: "#2C1810",
+    fontFamily: FONTS.body.bold,
+    color: COLORS.ink,
     letterSpacing: 0.2,
   },
   subtitleText: {
     fontSize: 12,
-    color: "#7A6F68",
+    fontFamily: FONTS.body.regular,
+    color: COLORS.inkMuted,
     marginTop: 2,
-    fontWeight: "500",
   },
   activeDotRow: {
     flexDirection: "row",
@@ -462,12 +461,12 @@ const styles = StyleSheet.create({
     width: 7,
     height: 7,
     borderRadius: 3.5,
-    backgroundColor: "#10B981",
+    backgroundColor: COLORS.success,
   },
   readyText: {
     fontSize: 12,
-    color: "#059669",
-    fontWeight: "600",
+    fontFamily: FONTS.body.semiBold,
+    color: COLORS.success,
   },
 
   // Card Styles

@@ -7,10 +7,15 @@ import {
   useWindowDimensions,
   View,
 } from "react-native";
+import { COLORS } from "@/constants/colors";
+import { FONTS } from "@/constants/typography";
+import { RADIUS } from "@/constants/theme";
+
 export default function HeroBanner() {
   const { height } = useWindowDimensions();
   const heroHeight = Math.min(350, Math.max(240, height * 0.48));
   const explorePackages = () => router.push("/(tabs)/packages");
+
   return (
     <View style={styles.wrapper}>
       <ImageBackground
@@ -20,11 +25,17 @@ export default function HeroBanner() {
         resizeMode="cover"
       >
         <View style={styles.overlay}>
-          <Text style={styles.title}>Book Darshan & {"\n"}Tour Packages</Text>
+          <Text style={styles.title}>Book Darshan &{"\n"}Tour Packages</Text>
 
           <Text style={styles.subtitle}>Ujjain Trusted Tirth App</Text>
 
-          <TouchableOpacity onPress={explorePackages} style={styles.button}>
+          <TouchableOpacity
+            onPress={explorePackages}
+            style={styles.button}
+            activeOpacity={0.85}
+            accessibilityRole="button"
+            accessibilityLabel="Explore Packages Now"
+          >
             <Text style={styles.buttonText}>Explore Now</Text>
           </TouchableOpacity>
         </View>
@@ -45,41 +56,43 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    borderRadius: 20,
+    borderRadius: RADIUS.md,
   },
 
   overlay: {
     padding: 16,
-    backgroundColor: "rgba(0,0,0,0.3)",
-    borderRadius: 20,
+    backgroundColor: "rgba(0,0,0,0.35)",
+    borderRadius: RADIUS.md,
   },
 
   title: {
-    color: "#fff",
-    fontSize: 18,
-    fontWeight: "600",
+    color: "#FFFFFF",
+    fontSize: 20,
+    fontFamily: FONTS.display.semiBold,
+    lineHeight: 26,
   },
 
   subtitle: {
-    color: "#eee",
+    color: "rgba(255,255,255,0.9)",
     fontSize: 13,
+    fontFamily: FONTS.body.medium,
     marginTop: 4,
   },
 
   button: {
     marginTop: 10,
-    backgroundColor: "#FF7A00",
-    paddingHorizontal: 14,
-    paddingVertical: 6,
-    borderRadius: 20,
+    backgroundColor: COLORS.primary,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: RADIUS.sm,
     alignSelf: "flex-start",
     minHeight: 44,
     justifyContent: "center",
   },
 
   buttonText: {
-    color: "#fff",
+    color: "#FFFFFF",
     fontSize: 14,
-    fontWeight: "500",
+    fontFamily: FONTS.body.semiBold,
   },
 });

@@ -1,4 +1,6 @@
 import MenuItem from "@/components/ui/MenuItem";
+import { COLORS } from "@/constants/colors";
+import { RADIUS, SHADOWS } from "@/constants/theme";
 import { router } from "expo-router";
 import React from "react";
 import { StyleSheet, View } from "react-native";
@@ -59,17 +61,13 @@ export default function SettingsMenuList() {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "#FFF",
-    borderRadius: 18,
+    backgroundColor: COLORS.surface,
+    borderRadius: RADIUS.md,
     paddingHorizontal: 18,
     paddingVertical: 6,
     marginBottom: 14,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    elevation: 3,
     borderWidth: 1,
-    borderColor: "rgba(0,0,0,0.03)",
+    borderColor: COLORS.hairline,
+    ...SHADOWS.card,
   },
 });

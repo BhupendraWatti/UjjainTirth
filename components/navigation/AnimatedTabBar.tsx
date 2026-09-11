@@ -19,6 +19,8 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 import { icons } from "@/components/ui/Icons";
+import { COLORS } from "@/constants/colors";
+import { FONTS } from "@/constants/typography";
 
 // Spring transition configs for fluid physical tab morphing
 const TAB_LAYOUT_TRANSITION = LinearTransition.springify()
@@ -273,10 +275,10 @@ const styles = StyleSheet.create({
     maxWidth: 440,
     paddingHorizontal: 8,
     borderWidth: 1,
-    borderColor: "rgba(0, 0, 0, 0.05)",
+    borderColor: COLORS.hairline,
     ...Platform.select({
       ios: {
-        shadowColor: "#000",
+        shadowColor: "#2B2420",
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.08,
         shadowRadius: 12,
@@ -303,7 +305,7 @@ const styles = StyleSheet.create({
     borderRadius: 22,
   },
   pillActive: {
-    backgroundColor: "rgba(235, 92, 73, 0.12)",
+    backgroundColor: COLORS.primaryTint,
     paddingHorizontal: 11,
     paddingVertical: 4,
   },
@@ -321,8 +323,8 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
   },
   label: {
-    color: "#EB5C49",
-    fontWeight: "700",
+    color: COLORS.primary,
+    fontFamily: FONTS.body.bold,
     fontSize: 12,
     marginLeft: 6,
     letterSpacing: 0.2,

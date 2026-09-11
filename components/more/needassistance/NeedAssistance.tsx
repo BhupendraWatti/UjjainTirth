@@ -1,5 +1,7 @@
 import { APP_CONFIG } from "@/constants/appConfig";
 import { COLORS } from "@/constants/colors";
+import { RADIUS, SHADOWS } from "@/constants/theme";
+import { FONTS } from "@/constants/typography";
 import { Ionicons } from "@expo/vector-icons";
 import * as Linking from "expo-linking";
 import React from "react";
@@ -61,7 +63,7 @@ export default function NeedAssistance() {
         <View style={styles.textBlock}>
           <Text style={styles.title}>Need Assistance?</Text>
           <Text style={styles.subtitle}>
-            We're here to help you 24/7
+            We&apos;re here to help you 24/7
           </Text>
         </View>
       </View>
@@ -81,16 +83,13 @@ export default function NeedAssistance() {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "#FFF",
-    borderRadius: 18,
+    backgroundColor: COLORS.surface,
+    borderRadius: RADIUS.md,
     padding: 18,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    elevation: 3,
     borderWidth: 1,
-    borderColor: "rgba(0,0,0,0.03)",
+    borderColor: COLORS.hairline,
+    marginBottom: 14,
+    ...SHADOWS.card,
   },
 
   headerRow: {
@@ -104,7 +103,7 @@ const styles = StyleSheet.create({
     width: 46,
     height: 46,
     borderRadius: 23,
-    backgroundColor: COLORS.secondary,
+    backgroundColor: COLORS.primaryTint,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -115,35 +114,31 @@ const styles = StyleSheet.create({
 
   title: {
     fontSize: 16,
-    fontWeight: "700",
-    color: COLORS.textDark,
+    fontFamily: FONTS.display.semiBold,
+    color: COLORS.ink,
     marginBottom: 2,
   },
 
   subtitle: {
     fontSize: 13,
-    color: COLORS.textLight,
-    fontWeight: "500",
+    fontFamily: FONTS.body.regular,
+    color: COLORS.inkMuted,
   },
 
   callBtn: {
     flexDirection: "row",
     backgroundColor: COLORS.primary,
-    paddingVertical: 14,
-    borderRadius: 14,
+    paddingVertical: 13,
+    borderRadius: RADIUS.sm,
     justifyContent: "center",
     alignItems: "center",
     gap: 8,
-    shadowColor: COLORS.primary,
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.2,
-    shadowRadius: 6,
-    elevation: 3,
+    ...SHADOWS.subtle,
   },
 
   callText: {
     color: "#FFF",
-    fontWeight: "700",
+    fontFamily: FONTS.body.bold,
     fontSize: 15,
     letterSpacing: 0.2,
   },

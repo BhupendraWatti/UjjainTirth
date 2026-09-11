@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { COLORS } from "@/constants/colors";
 
 interface ScreenContainerProps {
   children: React.ReactNode;
@@ -27,11 +28,12 @@ export default function ScreenContainer({
 const styles = StyleSheet.create({
   safe: {
     flex: 1,
-    backgroundColor: "#F5F2EA", // 🔥 your premium background
+    backgroundColor: COLORS.bg,
   },
   container: {
     flex: 1,
-    paddingHorizontal: 14, // 👈 FIXED spacing
+    paddingHorizontal: 14,
     paddingTop: 10,
   },
 });
+

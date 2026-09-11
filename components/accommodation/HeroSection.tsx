@@ -1,5 +1,6 @@
 import { AccommodationHero } from "@/types/service";
 import { COLORS } from "@/constants/colors";
+import { FONTS } from "@/constants/typography";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
@@ -29,8 +30,10 @@ const HeroSection = ({ hero }: Props) => {
         style={styles.backButton}
         activeOpacity={0.7}
         onPress={() => router.back()}
+        accessibilityRole="button"
+        accessibilityLabel="Go back"
       >
-        <Ionicons name="arrow-back" size={22} color="#fff" />
+        <Ionicons name="arrow-back" size={22} color="#FFFFFF" />
       </TouchableOpacity>
 
       {/* Title & Subtitle */}
@@ -61,7 +64,7 @@ const HeroSection = ({ hero }: Props) => {
 
   return (
     <LinearGradient
-      colors={[COLORS.primary, "#8B1E1E"]}
+      colors={[COLORS.primary, COLORS.sacred]}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
       style={styles.container}
@@ -106,7 +109,7 @@ const styles = StyleSheet.create({
 
   title: {
     fontSize: 28,
-    fontWeight: "800",
+    fontFamily: FONTS.display.semiBold,
     color: "#FFFFFF",
     marginBottom: 6,
     letterSpacing: -0.3,
@@ -117,8 +120,8 @@ const styles = StyleSheet.create({
 
   subtitle: {
     fontSize: 15,
-    color: "rgba(255,255,255,0.85)",
-    fontWeight: "500",
+    color: "rgba(255,255,255,0.9)",
+    fontFamily: FONTS.body.medium,
     letterSpacing: 0.1,
   },
 });

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { StyleSheet, View, Dimensions } from "react-native";
 import Animated, {
   useSharedValue,
@@ -19,27 +19,34 @@ interface ParticleProps {
 // Warm saffron, gold, and peach/cream tones binned to match the redesigned brand aesthetic
 const PARTICLE_COLORS = ["#E88B5A", "#D4A373", "#F5D5C0", "#E2976F", "#F6DEC9"];
 
+// Pre-compute stable seeds for all particles at module load time (never changes on re-render)
+const MAX_PARTICLES = 20;
+const PARTICLE_SEEDS = Array.from({ length: MAX_PARTICLES }, () => ({
+  startX: Math.random() * SCREEN_WIDTH,
+  startY: Math.random() * SCREEN_HEIGHT,
+  size: Math.random() * 3 + 3,
+  duration: Math.random() * 8000 + 8000,
+  delay: Math.random() * 3000,
+  driftDx: Math.random() * 60 - 30,
+  driftDy: Math.random() * 150 + 50,
+  opacityA: Math.random() * 0.4 + 0.15,
+  opacityB: Math.random() * 0.4 + 0.15,
+}));
+
 const Particle = React.memo(({ index }: ParticleProps) => {
-  // Distribute particles across the entire screen initially for immediate ambiance
-  const startX = Math.random() * SCREEN_WIDTH;
-  const startY = Math.random() * SCREEN_HEIGHT;
-  
-  const x = useSharedValue(startX);
-  const y = useSharedValue(startY);
+  // Stable seed — never recomputed on re-render, preventing shared value recreation
+  const seed = useMemo(() => PARTICLE_SEEDS[index % MAX_PARTICLES], [index]);
+
+  const x = useSharedValue(seed.startX);
+  const y = useSharedValue(seed.startY);
   const opacity = useSharedValue(0);
-  
-  // High-fidelity tiny sizing: 3px to 6px for delicate dust motes (not confetti)
-  const size = Math.random() * 3 + 3; 
   const scale = useSharedValue(1);
 
   useEffect(() => {
-    // Extremely slow and soothing floating durations (8 to 16 seconds)
-    const duration = Math.random() * 8000 + 8000; 
-    const delay = Math.random() * 3000;
-    
-    // Very gentle drift bounds
-    const driftX = startX + (Math.random() * 60 - 30);
-    const driftY = startY - (Math.random() * 150 + 50);
+    const { startX, startY, duration, delay, driftDx, driftDy, opacityA, opacityB } = seed;
+
+    const driftX = startX + driftDx;
+    const driftY = startY - driftDy;
 
     // Animate Y (slow upward float)
     y.value = withDelay(
@@ -72,8 +79,8 @@ const Particle = React.memo(({ index }: ParticleProps) => {
       delay,
       withRepeat(
         withSequence(
-          withTiming(Math.random() * 0.4 + 0.15, { duration: duration * 0.25 }),
-          withTiming(Math.random() * 0.4 + 0.15, { duration: duration * 0.5 }),
+          withTiming(opacityA, { duration: duration * 0.25 }),
+          withTiming(opacityB, { duration: duration * 0.5 }),
           withTiming(0, { duration: duration * 0.25 })
         ),
         -1,
@@ -93,7 +100,7 @@ const Particle = React.memo(({ index }: ParticleProps) => {
         true
       )
     );
-  }, []);
+  }, [seed]);
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -115,9 +122,9 @@ const Particle = React.memo(({ index }: ParticleProps) => {
         animatedStyle,
         {
           backgroundColor: particleColor,
-          width: size,
-          height: size,
-          borderRadius: size / 2,
+          width: seed.size,
+          height: seed.size,
+          borderRadius: seed.size / 2,
           shadowColor: particleColor,
           shadowRadius: 3,
         },
@@ -125,6 +132,8 @@ const Particle = React.memo(({ index }: ParticleProps) => {
     />
   );
 });
+
+Particle.displayName = "Particle";
 
 interface ParticleSystemProps {
   count?: number;
@@ -139,6 +148,8 @@ const ParticleSystem = React.memo(({ count = 15 }: ParticleSystemProps) => {
     </View>
   );
 });
+
+ParticleSystem.displayName = "ParticleSystem";
 
 export default ParticleSystem;
 
