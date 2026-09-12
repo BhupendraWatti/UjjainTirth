@@ -6,6 +6,7 @@
     "start": "expo start --dev-client",
     "start:dev": "expo start --dev-client",
     "start:go": "expo start --go",
+    "check:prefetch-cache": "node scripts/check-prefetch-cache.cjs",
     "check:otp-native": "node scripts/check-otp-native-runtime.cjs",
     "start:mcp": "cross-env EXPO_UNSTABLE_MCP_SERVER=1 expo start",
     "reset-project": "node ./scripts/reset-project.js",

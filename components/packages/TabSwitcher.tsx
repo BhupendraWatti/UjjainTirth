@@ -1,34 +1,38 @@
 import { COLORS } from "@/constants/colors";
 import { FONTS } from "@/constants/typography";
-import { RADIUS } from "@/constants/theme";
 import { PackageTab } from "@/types/tab";
-import { useState } from "react";
+import * as Haptics from "expo-haptics";
+import React, { useState } from "react";
 import {
   LayoutChangeEvent,
+  Pressable,
   StyleSheet,
-  TouchableOpacity,
+  Text,
   View,
 } from "react-native";
 import Animated, {
-  Easing,
   useAnimatedStyle,
   useSharedValue,
-  withTiming,
+  withSpring,
 } from "react-native-reanimated";
 
 interface Tab {
   label: string;
   value: PackageTab;
+  badge?: string;
 }
+
 interface Props {
   tabs: Tab[];
   active: PackageTab;
   onChange: (val: PackageTab) => void;
 }
 
-const TIMING_CONFIG = {
-  duration: 300,
-  easing: Easing.bezier(0.25, 0.1, 0.25, 1),
+// Swiggy/Zomato style spring configuration for bouncy, tactile feedback
+const SPRING_CONFIG = {
+  damping: 18,
+  stiffness: 180,
+  mass: 0.8,
 };
 
 export default function TabSwitcher({ tabs, active, onChange }: Props) {
@@ -36,16 +40,21 @@ export default function TabSwitcher({ tabs, active, onChange }: Props) {
   const [tabWidth, setTabWidth] = useState(0);
 
   const handleLayout = (e: LayoutChangeEvent) => {
-    const singleTabWidth = (e.nativeEvent.layout.width - 8) / tabs.length;
+    const containerWidth = e.nativeEvent.layout.width;
+    const singleTabWidth = (containerWidth - 8) / tabs.length;
     setTabWidth(singleTabWidth);
 
-    // Set initial position based on active tab
     const index = tabs.findIndex((t) => t.value === active);
-    translateX.value = index * singleTabWidth;
+    if (index >= 0) {
+      translateX.value = index * singleTabWidth;
+    }
   };
 
   const handlePress = (index: number, value: PackageTab) => {
-    translateX.value = withTiming(index * tabWidth, TIMING_CONFIG);
+    if (value === active) return;
+
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    translateX.value = withSpring(index * tabWidth, SPRING_CONFIG);
     onChange(value);
   };
 
@@ -54,30 +63,63 @@ export default function TabSwitcher({ tabs, active, onChange }: Props) {
   }));
 
   return (
-    <View style={styles.wrapper}>
-      <View style={styles.container} onLayout={handleLayout}>
-        {/* Animated slider pill */}
-        <Animated.View
-          style={[styles.slider, { width: tabWidth }, sliderStyle]}
-        />
+    <View style={styles.outerWrapper}>
+      {/* Floating Segmented Pill Island */}
+      <View style={styles.islandContainer} onLayout={handleLayout}>
+        {/* Animated Sliding Pill with Dynamic Saffron Glow */}
+        {tabWidth > 0 && (
+          <Animated.View
+            style={[styles.activeSlider, { width: tabWidth }, sliderStyle]}
+          />
+        )}
 
-        {/* Tab buttons */}
+        {/* Tab Buttons */}
         {tabs.map((tab: Tab, index) => {
           const isActive = active === tab.value;
 
           return (
-            <TouchableOpacity
+            <Pressable
               key={tab.value}
-              activeOpacity={0.7}
-              style={styles.tab}
               onPress={() => handlePress(index, tab.value)}
+              style={styles.tabButton}
+              accessible={true}
+              accessibilityRole="tab"
+              accessibilityState={{ selected: isActive }}
+              accessibilityLabel={`${tab.label} tab`}
             >
-              <Animated.Text
-                style={[styles.text, isActive && styles.activeText]}
-              >
-                {tab.label}
-              </Animated.Text>
-            </TouchableOpacity>
+              <View style={styles.tabContentRow}>
+                <Text
+                  style={[
+                    styles.tabLabel,
+                    isActive ? styles.activeTabLabel : styles.inactiveTabLabel,
+                  ]}
+                  numberOfLines={1}
+                >
+                  {tab.label}
+                </Text>
+
+                {/* Optional Swiggy/Zomato micro-badge */}
+                {tab.badge ? (
+                  <View
+                    style={[
+                      styles.microBadge,
+                      isActive ? styles.activeMicroBadge : styles.inactiveMicroBadge,
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.microBadgeText,
+                        isActive
+                          ? styles.activeMicroBadgeText
+                          : styles.inactiveMicroBadgeText,
+                      ]}
+                    >
+                      {tab.badge}
+                    </Text>
+                  </View>
+                ) : null}
+              </View>
+            </Pressable>
           );
         })}
       </View>
@@ -86,53 +128,103 @@ export default function TabSwitcher({ tabs, active, onChange }: Props) {
 }
 
 const styles = StyleSheet.create({
-  wrapper: {
-    paddingHorizontal: 14,
-    marginBottom: 12,
-  },
-  container: {
-    flexDirection: "row",
-    backgroundColor: COLORS.bgStone,
-    borderRadius: RADIUS.sm,
-    padding: 4,
-    overflow: "hidden",
-    position: "relative",
+  outerWrapper: {
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    paddingBottom: 10,
   },
 
-  slider: {
+  // Swiggy/Zomato Floating Island Container
+  islandContainer: {
+    flexDirection: "row",
+    backgroundColor: "#EFE8DC",
+    borderRadius: 24,
+    padding: 4,
+    position: "relative",
+    borderWidth: 1,
+    borderColor: "rgba(43, 36, 32, 0.08)",
+    // Soft organic floating shadow
+    shadowColor: "#2B2420",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+
+  activeSlider: {
     position: "absolute",
     top: 4,
     bottom: 4,
     left: 4,
     backgroundColor: COLORS.primary,
-    borderRadius: 10,
-    // iOS shadow
+    borderRadius: 20,
+    // Vibrant warm saffron glow shadow
     shadowColor: COLORS.primary,
     shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.25,
-    shadowRadius: 6,
-    // Android shadow
+    shadowOpacity: 0.38,
+    shadowRadius: 7,
     elevation: 4,
   },
 
-  tab: {
+  tabButton: {
     flex: 1,
     minHeight: 44,
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 12,
-    zIndex: 1,
+    paddingVertical: 10,
+    paddingHorizontal: 6,
+    zIndex: 2,
   },
 
-  text: {
-    fontSize: 13,
-    fontFamily: FONTS.body.medium,
-    color: COLORS.inkMuted,
-    letterSpacing: 0.2,
+  tabContentRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 6,
   },
 
-  activeText: {
-    color: "#FFFFFF",
+  tabLabel: {
+    fontSize: 13.5,
+    letterSpacing: 0.15,
+  },
+
+  activeTabLabel: {
     fontFamily: FONTS.body.bold,
+    color: "#FFFFFF",
+  },
+
+  inactiveTabLabel: {
+    fontFamily: FONTS.body.semiBold,
+    color: "#5C5248",
+  },
+
+  // Micro pill badge (e.g. "Curated" / "Custom")
+  microBadge: {
+    paddingHorizontal: 6,
+    paddingVertical: 1.5,
+    borderRadius: 8,
+  },
+
+  activeMicroBadge: {
+    backgroundColor: "rgba(255, 255, 255, 0.25)",
+  },
+
+  inactiveMicroBadge: {
+    backgroundColor: "rgba(43, 36, 32, 0.08)",
+  },
+
+  microBadgeText: {
+    fontSize: 9,
+    fontFamily: FONTS.body.bold,
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+  },
+
+  activeMicroBadgeText: {
+    color: "#FFFFFF",
+  },
+
+  inactiveMicroBadgeText: {
+    color: "#7A7167",
   },
 });

@@ -2,35 +2,38 @@ import {
   fetchPackageById,
   fetchPackages,
 } from "@/services/packagesServices";
-import { Package } from "@/types/product";
-import { useCallback, useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { Image } from "expo-image";
+import { useEffect } from "react";
 
 /**
  * Hook to fetch all packages (list view - basic fields)
  */
 export const usePackages = () => {
-  const [packages, setPackages] = useState<Package[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const loadPackages = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const data = await fetchPackages();
-      setPackages(data);
-    } catch (err) {
-      setError("Something went wrong");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const query = useQuery({
+    queryKey: ["packages"],
+    queryFn: fetchPackages,
+    staleTime: 1000 * 60 * 10,
+  });
 
   useEffect(() => {
-    loadPackages();
-  }, []);
+    const imageUrls = (query.data || [])
+      .map((p) => p.image?.trim())
+      .filter((url): url is string => Boolean(url && url.length > 0));
 
-  return { packages, loading, error, reload: loadPackages };
+    if (imageUrls.length > 0) {
+      Promise.allSettled(
+        imageUrls.map((url) => Image.prefetch(url, "memory-disk")),
+      ).catch(() => {});
+    }
+  }, [query.data]);
+
+  return {
+    packages: query.data || [],
+    loading: query.isLoading,
+    error: query.error ? "Something went wrong" : null,
+    reload: query.refetch,
+  };
 };
 
 /**
@@ -38,31 +41,17 @@ export const usePackages = () => {
  * (includes package_details & additional_info)
  */
 export const usePackageDetail = (id: number | null) => {
-  const [packageDetail, setPackageDetail] = useState<Package | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const query = useQuery({
+    queryKey: ["package", id],
+    queryFn: () => fetchPackageById(id!),
+    enabled: Boolean(id),
+    staleTime: 1000 * 60 * 10,
+  });
 
-  const loadDetail = useCallback(async () => {
-    if (!id) return;
-    try {
-      setLoading(true);
-      setError(null);
-      const data = await fetchPackageById(id);
-      setPackageDetail(data);
-    } catch (err) {
-      setError("Failed to load package details");
-    } finally {
-      setLoading(false);
-    }
-  }, [id]);
-
-  useEffect(() => {
-    if (id) {
-      loadDetail();
-    } else {
-      setPackageDetail(null);
-    }
-  }, [id, loadDetail]);
-
-  return { packageDetail, loading, error, reload: loadDetail };
+  return {
+    packageDetail: query.data ?? null,
+    loading: query.isLoading,
+    error: query.error ? "Failed to load package details" : null,
+    reload: query.refetch,
+  };
 };

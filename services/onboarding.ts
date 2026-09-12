@@ -27,7 +27,7 @@ export const DEFAULT_ONBOARDING_ITEMS: OnboardingItem[] = [
 
 export const fetchOnboarding = async (): Promise<OnboardingItem[]> => {
   try {
-    const url = `${API_CUSTOM_URL}${API_ENDPOINTS.ONBOARDING}?nocache=${Date.now()}`;
+    const url = `${API_CUSTOM_URL}${API_ENDPOINTS.ONBOARDING}`;
     const res = await fetch(url, {
       method: "GET",
       headers: DEFAULT_HEADERS,

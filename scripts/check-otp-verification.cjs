@@ -36,6 +36,7 @@ const mocks = {
   '@/services/otpScreenService': {},
   '@/context/AuthContext': { useAuth: () => ({ login: () => new Promise(resolve => { resolveLogin = resolve; }) }) },
   '@/services/otpAutofill': { startOtpAutofill: async () => () => {} },
+  '@/constants/colors': { COLORS: { bg: '#fff' } },
   './LoginView': { default: 'Login' },
   './OtpVerificationView': { default: 'OTP' },
 };

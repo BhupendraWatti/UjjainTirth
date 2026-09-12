@@ -39,14 +39,18 @@ async function fetchWithTimeout(
   timeoutMs = 12000
 ): Promise<Response> {
   const controller = new AbortController();
-  const id = setTimeout(() => controller.abort(), timeoutMs);
+  let didTimeout = false;
+  const id = setTimeout(() => {
+    didTimeout = true;
+    controller.abort();
+  }, timeoutMs);
   try {
     const res = await fetch(url, { ...options, signal: controller.signal });
     clearTimeout(id);
     return res;
   } catch (err: any) {
     clearTimeout(id);
-    if (err.name === "AbortError") {
+    if (didTimeout || err.name === "AbortError") {
       throw new Error("The server took too long to respond. Please try again.");
     }
     throw err;
@@ -194,7 +198,7 @@ export async function verifyOtp(
         mobile_number: cleanMobile,
         otp_code: trimmedOtp,
       }),
-    }, 10000);
+    }, 30000);
 
     const data = await response.json();
 

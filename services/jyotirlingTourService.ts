@@ -38,9 +38,6 @@ export const fetchJyotirlingTours = async ({
       params.append("location_tag", locationTag);
     }
 
-    // Force refresh cache
-    params.append("nocache", Date.now().toString());
-
     const url = `${API_CUSTOM_URL}${API_ENDPOINTS.JYOTIRLING_TOURS}?${params.toString()}`;
 
     const response = await fetch(url, {

@@ -39,7 +39,6 @@ export const fetchTemples = async ({
       params.append("temple_tag", tag.toString());
     }
 
-    params.append("nocache", Date.now().toString());
     const url = `${API_CUSTOM_URL}${API_ENDPOINTS.TEMPLES}?${params.toString()}`;
 
     // console.log("API URL:", url); // 🔍 Debug

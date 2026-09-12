@@ -1,17 +1,5 @@
-import React from "react";
-import { Stack } from "expo-router";
+import { Slot } from "expo-router";
 
 export default function AuthLayout() {
-  return (
-    <Stack
-      screenOptions={{
-        headerShown: false,
-        animation: "fade",
-      }}
-    >
-      <Stack.Screen name="login" />
-      <Stack.Screen name="onboarding" options={{ animation: "fade" }} />
-      <Stack.Screen name="profile-setup" />
-    </Stack>
-  );
+  return <Slot />;
 }

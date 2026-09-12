@@ -8,7 +8,6 @@ import {
 import { FONTS } from "@/constants/typography";
 import Animated, {
   Easing,
-  FadeIn,
   FadeInDown,
   FadeInRight,
   FadeOut,
@@ -317,7 +316,9 @@ export const AvailabilityScreen: React.FC<AvailabilityScreenProps> = ({
   children,
   revealDurationMs = 700,
 }) => {
-  const [showContent, setShowContent] = useState(!isLoading);
+  // Always play the short branded reveal on a screen's first mount, even when
+  // its data was already warmed during splash/login.
+  const [showContent, setShowContent] = useState(false);
 
   useEffect(() => {
     if (!isLoading) {
@@ -330,24 +331,49 @@ export const AvailabilityScreen: React.FC<AvailabilityScreenProps> = ({
     }
   }, [isLoading, revealDurationMs]);
 
-  if (showContent) {
-    return (
-      <Animated.View entering={FadeIn.duration(260)} style={styles.flex1}>
-        {children}
-      </Animated.View>
-    );
-  }
+  // Pre-fetch all passed images into memory-disk cache immediately
+  useEffect(() => {
+    if (images && images.length > 0) {
+      const validUrls = images.filter(
+        (img): img is string => Boolean(img && typeof img === "string" && img.trim().length > 0)
+      );
+      if (validUrls.length > 0) {
+        Promise.allSettled(
+          validUrls.map((u) => Image.prefetch(u.trim(), "memory-disk"))
+        ).catch(() => {});
+      }
+    }
+  }, [images]);
 
   return (
-    <View style={styles.loadingScreenContainer}>
-      <AvailabilityLoader
-        isLoading={isLoading}
-        count={count}
-        label={label}
-        subtitle={subtitle}
-        images={images}
-        revealDurationMs={revealDurationMs}
-      />
+    <View style={styles.flex1}>
+      {/* Background pre-warmed content: mounts and loads cards and images in parallel */}
+      <View
+        style={[
+          styles.flex1,
+          { opacity: showContent ? 1 : 0 },
+        ]}
+        pointerEvents={showContent ? "auto" : "none"}
+      >
+        {children}
+      </View>
+
+      {/* Floating AvailabilityLoader animation overlay during initial fetch & reveal */}
+      {!showContent && (
+        <Animated.View
+          exiting={FadeOut.duration(240)}
+          style={[StyleSheet.absoluteFillObject, styles.loadingScreenContainer]}
+        >
+          <AvailabilityLoader
+            isLoading={isLoading}
+            count={count}
+            label={label}
+            subtitle={subtitle}
+            images={images}
+            revealDurationMs={revealDurationMs}
+          />
+        </Animated.View>
+      )}
     </View>
   );
 };
