@@ -1,6 +1,5 @@
 import { EnrichedHotel } from "@/utils/accommodationAdapter";
 import { RoomTier } from "@/types/service";
-import { COLORS } from "@/constants/colors";
 import { FONTS } from "@/constants/typography";
 import { RADIUS, SHADOWS } from "@/constants/theme";
 import { APP_CONFIG } from "@/constants/appConfig";
@@ -51,10 +50,11 @@ export default function HotelBookingModal({
   const totalPayable = roomPrice * nights;
 
   const handleConfirmBooking = async () => {
-    if (!fullName.trim() || !phone.trim()) {
+    const phoneDigits = phone.replace(/\D/g, "");
+    if (!fullName.trim() || phoneDigits.length < 10) {
       Alert.alert(
         "Devotee Details Required",
-        "Please enter your full name and phone/WhatsApp number for your booking voucher."
+        "Please enter your full name and a valid phone/WhatsApp number for your booking voucher."
       );
       return;
     }
@@ -93,10 +93,9 @@ export default function HotelBookingModal({
       onClose();
     } catch {
       Alert.alert(
-        "Booking Submitted",
-        `Thank you ${fullName}! Our temple sewadar desk will contact you at ${phone} to confirm your stay.`
+        "Could Not Open WhatsApp",
+        "Your booking request has not been sent. Please try again or contact the support desk directly."
       );
-      onClose();
     }
   };
 

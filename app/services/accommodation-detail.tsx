@@ -8,17 +8,15 @@ import SacredRouteTimeline from "@/components/accommodation/detail/SacredRouteTi
 import SegmentedTabs, { DetailTabType } from "@/components/accommodation/detail/SegmentedTabs";
 import YatraAmenities from "@/components/accommodation/detail/YatraAmenities";
 import HotelBookingModal from "@/components/accommodation/HotelBookingModal";
-import { COLORS } from "@/constants/colors";
 import { FONTS } from "@/constants/typography";
 import { RADIUS, SHADOWS } from "@/constants/theme";
 import { useAccommodation } from "@/hooks/useAccommodation";
 import { RoomTier } from "@/types/service";
 import { enrichHotel, EnrichedHotel } from "@/utils/accommodationAdapter";
 import { Ionicons } from "@expo/vector-icons";
-import { router, useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import React, { useEffect, useMemo, useState } from "react";
 import {
-  Platform,
   ScrollView,
   Share,
   StyleSheet,
@@ -40,8 +38,8 @@ export default function AccommodationDetailScreen() {
   // Find and enrich the hotel
   const enrichedHotel: EnrichedHotel | null = useMemo(() => {
     if (!data?.hotels || data.hotels.length === 0) return null;
-    const raw = data.hotels.find((h) => h.id === id) || data.hotels[0];
-    return enrichHotel(raw);
+    const raw = data.hotels.find((h) => h.id === id);
+    return raw ? enrichHotel(raw) : null;
   }, [data, id]);
 
   // Set default selected room once hotel is resolved
