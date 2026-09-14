@@ -78,14 +78,6 @@ export default function LoginView({
     }
   }, [errorMessage]);
 
-  useEffect(() => {
-    const numeric = initialPhone.replace(/\D/g, "").slice(0, 10);
-    if (numeric.length === 10 && !loading && !hasTriggeredRef.current) {
-      hasTriggeredRef.current = true;
-      onSendOtp(numeric);
-    }
-  }, [initialPhone, loading, onSendOtp]);
-
   const handlePhoneChange = (val: string) => {
     const numeric = val.replace(/\D/g, "").slice(0, 10);
     setPhoneNumber(numeric);
