@@ -23,7 +23,7 @@ export default function SacredRouteTimeline({ nodes }: Props) {
         </View>
         <Text style={styles.titleText}>Nearby Sacred Places</Text>
         <Text style={styles.subtext}>
-          Walk the sacred trail of revered shrines directly from your room's doorstep
+          Walk the sacred trail of revered shrines directly from your room&apos;s doorstep
         </Text>
       </View>
 

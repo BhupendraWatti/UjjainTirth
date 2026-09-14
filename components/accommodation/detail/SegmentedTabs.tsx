@@ -1,4 +1,3 @@
-import { COLORS } from "@/constants/colors";
 import { FONTS } from "@/constants/typography";
 import { RADIUS } from "@/constants/theme";
 import React from "react";

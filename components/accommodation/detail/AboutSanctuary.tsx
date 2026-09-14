@@ -1,7 +1,7 @@
 import { EnrichedHotel, getHotelAboutText } from "@/utils/accommodationAdapter";
 import { FONTS } from "@/constants/typography";
 import { RADIUS, SHADOWS } from "@/constants/theme";
-import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
