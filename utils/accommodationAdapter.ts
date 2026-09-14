@@ -35,18 +35,6 @@ export function enrichHotel(hotel: Hotel): EnrichedHotel {
   };
 }
 
-/** Function line to get room tiers from API payload */
-export function getHotelRooms(hotel: Hotel | null | undefined): RoomTier[] {
-  if (!hotel || !Array.isArray(hotel.rooms)) return [];
-  return hotel.rooms;
-}
-
-/** Function line to get nearby shrines / walking route from API payload */
-export function getHotelNearbyShrines(hotel: Hotel | null | undefined): SacredRouteNode[] {
-  if (!hotel || !Array.isArray(hotel.nearby_shrines)) return [];
-  return hotel.nearby_shrines;
-}
-
 /** Function line to get editorial about text from API payload */
 export function getHotelAboutText(hotel: Hotel | null | undefined): string {
   return hotel?.about_text ? hotel.about_text.trim() : "";
@@ -61,12 +49,4 @@ export function hasProximityData(hotel: Hotel | null | undefined): boolean {
     (hotel.bhasma_aarti_advantage && hotel.bhasma_aarti_advantage.trim() !== "") ||
     (hotel.landmark_note && hotel.landmark_note.trim() !== "")
   );
-}
-
-/** Function line to get distance to Mahakal from API payload */
-export function getHotelDistanceText(hotel: Hotel | null | undefined): string {
-  if (!hotel?.distance_to_mahakal) return "";
-  const parts = [hotel.distance_to_mahakal];
-  if (hotel.walk_time) parts.push(hotel.walk_time);
-  return parts.join(" · ");
 }

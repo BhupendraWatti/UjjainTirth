@@ -1,13 +1,12 @@
 import { AvailabilityScreen } from "@/components/common/AvailabilityLoader";
 import ErrorState from "@/components/common/ErrorState";
 import ScreenContainer from "@/components/layout/ScreenContainer";
-import PoojaBookingModal from "@/components/pooja/PoojaBookingModal";
 import PoojaCard from "@/components/pooja/PoojaCard";
 import PoojaCategoryFilter from "@/components/pooja/PoojaCategoryFilter";
 import PoojaFeaturedCard from "@/components/pooja/PoojaFeaturedCard";
 import PoojaHeader from "@/components/pooja/PoojaHeader";
 import { COLORS } from "@/constants/colors";
-import { RADIUS, SHADOWS } from "@/constants/theme";
+import { RADIUS } from "@/constants/theme";
 import { FONTS } from "@/constants/typography";
 import { usePoojas } from "@/hooks/usePooja";
 import { PoojaItem } from "@/types/pooja";
@@ -34,8 +33,6 @@ const PoojaScreenContent = ({ showBackButton = true }: Props) => {
 
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [selectedPooja, setSelectedPooja] = useState<PoojaItem | null>(null);
-  const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   const handleSelectCategory = useCallback((catId: string) => {
     setSelectedCategory(catId);
@@ -46,11 +43,6 @@ const PoojaScreenContent = ({ showBackButton = true }: Props) => {
       pathname: "/services/pooja-detail",
       params: { id: item.id.toString() },
     });
-  }, []);
-
-  const handleCloseModal = useCallback(() => {
-    setModalVisible(false);
-    setSelectedPooja(null);
   }, []);
 
   const handleClearSearch = useCallback(() => {
@@ -329,12 +321,6 @@ const PoojaScreenContent = ({ showBackButton = true }: Props) => {
           windowSize={5}
         />
 
-        {/* Dynamic Booking Action Modal */}
-        <PoojaBookingModal
-          visible={modalVisible}
-          item={selectedPooja}
-          onClose={handleCloseModal}
-        />
       </AvailabilityScreen>
     </ScreenContainer>
   );
