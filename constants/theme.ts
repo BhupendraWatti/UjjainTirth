@@ -6,6 +6,8 @@ import { FONTS, TYPOGRAPHY } from "./typography";
  * Standardized Corner Radii (3-step scale)
  */
 export const RADIUS = {
+  /** Micro badges, tiny pills */
+  xs: 6,
   /** Chips, badges, small pills */
   sm: 12,
   /** Standard cards, input rows, medium buttons */

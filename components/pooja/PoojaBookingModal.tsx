@@ -1,13 +1,16 @@
-import { PoojaItem } from "@/types/pooja";
+import { APP_CONFIG } from "@/constants/appConfig";
 import { COLORS } from "@/constants/colors";
+import { RADIUS, SHADOWS } from "@/constants/theme";
 import { FONTS } from "@/constants/typography";
-import { RADIUS } from "@/constants/theme";
+import { PoojaDakshinaTier, PoojaItem } from "@/types/pooja";
 import { Ionicons } from "@expo/vector-icons";
+import * as Haptics from "expo-haptics";
 import { Image } from "expo-image";
-import React, { memo } from "react";
+import React, { memo, useCallback } from "react";
 import {
   Linking,
   Modal,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -20,32 +23,63 @@ interface Props {
   visible: boolean;
   item: PoojaItem | null;
   onClose: () => void;
+  selectedTier?: PoojaDakshinaTier | null;
 }
 
-const SUPPORT_PHONE = "+919425091211";
+const PoojaBookingModal = ({ visible, item, onClose, selectedTier }: Props) => {
+  const activePrice = selectedTier && selectedTier.price !== null
+    ? selectedTier.price
+    : item?.starting_price ?? null;
 
-const PoojaBookingModal = ({ visible, item, onClose }: Props) => {
-  if (!item) return null;
-
-  const handleWhatsApp = () => {
-    const priceText = item.starting_price
-      ? `₹${item.starting_price.toLocaleString("en-IN")}`
+  const handleWhatsApp = useCallback(() => {
+    if (!item) return;
+    if (Platform.OS !== "web") {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    }
+    const priceText = activePrice
+      ? `₹${activePrice.toLocaleString("en-IN")}`
       : "As per Vidhi";
 
+    const packageLine = selectedTier
+      ? `*Package:* ${selectedTier.title} (${priceText})\n`
+      : `*Dakshina:* ${priceText}\n`;
+
     const text = encodeURIComponent(
-      `Jai Shri Mahakal! 🙏\n\nI would like to book the following sacred pooja:\n*Ritual:* ${item.title}\n*Temple:* ${item.temple}\n*Duration:* ${item.duration}\n*Dakshina:* ${priceText}\n\nPlease guide me through the Sankalp date, required Gotra details, and puja samagri.`
+      `Jai Shri Mahakal! 🙏\n\nI would like to book the following sacred pooja in Ujjain:\n*Ritual:* ${item.title}\n*Temple:* ${item.temple}\n*Duration:* ${item.duration}\n${packageLine}*Muhurat:* ${item.muhurat_timings || "Daily Morning"}\n\nPlease guide me through the auspicious muhurat, required Gotra details, and puja samagri.`
     );
-    const url = `https://wa.me/919425091211?text=${text}`;
+    const cleanPhone = (APP_CONFIG.SUPPORT_PHONE || "+919179187199").replace(
+      /[^0-9]/g,
+      ""
+    );
+    const url = `https://wa.me/${cleanPhone}?text=${text}`;
     Linking.openURL(url).catch((err) =>
       console.warn("Could not open WhatsApp:", err)
     );
-  };
+  }, [item, activePrice, selectedTier]);
 
-  const handleCall = () => {
-    Linking.openURL(`tel:${SUPPORT_PHONE}`).catch((err) =>
+  const handleCall = useCallback(() => {
+    if (Platform.OS !== "web") {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    }
+    const phone = APP_CONFIG.SUPPORT_PHONE || "+919179187199";
+    Linking.openURL(`tel:${phone}`).catch((err) =>
       console.warn("Could not make call:", err)
     );
-  };
+  }, []);
+
+  const handleClose = useCallback(() => {
+    if (Platform.OS !== "web") {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    }
+    onClose();
+  }, [onClose]);
+
+  if (!item) return null;
+
+  const displayImage =
+    item.image && typeof item.image === "string" && item.image.trim() !== ""
+      ? item.image.trim()
+      : "https://images.unsplash.com/photo-1609358905581-e5382c23f2f8?w=800&auto=format&fit=crop&q=80";
 
   return (
     <Modal
@@ -54,7 +88,7 @@ const PoojaBookingModal = ({ visible, item, onClose }: Props) => {
       animationType="fade"
       onRequestClose={onClose}
     >
-      <TouchableWithoutFeedback onPress={onClose}>
+      <TouchableWithoutFeedback onPress={handleClose}>
         <View style={styles.backdrop}>
           <TouchableWithoutFeedback>
             <View style={styles.sheet}>
@@ -64,10 +98,10 @@ const PoojaBookingModal = ({ visible, item, onClose }: Props) => {
                 <Text style={styles.sheetTitle}>Request Vedic Pooja</Text>
                 <TouchableOpacity
                   style={styles.closeButton}
-                  onPress={onClose}
+                  onPress={handleClose}
                   accessibilityLabel="Close modal"
                 >
-                  <Ionicons name="close" size={20} color="#4A4A4A" />
+                  <Ionicons name="close" size={20} color={COLORS.ink} />
                 </TouchableOpacity>
               </View>
 
@@ -75,7 +109,7 @@ const PoojaBookingModal = ({ visible, item, onClose }: Props) => {
                 {/* Ritual Summary */}
                 <View style={styles.summaryCard}>
                   <Image
-                    source={{ uri: item.image }}
+                    source={{ uri: displayImage }}
                     style={styles.thumbnail}
                     contentFit="cover"
                   />
@@ -89,44 +123,107 @@ const PoojaBookingModal = ({ visible, item, onClose }: Props) => {
                     <Text style={styles.summaryDuration}>
                       ⏱ {item.duration}
                     </Text>
-                    {item.starting_price ? (
+                    {selectedTier ? (
+                      <View style={styles.tierSelectionPill}>
+                        <Ionicons name="bookmark" size={12} color={COLORS.sacred} />
+                        <Text style={styles.tierSelectionText} numberOfLines={1}>
+                          {selectedTier.title}: ₹{selectedTier.price?.toLocaleString("en-IN") || "Custom"}
+                        </Text>
+                      </View>
+                    ) : item.starting_price ? (
                       <Text style={styles.summaryPrice}>
-                        Dakshina: ₹{item.starting_price.toLocaleString("en-IN")}
+                        Starting Dakshina: ₹
+                        {item.starting_price.toLocaleString("en-IN")}
                       </Text>
-                    ) : null}
+                    ) : (
+                      <Text style={styles.summaryPrice}>
+                        Dakshina as per Vidhi
+                      </Text>
+                    )}
                   </View>
                 </View>
 
                 {/* Purpose Note */}
                 <Text style={styles.purposeText}>{item.short_purpose}</Text>
 
-                {/* Vedic Guarantees Box */}
+                {/* Genuine What UjjainTirth Provides Box */}
                 <View style={styles.guaranteeBox}>
-                  <Text style={styles.guaranteeTitle}>Pooja Seva Includes:</Text>
-                  <View style={styles.guaranteeRow}>
-                    <Ionicons name="shield-checkmark" size={16} color="#922C45" />
-                    <Text style={styles.guaranteeItem}>
-                      Individual Vedic Sankalp with Yajman name & Gotra
-                    </Text>
-                  </View>
-                  <View style={styles.guaranteeRow}>
-                    <Ionicons name="shield-checkmark" size={16} color="#922C45" />
-                    <Text style={styles.guaranteeItem}>
-                      Pure Puja Samagri & sacred offerings provided by temple
-                    </Text>
-                  </View>
-                  <View style={styles.guaranteeRow}>
-                    <Ionicons name="shield-checkmark" size={16} color="#922C45" />
-                    <Text style={styles.guaranteeItem}>
-                      Photos & Video darshan shared directly on WhatsApp
-                    </Text>
-                  </View>
-                  <View style={styles.guaranteeRow}>
-                    <Ionicons name="shield-checkmark" size={16} color="#922C45" />
-                    <Text style={styles.guaranteeItem}>
-                      Consecrated Mahakal Prasad dispatched to home address
-                    </Text>
-                  </View>
+                  <Text style={styles.guaranteeTitle}>What UjjainTirth Provides:</Text>
+                  {item.what_we_provide && item.what_we_provide.length > 0 ? (
+                    item.what_we_provide.map((prov, pIdx) => {
+                      const iconName =
+                        prov.icon === "ribbon"
+                          ? "ribbon-outline"
+                          : prov.icon === "videocam"
+                          ? "videocam-outline"
+                          : prov.icon === "leaf"
+                          ? "leaf-outline"
+                          : prov.icon === "gift"
+                          ? "gift-outline"
+                          : "shield-checkmark-outline";
+
+                      return (
+                        <View key={`prov-${pIdx}`} style={styles.guaranteeRow}>
+                          <Ionicons
+                            name={iconName as any}
+                            size={16}
+                            color={COLORS.sacred}
+                          />
+                          <View style={{ flex: 1 }}>
+                            <Text style={styles.guaranteeTitleBold}>
+                              {prov.title}
+                            </Text>
+                            <Text style={styles.guaranteeItem}>
+                              {prov.description}
+                            </Text>
+                          </View>
+                        </View>
+                      );
+                    })
+                  ) : (
+                    <>
+                      <View style={styles.guaranteeRow}>
+                        <Ionicons
+                          name="shield-checkmark"
+                          size={16}
+                          color={COLORS.sacred}
+                        />
+                        <Text style={styles.guaranteeItem}>
+                          Individual Vedic Sankalp with Yajman name & Gotra
+                        </Text>
+                      </View>
+                      <View style={styles.guaranteeRow}>
+                        <Ionicons
+                          name="shield-checkmark"
+                          size={16}
+                          color={COLORS.sacred}
+                        />
+                        <Text style={styles.guaranteeItem}>
+                          Pure Puja Samagri & sacred offerings provided by temple
+                        </Text>
+                      </View>
+                      <View style={styles.guaranteeRow}>
+                        <Ionicons
+                          name="shield-checkmark"
+                          size={16}
+                          color={COLORS.sacred}
+                        />
+                        <Text style={styles.guaranteeItem}>
+                          Photos & Video darshan shared directly on WhatsApp
+                        </Text>
+                      </View>
+                      <View style={styles.guaranteeRow}>
+                        <Ionicons
+                          name="shield-checkmark"
+                          size={16}
+                          color={COLORS.sacred}
+                        />
+                        <Text style={styles.guaranteeItem}>
+                          Consecrated Mahakal Prasad dispatched to home address
+                        </Text>
+                      </View>
+                    </>
+                  )}
                 </View>
 
                 {/* CTAs */}
@@ -137,7 +234,9 @@ const PoojaBookingModal = ({ visible, item, onClose }: Props) => {
                     onPress={handleWhatsApp}
                   >
                     <Ionicons name="logo-whatsapp" size={20} color="#FFFFFF" />
-                    <Text style={styles.whatsappText}>Book Pooja on WhatsApp</Text>
+                    <Text style={styles.whatsappText}>
+                      Book Pooja on WhatsApp
+                    </Text>
                   </TouchableOpacity>
 
                   <TouchableOpacity
@@ -145,12 +244,18 @@ const PoojaBookingModal = ({ visible, item, onClose }: Props) => {
                     activeOpacity={0.8}
                     onPress={handleCall}
                   >
-                    <Ionicons name="call-outline" size={18} color="#922C45" />
-                    <Text style={styles.callText}>Talk to Vedic Pandit Coordinator</Text>
+                    <Ionicons
+                      name="call-outline"
+                      size={18}
+                      color={COLORS.primaryDeep}
+                    />
+                    <Text style={styles.callText}>
+                      Talk to Vedic Coordinator
+                    </Text>
                   </TouchableOpacity>
                 </View>
 
-                <View style={{ height: 20 }} />
+                <View style={{ height: 24 }} />
               </ScrollView>
             </View>
           </TouchableWithoutFeedback>
@@ -165,24 +270,24 @@ export default memo(PoojaBookingModal);
 const styles = StyleSheet.create({
   backdrop: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.55)",
+    backgroundColor: "rgba(0, 0, 0, 0.6)",
     justifyContent: "flex-end",
   },
   sheet: {
-    backgroundColor: "#FFFFFF",
-    borderTopLeftRadius: 26,
-    borderTopRightRadius: 26,
+    backgroundColor: COLORS.surface,
+    borderTopLeftRadius: RADIUS.lg,
+    borderTopRightRadius: RADIUS.lg,
     paddingHorizontal: 20,
     paddingTop: 12,
     maxHeight: "85%",
   },
   handle: {
-    width: 40,
+    width: 44,
     height: 4,
     borderRadius: 2,
-    backgroundColor: "#E0E0E0",
+    backgroundColor: COLORS.bgStone,
     alignSelf: "center",
-    marginBottom: 12,
+    marginBottom: 14,
   },
   header: {
     flexDirection: "row",
@@ -192,14 +297,14 @@ const styles = StyleSheet.create({
   },
   sheetTitle: {
     fontSize: 20,
-    fontWeight: "700",
-    color: "#222222",
+    fontFamily: FONTS.display.semiBold,
+    color: COLORS.ink,
   },
   closeButton: {
-    width: 34,
-    height: 34,
-    borderRadius: 17,
-    backgroundColor: "#F2F2F2",
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: COLORS.surfaceMuted,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -213,8 +318,8 @@ const styles = StyleSheet.create({
     borderColor: COLORS.hairline,
   },
   thumbnail: {
-    width: 80,
-    height: 80,
+    width: 82,
+    height: 82,
     borderRadius: RADIUS.sm,
     backgroundColor: COLORS.bgStone,
   },
@@ -225,7 +330,7 @@ const styles = StyleSheet.create({
   },
   summaryTitle: {
     fontSize: 16,
-    fontFamily: FONTS.display.regular,
+    fontFamily: FONTS.display.semiBold,
     color: COLORS.ink,
     marginBottom: 2,
   },
@@ -257,21 +362,43 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.sacredTint,
     borderRadius: RADIUS.sm,
     padding: 14,
-    gap: 8,
+    gap: 10,
     marginBottom: 20,
     borderWidth: 1,
-    borderColor: COLORS.hairline,
+    borderColor: "rgba(124, 31, 43, 0.15)",
   },
   guaranteeTitle: {
     fontSize: 13,
     fontFamily: FONTS.body.bold,
     color: COLORS.sacred,
-    marginBottom: 4,
+    marginBottom: 2,
   },
   guaranteeRow: {
     flexDirection: "row",
     alignItems: "flex-start",
     gap: 8,
+  },
+  tierSelectionPill: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    backgroundColor: COLORS.sacredTint,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: RADIUS.xs,
+    alignSelf: "flex-start",
+    marginTop: 2,
+  },
+  tierSelectionText: {
+    fontSize: 12,
+    fontFamily: FONTS.body.bold,
+    color: COLORS.sacred,
+  },
+  guaranteeTitleBold: {
+    fontSize: 12,
+    fontFamily: FONTS.body.bold,
+    color: COLORS.ink,
+    marginBottom: 2,
   },
   guaranteeItem: {
     fontSize: 12,
@@ -291,11 +418,7 @@ const styles = StyleSheet.create({
     gap: 8,
     paddingVertical: 14,
     borderRadius: RADIUS.sm,
-    shadowColor: COLORS.whatsapp,
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.25,
-    shadowRadius: 5,
-    elevation: 3,
+    ...SHADOWS.subtle,
   },
   whatsappText: {
     color: "#FFFFFF",

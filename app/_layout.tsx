@@ -97,7 +97,7 @@ export default function RootLayout() {
 
       await queryClient.prefetchQuery({
         queryKey: ["poojas"],
-        queryFn: fetchPoojas,
+        queryFn: () => fetchPoojas(),
         retry: false,
       });
 

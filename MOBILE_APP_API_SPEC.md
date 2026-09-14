@@ -127,13 +127,51 @@ export interface TransportServiceItem {
 
 ## 3. API Endpoint 2: Sacred Pooja & Rituals (`/custom/v1/pooja`)
 
-### Endpoint Details
+### 3.1 List Endpoint (`GET /custom/v1/pooja`)
 - **HTTP Method**: `GET`
 - **Full URL**: `https://ujjaintirth.com/wp-json/custom/v1/pooja`
 - **WordPress CPT**: `pooja`
 - **Ordering**: Menu Order / Post ID ascending (`ASC`)
+- **Supported Query Parameters**:
+  * `category` (optional, string): Filter by category (e.g. `shiva`, `special`, `protection`, `prosperity`, `devi`). Default: `all`.
+  * `featured` or `is_featured` (optional, boolean/integer): Filter by featured status (`1` or `true`).
+  * `temple` (optional, string): Filter by temple name (e.g. `Mahakaleshwar`, `Mangalnath`).
+  * `search` or `q` (optional, string): Real-time keyword search in title and content.
+  * `per_page` (optional, integer): Number of items to return. Default: `-1` (all).
+  * `page` (optional, integer): Pagination page number. Default: `1`.
 
-### Exact JSON Response Format
+### 3.2 Single Item Endpoint (`GET /custom/v1/pooja/{id}`)
+- **HTTP Method**: `GET`
+- **Example URL**: `https://ujjaintirth.com/wp-json/custom/v1/pooja/5654`
+- **Description**: Returns the exact single formatted Pooja object. Returns HTTP 404 (`{"code":"not_found","message":"Pooja not found","data":{"status":404}}`) if the ID does not exist or is not published.
+
+### 3.3 Booking & Enquiry Endpoint (`POST /custom/v1/pooja/book`)
+- **HTTP Method**: `POST`
+- **Full URL**: `https://ujjaintirth.com/wp-json/custom/v1/pooja/book`
+- **Content-Type**: `application/json`
+- **Request Body Payload**:
+  ```json
+  {
+    "pooja_id": 5654,
+    "name": "Bhupendra Sharma",
+    "phone": "+919876543210",
+    "gotra": "Kashyap",
+    "preferred_date": "2026-09-20",
+    "dakshina_tier": "Panchamrut Abhishek (₹2,100)",
+    "notes": "Please conduct sankalp in father's name"
+  }
+  ```
+- **Response**:
+  ```json
+  {
+    "success": true,
+    "message": "Pooja booking request submitted successfully. Our Vedic Pandit will contact you shortly.",
+    "pooja_id": 5654,
+    "name": "Bhupendra Sharma"
+  }
+  ```
+
+### Exact JSON Response Format (`GET /custom/v1/pooja`)
 ```json
 [
   {
@@ -144,56 +182,62 @@ export interface TransportServiceItem {
     "category": "shiva",
     "duration": "60–90 min",
     "short_purpose": "A traditional Vedic Shiva abhishek ritual invoking health, peace, and divine blessings.",
+    "description": "Maha Rudrabhishek is an ancient Vedic ritual dedicated to Bhagwan Shiva in his Rudra form...",
     "starting_price": 2100,
+    "muhurat_timings": "Daily: 06:00 AM - 11:30 AM",
+    "samagri_list": [
+      "Panchamrut (Milk, Curd, Ghee, Honey, Sugar)",
+      "Bhasma from Bhasma Aarti",
+      "Bilva Patra & Dhatura offerings",
+      "Gangajal & Narmada Jal",
+      "Sugandhit Chandan & Janeu"
+    ],
+    "benefits": [
+      "Alleviates chronic ailments & bestows physical vitality",
+      "Nullifies malefic Planetary and Graha Dosh influences",
+      "Spiritual peace, mental clarity, and prosperity"
+    ],
+    "dakshina_tiers": [
+      {
+        "title": "Laghu Rudrabhishek",
+        "price": 2100,
+        "description": "Standard individual Vedic abhishek with single Pandit"
+      },
+      {
+        "title": "Maha Rudrabhishek (Detailed)",
+        "price": 5100,
+        "description": "Complete ritual with 3 Vedic Brahmins, Chhatra offering, and live darshan"
+      }
+    ],
+    "badge_tag": "Shiv Kripa",
     "is_featured": true
-  },
-  {
-    "id": 5659,
-    "title": "Mangalnath Bhat Pooja (Dosh Nivarana)",
-    "image": "",
-    "temple": "Mangalnath Temple",
-    "category": "special",
-    "duration": "45–60 min",
-    "short_purpose": "Sacred Mangal Dosh Shanti & Bhat Pooja performed at the birthplace of Mars.",
-    "starting_price": 3100,
-    "is_featured": true
-  },
-  {
-    "id": 5660,
-    "title": "Kaal Sarp Dosh Shanti Pooja",
-    "image": "",
-    "temple": "Ram Ghat & Trimbakeshwar Samarth",
-    "category": "protection",
-    "duration": "120 min",
-    "short_purpose": "Complete Vedic ritual to alleviate Rahu-Ketu obstacles and bring harmony.",
-    "starting_price": 4500,
-    "is_featured": false
-  },
-  {
-    "id": 5661,
-    "title": "Bhairav Sahasranama Archana",
-    "image": "",
-    "temple": "Kaal Bhairav Temple",
-    "category": "protection",
-    "duration": "30–45 min",
-    "short_purpose": "Powerful Archana offering for protection and obstacle removal at Kaal Bhairav.",
-    "starting_price": 1100,
-    "is_featured": false
   }
 ]
 ```
 
 ### TypeScript Data Models
 ```typescript
+export interface PoojaDakshinaTier {
+  title: string;
+  price: number | null;
+  description: string;
+}
+
 export interface PoojaItem {
   id: number;
   title: string;
   image: string;
   temple: string;
-  category: 'shiva' | 'devi' | 'protection' | 'prosperity' | 'special' | 'other';
+  category: 'shiva' | 'devi' | 'protection' | 'prosperity' | 'special' | 'other' | string;
   duration: string;
   short_purpose: string;
+  description: string;
   starting_price: number | null;
+  muhurat_timings: string;
+  samagri_list: string[];
+  benefits: string[];
+  dakshina_tiers: PoojaDakshinaTier[];
+  badge_tag: string;
   is_featured: boolean;
 }
 ```
@@ -471,16 +515,55 @@ function ujjaintirth_format_parikrama_mode($post_id) {
 function ujjaintirth_format_pooja($post_id) {
     $featured_image = get_the_post_thumbnail_url($post_id, 'full') ?: ujjaintirth_get_acf_image_url(ujjaintirth_get_field_val($post_id, 'pooja_icon'));
     $starting_price = ujjaintirth_get_field_val($post_id, 'starting_price');
+
+    $samagri_raw = ujjaintirth_get_field_val($post_id, 'samagri_list', array());
+    $samagri_list = array();
+    if (is_array($samagri_raw)) {
+        foreach ($samagri_raw as $item) {
+            $val = is_array($item) ? ($item['item_name'] ?? '') : $item;
+            if (!empty($val)) $samagri_list[] = strval($val);
+        }
+    }
+
+    $benefits_raw = ujjaintirth_get_field_val($post_id, 'benefits', array());
+    $benefits = array();
+    if (is_array($benefits_raw)) {
+        foreach ($benefits_raw as $item) {
+            $val = is_array($item) ? ($item['benefit_text'] ?? '') : $item;
+            if (!empty($val)) $benefits[] = strval($val);
+        }
+    }
+
+    $tiers_raw = ujjaintirth_get_field_val($post_id, 'dakshina_tiers', array());
+    $dakshina_tiers = array();
+    if (is_array($tiers_raw)) {
+        foreach ($tiers_raw as $item) {
+            if (is_array($item) && !empty($item['title'])) {
+                $dakshina_tiers[] = array(
+                    'title'       => strval($item['title'] ?? ''),
+                    'price'       => !empty($item['price']) ? floatval($item['price']) : null,
+                    'description' => strval($item['description'] ?? ''),
+                );
+            }
+        }
+    }
+
     return array(
-        'id'             => intval($post_id),
-        'title'          => html_entity_decode(get_the_title($post_id), ENT_QUOTES, 'UTF-8'),
-        'image'          => $featured_image,
-        'temple'         => ujjaintirth_get_field_val($post_id, 'temple', 'Mahakaleshwar'),
-        'category'       => strtolower(ujjaintirth_get_field_val($post_id, 'category', 'shiva')),
-        'duration'       => ujjaintirth_get_field_val($post_id, 'duration', '60–90 min'),
-        'short_purpose'  => ujjaintirth_get_field_val($post_id, 'short_purpose', ''),
-        'starting_price' => !empty($starting_price) ? floatval($starting_price) : null,
-        'is_featured'    => (bool) ujjaintirth_get_field_val($post_id, 'is_featured', 1),
+        'id'              => intval($post_id),
+        'title'           => html_entity_decode(get_the_title($post_id), ENT_QUOTES, 'UTF-8'),
+        'image'           => $featured_image,
+        'temple'          => ujjaintirth_get_field_val($post_id, 'temple', 'Mahakaleshwar'),
+        'category'        => strtolower(ujjaintirth_get_field_val($post_id, 'category', 'shiva')),
+        'duration'        => ujjaintirth_get_field_val($post_id, 'duration', '60-90 min'),
+        'short_purpose'   => ujjaintirth_get_field_val($post_id, 'short_purpose', ''),
+        'description'     => ujjaintirth_get_field_val($post_id, 'description', ''),
+        'starting_price'  => !empty($starting_price) ? floatval($starting_price) : null,
+        'muhurat_timings' => ujjaintirth_get_field_val($post_id, 'muhurat_timings', 'Daily: 06:00 AM - 11:30 AM'),
+        'samagri_list'    => $samagri_list,
+        'benefits'        => $benefits,
+        'dakshina_tiers'  => $dakshina_tiers,
+        'badge_tag'       => ujjaintirth_get_field_val($post_id, 'badge_tag', ''),
+        'is_featured'     => (bool) ujjaintirth_get_field_val($post_id, 'is_featured', 1),
     );
 }
 
@@ -541,11 +624,79 @@ add_action('rest_api_init', function() {
 
     register_rest_route('custom/v1', '/pooja', array(
         'methods'  => 'GET',
-        'callback' => function() {
-            $posts = get_posts(array('post_type' => 'pooja', 'posts_per_page' => -1, 'post_status' => 'publish', 'orderby' => 'menu_order ID', 'order' => 'ASC'));
+        'callback' => function($request = null) {
+            $category = $request ? $request->get_param('category') : null;
+            $featured = $request ? ($request->get_param('featured') ?? $request->get_param('is_featured')) : null;
+            $temple   = $request ? $request->get_param('temple') : null;
+            $search   = $request ? ($request->get_param('search') ?? $request->get_param('q')) : null;
+            $per_page = ($request && $request->get_param('per_page')) ? intval($request->get_param('per_page')) : -1;
+            $page     = ($request && $request->get_param('page')) ? intval($request->get_param('page')) : 1;
+
+            $args = array(
+                'post_type'      => 'pooja',
+                'posts_per_page' => $per_page,
+                'paged'          => $page,
+                'post_status'    => 'publish',
+                'orderby'        => 'menu_order ID',
+                'order'          => 'ASC',
+            );
+
+            if (!empty($search)) { $args['s'] = sanitize_text_field($search); }
+            $meta_query = array();
+            if (!empty($category) && strtolower($category) !== 'all') {
+                $meta_query[] = array('key' => 'category', 'value' => sanitize_text_field($category), 'compare' => 'LIKE');
+            }
+            if ($featured !== null && $featured !== '') {
+                $meta_query[] = array('key' => 'is_featured', 'value' => filter_var($featured, FILTER_VALIDATE_BOOLEAN) ? 1 : 0, 'compare' => '=');
+            }
+            if (!empty($temple)) {
+                $meta_query[] = array('key' => 'temple', 'value' => sanitize_text_field($temple), 'compare' => 'LIKE');
+            }
+            if (!empty($meta_query)) { $args['meta_query'] = $meta_query; }
+
+            $posts = get_posts($args);
             $out = array();
             foreach ($posts as $post) { $out[] = ujjaintirth_format_pooja($post->ID); }
-            return $out;
+            return rest_ensure_response($out);
+        },
+        'permission_callback' => '__return_true',
+    ));
+
+    register_rest_route('custom/v1', '/pooja/(?P<id>\d+)', array(
+        'methods'  => 'GET',
+        'callback' => function($request) {
+            $post_id = intval($request['id']);
+            $post = get_post($post_id);
+            if (!$post || $post->post_type !== 'pooja' || $post->post_status !== 'publish') {
+                return new WP_Error('not_found', 'Pooja not found', array('status' => 404));
+            }
+            return rest_ensure_response(ujjaintirth_format_pooja($post_id));
+        },
+        'permission_callback' => '__return_true',
+    ));
+
+    register_rest_route('custom/v1', '/pooja/book', array(
+        'methods'  => 'POST',
+        'callback' => function($request) {
+            $pooja_id       = intval($request->get_param('pooja_id'));
+            $name           = sanitize_text_field($request->get_param('name'));
+            $phone          = sanitize_text_field($request->get_param('phone'));
+            $gotra          = sanitize_text_field($request->get_param('gotra'));
+            $preferred_date = sanitize_text_field($request->get_param('preferred_date'));
+            $dakshina_tier  = sanitize_text_field($request->get_param('dakshina_tier'));
+            $notes          = sanitize_textarea_field($request->get_param('notes'));
+
+            if (empty($name) || empty($phone)) {
+                return new WP_Error('missing_fields', 'Name and phone number are required', array('status' => 400));
+            }
+
+            $pooja_title = $pooja_id ? get_the_title($pooja_id) : 'Sacred Vedic Pooja';
+            $admin_email = get_option('admin_email');
+            $subject     = 'New Pooja Booking Request: ' . $pooja_title . ' - ' . $name;
+            $message     = "Jai Shri Mahakal!\n\nA new Pooja booking request has been submitted:\n\nPooja: {$pooja_title}\nName: {$name}\nPhone: {$phone}\nGotra: {$gotra}\nDate: {$preferred_date}\nTier: {$dakshina_tier}\nNotes: {$notes}\n";
+            @wp_mail($admin_email, $subject, $message);
+
+            return rest_ensure_response(array('success' => true, 'message' => 'Booking request received.', 'pooja_id' => $pooja_id, 'name' => $name));
         },
         'permission_callback' => '__return_true',
     ));

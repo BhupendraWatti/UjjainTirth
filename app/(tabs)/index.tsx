@@ -3,6 +3,7 @@ import Header from "@/components/home/Header";
 import HeroBanner from "@/components/home/HeroBanner";
 import RecommendationSection from "@/components/home/RecommendationSection";
 import ServicesGrid from "@/components/home/ServicesGrid";
+import HomePoojaSection from "@/components/home/HomePoojaSection";
 import ScreenContainer from "@/components/layout/ScreenContainer";
 import { AvailabilityScreen } from "@/components/common/AvailabilityLoader";
 import { useServices } from "@/hooks/useServices";
@@ -48,6 +49,7 @@ export default function HomeScreen() {
               </View>
 
               <ServicesGrid services={services || []} />
+              <HomePoojaSection />
               <RecommendationSection />
             </>
           }
