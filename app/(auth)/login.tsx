@@ -1,7 +1,6 @@
 import React from "react";
 import { useRouter } from "expo-router";
 import AuthVerificationView from "@/components/auth/AuthVerificationView";
-import { isOnboardingDone, setOnboardingDone } from "@/utils/storage";
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -19,4 +18,3 @@ export default function LoginScreen() {
     />
   );
 }
-

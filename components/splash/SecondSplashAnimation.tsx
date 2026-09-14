@@ -141,7 +141,20 @@ export default function SecondSplashAnimation({ onFinish }: SecondSplashAnimatio
     return () => {
       clearTimeout(tExit);
     };
-  }, []);
+  }, [
+    containerOpacity,
+    glowOpacity,
+    glowScale,
+    logoOpacity,
+    logoScale,
+    logoTranslateY,
+    onFinish,
+    taglineOpacity,
+    templeOpacity,
+    templeTranslateY,
+    tripundraOpacity,
+    tripundraScale,
+  ]);
 
   // Animated Styles
   const containerStyle = useAnimatedStyle(() => ({

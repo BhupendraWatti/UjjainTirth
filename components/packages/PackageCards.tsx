@@ -6,7 +6,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Image } from "expo-image";
 import * as Haptics from "expo-haptics";
 import * as Linking from "expo-linking";
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import {
   Alert,
   Platform,
@@ -24,7 +24,7 @@ import Animated, {
   withSpring,
   withTiming,
 } from "react-native-reanimated";
-import Svg, { Circle, G, Line, Path } from "react-native-svg";
+import Svg, { Circle, Path } from "react-native-svg";
 
 interface Props {
   item: Package;
@@ -241,7 +241,6 @@ export default function PackageCard({
   }));
 
   const hasImage = Boolean(item.image && item.image.trim().length > 0);
-  const [imageLoaded, setImageLoaded] = useState(false);
 
   return (
     <Animated.View
@@ -275,8 +274,6 @@ export default function PackageCard({
               priority={index < 2 ? "high" : "normal"}
               cachePolicy="memory-disk"
               transition={280}
-              onLoad={() => setImageLoaded(true)}
-              onError={() => setImageLoaded(false)}
             />
           ) : (
             <View style={styles.placeholderBackdrop}>

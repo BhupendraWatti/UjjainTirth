@@ -8,7 +8,7 @@ import Animated, {
   withSequence,
   withTiming,
 } from "react-native-reanimated";
-import Svg, { Circle, G, Path } from "react-native-svg";
+import Svg, { Path } from "react-native-svg";
 
 const CTA_BG_COLOR = "#FAF5EB";
 

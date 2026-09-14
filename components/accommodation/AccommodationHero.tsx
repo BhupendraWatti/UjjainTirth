@@ -12,6 +12,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -30,10 +31,12 @@ export default function AccommodationHero({
   onFilterPress,
 }: Props) {
   const insets = useSafeAreaInsets();
+  const { width } = useWindowDimensions();
   const imageUri = hero.image && hero.image.trim() !== "" ? hero.image : null;
+  const heroHeight = Math.min(Math.max(width * 0.95, 340), 460);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { height: heroHeight }]}>
       {/* Background Image (only if provided by API) */}
       {imageUri ? (
         <Image
@@ -130,7 +133,6 @@ export default function AccommodationHero({
 
 const styles = StyleSheet.create({
   container: {
-    height: 380,
     width: "100%",
     position: "relative",
     justifyContent: "space-between",

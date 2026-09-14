@@ -1,4 +1,5 @@
 import React, {
+  useCallback,
   forwardRef,
   useEffect,
   useImperativeHandle,
@@ -25,7 +26,7 @@ const ComingSoon = forwardRef<ComingSoonRef, ComingSoonProps>(
     const opacity = useRef(new Animated.Value(0)).current;
     const scale = useRef(new Animated.Value(0.8)).current;
 
-    const startAnimation = () => {
+    const startAnimation = useCallback(() => {
       Animated.parallel([
         Animated.timing(opacity, {
           toValue: 1,
@@ -38,7 +39,7 @@ const ComingSoon = forwardRef<ComingSoonRef, ComingSoonProps>(
           useNativeDriver: true,
         }),
       ]).start();
-    };
+    }, [opacity, scale]);
 
     useImperativeHandle(ref, () => ({
       startAnimation,
@@ -46,7 +47,7 @@ const ComingSoon = forwardRef<ComingSoonRef, ComingSoonProps>(
 
     useEffect(() => {
       startAnimation();
-    }, []);
+    }, [startAnimation]);
 
     return (
       <View style={styles.container}>

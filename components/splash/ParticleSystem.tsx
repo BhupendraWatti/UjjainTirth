@@ -100,7 +100,7 @@ const Particle = React.memo(({ index }: ParticleProps) => {
         true
       )
     );
-  }, [seed]);
+  }, [opacity, scale, seed, x, y]);
 
   const animatedStyle = useAnimatedStyle(() => {
     return {

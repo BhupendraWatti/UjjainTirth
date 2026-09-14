@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Dimensions } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -88,7 +88,7 @@ export default function SplashAnimation({ onFinish }: SplashAnimationProps) {
       clearTimeout(tBrand);
       clearTimeout(tExit);
     };
-  }, []);
+  }, [containerOpacity, glowPulse, onFinish, sunriseOpacity, sunriseScale]);
 
   // Animated styles
   const containerStyle = useAnimatedStyle(() => ({

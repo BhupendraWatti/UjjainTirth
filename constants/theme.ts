@@ -23,25 +23,13 @@ export const RADIUS = {
  */
 export const SHADOWS: Record<string, ViewStyle> = {
   subtle: {
-    shadowColor: "#2B2420",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 4,
-    elevation: 2,
+    boxShadow: "0 2px 4px rgba(43, 36, 32, 0.06)",
   },
   card: {
-    shadowColor: "#2B2420",
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.10,
-    shadowRadius: 8,
-    elevation: 3,
+    boxShadow: "0 3px 8px rgba(43, 36, 32, 0.10)",
   },
   elevated: {
-    shadowColor: "#2B2420",
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.14,
-    shadowRadius: 14,
-    elevation: 6,
+    boxShadow: "0 6px 14px rgba(43, 36, 32, 0.14)",
   },
 };
 

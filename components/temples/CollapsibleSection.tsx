@@ -46,10 +46,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 14,
     marginBottom: 16,
-    shadowColor: "#000",
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 3,
+    boxShadow: "0 3px 8px rgba(0, 0, 0, 0.05)",
   },
   header: {
     flexDirection: "row",

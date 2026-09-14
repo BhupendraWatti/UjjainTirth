@@ -8,17 +8,14 @@ import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import {
-  Dimensions,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-
-const { width } = Dimensions.get("window");
-const SLIDER_HEIGHT = Math.min(320, width * 0.75);
 
 interface Props {
   hotel: EnrichedHotel;
@@ -27,6 +24,8 @@ interface Props {
 
 export default function GalleryHeader({ hotel, onShare }: Props) {
   const insets = useSafeAreaInsets();
+  const { width } = useWindowDimensions();
+  const sliderHeight = Math.min(320, width * 0.75);
   const [activeSlide, setActiveSlide] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
 
@@ -43,7 +42,7 @@ export default function GalleryHeader({ hotel, onShare }: Props) {
   };
 
   return (
-    <View style={[styles.container, { height: SLIDER_HEIGHT }]}>
+    <View style={[styles.container, { width, height: sliderHeight }]}>
       {/* Horizontal Image Carousel */}
       <ScrollView
         horizontal
@@ -56,13 +55,13 @@ export default function GalleryHeader({ hotel, onShare }: Props) {
           <Image
             key={idx}
             source={{ uri }}
-            style={{ width, height: SLIDER_HEIGHT }}
+            style={{ width, height: sliderHeight }}
             contentFit="cover"
             transition={200}
           />
         ))}
         {images.length === 0 && (
-          <View style={[styles.fallbackContainer, { width, height: SLIDER_HEIGHT }]}>
+          <View style={[styles.fallbackContainer, { width, height: sliderHeight }]}>
             <MaterialCommunityIcons name="image-outline" size={48} color="#A09895" />
           </View>
         )}
@@ -72,8 +71,7 @@ export default function GalleryHeader({ hotel, onShare }: Props) {
       <LinearGradient
         colors={["rgba(0,0,0,0.5)", "transparent", "rgba(0,0,0,0.65)"]}
         locations={[0, 0.45, 1]}
-        style={StyleSheet.absoluteFillObject}
-        pointerEvents="none"
+        style={[StyleSheet.absoluteFillObject, { pointerEvents: "none" }]}
       />
 
       {/* Top Action Nav Bar */}
@@ -141,7 +139,6 @@ export default function GalleryHeader({ hotel, onShare }: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    width,
     position: "relative",
     backgroundColor: "#EBE8E3",
   },

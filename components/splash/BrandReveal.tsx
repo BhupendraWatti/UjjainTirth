@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { StyleSheet, View, Text, Dimensions } from "react-native";
+import { StyleSheet, Text, Dimensions } from "react-native";
 import Svg, { Path, Defs, LinearGradient, Stop } from "react-native-svg";
 import Animated, {
   useSharedValue,
@@ -67,7 +67,15 @@ const BrandReveal = React.memo(({ startTrigger }: BrandRevealProps) => {
         })
       );
     }
-  }, [startTrigger]);
+  }, [
+    containerOpacity,
+    logoScale,
+    logoTranslateY,
+    startTrigger,
+    taglineOpacity,
+    textOpacity,
+    textTranslateY,
+  ]);
 
   const containerStyle = useAnimatedStyle(() => ({
     opacity: containerOpacity.value,

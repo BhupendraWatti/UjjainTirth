@@ -1,5 +1,4 @@
 import ComingSoon from "@/components/ui/ComingSoon";
-import { StyleSheet } from "react-native";
 export default function PackageForm() {
   return (
     <ComingSoon
@@ -8,4 +7,3 @@ export default function PackageForm() {
     />
   );
 }
-const styles = StyleSheet.create({});

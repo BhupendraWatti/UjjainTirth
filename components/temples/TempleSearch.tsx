@@ -18,7 +18,7 @@ const TempleSearch = ({ onSearch }: TempleSearchProps) => {
     }, 500); // debounce 500ms
 
     return () => clearTimeout(timer);
-  }, [query]);
+  }, [onSearch, query]);
 
   return (
     <View style={styles.container}>

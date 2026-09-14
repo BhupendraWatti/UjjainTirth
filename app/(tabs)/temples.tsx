@@ -26,9 +26,6 @@ export default function TemplesScreen() {
 
   const {
     data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
     refetch,
     isLoading,
     isError,

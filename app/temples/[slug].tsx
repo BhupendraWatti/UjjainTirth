@@ -1,7 +1,7 @@
 import CollapsibleSection from "@/components/temples/CollapsibleSection";
 import MapCard from "@/components/temples/MapCard";
 import { LinearGradient } from "expo-linear-gradient";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Image,
@@ -17,7 +17,6 @@ import { useTempleDistances, formatDistance } from "@/hooks/useTempleDistances";
 import { usePoojas } from "@/hooks/usePooja";
 import { fetchTempleBySlug } from "@/services/templeService";
 import { Temple } from "@/types/temple";
-import { router } from "expo-router";
 import { COLORS } from "@/constants/colors";
 import { FONTS } from "@/constants/typography";
 import { RADIUS, SHADOWS } from "@/constants/theme";
@@ -39,7 +38,7 @@ const TempleDetailScreen = () => {
       } else {
         setTemple(data);
       }
-    } catch (err) {
+    } catch {
       setError("Something went wrong");
     } finally {
       setLoading(false);
@@ -47,15 +46,15 @@ const TempleDetailScreen = () => {
   }, [slug]);
 
   useEffect(() => {
-    if (slug) loadTemple();
-  }, [slug]);
+    if (slug) void loadTemple();
+  }, [slug, loadTemple]);
 
   // ── Distance tracking for this single temple ──
   const templesArray = useMemo(
     () => (temple ? [temple] : []),
     [temple]
   );
-  const { distances, locationStatus } = useTempleDistances(templesArray);
+  const { distances } = useTempleDistances(templesArray);
   const distanceKm = temple ? distances[temple.id] ?? null : null;
 
   const { data: allPoojas } = usePoojas();

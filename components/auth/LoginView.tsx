@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
-  Dimensions,
   Image,
   Keyboard,
   KeyboardAvoidingView,
@@ -12,6 +11,7 @@ import {
   TextInput,
   TouchableOpacity,
   TouchableWithoutFeedback,
+  useWindowDimensions,
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -27,8 +27,6 @@ import {
   TempleSkylineArt,
   TrishulLogo,
 } from "./SacredArtwork";
-
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 const DEFAULT_SCREEN_1_IMAGE =
   "https://ujjaintirth.com/wp-content/uploads/2026/09/Ujjain-sacred-skyline-1.png";
@@ -49,6 +47,7 @@ export default function LoginView({
   dynamicImageUrl,
 }: LoginViewProps) {
   const insets = useSafeAreaInsets();
+  const { width } = useWindowDimensions();
   const [phoneNumber, setPhoneNumber] = useState(initialPhone);
   const [imageLoadFailed, setImageLoadFailed] = useState(false);
 
@@ -85,7 +84,7 @@ export default function LoginView({
       hasTriggeredRef.current = true;
       onSendOtp(numeric);
     }
-  }, [initialPhone]);
+  }, [initialPhone, loading, onSendOtp]);
 
   const handlePhoneChange = (val: string) => {
     const numeric = val.replace(/\D/g, "").slice(0, 10);
@@ -149,7 +148,7 @@ export default function LoginView({
             {imageLoadFailed && (
               <View style={styles.artworkFallbackWindow}>
                 <TrishulLogo size={34} color={COLORS.gold} />
-                <TempleSkylineArt width={Math.min(SCREEN_WIDTH - 24, 380)} height={160} />
+                <TempleSkylineArt width={Math.min(width - 24, 380)} height={160} />
               </View>
             )}
 
@@ -470,8 +469,7 @@ const styles = StyleSheet.create({
     ...SHADOWS.card,
   },
   ctaButtonDisabled: {
-    shadowOpacity: 0.1,
-    elevation: 1,
+    opacity: 0.7,
   },
   ctaButtonGradient: {
     height: 52,

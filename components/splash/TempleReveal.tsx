@@ -61,7 +61,7 @@ const TempleReveal = React.memo(({ startTrigger }: TempleRevealProps) => {
         )
       );
     }
-  }, [startTrigger]);
+  }, [breatheScale, opacity, startTrigger, translateY]);
 
   const templeAnimatedStyle = useAnimatedStyle(() => {
     return {

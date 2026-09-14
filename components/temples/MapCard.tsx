@@ -118,11 +118,11 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     overflow: "hidden",
     backgroundColor: "#fff",
-    elevation: 3,
+    boxShadow: "0 3px 8px rgba(0, 0, 0, 0.10)",
   },
   map: {
     width: "100%",
-    height: 150,
+    aspectRatio: 2,
   },
   overlay: {
     position: "absolute",
