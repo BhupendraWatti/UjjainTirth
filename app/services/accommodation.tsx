@@ -6,7 +6,6 @@ import TirthShuddhiBanner from "@/components/accommodation/TirthShuddhiBanner";
 import LinkedPackages from "@/components/accommodation/LinkedPackages";
 import ErrorState from "@/components/common/ErrorState";
 import LoadingSkeleton from "@/components/layout/LoadingSkeleton";
-import { COLORS } from "@/constants/colors";
 import { FONTS } from "@/constants/typography";
 import { RADIUS, SHADOWS } from "@/constants/theme";
 import { useAccommodation } from "@/hooks/useAccommodation";
@@ -69,8 +68,6 @@ export default function AccommodationScreen() {
           h.location.toLowerCase().includes("station") ||
           h.location.toLowerCase().includes("railway")
       );
-      // If none match strictly, fallback to all so screen is never accidentally empty
-      if (result.length === 0) result = enrichedHotels;
     }
 
     return result;
