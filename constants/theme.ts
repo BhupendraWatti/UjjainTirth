@@ -14,6 +14,8 @@ export const RADIUS = {
   md: 16,
   /** Modal sheets, large containers */
   lg: 24,
+  /** Full pill radius */
+  full: 9999,
 } as const;
 
 /**

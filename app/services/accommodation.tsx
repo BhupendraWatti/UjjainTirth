@@ -1,7 +1,8 @@
-import HeroSection from "@/components/accommodation/HeroSection";
-import HighlightsRow from "@/components/accommodation/HighlightsRow";
+import AccommodationHero from "@/components/accommodation/AccommodationHero";
+import DistanceFilterRow, { DistanceFilterType } from "@/components/accommodation/DistanceFilterRow";
+import DevoteeGuarantees from "@/components/accommodation/DevoteeGuarantees";
 import HotelCard from "@/components/accommodation/HotelCard";
-import HotelDetailModal from "@/components/accommodation/HotelDetailModal";
+import TirthShuddhiBanner from "@/components/accommodation/TirthShuddhiBanner";
 import LinkedPackages from "@/components/accommodation/LinkedPackages";
 import ErrorState from "@/components/common/ErrorState";
 import LoadingSkeleton from "@/components/layout/LoadingSkeleton";
@@ -9,9 +10,16 @@ import { COLORS } from "@/constants/colors";
 import { FONTS } from "@/constants/typography";
 import { RADIUS, SHADOWS } from "@/constants/theme";
 import { useAccommodation } from "@/hooks/useAccommodation";
-import { Hotel } from "@/types/service";
-import React, { useCallback, useState } from "react";
-import { ScrollView, StyleSheet, Text, View, useWindowDimensions } from "react-native";
+import { enrichHotel, EnrichedHotel } from "@/utils/accommodationAdapter";
+import { router } from "expo-router";
+import React, { useCallback, useMemo, useState } from "react";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  useWindowDimensions,
+} from "react-native";
 
 export default function AccommodationScreen() {
   const { width } = useWindowDimensions();
@@ -19,17 +27,60 @@ export default function AccommodationScreen() {
   const cardWidth = isTablet ? (width - 44) / 2 : "100%";
 
   const { data, isLoading, isError, refetch } = useAccommodation();
-  const [selectedHotel, setSelectedHotel] = useState<Hotel | null>(null);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [distanceFilter, setDistanceFilter] = useState<DistanceFilterType>("all");
 
-  const handleHotelPress = useCallback((hotel: Hotel) => {
-    setSelectedHotel(hotel);
-    setModalVisible(true);
-  }, []);
+  // Enrich all hotels with Stitch specifications
+  const enrichedHotels = useMemo<EnrichedHotel[]>(() => {
+    if (!data?.hotels) return [];
+    return data.hotels.map(enrichHotel);
+  }, [data]);
 
-  const handleModalClose = useCallback(() => {
-    setModalVisible(false);
-    setSelectedHotel(null);
+  // Client-side search and distance filtering
+  const filteredHotels = useMemo(() => {
+    let result = enrichedHotels;
+
+    // Search query filter
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      result = result.filter(
+        (h) =>
+          h.name.toLowerCase().includes(q) ||
+          h.location.toLowerCase().includes(q) ||
+          h.category.toLowerCase().includes(q) ||
+          h.amenities.some((a) => a.name.toLowerCase().includes(q))
+      );
+    }
+
+    // Distance filter
+    if (distanceFilter === "under_500m") {
+      result = result.filter((h) => h.distance_meters <= 500);
+    } else if (distanceFilter === "500m_2km") {
+      result = result.filter(
+        (h) => h.distance_meters > 500 && h.distance_meters <= 2000
+      );
+    } else if (distanceFilter === "2km_5km") {
+      result = result.filter(
+        (h) => h.distance_meters > 2000 && h.distance_meters <= 5000
+      );
+    } else if (distanceFilter === "near_station") {
+      result = result.filter(
+        (h) =>
+          h.location.toLowerCase().includes("station") ||
+          h.location.toLowerCase().includes("railway")
+      );
+      // If none match strictly, fallback to all so screen is never accidentally empty
+      if (result.length === 0) result = enrichedHotels;
+    }
+
+    return result;
+  }, [enrichedHotels, searchQuery, distanceFilter]);
+
+  const handleHotelPress = useCallback((hotel: EnrichedHotel) => {
+    router.push({
+      pathname: "/services/accommodation-detail",
+      params: { id: hotel.id },
+    });
   }, []);
 
   if (isLoading) {
@@ -48,60 +99,78 @@ export default function AccommodationScreen() {
     );
   }
 
-  const hasHotels = data.hotels && data.hotels.length > 0;
-
   return (
     <View style={styles.container}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
         bounces={false}
+        keyboardShouldPersistTaps="handled"
       >
-        {/* 1. Hero Section */}
-        <HeroSection hero={data.hero} />
+        {/* 1. Atmospheric Dusk Hero Section with Floating Search Bar */}
+        <AccommodationHero
+          hero={data.hero}
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+        />
 
-        {/* 2. Highlights Row (conditional) */}
-        <HighlightsRow highlights={data.highlights} />
+        {/* 2. Sacred Proximity Quick Navigation (Distance Filter Chips) */}
+        <DistanceFilterRow
+          selectedFilter={distanceFilter}
+          onSelectFilter={setDistanceFilter}
+        />
 
-        {/* 3. Hotels Section */}
-        <View style={styles.hotelsSection}>
-          <Text style={styles.sectionTitle}>Where to Stay</Text>
+        {/* 3. Devotee Guarantee & Feature Badges */}
+        <DevoteeGuarantees highlights={data.highlights} />
 
-          {hasHotels ? (
-            <View style={isTablet ? styles.hotelsGrid : undefined}>
-              {data.hotels.map((hotel) => (
-                <HotelCard
-                  key={hotel.id}
-                  hotel={hotel}
-                  onPress={handleHotelPress}
-                  style={isTablet ? { width: cardWidth, marginHorizontal: 0 } : undefined}
-                />
-              ))}
-            </View>
-          ) : (
-            <View style={styles.emptyState}>
-              <Text style={styles.emptyIcon}>🏨</Text>
-              <Text style={styles.emptyText}>No stays available</Text>
-              <Text style={styles.emptySubtext}>
-                Check back soon for new listings
-              </Text>
-            </View>
-          )}
+        {/* 4. Editorial Stays Listing Section Header */}
+        <View style={styles.sectionHeaderRow}>
+          <View>
+            <Text style={styles.sectionTag}>SANCTUM SANCTORUM PROXIMITY</Text>
+            <Text style={styles.sectionTitle}>Recommended Stays</Text>
+          </View>
+          <Text style={styles.availableCount}>
+            {filteredHotels.length} Available
+          </Text>
         </View>
 
-        {/* 4. Linked Packages (conditional) */}
+        {/* 5. Hotels Cards List */}
+        {filteredHotels.length > 0 ? (
+          <View style={isTablet ? styles.hotelsGrid : undefined}>
+            {filteredHotels.map((hotel) => (
+              <HotelCard
+                key={hotel.id}
+                hotel={hotel}
+                onPress={handleHotelPress}
+                style={isTablet ? { width: cardWidth, marginHorizontal: 0 } : undefined}
+              />
+            ))}
+          </View>
+        ) : (
+          <View style={styles.emptyState}>
+            <Text style={styles.emptyIcon}>🏨</Text>
+            <Text style={styles.emptyText}>
+              {data.hotels.length === 0
+                ? "No Accommodations Listed Yet"
+                : "No matching stays found"}
+            </Text>
+            <Text style={styles.emptySubtext}>
+              {data.hotels.length === 0
+                ? "Accommodations will appear here once published from the store dashboard."
+                : "Try adjusting your search query or distance filter."}
+            </Text>
+          </View>
+        )}
+
+        {/* 6. Tirth Shuddhi Trust Banner */}
+        <TirthShuddhiBanner title={data.tagline} description={data.description} />
+
+        {/* 7. Linked Packages */}
         <LinkedPackages packages={data.linked_packages} />
 
         {/* Bottom spacing */}
         <View style={{ height: 40 }} />
       </ScrollView>
-
-      {/* Hotel Detail Modal */}
-      <HotelDetailModal
-        visible={modalVisible}
-        hotel={selectedHotel}
-        onClose={handleModalClose}
-      />
     </View>
   );
 }
@@ -109,15 +178,39 @@ export default function AccommodationScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.bg,
+    backgroundColor: "#FCF9F4",
   },
-
   scrollContent: {
     flexGrow: 1,
   },
-
-  hotelsSection: {
-    marginTop: 24,
+  sectionHeaderRow: {
+    flexDirection: "row",
+    alignItems: "flex-end",
+    justifyContent: "space-between",
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    paddingBottom: 12,
+  },
+  sectionTag: {
+    fontSize: 10,
+    fontFamily: FONTS.body.bold,
+    color: "#904D00",
+    letterSpacing: 1.1,
+    textTransform: "uppercase",
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontFamily: FONTS.display.semiBold,
+    color: "#4E051A",
+    marginTop: 1,
+  },
+  availableCount: {
+    fontSize: 10,
+    fontFamily: FONTS.body.bold,
+    color: "#877274",
+    letterSpacing: 0.8,
+    textTransform: "uppercase",
+    paddingBottom: 2,
   },
   hotelsGrid: {
     flexDirection: "row",
@@ -125,43 +218,31 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 16,
   },
-
-  sectionTitle: {
-    fontSize: 18,
-    fontFamily: FONTS.display.semiBold,
-    color: COLORS.ink,
-    marginBottom: 14,
-    paddingHorizontal: 16,
-    letterSpacing: -0.2,
-  },
-
-  // Empty state
   emptyState: {
     alignItems: "center",
-    paddingVertical: 40,
+    paddingVertical: 36,
     marginHorizontal: 16,
-    backgroundColor: COLORS.surface,
+    backgroundColor: "#FFFFFF",
     borderRadius: RADIUS.md,
     borderWidth: 1,
-    borderColor: COLORS.hairline,
-    ...SHADOWS.subtle,
+    borderColor: "rgba(107, 29, 47, 0.08)",
+    ...SHADOWS.xs,
   },
-
   emptyIcon: {
-    fontSize: 40,
-    marginBottom: 12,
+    fontSize: 36,
+    marginBottom: 8,
   },
-
   emptyText: {
-    fontSize: 16,
-    fontFamily: FONTS.body.semiBold,
-    color: COLORS.ink,
+    fontSize: 15,
+    fontFamily: FONTS.display.semiBold,
+    color: "#4E051A",
     marginBottom: 4,
   },
-
   emptySubtext: {
-    fontSize: 13,
+    fontSize: 12,
     fontFamily: FONTS.body.regular,
-    color: COLORS.inkMuted,
+    color: "#544244",
+    textAlign: "center",
+    paddingHorizontal: 20,
   },
 });
