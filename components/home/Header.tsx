@@ -1,17 +1,16 @@
 import { Ionicons } from "@expo/vector-icons";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import { COLORS } from "@/constants/colors";
-import { FONTS } from "@/constants/typography";
 
 export default function Header() {
   return (
     <View style={styles.container}>
-      <View>
-        <Text style={styles.title}>Jai Shree Mahakal</Text>
-        <Text style={styles.subtitle}>
-          Welcome to <Text style={styles.link}>Ujjaintirth.com</Text>
-        </Text>
-      </View>
+      <Image
+        source={require("../../assets/images/icon.png")}
+        style={styles.brandLogo}
+        resizeMode="contain"
+        accessibilityLabel="Ujjain Tirth"
+      />
 
       <TouchableOpacity style={styles.searchBtn} accessibilityRole="button" accessibilityLabel="Search">
         <Ionicons name="search" size={20} color={COLORS.inkBody} />
@@ -29,17 +28,9 @@ const styles = StyleSheet.create({
     paddingTop: 12,
   },
 
-  title: {
-    fontSize: 20,
-    fontFamily: FONTS.display.semiBold,
-    color: COLORS.sacred,
-  },
-
-  subtitle: {
-    fontSize: 14,
-    fontFamily: FONTS.body.regular,
-    color: COLORS.inkMuted,
-    marginTop: 2,
+  brandLogo: {
+    width: 52,
+    height: 52,
   },
 
   searchBtn: {
@@ -49,10 +40,5 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.surfaceMuted,
     justifyContent: "center",
     alignItems: "center",
-  },
-
-  link: {
-    color: COLORS.inkMuted,
-    fontFamily: FONTS.body.medium,
   },
 });

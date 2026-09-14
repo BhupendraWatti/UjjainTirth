@@ -20,7 +20,7 @@ import * as Haptics from "expo-haptics";
 import { COLORS } from "@/constants/colors";
 import { RADIUS, SHADOWS } from "@/constants/theme";
 import { FONTS } from "@/constants/typography";
-import { JaiMahakalDivider, TempleSkylineArt, TrishulLogo } from "./SacredArtwork";
+import { JaiMahakalDivider, TempleSkylineArt } from "./SacredArtwork";
 
 const { width: SW } = Dimensions.get("window");
 const CHAKRA_FALLBACK =
@@ -226,11 +226,12 @@ export default function OtpVerificationView({
             <Ionicons name="arrow-back" size={22} color={COLORS.ink} />
           </TouchableOpacity>
           <View style={styles.headerCenter}>
-            <View style={styles.brandRow}>
-              <TrishulLogo size={26} color={COLORS.gold} />
-              <Text style={styles.brandName}>UjjainTirth</Text>
-            </View>
-            <Text style={styles.headerMantra}>ॐ नमः शिवाय</Text>
+            <Image
+              source={require("../../assets/images/icon.png")}
+              style={styles.brandLogo}
+              resizeMode="contain"
+              accessibilityLabel="Ujjain Tirth"
+            />
           </View>
           {/* Invisible balance spacer */}
           <View style={{ width: 36 }} />
@@ -371,20 +372,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   headerCenter: { flex: 1, alignItems: "center" },
-  brandRow: { flexDirection: "row", alignItems: "center", gap: 6 },
-  brandName: {
-    fontSize: 18,
-    fontFamily: FONTS.display.semiBold,
-    color: COLORS.ink,
-    letterSpacing: 0.1,
-  },
-  headerMantra: {
-    fontSize: 11,
-    fontFamily: FONTS.body.bold,
-    color: COLORS.gold,
-    letterSpacing: 1,
-    marginTop: 1,
-  },
+  brandLogo: { width: 42, height: 42 },
 
   // Title
   title: {
