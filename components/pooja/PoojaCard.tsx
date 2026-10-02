@@ -114,7 +114,7 @@ const PoojaCard = ({ item, index = 0, onRequest, style }: Props) => {
           {/* Pricing & CTA Footer */}
           <View style={styles.footer}>
             <View style={styles.priceContainer}>
-              <Text style={styles.priceLabel}>Starting Dakshina</Text>
+              <Text style={styles.priceLabel}>Dakshina from</Text>
               <View style={styles.priceRow}>
                 {item.starting_price ? (
                   <>
@@ -177,6 +177,8 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderRadius: RADIUS.sm,
     maxWidth: "75%",
+    borderWidth: 1,
+    borderColor: "rgba(0, 0, 0, 0.08)",
     ...SHADOWS.subtle,
   },
   templeText: {
@@ -195,6 +197,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: RADIUS.sm,
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.22)",
   },
   durationText: {
     fontSize: 11,
@@ -230,7 +234,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontFamily: FONTS.body.bold,
     color: COLORS.primaryDeep,
-    letterSpacing: 0.5,
+    letterSpacing: 0.8,
   },
   purpose: {
     fontSize: 13,

@@ -66,3 +66,10 @@ modules/*/android/.gradle/
 scratch
 .playwright-mcp
 CURRENT_UI_UX_DESIGN_SYSTEM.md
+
+# Agent Workspaces, Scratch, Research & Generated Documentation
+.agents/
+active/
+docs/ui-ux-learnings/
+rules.md
+GEMINI.md

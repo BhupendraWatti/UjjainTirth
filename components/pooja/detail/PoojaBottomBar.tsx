@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import * as Haptics from "expo-haptics";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "@/constants/colors";
 import { RADIUS, SHADOWS } from "@/constants/theme";
@@ -25,11 +26,25 @@ export const PoojaBottomBar: React.FC<PoojaBottomBarProps> = ({
   onCall,
   onBook,
 }) => {
+  const handleCallWithHaptic = () => {
+    if (Platform.OS !== "web") {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    }
+    onCall();
+  };
+
+  const handleBookWithHaptic = () => {
+    if (Platform.OS !== "web") {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    }
+    onBook();
+  };
+
   return (
     <View style={styles.bottomBar}>
       <View style={styles.bottomPriceCol}>
         <Text style={styles.bottomPriceLabel} numberOfLines={1}>
-          {selectedTier ? selectedTier.title : "Starting Dakshina"}
+          {selectedTier ? selectedTier.title : "Dakshina"}
         </Text>
         <View style={styles.bottomPriceRow}>
           {activePrice ? (
@@ -48,7 +63,7 @@ export const PoojaBottomBar: React.FC<PoojaBottomBarProps> = ({
       <View style={styles.bottomActions}>
         <TouchableOpacity
           style={styles.callIconBtn}
-          onPress={onCall}
+          onPress={handleCallWithHaptic}
           activeOpacity={0.8}
           accessibilityRole="button"
           accessibilityLabel="Call temple coordinator"
@@ -58,13 +73,17 @@ export const PoojaBottomBar: React.FC<PoojaBottomBarProps> = ({
 
         <TouchableOpacity
           style={styles.whatsappBtn}
-          onPress={onBook}
+          onPress={handleBookWithHaptic}
           activeOpacity={0.85}
           accessibilityRole="button"
           accessibilityLabel="Book Pooja via WhatsApp"
         >
           <Ionicons name="logo-whatsapp" size={18} color="#FFFFFF" />
-          <Text style={styles.whatsappBtnText}>Book Pooja</Text>
+          <Text style={styles.whatsappBtnText}>
+            {activePrice
+              ? `Book Pooja • ₹${activePrice.toLocaleString("en-IN")}`
+              : "Book Pooja"}
+          </Text>
         </TouchableOpacity>
       </View>
     </View>

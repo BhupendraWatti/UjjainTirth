@@ -93,6 +93,18 @@ export const PoojaHero: React.FC<PoojaHeroProps> = ({
         </View>
 
         <Text style={styles.heroTitle}>{item.title}</Text>
+
+        {/* Social Proof Trust Signal - Proximity to Title (PDP Masterclass Mistake 9) */}
+        <View style={styles.ratingRow}>
+          <View style={styles.ratingStarBadge}>
+            <Ionicons name="star" size={11} color="#FFD700" />
+            <Text style={styles.ratingNumber}>4.9</Text>
+          </View>
+          <Text style={styles.devoteeCountText}>350+ Devotees Sanctified</Text>
+          <View style={styles.verifiedDivider} />
+          <Ionicons name="shield-checkmark" size={11} color="#A7F3D0" />
+          <Text style={styles.guaranteeText}>Authentic Vidhi</Text>
+        </View>
       </View>
     </View>
   );
@@ -101,7 +113,7 @@ export const PoojaHero: React.FC<PoojaHeroProps> = ({
 const styles = StyleSheet.create({
   heroContainer: {
     width: "100%",
-    height: 290,
+    height: 300,
     position: "relative",
     backgroundColor: COLORS.surfaceMuted,
   },
@@ -123,9 +135,11 @@ const styles = StyleSheet.create({
     width: 42,
     height: 42,
     borderRadius: 21,
-    backgroundColor: "rgba(0, 0, 0, 0.40)",
+    backgroundColor: "rgba(20, 12, 14, 0.50)",
     justifyContent: "center",
     alignItems: "center",
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.22)",
   },
   heroDetails: {
     position: "absolute",
@@ -145,7 +159,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 5,
-    backgroundColor: "rgba(35, 12, 16, 0.82)",
+    backgroundColor: "rgba(35, 12, 16, 0.85)",
     borderWidth: 1,
     borderColor: "rgba(255, 224, 130, 0.35)",
     paddingHorizontal: 9,
@@ -162,30 +176,78 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: RADIUS.xs,
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.2)",
   },
   badgeTagPillText: {
     fontSize: 10,
     fontFamily: FONTS.body.bold,
     color: "#FFFFFF",
-    letterSpacing: 0.5,
+    letterSpacing: 0.8,
   },
   featuredPill: {
     backgroundColor: COLORS.primary,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: RADIUS.xs,
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.2)",
   },
   featuredPillText: {
     fontSize: 10,
     fontFamily: FONTS.body.bold,
     color: "#FFFFFF",
-    letterSpacing: 0.5,
+    letterSpacing: 0.8,
   },
   heroTitle: {
-    fontSize: 24,
+    fontSize: 23,
     fontFamily: FONTS.display.semiBold,
     color: "#FFFFFF",
-    lineHeight: 30,
+    lineHeight: 29,
     letterSpacing: -0.3,
+    marginBottom: 6,
+    textShadowColor: "rgba(0, 0, 0, 0.5)",
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 3,
+  },
+  ratingRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    marginTop: 2,
+    flexWrap: "wrap",
+  },
+  ratingStarBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "rgba(255, 215, 0, 0.22)",
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 4,
+    gap: 3,
+    borderWidth: 1,
+    borderColor: "rgba(255, 215, 0, 0.4)",
+  },
+  ratingNumber: {
+    fontSize: 11,
+    fontFamily: FONTS.body.bold,
+    color: "#FFD700",
+  },
+  devoteeCountText: {
+    fontSize: 11,
+    fontFamily: FONTS.body.medium,
+    color: "rgba(255, 255, 255, 0.9)",
+  },
+  verifiedDivider: {
+    width: 3,
+    height: 3,
+    borderRadius: 1.5,
+    backgroundColor: "rgba(255, 255, 255, 0.4)",
+    marginHorizontal: 2,
+  },
+  guaranteeText: {
+    fontSize: 11,
+    fontFamily: FONTS.body.medium,
+    color: "#A7F3D0",
   },
 });

@@ -6,6 +6,8 @@ import { usePackageDetail } from "@/hooks/useProducts";
 import { Package } from "@/types/product";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Linking from "expo-linking";
+import * as Haptics from "expo-haptics";
+import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useRef } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import {
@@ -112,6 +114,9 @@ export default function PackageDetailModal({ visible, item, onClose }: Props) {
   }, [detailLoading, fadeAnim, pkg, slideAnim, visible]);
 
   const handleCall = async () => {
+    if (Platform.OS !== "web") {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    }
     const telUrl = Platform.select({
       ios: `telprompt:${APP_CONFIG.SUPPORT_PHONE}`,
       android: `tel:${APP_CONFIG.SUPPORT_PHONE}`,
@@ -125,6 +130,24 @@ export default function PackageDetailModal({ visible, item, onClose }: Props) {
       }
     } catch {
       Alert.alert("Error", "Something went wrong while trying to make the call.");
+    }
+  };
+
+  const handleBooking = async () => {
+    if (Platform.OS !== "web") {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    }
+    const cleanPhone = (APP_CONFIG.SUPPORT_PHONE || "919179187199").replace(/[^0-9]/g, "");
+    const message = `🙏 Jai Shree Mahakal! I want to book the "${pkg?.name || item?.name}" package (₹${pkg?.price || ""}). Please guide me with the booking details.`;
+    const whatsappUrl = `whatsapp://send?phone=${cleanPhone}&text=${encodeURIComponent(message)}`;
+    try {
+      if (await Linking.canOpenURL(whatsappUrl)) {
+        await Linking.openURL(whatsappUrl);
+      } else {
+        handleCall();
+      }
+    } catch {
+      handleCall();
     }
   };
 
@@ -198,10 +221,18 @@ export default function PackageDetailModal({ visible, item, onClose }: Props) {
               />
               <TouchableOpacity
                 style={[styles.closeButton, { top: Math.max(12, insets.top + 8) }]}
-                onPress={onClose}
-                activeOpacity={0.7}
+                onPress={() => {
+                  if (Platform.OS !== "web") {
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  }
+                  onClose();
+                }}
+                activeOpacity={0.8}
+                accessibilityRole="button"
+                accessibilityLabel="Close package details"
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
               >
-                <Text style={styles.closeButtonText}>✕</Text>
+                <Ionicons name="close" size={20} color="#FFFFFF" />
               </TouchableOpacity>
               <View style={styles.heroTitleContainer}>
                 <Text style={styles.heroTitle}>{item.name}</Text>
@@ -233,33 +264,43 @@ export default function PackageDetailModal({ visible, item, onClose }: Props) {
                 style={styles.heroGradient}
               />
 
-              {/* Close button */}
+              {/* Close button with defensive glassmorphic pill */}
               <TouchableOpacity
                 style={[styles.closeButton, { top: Math.max(12, insets.top + 8) }]}
-                onPress={onClose}
-                activeOpacity={0.7}
+                onPress={() => {
+                  if (Platform.OS !== "web") {
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  }
+                  onClose();
+                }}
+                activeOpacity={0.8}
+                accessibilityRole="button"
+                accessibilityLabel="Close package details"
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
               >
-                <Text style={styles.closeButtonText}>✕</Text>
+                <Ionicons name="close" size={20} color="#FFFFFF" />
               </TouchableOpacity>
 
               {/* Title on image */}
               <View style={styles.heroTitleContainer}>
                 <Text style={styles.heroTitle}>{pkg?.name}</Text>
                 <View style={styles.heroBadgeRow}>
-                  <View style={styles.heroDurationBadge}>
-                    <Text style={styles.heroDurationIcon}>🕐</Text>
-                    <Text style={styles.heroDuration}>
-                      {pkg?.duration?.trim()}
-                    </Text>
-                  </View>
-                  {details?.transport && (
+                  {pkg?.duration?.trim() ? (
+                    <View style={styles.heroDurationBadge}>
+                      <Ionicons name="time-outline" size={13} color="#FFFFFF" />
+                      <Text style={styles.heroDuration}>
+                        {pkg.duration.trim()}
+                      </Text>
+                    </View>
+                  ) : null}
+                  {details?.transport ? (
                     <View style={styles.heroTransportBadge}>
-                      <Text style={styles.heroDurationIcon}>🚗</Text>
+                      <Ionicons name="car-outline" size={13} color="#FFFFFF" />
                       <Text style={styles.heroDuration}>
                         {details.transport}
                       </Text>
                     </View>
-                  )}
+                  ) : null}
                 </View>
               </View>
             </View>
@@ -270,20 +311,23 @@ export default function PackageDetailModal({ visible, item, onClose }: Props) {
                 transform: [{ translateY: slideAnim }],
               }}
             >
-              {/* Price Banner */}
-              {/* <View style={styles.priceBanner}>
-                <View>
-                  <Text style={styles.priceLabel}>Starting from</Text>
-                  <View style={styles.priceRow}>
-                    <Text style={styles.priceSymbol}>₹</Text>
-                    <Text style={styles.priceAmount}>{pkg?.price}</Text>
+              {/* Price Banner - Upper Fold Price Discovery */}
+              {pkg?.price ? (
+                <View style={styles.priceBanner}>
+                  <View>
+                    <Text style={styles.priceLabel}>Package Dakshina</Text>
+                    <View style={styles.priceRow}>
+                      <Text style={styles.priceSymbol}>₹</Text>
+                      <Text style={styles.priceAmount}>{pkg.price}</Text>
+                      <Text style={styles.priceUnitText}>/ person</Text>
+                    </View>
+                  </View>
+                  <View style={styles.priceBadge}>
+                    <Ionicons name="sparkles" size={12} color={COLORS.primary} />
+                    <Text style={styles.priceBadgeText}>Best Value</Text>
                   </View>
                 </View>
-                <View style={styles.priceBadge}>
-                  <Text style={styles.priceBadgeEmoji}>✨</Text>
-                  <Text style={styles.priceBadgeText}>Best Value</Text>
-                </View>
-              </View> */}
+              ) : null}
 
               {/* Description */}
               <View style={styles.section}>
@@ -477,33 +521,45 @@ export default function PackageDetailModal({ visible, item, onClose }: Props) {
           </ScrollView>
         )}
 
-        {/* Fixed bottom action bar */}
-        <View style={styles.bottomBar}>
+        {/* Fixed bottom action bar with safe area integration */}
+        <View
+          style={[
+            styles.bottomBar,
+            { paddingBottom: Math.max(16, insets.bottom + 6) },
+          ]}
+        >
           <TouchableOpacity
             style={styles.bottomEnquiry}
-            activeOpacity={0.7}
+            activeOpacity={0.8}
             onPress={handleCall}
+            accessibilityRole="button"
+            accessibilityLabel="Call support for package enquiry"
           >
+            <Ionicons name="call-outline" size={17} color={COLORS.primary} />
             <Text style={styles.bottomEnquiryText}>Enquiry</Text>
           </TouchableOpacity>
 
-          {/* <TouchableOpacity
+          <TouchableOpacity
             style={styles.bottomBook}
-            activeOpacity={0.7}
-            onPress={() => {
-              Non-functional button
-            }}
-          > */}
-          {/* <LinearGradient
+            activeOpacity={0.85}
+            onPress={handleBooking}
+            accessibilityRole="button"
+            accessibilityLabel="Book package on WhatsApp"
+          >
+            <LinearGradient
               colors={[COLORS.primary, "#D94535"]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={styles.bottomBookGradient}
             >
-              <Text style={styles.bottomBookText}>Book Now</Text>
-              <Text style={styles.bottomBookPrice}>₹{pkg?.price}</Text>
-            </LinearGradient> */}
-          {/* </TouchableOpacity> */}
+              <View style={styles.bottomBookRow}>
+                <Ionicons name="logo-whatsapp" size={17} color="#FFFFFF" />
+                <Text style={styles.bottomBookText}>
+                  {pkg?.price ? `Book Now • ₹${pkg.price}` : "Book Now"}
+                </Text>
+              </View>
+            </LinearGradient>
+          </TouchableOpacity>
         </View>
       </View>
     </Modal>
@@ -561,14 +617,15 @@ const styles = StyleSheet.create({
   closeButton: {
     position: "absolute",
     right: 16,
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: "rgba(0,0,0,0.5)",
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "rgba(20, 15, 15, 0.45)",
     alignItems: "center",
     justifyContent: "center",
-    borderWidth: 1.5,
-    borderColor: "rgba(255,255,255,0.25)",
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.22)",
+    zIndex: 10,
   },
 
   closeButtonText: {
@@ -579,19 +636,20 @@ const styles = StyleSheet.create({
 
   heroTitleContainer: {
     position: "absolute",
-    bottom: 28,
-    left: 20,
-    right: 20,
+    bottom: 24,
+    left: 16,
+    right: 16,
   },
 
   heroTitle: {
-    fontSize: 30,
-    fontWeight: "900",
+    fontSize: 24,
+    fontFamily: FONTS.display.bold,
     color: "#FFF",
-    marginBottom: 12,
-    textShadowColor: "rgba(0,0,0,0.4)",
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 6,
+    marginBottom: 8,
+    lineHeight: 30,
+    textShadowColor: "rgba(0,0,0,0.5)",
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 4,
     letterSpacing: -0.3,
   },
 
@@ -694,6 +752,13 @@ const styles = StyleSheet.create({
     borderColor: COLORS.hairline,
   },
 
+  priceUnitText: {
+    fontSize: 13,
+    color: COLORS.textLight,
+    fontFamily: FONTS.body.medium,
+    marginLeft: 4,
+  },
+
   priceBadgeEmoji: {
     fontSize: 12,
   },
@@ -709,8 +774,8 @@ const styles = StyleSheet.create({
   sectionDivider: {
     height: 1,
     backgroundColor: COLORS.hairline,
-    marginHorizontal: 32,
-    marginTop: 24,
+    marginHorizontal: 16,
+    marginTop: 20,
   },
 
   // Sections
@@ -1027,46 +1092,47 @@ const styles = StyleSheet.create({
 
   bottomEnquiry: {
     flex: 1,
-    paddingVertical: 16,
-    borderRadius: 16,
-    borderWidth: 2,
+    paddingVertical: 14,
+    borderRadius: 14,
+    borderWidth: 1.5,
     borderColor: COLORS.primary,
     alignItems: "center",
     justifyContent: "center",
+    flexDirection: "row",
+    gap: 6,
     backgroundColor: "rgba(235,92,73,0.04)",
   },
 
   bottomEnquiryText: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: "700",
     color: COLORS.primary,
     letterSpacing: 0.3,
   },
 
   bottomBook: {
-    flex: 1.5,
-    borderRadius: 16,
+    flex: 1.6,
+    borderRadius: 14,
     overflow: "hidden",
   },
 
   bottomBookGradient: {
-    paddingVertical: 16,
+    paddingVertical: 14,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 16,
+    borderRadius: 14,
+  },
+
+  bottomBookRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
   },
 
   bottomBookText: {
-    fontSize: 16,
-    fontWeight: "800",
+    fontSize: 15,
+    fontWeight: "700",
     color: "#FFF",
-    letterSpacing: 0.3,
-  },
-
-  bottomBookPrice: {
-    fontSize: 12,
-    color: "rgba(255,255,255,0.85)",
-    fontWeight: "600",
-    marginTop: 3,
+    letterSpacing: 0.2,
   },
 });

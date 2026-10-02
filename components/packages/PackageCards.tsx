@@ -532,6 +532,7 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.body.regular,
     color: "rgba(255, 255, 255, 0.7)",
     marginLeft: 2,
+    letterSpacing: 0.4,
   },
 
   // -------------------------------------------------------------

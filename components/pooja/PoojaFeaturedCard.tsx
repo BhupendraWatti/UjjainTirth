@@ -125,7 +125,7 @@ const PoojaFeaturedCard = ({ item, index = 0, onRequest, style }: Props) => {
           {/* Pricing & CTA Row */}
           <View style={styles.footer}>
             <View style={styles.priceCol}>
-              <Text style={styles.priceLabel}>Starting Dakshina</Text>
+              <Text style={styles.priceLabel}>Dakshina from</Text>
               <View style={styles.priceRow}>
                 {item.starting_price ? (
                   <>
@@ -218,6 +218,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: RADIUS.sm,
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.22)",
   },
   durationText: {
     fontSize: 11,
