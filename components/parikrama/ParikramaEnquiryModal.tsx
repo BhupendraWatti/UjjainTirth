@@ -8,6 +8,7 @@ import React, { memo } from "react";
 import {
   Linking,
   Modal,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -15,6 +16,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 interface Props {
   visible: boolean;
@@ -31,6 +33,8 @@ const ParikramaEnquiryModal = ({
   location,
   onClose,
 }: Props) => {
+  const insets = useSafeAreaInsets();
+
   if (!mode && !location) return null;
 
   const title = mode ? mode.title : location ? location.title : "Narmada Parikrama Yatra";
@@ -42,7 +46,7 @@ const ParikramaEnquiryModal = ({
     : "";
   const description = mode ? mode.short_description : location?.short_description || "";
 
-  const handleWhatsApp = () => {
+  const handleWhatsApp = async () => {
     const context = mode
       ? `*Parikrama Mode:* ${mode.title}\n*Duration:* ${mode.duration}\n*Distance:* ${mode.distance}`
       : location
@@ -52,14 +56,29 @@ const ParikramaEnquiryModal = ({
     const text = encodeURIComponent(
       `Narmade Har! 🙏\n\nI want to plan my sacred Narmada Parikrama pilgrimage.\n${context}\n\nPlease share the detailed day-wise itinerary, vehicle & ashram stay arrangements, and upcoming yatra dates.`
     );
-    const url = `https://wa.me/919425091211?text=${text}`;
-    Linking.openURL(url).catch((err) =>
-      console.warn("Could not open WhatsApp:", err)
-    );
+    const cleanPhone = SUPPORT_PHONE.replace(/[^0-9]/g, "");
+    const waUrl = `whatsapp://send?phone=${cleanPhone}&text=${text}`;
+    const webWaUrl = `https://wa.me/${cleanPhone}?text=${text}`;
+
+    try {
+      if (await Linking.canOpenURL(waUrl)) {
+        await Linking.openURL(waUrl);
+      } else {
+        await Linking.openURL(webWaUrl);
+      }
+    } catch (err) {
+      console.warn("Could not open WhatsApp:", err);
+      Linking.openURL(webWaUrl).catch(() => {});
+    }
   };
 
   const handleCall = () => {
-    Linking.openURL(`tel:${SUPPORT_PHONE}`).catch((err) =>
+    const phoneUrl = Platform.select({
+      ios: `telprompt:${SUPPORT_PHONE}`,
+      android: `tel:${SUPPORT_PHONE}`,
+      default: `tel:${SUPPORT_PHONE}`,
+    });
+    Linking.openURL(phoneUrl).catch((err) =>
       console.warn("Could not make call:", err)
     );
   };
@@ -74,15 +93,23 @@ const ParikramaEnquiryModal = ({
       <TouchableWithoutFeedback onPress={onClose}>
         <View style={styles.backdrop}>
           <TouchableWithoutFeedback>
-            <View style={styles.sheet}>
+            <View
+              style={[
+                styles.sheet,
+                { paddingBottom: Math.max(insets.bottom, 16) },
+              ]}
+            >
               <View style={styles.handle} />
 
               <View style={styles.header}>
-                <Text style={styles.sheetTitle}>Narmada Parikrama Seva</Text>
+                <Text style={styles.sheetTitle} maxFontSizeMultiplier={1.25}>
+                  Narmada Parikrama Seva
+                </Text>
                 <TouchableOpacity
                   style={styles.closeButton}
                   onPress={onClose}
                   accessibilityLabel="Close modal"
+                  accessibilityRole="button"
                 >
                   <Ionicons name="close" size={20} color={COLORS.inkBody} />
                 </TouchableOpacity>
@@ -99,12 +126,18 @@ const ParikramaEnquiryModal = ({
                     />
                   ) : null}
                   <View style={styles.summaryDetails}>
-                    <Text style={styles.summaryTitle} numberOfLines={1}>
+                    <Text
+                      style={styles.summaryTitle}
+                      numberOfLines={1}
+                      maxFontSizeMultiplier={1.25}
+                    >
                       {title}
                     </Text>
-                    <Text style={styles.summarySub}>{subtitle}</Text>
+                    <Text style={styles.summarySub} maxFontSizeMultiplier={1.2}>
+                      {subtitle}
+                    </Text>
                     <View style={styles.badge}>
-                      <Text style={styles.badgeText}>
+                      <Text style={styles.badgeText} maxFontSizeMultiplier={1.2}>
                         {mode ? "YATRA PACKAGE" : "SACRED STOP"}
                       </Text>
                     </View>
@@ -112,35 +145,47 @@ const ParikramaEnquiryModal = ({
                 </View>
 
                 {/* Description */}
-                <Text style={styles.descriptionText}>{description}</Text>
+                <Text style={styles.descriptionText} maxFontSizeMultiplier={1.2}>
+                  {description}
+                </Text>
 
                 {/* Inclusions Box */}
                 <View style={styles.inclusionsBox}>
-                  <Text style={styles.inclusionsTitle}>Yatra Assistance Includes:</Text>
+                  <Text style={styles.inclusionsTitle} maxFontSizeMultiplier={1.25}>
+                    Yatra Assistance Includes:
+                  </Text>
                   <View style={styles.inclusionRow}>
                     <Ionicons name="shield-checkmark" size={16} color={COLORS.journey} />
-                    <Text style={styles.inclusionText}>
+                    <Text style={styles.inclusionText} maxFontSizeMultiplier={1.2}>
                       Dedicated AC vehicle (Innova / Tempo) suited for Ghat routes
                     </Text>
                   </View>
                   <View style={styles.inclusionRow}>
                     <Ionicons name="shield-checkmark" size={16} color={COLORS.journey} />
-                    <Text style={styles.inclusionText}>
+                    <Text style={styles.inclusionText} maxFontSizeMultiplier={1.2}>
                       Pre-verified Ashram, Dharamshala & Hotel night halts
                     </Text>
                   </View>
                   <View style={styles.inclusionRow}>
                     <Ionicons name="shield-checkmark" size={16} color={COLORS.journey} />
-                    <Text style={styles.inclusionText}>
+                    <Text style={styles.inclusionText} maxFontSizeMultiplier={1.2}>
                       Assistance for Holy Snan, Narmada Jal Sankalp & Aarti vidhi
                     </Text>
                   </View>
                   <View style={styles.inclusionRow}>
                     <Ionicons name="shield-checkmark" size={16} color={COLORS.journey} />
-                    <Text style={styles.inclusionText}>
+                    <Text style={styles.inclusionText} maxFontSizeMultiplier={1.2}>
                       Boat crossing assistance at Narmada Sagar Sangam (Bharuch)
                     </Text>
                   </View>
+                </View>
+
+                {/* Trust Badge */}
+                <View style={styles.trustBadgeRow}>
+                  <Ionicons name="shield-checkmark-outline" size={13} color={COLORS.journey} />
+                  <Text style={styles.trustBadgeText} maxFontSizeMultiplier={1.2}>
+                    Devotee Care Desk • 100% Verified Yatra Guidance
+                  </Text>
                 </View>
 
                 {/* Action Buttons */}
@@ -149,22 +194,30 @@ const ParikramaEnquiryModal = ({
                     style={styles.whatsappButton}
                     activeOpacity={0.8}
                     onPress={handleWhatsApp}
+                    accessibilityRole="button"
+                    accessibilityLabel="Enquire on WhatsApp"
                   >
                     <Ionicons name="logo-whatsapp" size={20} color="#FFFFFF" />
-                    <Text style={styles.whatsappText}>Enquire on WhatsApp</Text>
+                    <Text style={styles.whatsappText} maxFontSizeMultiplier={1.2}>
+                      Enquire on WhatsApp
+                    </Text>
                   </TouchableOpacity>
 
                   <TouchableOpacity
                     style={styles.callButton}
                     activeOpacity={0.8}
                     onPress={handleCall}
+                    accessibilityRole="button"
+                    accessibilityLabel="Talk to Yatra Guide"
                   >
                     <Ionicons name="call-outline" size={18} color={COLORS.journey} />
-                    <Text style={styles.callText}>Talk to Yatra Guide</Text>
+                    <Text style={styles.callText} maxFontSizeMultiplier={1.2}>
+                      Talk to Yatra Guide
+                    </Text>
                   </TouchableOpacity>
                 </View>
 
-                <View style={{ height: 20 }} />
+                <View style={{ height: 12 }} />
               </ScrollView>
             </View>
           </TouchableWithoutFeedback>
@@ -295,6 +348,22 @@ const styles = StyleSheet.create({
     color: COLORS.inkBody,
     flex: 1,
     lineHeight: 16,
+  },
+  trustBadgeRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 6,
+    backgroundColor: COLORS.journeyTint,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: RADIUS.sm,
+    marginBottom: 16,
+  },
+  trustBadgeText: {
+    fontSize: 11,
+    fontFamily: FONTS.body.semiBold,
+    color: COLORS.journey,
   },
   actionButtons: {
     gap: 10,

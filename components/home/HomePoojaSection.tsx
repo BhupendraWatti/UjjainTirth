@@ -3,6 +3,7 @@ import { RADIUS, SHADOWS } from "@/constants/theme";
 import { FONTS } from "@/constants/typography";
 import { usePoojas } from "@/hooks/usePooja";
 import { PoojaItem } from "@/types/pooja";
+import { getPoojaFallbackImage } from "@/services/poojaService";
 import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { Image } from "expo-image";
@@ -92,10 +93,14 @@ const HomePoojaSection = () => {
         keyExtractor={(item) => `home-pooja-${item.id}`}
         contentContainerStyle={styles.listContent}
         renderItem={({ item }) => {
-          const displayImage =
-            item.image && typeof item.image === "string" && item.image.trim() !== ""
-              ? item.image.trim()
-              : "https://images.unsplash.com/photo-1609358905581-e5382c23f2f8?w=800&auto=format&fit=crop&q=80";
+          const rawImage = typeof item.image === "string" ? item.image.trim() : "";
+          const isBroken =
+            !rawImage ||
+            rawImage.includes("photo-1609358905581") ||
+            rawImage.includes("photo-1545232979");
+          const displayImage = !isBroken
+            ? rawImage
+            : getPoojaFallbackImage(item.category, item.title);
 
           return (
             <TouchableOpacity
@@ -181,15 +186,15 @@ export default memo(HomePoojaSection);
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 24,
-    marginBottom: 4,
+    marginTop: 8,
+    marginBottom: 0,
   },
   headerRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-end",
     paddingHorizontal: 16,
-    marginBottom: 12,
+    marginBottom: 10,
   },
   titleBadgeRow: {
     flexDirection: "row",
@@ -227,7 +232,7 @@ const styles = StyleSheet.create({
   listContent: {
     paddingHorizontal: 16,
     gap: 12,
-    paddingBottom: 8,
+    paddingBottom: 4,
   },
   card: {
     backgroundColor: COLORS.surface,

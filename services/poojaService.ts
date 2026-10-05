@@ -3,25 +3,33 @@ import { FetchPoojaParams, PoojaBookingPayload, PoojaItem } from "@/types/pooja"
 export type { FetchPoojaParams, PoojaBookingPayload };
 
 export const POOJA_FALLBACK_IMAGES: Record<string, string> = {
-  shiva: "https://images.unsplash.com/photo-1609358905581-e5382c23f2f8?w=800&auto=format&fit=crop&q=80",
-  special: "https://images.unsplash.com/photo-1545232979-fbf68fe9b10d?w=800&auto=format&fit=crop&q=80",
+  shiva: "https://images.unsplash.com/photo-1608958435020-e8a7109ba809?w=800&auto=format&fit=crop&q=80",
+  special: "https://images.unsplash.com/photo-1596176530529-78163a4f7af2?w=800&auto=format&fit=crop&q=80",
   protection: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?w=800&auto=format&fit=crop&q=80",
+  bhairav: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&auto=format&fit=crop&q=80",
   prosperity: "https://images.unsplash.com/photo-1567157577867-05ccb1388e66?w=800&auto=format&fit=crop&q=80",
-  default: "https://images.unsplash.com/photo-1609358905581-e5382c23f2f8?w=800&auto=format&fit=crop&q=80",
+  havan: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&auto=format&fit=crop&q=80",
+  default: "https://images.unsplash.com/photo-1621847468516-1ed5d0df56fe?w=800&auto=format&fit=crop&q=80",
 };
 
-export const getPoojaFallbackImage = (category: string = ""): string => {
-  const c = category.toLowerCase();
-  if (c.includes("shiva") || c.includes("rudra")) {
-    return POOJA_FALLBACK_IMAGES.shiva;
-  }
-  if (c.includes("mangal") || c.includes("special") || c.includes("bhat")) {
+export const getPoojaFallbackImage = (category: string = "", title: string = ""): string => {
+  const c = `${category} ${title}`.toLowerCase();
+  if (c.includes("mangal") || c.includes("bhat")) {
     return POOJA_FALLBACK_IMAGES.special;
   }
-  if (c.includes("protect") || c.includes("bhairav") || c.includes("kaal")) {
+  if (c.includes("rudra") || c.includes("shiva") || c.includes("abhishek")) {
+    return POOJA_FALLBACK_IMAGES.shiva;
+  }
+  if (c.includes("bhairav")) {
+    return POOJA_FALLBACK_IMAGES.bhairav;
+  }
+  if (c.includes("kaal") || c.includes("sarp") || c.includes("rahu") || c.includes("protect")) {
     return POOJA_FALLBACK_IMAGES.protection;
   }
-  if (c.includes("prosperity") || c.includes("devi") || c.includes("lakshmi")) {
+  if (c.includes("havan") || c.includes("yagya") || c.includes("anushthan")) {
+    return POOJA_FALLBACK_IMAGES.havan;
+  }
+  if (c.includes("prosperity") || c.includes("devi") || c.includes("lakshmi") || c.includes("archana")) {
     return POOJA_FALLBACK_IMAGES.prosperity;
   }
   return POOJA_FALLBACK_IMAGES.default;
@@ -392,8 +400,13 @@ export const fetchPoojas = async (params?: FetchPoojaParams): Promise<PoojaItem[
 
   return (Array.isArray(data) ? data : []).map((item: any) => {
     const rawImage = typeof item.image === "string" ? item.image.trim() : "";
+    const isBroken =
+      !rawImage ||
+      rawImage.includes("photo-1609358905581") ||
+      rawImage.includes("photo-1545232979");
     const category = (item.category || "shiva").toLowerCase();
-    const image = rawImage !== "" ? rawImage : getPoojaFallbackImage(category);
+    const title = item.title || "";
+    const image = !isBroken ? rawImage : getPoojaFallbackImage(category, title);
 
     const parsedItem: PoojaItem = {
       id: Number(item.id) || 0,
@@ -432,8 +445,13 @@ export const fetchPoojaById = async (id: number | string): Promise<PoojaItem | n
     if (response.ok) {
       const item = await response.json();
       const rawImage = typeof item.image === "string" ? item.image.trim() : "";
+      const isBroken =
+        !rawImage ||
+        rawImage.includes("photo-1609358905581") ||
+        rawImage.includes("photo-1545232979");
       const category = (item.category || "shiva").toLowerCase();
-      const image = rawImage !== "" ? rawImage : getPoojaFallbackImage(category);
+      const title = item.title || "";
+      const image = !isBroken ? rawImage : getPoojaFallbackImage(category, title);
 
       const parsedItem: PoojaItem = {
         id: Number(item.id) || numId,

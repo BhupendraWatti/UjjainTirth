@@ -12,8 +12,8 @@ import { FONTS } from "@/constants/typography";
 import { RADIUS } from "@/constants/theme";
 
 export default function HeroBanner() {
-  const { height } = useWindowDimensions();
-  const heroHeight = Math.min(350, Math.max(240, height * 0.48));
+  const { width } = useWindowDimensions();
+  const heroHeight = Math.min(230, Math.max(185, Math.round(width * 0.52)));
   const explorePackages = () => router.push("/(tabs)/packages");
 
   return (

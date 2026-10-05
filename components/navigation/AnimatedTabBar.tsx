@@ -171,8 +171,8 @@ export default function AnimatedTabBar({
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
 
-  const isCompact = width < 360;
-  const iconSize = isCompact ? 28 : 35;
+  const isCompact = width < 375;
+  const iconSize = isCompact ? 24 : 27;
 
   const handleTabPress = useCallback(
     (routeKey: string, routeName: string, isFocused: boolean) => {
@@ -209,7 +209,8 @@ export default function AnimatedTabBar({
       style={[
         styles.wrapper,
         {
-          paddingBottom: Math.max(insets.bottom, isCompact ? 6 : 10),
+          paddingBottom: Math.max(insets.bottom, isCompact ? 6 : 8),
+          paddingTop: 4,
         },
       ]}
       pointerEvents="box-none"
@@ -274,10 +275,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-around",
     backgroundColor: "#FFFFFF",
-    borderRadius: 26,
-    height: 64,
+    borderRadius: 24,
+    height: 58,
     width: "92%",
-    maxWidth: 440,
+    maxWidth: 420,
     paddingHorizontal: 8,
     borderWidth: 1,
     borderColor: COLORS.hairline,
@@ -289,15 +290,15 @@ const styles = StyleSheet.create({
         shadowRadius: 12,
       },
       android: {
-        elevation: 8,
+        elevation: 6,
       },
     }),
   },
   containerCompact: {
-    height: 56,
-    width: "96%",
+    height: 52,
+    width: "95%",
     paddingHorizontal: 4,
-    borderRadius: 22,
+    borderRadius: 20,
   },
   tabButton: {
     alignItems: "center",

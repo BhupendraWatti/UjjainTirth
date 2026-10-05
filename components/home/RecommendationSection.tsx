@@ -73,22 +73,23 @@ export default function RecommendationSection() {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
-    marginTop: 20,
+    marginTop: 14,
     paddingBottom: 0,
   },
 
   sectionTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontFamily: FONTS.display.semiBold,
     color: COLORS.sacred,
-    marginBottom: 12,
+    marginBottom: 10,
+    letterSpacing: -0.2,
   },
 
   card: {
     backgroundColor: COLORS.surfaceMuted,
     padding: 16,
     borderRadius: RADIUS.md,
-    marginBottom: 12,
+    marginBottom: 10,
     borderWidth: 1,
     borderColor: COLORS.hairline,
     ...SHADOWS.subtle,

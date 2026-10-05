@@ -7,8 +7,11 @@ import HomePoojaSection from "@/components/home/HomePoojaSection";
 import ScreenContainer from "@/components/layout/ScreenContainer";
 import { AvailabilityScreen } from "@/components/common/AvailabilityLoader";
 import { useServices } from "@/hooks/useServices";
+import { COLORS } from "@/constants/colors";
+import { FONTS } from "@/constants/typography";
 import React from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
+
 export default function HomeScreen() {
   const { data: services, refetch, isLoading, isError } = useServices();
 
@@ -57,7 +60,7 @@ export default function HomeScreen() {
           }
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
-            paddingBottom: 100,
+            paddingBottom: 110,
           }}
         />
       </AvailabilityScreen>
@@ -66,15 +69,15 @@ export default function HomeScreen() {
 }
 const styles = StyleSheet.create({
   section: {
-    marginTop: 20,
+    marginTop: 16,
     paddingHorizontal: 16,
+    marginBottom: 8,
   },
 
   sectionTitle: {
-    fontSize: 20,
-    fontWeight: "700",
-    color: "#3A3A3A",
-    marginBottom: 12,
-    letterSpacing: 0.5,
+    fontSize: 18,
+    fontFamily: FONTS.display.semiBold,
+    color: COLORS.ink,
+    letterSpacing: -0.2,
   },
 });

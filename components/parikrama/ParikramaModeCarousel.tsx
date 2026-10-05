@@ -29,8 +29,12 @@ const ParikramaModeCarousel = ({
   return (
     <View style={styles.container}>
       <View style={styles.sectionHeader}>
-        <Text style={styles.sectionTitle}>Choose Parikrama Mode</Text>
-        <Text style={styles.sectionHint}>Swipe to explore yatras</Text>
+        <Text style={styles.sectionTitle} maxFontSizeMultiplier={1.25}>
+          Choose Parikrama Mode
+        </Text>
+        <Text style={styles.sectionHint} maxFontSizeMultiplier={1.2}>
+          Swipe to explore yatras
+        </Text>
       </View>
 
       <ScrollView
@@ -38,7 +42,7 @@ const ParikramaModeCarousel = ({
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
         decelerationRate="fast"
-        snapToInterval={288} // card width 280 + gap 8
+        snapToInterval={292} // card width 280 + gap 12
       >
         {modes.map((mode) => {
           const isSelected = selectedModeId === mode.id;
@@ -62,7 +66,7 @@ const ParikramaModeCarousel = ({
                   transition={250}
                 />
                 <View style={styles.typeBadge}>
-                  <Text style={styles.typeBadgeText}>
+                  <Text style={styles.typeBadgeText} maxFontSizeMultiplier={1.2}>
                     {mode.mode_type.toUpperCase()}
                   </Text>
                 </View>
@@ -70,24 +74,26 @@ const ParikramaModeCarousel = ({
 
               {/* Details */}
               <View style={styles.cardBody}>
-                <Text style={styles.modeTitle} numberOfLines={1}>
+                <Text style={styles.modeTitle} numberOfLines={1} maxFontSizeMultiplier={1.25}>
                   {mode.title}
                 </Text>
 
                 <View style={styles.metaRow}>
                   <View style={styles.metaBadge}>
                     <Ionicons name="calendar-outline" size={12} color={COLORS.journey} />
-                    <Text style={styles.metaText}>{mode.duration}</Text>
+                    <Text style={styles.metaText} maxFontSizeMultiplier={1.2}>
+                      {mode.duration}
+                    </Text>
                   </View>
                   <View style={styles.metaBadge}>
                     <Ionicons name="trail-sign-outline" size={12} color={COLORS.journey} />
-                    <Text style={styles.metaText} numberOfLines={1}>
+                    <Text style={styles.metaText} numberOfLines={1} maxFontSizeMultiplier={1.2}>
                       {mode.distance}
                     </Text>
                   </View>
                 </View>
 
-                <Text style={styles.modeDescription} numberOfLines={2}>
+                <Text style={styles.modeDescription} numberOfLines={2} maxFontSizeMultiplier={1.2}>
                   {mode.short_description}
                 </Text>
 
@@ -97,6 +103,7 @@ const ParikramaModeCarousel = ({
                       styles.selectText,
                       isSelected ? styles.selectTextActive : styles.selectTextInactive,
                     ]}
+                    maxFontSizeMultiplier={1.2}
                   >
                     {isSelected ? "Selected Yatra ✓" : "View Itinerary & Book"}
                   </Text>

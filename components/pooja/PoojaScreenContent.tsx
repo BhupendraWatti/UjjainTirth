@@ -330,7 +330,7 @@ export default memo(PoojaScreenContent);
 
 const styles = StyleSheet.create({
   listContent: {
-    paddingBottom: 100,
+    paddingBottom: 110,
   },
   searchContainer: {
     paddingHorizontal: 16,

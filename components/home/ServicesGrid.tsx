@@ -3,7 +3,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React from "react";
 import {
-  FlatList,
   Image,
   StyleSheet,
   Text,
@@ -18,8 +17,13 @@ import { RADIUS, SHADOWS } from "@/constants/theme";
 const ServiceGrid = ({ services }: { services: Service[] }) => {
   const router = useRouter();
   const { width } = useWindowDimensions();
-  const cardWidth = (width - 44) / 2;
-  const iconWidth = Math.min(200, cardWidth - 20);
+  const isCompact = width < 375;
+  const sidePadding = 16;
+  const gap = 10;
+  const cardWidth = Math.floor((width - sidePadding * 2 - gap) / 2);
+  const cardHeight = isCompact ? 124 : 134;
+  const iconHeight = isCompact ? 66 : 74;
+  const iconWidth = Math.min(150, cardWidth - 20);
 
   const handleServicePress = (item: Service) => {
     const name = item?.acf?.service_name?.toLowerCase()?.trim();
@@ -60,10 +64,10 @@ const ServiceGrid = ({ services }: { services: Service[] }) => {
     }
   };
 
-  const renderItem = ({ item, index }: { item: Service; index: number }) => {
+  const renderItem = (item: Service, index: number) => {
     const icon = item?.acf?.service_icon;
 
-    // Zig-zag logic preserved
+    // Classic 2-column zig-zag alternating colors
     const row = Math.floor(index / 2);
     const isEvenRow = row % 2 === 0;
     const isLeft = index % 2 === 0;
@@ -71,9 +75,10 @@ const ServiceGrid = ({ services }: { services: Service[] }) => {
 
     return (
       <TouchableOpacity
-        activeOpacity={0.8}
+        key={item.id ? item.id.toString() : `service-${index}`}
+        activeOpacity={0.82}
         onPress={() => handleServicePress(item)}
-        style={{ width: cardWidth }}
+        style={{ width: cardWidth, marginBottom: gap }}
         accessibilityRole="button"
         accessibilityLabel={item?.acf?.service_name || "Service"}
       >
@@ -85,12 +90,12 @@ const ServiceGrid = ({ services }: { services: Service[] }) => {
           }
           start={{ x: 0.8, y: 0 }}
           end={{ x: 0.2, y: 1 }}
-          style={styles.card}
+          style={[styles.card, { minHeight: cardHeight }]}
         >
           {typeof icon === "string" && icon.trim() !== "" ? (
             <Image
               source={{ uri: icon.trim() }}
-              style={[styles.icon, { width: iconWidth }]}
+              style={[styles.icon, { width: iconWidth, height: iconHeight }]}
               resizeMode="contain"
             />
           ) : (
@@ -98,7 +103,7 @@ const ServiceGrid = ({ services }: { services: Service[] }) => {
           )}
 
           <Text
-            style={styles.title}
+            style={[styles.title, isCompact && styles.titleCompact]}
             numberOfLines={2}
             maxFontSizeMultiplier={1.25}
           >
@@ -109,17 +114,16 @@ const ServiceGrid = ({ services }: { services: Service[] }) => {
     );
   };
 
+  if (!services || services.length === 0) {
+    return null;
+  }
+
   return (
-    <FlatList
-      data={services || []}
-      keyExtractor={(item) => item.id.toString()}
-      renderItem={renderItem}
-      numColumns={2}
-      columnWrapperStyle={styles.row}
-      contentContainerStyle={styles.container}
-      showsVerticalScrollIndicator={false}
-      scrollEnabled={false}
-    />
+    <View style={styles.container}>
+      <View style={styles.grid}>
+        {services.map((item, index) => renderItem(item, index))}
+      </View>
+    </View>
   );
 };
 
@@ -127,45 +131,48 @@ export default ServiceGrid;
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 10,
     paddingHorizontal: 16,
   },
 
-  row: {
+  grid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
     justifyContent: "space-between",
-    marginBottom: 12,
   },
 
   card: {
     width: "100%",
-    minHeight: 144,
     borderRadius: RADIUS.md,
-    paddingVertical: 14,
+    paddingVertical: 10,
     paddingHorizontal: 8,
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "center",
     ...SHADOWS.card,
   },
 
   icon: {
-    height: 76,
-    marginBottom: 8,
+    marginBottom: 6,
   },
 
   placeholder: {
-    width: 44,
-    height: 44,
+    width: 38,
+    height: 38,
     backgroundColor: "rgba(255, 255, 255, 0.2)",
-    borderRadius: 22,
-    marginBottom: 8,
+    borderRadius: 19,
+    marginBottom: 6,
   },
 
   title: {
-    fontSize: 14.5,
+    fontSize: 13.5,
     fontFamily: FONTS.display.semiBold,
     textAlign: "center",
     color: "#FFFFFF",
-    lineHeight: 19,
+    lineHeight: 17,
     paddingHorizontal: 2,
+  },
+
+  titleCompact: {
+    fontSize: 12,
+    lineHeight: 15,
   },
 });

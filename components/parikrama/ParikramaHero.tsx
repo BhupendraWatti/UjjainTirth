@@ -9,9 +9,10 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 interface Props {
   onBack?: () => void;
+  showBackButton?: boolean;
 }
 
-const ParikramaHero = ({ onBack }: Props) => {
+const ParikramaHero = ({ onBack, showBackButton = true }: Props) => {
   const handleBack = () => {
     if (onBack) {
       onBack();
@@ -24,18 +25,20 @@ const ParikramaHero = ({ onBack }: Props) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.backButton}
-        activeOpacity={0.7}
-        onPress={handleBack}
-        accessibilityRole="button"
-        accessibilityLabel="Go back"
-      >
-        <Ionicons name="arrow-back" size={20} color={COLORS.ink} />
-      </TouchableOpacity>
+      {showBackButton && (
+        <TouchableOpacity
+          style={styles.backButton}
+          activeOpacity={0.7}
+          onPress={handleBack}
+          accessibilityRole="button"
+          accessibilityLabel="Go back"
+        >
+          <Ionicons name="arrow-back" size={20} color={COLORS.ink} />
+        </TouchableOpacity>
+      )}
 
       <LinearGradient
-        colors={[COLORS.journey, "#158498"]}
+        colors={[COLORS.journey, "#0E7C90"]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.heroBanner}

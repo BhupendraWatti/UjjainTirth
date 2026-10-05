@@ -3,6 +3,7 @@ import { COLORS } from "@/constants/colors";
 import { RADIUS, SHADOWS } from "@/constants/theme";
 import { FONTS } from "@/constants/typography";
 import { PoojaDakshinaTier, PoojaItem } from "@/types/pooja";
+import { getPoojaFallbackImage } from "@/services/poojaService";
 import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { Image } from "expo-image";
@@ -76,10 +77,14 @@ const PoojaBookingModal = ({ visible, item, onClose, selectedTier }: Props) => {
 
   if (!item) return null;
 
-  const displayImage =
-    item.image && typeof item.image === "string" && item.image.trim() !== ""
-      ? item.image.trim()
-      : "https://images.unsplash.com/photo-1609358905581-e5382c23f2f8?w=800&auto=format&fit=crop&q=80";
+  const rawImage = typeof item.image === "string" ? item.image.trim() : "";
+  const isBroken =
+    !rawImage ||
+    rawImage.includes("photo-1609358905581") ||
+    rawImage.includes("photo-1545232979");
+  const displayImage = !isBroken
+    ? rawImage
+    : getPoojaFallbackImage(item.category, item.title);
 
   return (
     <Modal

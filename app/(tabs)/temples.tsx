@@ -153,7 +153,7 @@ export default function TemplesScreen() {
         contentContainerStyle={{
           paddingHorizontal: 16,
           paddingTop: 10,
-          paddingBottom: 100,
+          paddingBottom: 110,
           flexGrow: 1,
         }}
         ListEmptyComponent={

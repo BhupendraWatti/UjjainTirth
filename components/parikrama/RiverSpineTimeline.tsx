@@ -68,8 +68,10 @@ const RiverSpineTimeline = ({ locations, onSelectLocation }: Props) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>Sacred River Spine Path</Text>
-        <Text style={styles.subtitle}>
+        <Text style={styles.title} maxFontSizeMultiplier={1.25}>
+          Sacred River Spine Path
+        </Text>
+        <Text style={styles.subtitle} maxFontSizeMultiplier={1.2}>
           Chronological Parikrama circuit from holy origin to ocean confluence
         </Text>
       </View>
@@ -102,22 +104,31 @@ const RiverSpineTimeline = ({ locations, onSelectLocation }: Props) => {
                 style={styles.cardContainer}
                 activeOpacity={0.85}
                 onPress={() => onSelectLocation(loc)}
+                accessibilityRole="button"
+                accessibilityLabel={`${loc.title}, Stage ${loc.route_order}`}
               >
                 <View style={styles.locationCard}>
                   <View style={styles.cardHeader}>
                     <View style={styles.badgeRow}>
                       <View style={[styles.typeBadge, { backgroundColor: config.bgColor }]}>
-                        <Text style={[styles.typeBadgeText, { color: config.iconColor }]}>
+                        <Text
+                          style={[styles.typeBadgeText, { color: config.iconColor }]}
+                          maxFontSizeMultiplier={1.2}
+                        >
                           {config.label}
                         </Text>
                       </View>
-                      <Text style={styles.stageText}>Stage {loc.route_order}</Text>
+                      <Text style={styles.stageText} maxFontSizeMultiplier={1.2}>
+                        Stage {loc.route_order}
+                      </Text>
                     </View>
 
-                    <Text style={styles.locationTitle} numberOfLines={1}>
+                    <Text style={styles.locationTitle} numberOfLines={1} maxFontSizeMultiplier={1.25}>
                       {loc.title}
                     </Text>
-                    <Text style={styles.regionText}>📍 {loc.region}</Text>
+                    <Text style={styles.regionText} maxFontSizeMultiplier={1.2}>
+                      📍 {loc.region}
+                    </Text>
                   </View>
 
                   {/* Location Photo */}
@@ -130,12 +141,14 @@ const RiverSpineTimeline = ({ locations, onSelectLocation }: Props) => {
 
                   {/* Description */}
                   <View style={styles.cardBody}>
-                    <Text style={styles.locationDesc} numberOfLines={2}>
+                    <Text style={styles.locationDesc} numberOfLines={2} maxFontSizeMultiplier={1.2}>
                       {loc.short_description}
                     </Text>
 
                     <View style={styles.footerRow}>
-                      <Text style={styles.actionPrompt}>Yatra Details & Stays</Text>
+                      <Text style={styles.actionPrompt} maxFontSizeMultiplier={1.2}>
+                        Yatra Details & Stays
+                      </Text>
                       <Ionicons name="chevron-forward" size={13} color={COLORS.journey} />
                     </View>
                   </View>

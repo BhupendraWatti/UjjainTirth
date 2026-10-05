@@ -1,10 +1,12 @@
 import React from "react";
 import {
+  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
@@ -25,10 +27,15 @@ export const PoojaHero: React.FC<PoojaHeroProps> = ({
   onBack,
   onShare,
 }) => {
-  const displayImage =
-    item.image && typeof item.image === "string" && item.image.trim() !== ""
-      ? item.image.trim()
-      : getPoojaFallbackImage(item.category);
+  const insets = useSafeAreaInsets();
+  const rawImage = typeof item.image === "string" ? item.image.trim() : "";
+  const isBroken =
+    !rawImage ||
+    rawImage.includes("photo-1609358905581") ||
+    rawImage.includes("photo-1545232979");
+  const displayImage = !isBroken
+    ? rawImage
+    : getPoojaFallbackImage(item.category, item.title);
 
   return (
     <View style={styles.heroContainer}>
@@ -51,7 +58,14 @@ export const PoojaHero: React.FC<PoojaHeroProps> = ({
       />
 
       {/* Top Navigation Controls */}
-      <View style={styles.topNav}>
+      <View
+        style={[
+          styles.topNav,
+          {
+            top: Math.max(insets.top, Platform.OS === "android" ? 34 : 16) + 6,
+          },
+        ]}
+      >
         <TouchableOpacity
           style={styles.navButton}
           onPress={onBack}
@@ -129,9 +143,10 @@ export const PoojaHero: React.FC<PoojaHeroProps> = ({
 const styles = StyleSheet.create({
   heroContainer: {
     width: "100%",
-    minHeight: 290,
+    height: 300,
     position: "relative",
     backgroundColor: COLORS.surfaceMuted,
+    overflow: "hidden",
   },
   heroImage: {
     width: "100%",
@@ -159,7 +174,7 @@ const styles = StyleSheet.create({
   },
   heroDetails: {
     position: "absolute",
-    bottom: 18,
+    bottom: 24,
     left: 16,
     right: 16,
     zIndex: 5,
