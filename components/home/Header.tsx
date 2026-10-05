@@ -1,12 +1,20 @@
 import { Ionicons } from "@expo/vector-icons";
+import React, { useState } from "react";
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import { COLORS } from "@/constants/colors";
 
+const LOGO_REMOTE_URL = "https://ujjaintirth.com/wp-content/uploads/2023/02/ujjain_tirth_logo.png";
+const LOGO_LOCAL_ASSET = require("../../assets/images/ujjain_tirth_logo.png");
+
 export default function Header() {
+  const [useFallback, setUseFallback] = useState(false);
+
   return (
     <View style={styles.container}>
       <Image
-        source={require("../../assets/images/icon.png")}
+        source={useFallback ? LOGO_LOCAL_ASSET : { uri: LOGO_REMOTE_URL }}
+        defaultSource={LOGO_LOCAL_ASSET}
+        onError={() => setUseFallback(true)}
         style={styles.brandLogo}
         resizeMode="contain"
         accessibilityLabel="Ujjain Tirth"
@@ -29,8 +37,8 @@ const styles = StyleSheet.create({
   },
 
   brandLogo: {
-    width: 52,
-    height: 52,
+    width: 156,
+    height: 38,
   },
 
   searchBtn: {

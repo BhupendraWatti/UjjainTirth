@@ -134,7 +134,7 @@ export default function PackagesScreen() {
           showsVerticalScrollIndicator={false}
           ListHeaderComponent={renderEditorialHeader}
           contentContainerStyle={{
-            paddingBottom: 32,
+            paddingBottom: 100,
             paddingTop: 4,
           }}
           renderItem={({ item, index }) => (

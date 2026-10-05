@@ -27,7 +27,7 @@ export default function HomeScreen() {
   }
 
   return (
-    <ScreenContainer>
+    <ScreenContainer noPadding>
       <AvailabilityScreen
         isLoading={isLoading}
         count={services?.length || 0}
@@ -45,7 +45,9 @@ export default function HomeScreen() {
               <HeroBanner />
 
               <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Our Services</Text>
+                <Text style={styles.sectionTitle} maxFontSizeMultiplier={1.3}>
+                  Our Services
+                </Text>
               </View>
 
               <ServicesGrid services={services || []} />
@@ -55,7 +57,7 @@ export default function HomeScreen() {
           }
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
-            paddingBottom: 12,
+            paddingBottom: 100,
           }}
         />
       </AvailabilityScreen>

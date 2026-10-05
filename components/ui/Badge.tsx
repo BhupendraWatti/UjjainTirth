@@ -11,7 +11,7 @@ interface BadgeProps {
 const Badge = ({ label }: BadgeProps) => {
   return (
     <View style={styles.badge}>
-      <Text style={styles.text}>{label}</Text>
+      <Text style={styles.text} maxFontSizeMultiplier={1.2}>{label}</Text>
     </View>
   );
 };

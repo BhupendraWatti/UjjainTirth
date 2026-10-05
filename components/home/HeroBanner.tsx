@@ -25,9 +25,13 @@ export default function HeroBanner() {
         resizeMode="cover"
       >
         <View style={styles.overlay}>
-          <Text style={styles.title}>Book Darshan &{"\n"}Tour Packages</Text>
+          <Text style={styles.title} maxFontSizeMultiplier={1.3}>
+            Book Darshan &{"\n"}Tour Packages
+          </Text>
 
-          <Text style={styles.subtitle}>Ujjain Trusted Tirth App</Text>
+          <Text style={styles.subtitle} maxFontSizeMultiplier={1.25}>
+            Ujjain Trusted Tirth App
+          </Text>
 
           <TouchableOpacity
             onPress={explorePackages}
@@ -36,7 +40,9 @@ export default function HeroBanner() {
             accessibilityRole="button"
             accessibilityLabel="Explore Packages Now"
           >
-            <Text style={styles.buttonText}>Explore Now</Text>
+            <Text style={styles.buttonText} maxFontSizeMultiplier={1.2}>
+              Explore Now
+            </Text>
           </TouchableOpacity>
         </View>
       </ImageBackground>
@@ -46,8 +52,8 @@ export default function HeroBanner() {
 
 const styles = StyleSheet.create({
   wrapper: {
-    marginTop: 5,
-    paddingHorizontal: 0,
+    marginTop: 8,
+    marginHorizontal: 16,
   },
 
   container: {

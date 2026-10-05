@@ -97,7 +97,11 @@ const ServiceGrid = ({ services }: { services: Service[] }) => {
             <View style={styles.placeholder} />
           )}
 
-          <Text style={styles.title}>
+          <Text
+            style={styles.title}
+            numberOfLines={2}
+            maxFontSizeMultiplier={1.25}
+          >
             {item?.acf?.service_name || "Service"}
           </Text>
         </LinearGradient>
@@ -123,7 +127,8 @@ export default ServiceGrid;
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 12,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
   },
 
   row: {
@@ -133,31 +138,34 @@ const styles = StyleSheet.create({
 
   card: {
     width: "100%",
+    minHeight: 144,
     borderRadius: RADIUS.md,
-    paddingVertical: 10,
+    paddingVertical: 14,
+    paddingHorizontal: 8,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-between",
     ...SHADOWS.card,
   },
 
   icon: {
-    height: 130,
-    marginBottom: 10,
+    height: 76,
+    marginBottom: 8,
   },
 
   placeholder: {
-    width: 50,
-    height: 50,
+    width: 44,
+    height: 44,
     backgroundColor: "rgba(255, 255, 255, 0.2)",
-    borderRadius: 25,
-    marginBottom: 10,
+    borderRadius: 22,
+    marginBottom: 8,
   },
 
   title: {
-    fontSize: 15,
+    fontSize: 14.5,
     fontFamily: FONTS.display.semiBold,
     textAlign: "center",
     color: "#FFFFFF",
-    paddingBottom: 20,
+    lineHeight: 19,
+    paddingHorizontal: 2,
   },
 });

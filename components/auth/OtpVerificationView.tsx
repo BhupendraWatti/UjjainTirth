@@ -23,6 +23,7 @@ import { FONTS } from "@/constants/typography";
 import { JaiMahakalDivider, TempleSkylineArt } from "./SacredArtwork";
 
 const { width: SW } = Dimensions.get("window");
+const LOGO_LOCAL_ASSET = require("../../assets/images/ujjain_tirth_logo.png");
 const CHAKRA_FALLBACK =
   "https://ujjaintirth.com/wp-content/uploads/2026/09/Golden-Om-Mandala-Medallion-1.png";
 
@@ -227,7 +228,7 @@ export default function OtpVerificationView({
           </TouchableOpacity>
           <View style={styles.headerCenter}>
             <Image
-              source={require("../../assets/images/icon.png")}
+              source={LOGO_LOCAL_ASSET}
               style={styles.brandLogo}
               resizeMode="contain"
               accessibilityLabel="Ujjain Tirth"
@@ -372,7 +373,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   headerCenter: { flex: 1, alignItems: "center" },
-  brandLogo: { width: 42, height: 42 },
+  brandLogo: { width: 140, height: 34 },
 
   // Title
   title: {

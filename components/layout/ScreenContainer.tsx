@@ -1,22 +1,30 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
+import { Edge, SafeAreaView } from "react-native-safe-area-context";
 import { COLORS } from "@/constants/colors";
 
-interface ScreenContainerProps {
+export interface ScreenContainerProps {
   children: React.ReactNode;
   noPadding?: boolean;
+  edges?: readonly Edge[];
+  style?: StyleProp<ViewStyle>;
+  containerStyle?: StyleProp<ViewStyle>;
 }
+
 export default function ScreenContainer({
   children,
   noPadding = false,
+  edges = ["top"],
+  style,
+  containerStyle,
 }: ScreenContainerProps) {
   return (
-    <SafeAreaView style={styles.safe}>
+    <SafeAreaView edges={edges} style={[styles.safe, style]}>
       <View
         style={[
           styles.container,
-          noPadding && { paddingHorizontal: 0, paddingTop: 0 },
+          noPadding && styles.noPadding,
+          containerStyle,
         ]}
       >
         {children}
@@ -33,7 +41,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 14,
-    paddingTop: 10,
+    paddingTop: 8,
+  },
+  noPadding: {
+    paddingHorizontal: 0,
+    paddingTop: 0,
   },
 });
 

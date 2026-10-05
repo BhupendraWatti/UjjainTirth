@@ -93,12 +93,16 @@ const PoojaFeaturedCard = ({ item, index = 0, onRequest, style }: Props) => {
           <View style={styles.topRow}>
             <View style={styles.featuredBadge}>
               <Ionicons name="sparkles" size={11} color="#FFE082" />
-              <Text style={styles.featuredText}>VEDIC HIGHLIGHT</Text>
+              <Text style={styles.featuredText} maxFontSizeMultiplier={1.2}>
+                VEDIC HIGHLIGHT
+              </Text>
             </View>
 
             <View style={styles.durationBadge}>
               <Ionicons name="time-outline" size={12} color="#FFFFFF" />
-              <Text style={styles.durationText}>{item.duration}</Text>
+              <Text style={styles.durationText} maxFontSizeMultiplier={1.2}>
+                {item.duration}
+              </Text>
             </View>
           </View>
 
@@ -106,11 +110,11 @@ const PoojaFeaturedCard = ({ item, index = 0, onRequest, style }: Props) => {
           <View style={styles.overlayContent}>
             <View style={styles.templeRow}>
               <Ionicons name="location" size={13} color="#FFE082" />
-              <Text style={styles.templeName} numberOfLines={1}>
+              <Text style={styles.templeName} numberOfLines={1} maxFontSizeMultiplier={1.25}>
                 {item.temple}
               </Text>
             </View>
-            <Text style={styles.title} numberOfLines={2}>
+            <Text style={styles.title} numberOfLines={2} maxFontSizeMultiplier={1.25}>
               {item.title}
             </Text>
           </View>
@@ -118,24 +122,24 @@ const PoojaFeaturedCard = ({ item, index = 0, onRequest, style }: Props) => {
 
         {/* Card Body */}
         <View style={styles.body}>
-          <Text style={styles.purpose} numberOfLines={2}>
+          <Text style={styles.purpose} numberOfLines={3} maxFontSizeMultiplier={1.25}>
             {item.short_purpose}
           </Text>
 
           {/* Pricing & CTA Row */}
           <View style={styles.footer}>
             <View style={styles.priceCol}>
-              <Text style={styles.priceLabel}>Dakshina from</Text>
+              <Text style={styles.priceLabel} maxFontSizeMultiplier={1.2}>Dakshina from</Text>
               <View style={styles.priceRow}>
                 {item.starting_price ? (
                   <>
-                    <Text style={styles.currency}>₹</Text>
-                    <Text style={styles.amount}>
+                    <Text style={styles.currency} maxFontSizeMultiplier={1.2}>₹</Text>
+                    <Text style={styles.amount} maxFontSizeMultiplier={1.25}>
                       {item.starting_price.toLocaleString("en-IN")}
                     </Text>
                   </>
                 ) : (
-                  <Text style={styles.customPrice}>As per Vidhi</Text>
+                  <Text style={styles.customPrice} maxFontSizeMultiplier={1.25}>As per Vidhi</Text>
                 )}
               </View>
             </View>
@@ -147,7 +151,7 @@ const PoojaFeaturedCard = ({ item, index = 0, onRequest, style }: Props) => {
                 end={{ x: 1, y: 0 }}
                 style={styles.ctaGradient}
               >
-                <Text style={styles.ctaText}>Book Pooja</Text>
+                <Text style={styles.ctaText} maxFontSizeMultiplier={1.2}>Book Pooja</Text>
                 <Ionicons name="arrow-forward" size={14} color="#FFFFFF" />
               </LinearGradient>
             </View>

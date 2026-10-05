@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Haptics from "expo-haptics";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "@/constants/colors";
@@ -26,6 +27,8 @@ export const PoojaBottomBar: React.FC<PoojaBottomBarProps> = ({
   onCall,
   onBook,
 }) => {
+  const insets = useSafeAreaInsets();
+
   const handleCallWithHaptic = () => {
     if (Platform.OS !== "web") {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -41,21 +44,42 @@ export const PoojaBottomBar: React.FC<PoojaBottomBarProps> = ({
   };
 
   return (
-    <View style={styles.bottomBar}>
+    <View
+      style={[
+        styles.bottomBar,
+        {
+          paddingBottom: Math.max(insets.bottom, Platform.OS === "ios" ? 24 : 14),
+        },
+      ]}
+    >
       <View style={styles.bottomPriceCol}>
-        <Text style={styles.bottomPriceLabel} numberOfLines={1}>
+        <Text
+          style={styles.bottomPriceLabel}
+          numberOfLines={1}
+          maxFontSizeMultiplier={1.2}
+        >
           {selectedTier ? selectedTier.title : "Dakshina"}
         </Text>
         <View style={styles.bottomPriceRow}>
           {activePrice ? (
             <>
-              <Text style={styles.bottomCurrency}>₹</Text>
-              <Text style={styles.bottomAmount}>
+              <Text style={styles.bottomCurrency} maxFontSizeMultiplier={1.2}>₹</Text>
+              <Text
+                style={styles.bottomAmount}
+                numberOfLines={1}
+                maxFontSizeMultiplier={1.25}
+              >
                 {activePrice.toLocaleString("en-IN")}
               </Text>
             </>
           ) : (
-            <Text style={styles.bottomCustomPrice}>As per Vidhi</Text>
+            <Text
+              style={styles.bottomCustomPrice}
+              numberOfLines={1}
+              maxFontSizeMultiplier={1.25}
+            >
+              As per Vidhi
+            </Text>
           )}
         </View>
       </View>
@@ -78,10 +102,16 @@ export const PoojaBottomBar: React.FC<PoojaBottomBarProps> = ({
           accessibilityRole="button"
           accessibilityLabel="Book Pooja via WhatsApp"
         >
-          <Ionicons name="logo-whatsapp" size={18} color="#FFFFFF" />
-          <Text style={styles.whatsappBtnText}>
+          <Ionicons name="logo-whatsapp" size={17} color="#FFFFFF" />
+          <Text
+            style={styles.whatsappBtnText}
+            numberOfLines={1}
+            maxFontSizeMultiplier={1.2}
+            adjustsFontSizeToFit={true}
+            minimumFontScale={0.85}
+          >
             {activePrice
-              ? `Book Pooja • ₹${activePrice.toLocaleString("en-IN")}`
+              ? `Book • ₹${activePrice.toLocaleString("en-IN")}`
               : "Book Pooja"}
           </Text>
         </TouchableOpacity>
@@ -97,9 +127,8 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     backgroundColor: COLORS.surface,
-    paddingHorizontal: 16,
-    paddingTop: 12,
-    paddingBottom: Platform.OS === "ios" ? 28 : 16,
+    paddingHorizontal: 14,
+    paddingTop: 10,
     borderTopWidth: 1,
     borderTopColor: COLORS.hairline,
     flexDirection: "row",
@@ -110,7 +139,9 @@ const styles = StyleSheet.create({
   },
   bottomPriceCol: {
     justifyContent: "center",
-    maxWidth: "48%",
+    flexShrink: 1,
+    minWidth: 80,
+    marginRight: 8,
   },
   bottomPriceLabel: {
     fontSize: 11,
@@ -141,30 +172,36 @@ const styles = StyleSheet.create({
   bottomActions: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 10,
+    justifyContent: "flex-end",
+    gap: 8,
+    flex: 1,
+    flexShrink: 1,
   },
   callIconBtn: {
-    width: 44,
-    height: 44,
+    width: 42,
+    height: 42,
     borderRadius: RADIUS.sm,
     backgroundColor: COLORS.primaryTint,
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 1,
     borderColor: "rgba(235, 92, 73, 0.3)",
+    flexShrink: 0,
   },
   whatsappBtn: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
     gap: 6,
     backgroundColor: COLORS.whatsapp,
-    paddingHorizontal: 20,
-    paddingVertical: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 11,
     borderRadius: RADIUS.sm,
+    flexShrink: 1,
     ...SHADOWS.subtle,
   },
   whatsappBtnText: {
-    fontSize: 14,
+    fontSize: 13,
     fontFamily: FONTS.body.bold,
     color: "#FFFFFF",
   },

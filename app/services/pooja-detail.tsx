@@ -147,7 +147,7 @@ export default function PoojaDetailScreen() {
   }
 
   return (
-    <ScreenContainer>
+    <ScreenContainer noPadding>
       <View style={styles.screenWrapper}>
         <ScrollView
           showsVerticalScrollIndicator={false}

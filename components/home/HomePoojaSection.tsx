@@ -61,9 +61,11 @@ const HomePoojaSection = () => {
         <View>
           <View style={styles.titleBadgeRow}>
             <Ionicons name="flame" size={16} color={COLORS.gold} />
-            <Text style={styles.sectionTitle}>Sacred Vedic Poojas</Text>
+            <Text style={styles.sectionTitle} maxFontSizeMultiplier={1.3}>
+              Sacred Vedic Poojas
+            </Text>
           </View>
-          <Text style={styles.sectionSub}>
+          <Text style={styles.sectionSub} maxFontSizeMultiplier={1.25}>
             Authentic Anushthan performed by Ujjain Tirtha Purohits
           </Text>
         </View>
@@ -75,7 +77,9 @@ const HomePoojaSection = () => {
           accessibilityRole="button"
           accessibilityLabel="View all poojas"
         >
-          <Text style={styles.viewAllText}>View All</Text>
+          <Text style={styles.viewAllText} maxFontSizeMultiplier={1.2}>
+            View All
+          </Text>
           <Ionicons name="chevron-forward" size={14} color={COLORS.sacred} />
         </TouchableOpacity>
       </View>
@@ -137,22 +141,22 @@ const HomePoojaSection = () => {
 
               {/* Card Body */}
               <View style={styles.cardBody}>
-                <Text style={styles.cardTitle} numberOfLines={2}>
+                <Text style={styles.cardTitle} numberOfLines={2} maxFontSizeMultiplier={1.25}>
                   {item.title}
                 </Text>
 
                 <View style={styles.metaRow}>
                   <View style={styles.metaItem}>
                     <Ionicons name="time-outline" size={12} color={COLORS.inkMuted} />
-                    <Text style={styles.metaText}>{item.duration}</Text>
+                    <Text style={styles.metaText} maxFontSizeMultiplier={1.2}>{item.duration}</Text>
                   </View>
                 </View>
 
                 {/* Footer / Price Row */}
                 <View style={styles.cardFooter}>
                   <View>
-                    <Text style={styles.priceLabel}>Starting Dakshina</Text>
-                    <Text style={styles.priceAmount}>
+                    <Text style={styles.priceLabel} maxFontSizeMultiplier={1.15}>Starting Dakshina</Text>
+                    <Text style={styles.priceAmount} maxFontSizeMultiplier={1.25}>
                       {item.starting_price
                         ? `₹${item.starting_price.toLocaleString("en-IN")}`
                         : "As per Vidhi"}
@@ -160,7 +164,7 @@ const HomePoojaSection = () => {
                   </View>
 
                   <View style={styles.ctaPill}>
-                    <Text style={styles.ctaPillText}>View Vidhi</Text>
+                    <Text style={styles.ctaPillText} maxFontSizeMultiplier={1.15}>View Vidhi</Text>
                     <Ionicons name="arrow-forward" size={11} color="#FFFFFF" />
                   </View>
                 </View>
@@ -286,7 +290,7 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.display.semiBold,
     color: COLORS.ink,
     lineHeight: 18,
-    height: 36,
+    minHeight: 36,
   },
   metaRow: {
     flexDirection: "row",

@@ -51,7 +51,7 @@ export default function NarmadaParikramaScreen() {
   }
 
   return (
-    <ScreenContainer>
+    <ScreenContainer noPadding edges={["top", "bottom"]}>
       <AvailabilityScreen
         isLoading={isLoading}
         count={data?.locations?.length || 5}

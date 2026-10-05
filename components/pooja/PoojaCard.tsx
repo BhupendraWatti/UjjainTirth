@@ -82,7 +82,7 @@ const PoojaCard = ({ item, index = 0, onRequest, style }: Props) => {
           {/* Temple Badge */}
           <View style={styles.templeBadge}>
             <Ionicons name="business" size={11} color={COLORS.sacred} />
-            <Text style={styles.templeText} numberOfLines={1}>
+            <Text style={styles.templeText} numberOfLines={1} maxFontSizeMultiplier={1.2}>
               {item.temple}
             </Text>
           </View>
@@ -90,47 +90,47 @@ const PoojaCard = ({ item, index = 0, onRequest, style }: Props) => {
           {/* Duration Badge */}
           <View style={styles.durationBadge}>
             <Ionicons name="time-outline" size={11} color="#FFFFFF" />
-            <Text style={styles.durationText}>{item.duration}</Text>
+            <Text style={styles.durationText} maxFontSizeMultiplier={1.2}>{item.duration}</Text>
           </View>
         </View>
 
         {/* Card Content */}
         <View style={styles.content}>
           <View style={styles.titleRow}>
-            <Text style={styles.title} numberOfLines={2}>
+            <Text style={styles.title} numberOfLines={2} maxFontSizeMultiplier={1.25}>
               {item.title}
             </Text>
             {item.is_featured ? (
               <View style={styles.featuredBadge}>
-                <Text style={styles.featuredText}>VEDIC</Text>
+                <Text style={styles.featuredText} maxFontSizeMultiplier={1.2}>VEDIC</Text>
               </View>
             ) : null}
           </View>
 
-          <Text style={styles.purpose} numberOfLines={2}>
+          <Text style={styles.purpose} numberOfLines={3} maxFontSizeMultiplier={1.25}>
             {item.short_purpose}
           </Text>
 
           {/* Pricing & CTA Footer */}
           <View style={styles.footer}>
             <View style={styles.priceContainer}>
-              <Text style={styles.priceLabel}>Dakshina from</Text>
+              <Text style={styles.priceLabel} maxFontSizeMultiplier={1.2}>Dakshina from</Text>
               <View style={styles.priceRow}>
                 {item.starting_price ? (
                   <>
-                    <Text style={styles.currencySymbol}>₹</Text>
-                    <Text style={styles.priceAmount}>
+                    <Text style={styles.currencySymbol} maxFontSizeMultiplier={1.2}>₹</Text>
+                    <Text style={styles.priceAmount} maxFontSizeMultiplier={1.25}>
                       {item.starting_price.toLocaleString("en-IN")}
                     </Text>
                   </>
                 ) : (
-                  <Text style={styles.customPrice}>As per Vidhi</Text>
+                  <Text style={styles.customPrice} maxFontSizeMultiplier={1.25}>As per Vidhi</Text>
                 )}
               </View>
             </View>
 
             <View style={styles.ctaButton}>
-              <Text style={styles.ctaText}>Book Pooja</Text>
+              <Text style={styles.ctaText} maxFontSizeMultiplier={1.2}>Book Pooja</Text>
               <Ionicons name="arrow-forward" size={13} color="#FFFFFF" />
             </View>
           </View>

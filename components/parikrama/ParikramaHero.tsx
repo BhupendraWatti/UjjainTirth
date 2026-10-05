@@ -45,9 +45,9 @@ const ParikramaHero = ({ onBack }: Props) => {
         </View>
 
         <View style={styles.bannerTextContainer}>
-          <Text style={styles.sacredChant}>नर्मदे हर • NARMADE HAR</Text>
-          <Text style={styles.bannerTitle}>Narmada Parikrama</Text>
-          <Text style={styles.bannerSubtitle}>
+          <Text style={styles.sacredChant} maxFontSizeMultiplier={1.2}>नर्मदे हर • NARMADE HAR</Text>
+          <Text style={styles.bannerTitle} maxFontSizeMultiplier={1.25}>Narmada Parikrama</Text>
+          <Text style={styles.bannerSubtitle} maxFontSizeMultiplier={1.2}>
             Circumambulation of the holy river of salvation & sacred ghats
           </Text>
         </View>

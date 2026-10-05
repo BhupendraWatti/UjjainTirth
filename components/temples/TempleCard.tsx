@@ -92,11 +92,11 @@ const TempleCard = ({ temple, distance, locationStatus, style }: TempleCardProps
           />
 
           <View style={styles.content}>
-            <Text style={styles.title} numberOfLines={1}>
+            <Text style={styles.title} numberOfLines={2} maxFontSizeMultiplier={1.25}>
               {title}
             </Text>
 
-            <Text style={styles.description} numberOfLines={2}>
+            <Text style={styles.description} numberOfLines={3} maxFontSizeMultiplier={1.25}>
               {description}
             </Text>
 
@@ -106,7 +106,7 @@ const TempleCard = ({ temple, distance, locationStatus, style }: TempleCardProps
                 {renderDistanceBadge()}
               </View>
 
-              <Text style={styles.viewDetails}>View Details</Text>
+              <Text style={styles.viewDetails} maxFontSizeMultiplier={1.2}>View Details</Text>
             </View>
           </View>
         </View>

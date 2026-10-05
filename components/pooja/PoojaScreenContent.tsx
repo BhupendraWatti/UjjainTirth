@@ -197,7 +197,7 @@ const PoojaScreenContent = ({ showBackButton = true }: Props) => {
   }
 
   return (
-    <ScreenContainer>
+    <ScreenContainer noPadding>
       <AvailabilityScreen
         isLoading={isLoading}
         count={poojas?.length || 0}
@@ -261,11 +261,11 @@ const PoojaScreenContent = ({ showBackButton = true }: Props) => {
                 <View style={styles.featuredSection}>
                   <View style={styles.sectionHeader}>
                     <Ionicons name="flame" size={16} color={COLORS.gold} />
-                    <Text style={styles.sectionTitle}>
+                    <Text style={styles.sectionTitle} maxFontSizeMultiplier={1.3}>
                       Featured Vedic Rituals
                     </Text>
                     <View style={styles.sectionBadge}>
-                      <Text style={styles.sectionBadgeText}>
+                      <Text style={styles.sectionBadgeText} maxFontSizeMultiplier={1.2}>
                         {featuredPoojas.length}
                       </Text>
                     </View>
@@ -286,7 +286,7 @@ const PoojaScreenContent = ({ showBackButton = true }: Props) => {
 
               {/* Section Header for the List */}
               <View style={styles.countRow}>
-                <Text style={styles.countText}>
+                <Text style={styles.countText} maxFontSizeMultiplier={1.2}>
                   {isDefaultView && featuredPoojas.length > 0
                     ? `Other Vedic Poojas (${listItems.length})`
                     : `Available Poojas (${filteredPoojas.length})`}
@@ -330,7 +330,7 @@ export default memo(PoojaScreenContent);
 
 const styles = StyleSheet.create({
   listContent: {
-    paddingBottom: 36,
+    paddingBottom: 100,
   },
   searchContainer: {
     paddingHorizontal: 16,

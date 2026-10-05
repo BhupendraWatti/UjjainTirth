@@ -93,7 +93,7 @@ export default function TemplesScreen() {
   }
 
   return (
-    <ScreenContainer>
+    <ScreenContainer noPadding>
       <AvailabilityScreen
         isLoading={isLoading}
         count={temples.length}
@@ -118,7 +118,7 @@ export default function TemplesScreen() {
         )}
         ListHeaderComponent={
           <>
-            <Text style={styles.header}>Temples in Ujjain</Text>
+            <Text style={styles.header} maxFontSizeMultiplier={1.3}>Temples in Ujjain</Text>
 
             <TempleSearch onSearch={setSearch} />
 
@@ -131,10 +131,10 @@ export default function TemplesScreen() {
             {selectedTag && (
               <View style={styles.filterBox}>
                 <View>
-                  <Text style={styles.filterInfo}>
+                  <Text style={styles.filterInfo} maxFontSizeMultiplier={1.2}>
                     Showing results for selected category
                   </Text>
-                  <Text style={styles.resultCount}>
+                  <Text style={styles.resultCount} maxFontSizeMultiplier={1.2}>
                     {filteredData.length} places found
                   </Text>
                 </View>
@@ -142,6 +142,7 @@ export default function TemplesScreen() {
                 <Text
                   style={styles.clearFilter}
                   onPress={() => setSelectedTag(null)}
+                  maxFontSizeMultiplier={1.2}
                 >
                   Clear ✕
                 </Text>
@@ -150,7 +151,9 @@ export default function TemplesScreen() {
           </>
         }
         contentContainerStyle={{
-          paddingBottom: 16,
+          paddingHorizontal: 16,
+          paddingTop: 10,
+          paddingBottom: 100,
           flexGrow: 1,
         }}
         ListEmptyComponent={

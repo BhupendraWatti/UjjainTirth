@@ -17,8 +17,8 @@ export const PoojaQuickMeta: React.FC<PoojaQuickMetaProps> = ({ item }) => {
   return (
     <View style={styles.metaStrip}>
       <View style={styles.metaItem}>
-        <Text style={styles.metaLabel}>DURATION</Text>
-        <Text style={styles.metaValue} numberOfLines={1}>
+        <Text style={styles.metaLabel} maxFontSizeMultiplier={1.2}>DURATION</Text>
+        <Text style={styles.metaValue} numberOfLines={2} maxFontSizeMultiplier={1.2}>
           {item.duration || "45–60 min"}
         </Text>
       </View>
@@ -26,8 +26,8 @@ export const PoojaQuickMeta: React.FC<PoojaQuickMetaProps> = ({ item }) => {
       <View style={styles.metaDivider} />
 
       <View style={styles.metaItemCenter}>
-        <Text style={styles.metaLabel}>MUHURAT</Text>
-        <Text style={styles.metaValue} numberOfLines={1}>
+        <Text style={styles.metaLabel} maxFontSizeMultiplier={1.2}>MUHURAT</Text>
+        <Text style={styles.metaValue} numberOfLines={2} maxFontSizeMultiplier={1.2}>
           {muhuratDisplay}
         </Text>
       </View>
@@ -35,8 +35,8 @@ export const PoojaQuickMeta: React.FC<PoojaQuickMetaProps> = ({ item }) => {
       <View style={styles.metaDivider} />
 
       <View style={styles.metaItem}>
-        <Text style={styles.metaLabel}>DHAM</Text>
-        <Text style={styles.metaValue} numberOfLines={1}>
+        <Text style={styles.metaLabel} maxFontSizeMultiplier={1.2}>DHAM</Text>
+        <Text style={styles.metaValue} numberOfLines={2} maxFontSizeMultiplier={1.2}>
           Ujjain Dham
         </Text>
       </View>
@@ -72,7 +72,8 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   metaValue: {
-    fontSize: 12,
+    fontSize: 11.5,
+    lineHeight: 15,
     fontFamily: FONTS.body.bold,
     color: COLORS.ink,
   },

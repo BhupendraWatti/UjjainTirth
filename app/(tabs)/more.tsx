@@ -61,7 +61,7 @@ export default function MoreScreen() {
   const shareMessage = shareData ? buildShareMessage(shareData) : "";
 
   return (
-    <ScreenContainer>
+    <ScreenContainer noPadding>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
@@ -90,7 +90,9 @@ export default function MoreScreen() {
 
 const styles = StyleSheet.create({
   scrollContent: {
-    paddingBottom: 16,
+    paddingHorizontal: 16,
+    paddingTop: 10,
+    paddingBottom: 100,
   },
   sectionSpacing: {
     marginTop: 16,

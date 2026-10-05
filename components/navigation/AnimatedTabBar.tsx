@@ -150,6 +150,7 @@ const TabItem = memo(
                 exiting={LABEL_EXIT_ANIMATION}
                 style={[styles.label, isCompact && styles.labelCompact]}
                 numberOfLines={1}
+                maxFontSizeMultiplier={1.2}
               >
                 {label}
               </Animated.Text>
@@ -263,6 +264,10 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
     alignItems: "center",
     justifyContent: "center",
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
   },
   container: {
     flexDirection: "row",

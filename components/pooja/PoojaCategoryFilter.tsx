@@ -80,6 +80,7 @@ const PoojaCategoryFilter = ({
                   styles.pillText,
                   isSelected ? styles.pillTextActive : styles.pillTextInactive,
                 ]}
+                maxFontSizeMultiplier={1.2}
               >
                 {cat.label}
               </Text>
@@ -100,6 +101,7 @@ const PoojaCategoryFilter = ({
                         ? styles.countBadgeTextActive
                         : styles.countBadgeTextInactive,
                     ]}
+                    maxFontSizeMultiplier={1.2}
                   >
                     {count}
                   </Text>

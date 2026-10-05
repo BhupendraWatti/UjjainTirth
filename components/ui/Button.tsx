@@ -18,7 +18,7 @@ const Button = ({ label, onPress }: ButtonProps) => {
       accessibilityRole="button"
       accessibilityLabel={label}
     >
-      <Text style={styles.text}>{label}</Text>
+      <Text style={styles.text} maxFontSizeMultiplier={1.2}>{label}</Text>
     </TouchableOpacity>
   );
 };

@@ -60,7 +60,7 @@ export default function TransportScreen() {
   }
 
   return (
-    <ScreenContainer>
+    <ScreenContainer noPadding edges={["top", "bottom"]}>
       <AvailabilityScreen
         isLoading={isLoading}
         count={transportItems?.length || 3}
@@ -83,7 +83,7 @@ export default function TransportScreen() {
                 onSelectCategory={handleSelectCategory}
               />
               <View style={styles.countRow}>
-                <Text style={styles.countText}>
+                <Text style={styles.countText} maxFontSizeMultiplier={1.2}>
                   Available Options ({filteredItems.length})
                 </Text>
               </View>

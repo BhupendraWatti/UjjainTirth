@@ -78,32 +78,48 @@ export const PoojaHero: React.FC<PoojaHeroProps> = ({
         <View style={styles.badgeRow}>
           <View style={styles.templePill}>
             <Ionicons name="location-sharp" size={11} color="#FFE082" />
-            <Text style={styles.templePillText}>{item.temple}</Text>
+            <Text style={styles.templePillText} maxFontSizeMultiplier={1.2}>
+              {item.temple}
+            </Text>
           </View>
 
           {item.badge_tag ? (
             <View style={styles.badgeTagPill}>
-              <Text style={styles.badgeTagPillText}>{item.badge_tag}</Text>
+              <Text style={styles.badgeTagPillText} maxFontSizeMultiplier={1.2}>
+                {item.badge_tag}
+              </Text>
             </View>
           ) : item.is_featured ? (
             <View style={styles.featuredPill}>
-              <Text style={styles.featuredPillText}>VEDIC PARAMPARA</Text>
+              <Text style={styles.featuredPillText} maxFontSizeMultiplier={1.2}>
+                VEDIC PARAMPARA
+              </Text>
             </View>
           ) : null}
         </View>
 
-        <Text style={styles.heroTitle}>{item.title}</Text>
+        <Text
+          style={styles.heroTitle}
+          numberOfLines={3}
+          maxFontSizeMultiplier={1.25}
+        >
+          {item.title}
+        </Text>
 
         {/* Social Proof Trust Signal - Proximity to Title (PDP Masterclass Mistake 9) */}
         <View style={styles.ratingRow}>
           <View style={styles.ratingStarBadge}>
             <Ionicons name="star" size={11} color="#FFD700" />
-            <Text style={styles.ratingNumber}>4.9</Text>
+            <Text style={styles.ratingNumber} maxFontSizeMultiplier={1.2}>4.9</Text>
           </View>
-          <Text style={styles.devoteeCountText}>350+ Devotees Sanctified</Text>
+          <Text style={styles.devoteeCountText} maxFontSizeMultiplier={1.2}>
+            350+ Devotees Sanctified
+          </Text>
           <View style={styles.verifiedDivider} />
           <Ionicons name="shield-checkmark" size={11} color="#A7F3D0" />
-          <Text style={styles.guaranteeText}>Authentic Vidhi</Text>
+          <Text style={styles.guaranteeText} maxFontSizeMultiplier={1.2}>
+            Authentic Vidhi
+          </Text>
         </View>
       </View>
     </View>
@@ -113,7 +129,7 @@ export const PoojaHero: React.FC<PoojaHeroProps> = ({
 const styles = StyleSheet.create({
   heroContainer: {
     width: "100%",
-    height: 300,
+    minHeight: 290,
     position: "relative",
     backgroundColor: COLORS.surfaceMuted,
   },
@@ -200,11 +216,11 @@ const styles = StyleSheet.create({
     letterSpacing: 0.8,
   },
   heroTitle: {
-    fontSize: 23,
+    fontSize: 21,
     fontFamily: FONTS.display.semiBold,
     color: "#FFFFFF",
-    lineHeight: 29,
-    letterSpacing: -0.3,
+    lineHeight: 28,
+    letterSpacing: -0.2,
     marginBottom: 6,
     textShadowColor: "rgba(0, 0, 0, 0.5)",
     textShadowOffset: { width: 0, height: 1 },

@@ -334,20 +334,20 @@ export default function JyotirlingasScreen() {
         onPress={() => setSelectedTour(item)}
       >
         <Image
-          source={imageUri ? { uri: imageUri } : require("../../assets/images/ujjain_tirth_logo.png")}
+          source={imageUri ? { uri: imageUri } : require("../../assets/images/Mahakaleshwar-1.jpeg")}
           style={styles.cardImage}
           resizeMode="cover"
         />
         <View style={styles.cardDetails}>
           <View>
-            <Text style={styles.cardTitle}>{item.title}</Text>
-            <Text style={styles.cardDescription} numberOfLines={2}>
+            <Text style={styles.cardTitle} maxFontSizeMultiplier={1.25}>{item.title}</Text>
+            <Text style={styles.cardDescription} numberOfLines={3} maxFontSizeMultiplier={1.25}>
               {item.acf?.jyotirling_description}
             </Text>
           </View>
           {tagName ? (
             <View style={styles.tagBadge}>
-              <Text style={styles.tagText}>{tagName}</Text>
+              <Text style={styles.tagText} maxFontSizeMultiplier={1.2}>{tagName}</Text>
             </View>
           ) : null}
         </View>
@@ -362,7 +362,7 @@ export default function JyotirlingasScreen() {
   }, [tours]);
 
   return (
-    <ScreenContainer>
+    <ScreenContainer noPadding>
       <AvailabilityScreen
         isLoading={loading}
         count={tours.length || 12}
@@ -381,7 +381,7 @@ export default function JyotirlingasScreen() {
             >
               <Ionicons name="arrow-back" size={20} color="#8B1E1E" />
             </TouchableOpacity>
-            <Text style={styles.headerTitle}>12 Jyotirlingas</Text>
+            <Text style={styles.headerTitle} maxFontSizeMultiplier={1.3}>12 Jyotirlingas</Text>
             <View style={styles.headerSpacer} />
           </View>
 
@@ -506,6 +506,7 @@ export default function JyotirlingasScreen() {
 const styles = StyleSheet.create({
   mainArea: {
     flex: 1,
+    paddingHorizontal: 16,
   },
   header: {
     flexDirection: "row",

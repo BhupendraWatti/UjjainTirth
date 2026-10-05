@@ -111,6 +111,9 @@ export const PoojaTabBar: React.FC<PoojaTabBarProps> = ({
                   isActive && styles.tabLabelActive,
                 ]}
                 numberOfLines={1}
+                maxFontSizeMultiplier={1.15}
+                adjustsFontSizeToFit={true}
+                minimumFontScale={0.8}
               >
                 {tab.label}
               </Text>
@@ -120,6 +123,7 @@ export const PoojaTabBar: React.FC<PoojaTabBarProps> = ({
                   isActive && styles.tabSubLabelActive,
                 ]}
                 numberOfLines={1}
+                maxFontSizeMultiplier={1.15}
               >
                 {tab.subLabel}
               </Text>
@@ -163,10 +167,11 @@ const styles = StyleSheet.create({
     zIndex: 2,
   },
   tabLabel: {
-    fontSize: 13,
+    fontSize: 12.5,
     fontFamily: FONTS.body.bold,
     color: COLORS.inkBody,
     letterSpacing: -0.2,
+    textAlign: "center",
   },
   tabLabelActive: {
     color: "#FFFFFF",

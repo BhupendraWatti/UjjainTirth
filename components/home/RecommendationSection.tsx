@@ -15,13 +15,17 @@ export default function RecommendationSection() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.sectionTitle}>Recommendation</Text>
+      <Text style={styles.sectionTitle} maxFontSizeMultiplier={1.3}>
+        Recommendation
+      </Text>
 
       {/* Card 1 */}
       <View style={styles.card}>
-        <Text style={styles.title}>Customize Your Trip</Text>
+        <Text style={styles.title} maxFontSizeMultiplier={1.25}>
+          Customize Your Trip
+        </Text>
 
-        <Text style={styles.desc}>
+        <Text style={styles.desc} maxFontSizeMultiplier={1.25}>
           Plan your complete Ujjain trip with stay, darshan, and transport in
           one place.
         </Text>
@@ -33,15 +37,19 @@ export default function RecommendationSection() {
           accessibilityRole="button"
           accessibilityLabel="Plan My Trip"
         >
-          <Text style={styles.buttonText}>Plan My Trip</Text>
+          <Text style={styles.buttonText} maxFontSizeMultiplier={1.2}>
+            Plan My Trip
+          </Text>
         </TouchableOpacity>
       </View>
 
       {/* Card 2 */}
       <View style={styles.card}>
-        <Text style={styles.title}>Arrange Your Puja</Text>
+        <Text style={styles.title} maxFontSizeMultiplier={1.25}>
+          Arrange Your Puja
+        </Text>
 
-        <Text style={styles.desc}>
+        <Text style={styles.desc} maxFontSizeMultiplier={1.25}>
           Get assistance for puja in Ujjain with verified pandits and smooth
           coordination.
         </Text>
@@ -53,7 +61,9 @@ export default function RecommendationSection() {
           accessibilityRole="button"
           accessibilityLabel="Book Puja Instantly"
         >
-          <Text style={styles.buttonText}>Book Puja Instantly</Text>
+          <Text style={styles.buttonText} maxFontSizeMultiplier={1.2}>
+            Book Puja Instantly
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -62,7 +72,7 @@ export default function RecommendationSection() {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 0,
+    paddingHorizontal: 16,
     marginTop: 20,
     paddingBottom: 0,
   },
