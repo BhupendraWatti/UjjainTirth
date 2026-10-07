@@ -6,6 +6,7 @@ export const API_BASE_URL = "https://ujjaintirth.com/wp-json/wp/v2";
 
 export const API_CUSTOM_URL = "https://ujjaintirth.com/wp-json/custom/v1";
 export const API_GRANTH_URL = "https://ujjaintirth.com/wp-json/granth/v1";
+export const API_UJJAIN_URL = "https://ujjaintirth.com/wp-json/ujjain/v1";
 
 /**
  * API endpoints used across the app
@@ -30,6 +31,9 @@ export const API_ENDPOINTS = {
   OTP_SETTINGS: "/auth/settings",
   // Custom Dynamic OTP Screens
   OTP_SCREENS: "/otp-screens",
+  // Dynamic CF7 Forms
+  FORMS_PACKAGE: "/forms/package",
+  FORMS_PACKAGE_SUBMIT: "/forms/package/submit",
 };
 
 /**

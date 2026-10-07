@@ -2,6 +2,7 @@ import { AvailabilityScreen } from "@/components/common/AvailabilityLoader";
 import EmptyState from "@/components/common/EmptyState";
 import ErrorState from "@/components/common/ErrorState";
 import ScreenContainer from "@/components/layout/ScreenContainer";
+import DynamicPackageForm from "@/components/packages/DynamicPackageForm";
 import PackageCard from "@/components/packages/PackageCards";
 import PackageDetailModal from "@/components/packages/PackageDetailModal";
 import TabSwitcher from "@/components/packages/TabSwitcher";
@@ -179,24 +180,9 @@ export default function PackagesScreen() {
       {/* TAB CONTENT                                                  */}
       {/* ============================================================ */}
       {activeTab === "custom" ? (
-        // === "My Package / My Cost" Tab (Form tab) ===
+        // === "My Package & My Cost" Tab (Dynamic CF7 Form) ===
         <View style={{ flex: 1 }}>
-          <View style={styles.customFormContainer}>
-            <View style={styles.customFormIconWrapper}>
-              <Svg width={40} height={40} viewBox="0 0 40 40" fill="none">
-                <Circle cx={20} cy={20} r={18} stroke="#C99A55" strokeWidth={1} strokeDasharray="3 3" />
-                <Path d="M 20 8 L 22 17 L 31 20 L 22 23 L 20 32 L 18 23 L 9 20 L 18 17 Z" fill="#C99A55" />
-              </Svg>
-            </View>
-            <Text style={styles.customFormTitle}>Build Your Own Package</Text>
-            <Text style={styles.customFormSubtitle}>
-              Create a personalized spiritual journey tailored to your preferences, ghats, and budget.
-            </Text>
-            <View style={styles.customFormDivider} />
-            <Text style={styles.customFormNote}>
-              Custom package builder coming soon!
-            </Text>
-          </View>
+          <DynamicPackageForm showHeader={true} />
         </View>
       ) : (
         // === "Latest Packages" Tab (Sacred Journey Package Cards) ===
