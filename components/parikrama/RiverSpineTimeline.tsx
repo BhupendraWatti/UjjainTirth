@@ -3,9 +3,17 @@ import { RADIUS, SHADOWS } from "@/constants/theme";
 import { FONTS } from "@/constants/typography";
 import { NarmadaLocationItem } from "@/types/parikrama";
 import { Ionicons } from "@expo/vector-icons";
+import * as Haptics from "expo-haptics";
 import { Image } from "expo-image";
-import React, { memo } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import React, { memo, useCallback } from "react";
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { XStack, YStack } from "tamagui";
 
 interface Props {
   locations: NarmadaLocationItem[];
@@ -18,99 +26,159 @@ interface NodeStyleConfig {
   borderColor: string;
   iconColor: string;
   label: string;
+  sublabel: string;
 }
 
-const getNodeConfig = (locationType: string): NodeStyleConfig => {
+const getNodeConfig = (locationType: string, title: string): NodeStyleConfig => {
   const type = (locationType || "").toLowerCase();
+  const t = (title || "").toLowerCase();
 
-  if (type.includes("origin")) {
+  if (type.includes("origin") || t.includes("amarkantak")) {
     return {
       iconName: "sparkles",
-      bgColor: COLORS.bgStone,
+      bgColor: "#FEF7E6",
       borderColor: COLORS.gold,
       iconColor: COLORS.gold,
       label: "SACRED ORIGIN",
+      sublabel: "Maa Narmada Udgam",
     };
   }
 
-  if (type.includes("ghat")) {
+  if (type.includes("ghat") || t.includes("maheshwar")) {
     return {
       iconName: "water",
       bgColor: COLORS.journeyTint,
       borderColor: COLORS.journey,
       iconColor: COLORS.journey,
-      label: "SACRED GHAT",
+      label: "SACRED GHATS",
+      sublabel: "Holkar Royal Snan",
     };
   }
 
-  if (type.includes("important") || type.includes("destination")) {
+  if (type.includes("important") || type.includes("destination") || t.includes("omkareshwar") || t.includes("bharuch")) {
     return {
       iconName: "business",
       bgColor: COLORS.sacredTint,
       borderColor: COLORS.sacred,
       iconColor: COLORS.sacred,
-      label: "JYOTIRLINGA / SANGAM",
+      label: "JYOTIRLINGA & SANGAM",
+      sublabel: "Divine Pilgrimage",
     };
   }
 
   return {
-    iconName: "location",
+    iconName: "compass-outline",
     bgColor: COLORS.bgStone,
-    borderColor: COLORS.inkMuted,
+    borderColor: COLORS.inkBody,
     iconColor: COLORS.inkBody,
-    label: "NABHI STHAN / STOP",
+    label: "NABHI STHAN & STOP",
+    sublabel: "Sacred Center",
   };
 };
 
 const RiverSpineTimeline = ({ locations, onSelectLocation }: Props) => {
+  const handleLocationPress = useCallback(
+    (loc: NarmadaLocationItem) => {
+      try {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      } catch {}
+      onSelectLocation(loc);
+    },
+    [onSelectLocation]
+  );
+
   if (!locations || locations.length === 0) return null;
 
   return (
     <View style={styles.container}>
+      {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.title} maxFontSizeMultiplier={1.25}>
-          Sacred River Spine Path
-        </Text>
-        <Text style={styles.subtitle} maxFontSizeMultiplier={1.2}>
-          Chronological Parikrama circuit from holy origin to ocean confluence
+        <View style={styles.headerTitleRow}>
+          <Text style={styles.title} maxFontSizeMultiplier={1.3}>
+            Sacred River Spine Circuit
+          </Text>
+          <View style={styles.totalStopsBadge}>
+            <Text style={styles.totalStopsText} maxFontSizeMultiplier={1.2}>
+              {locations.length} Sacred Stops
+            </Text>
+          </View>
+        </View>
+        <Text style={styles.subtitle} maxFontSizeMultiplier={1.25}>
+          Chronological pilgrimage route along holy banks from origin to ocean
         </Text>
       </View>
 
+      {/* Vertical Spine River Flow */}
       <View style={styles.timelineWrapper}>
         {locations.map((loc, index) => {
           const isLast = index === locations.length - 1;
-          const config = getNodeConfig(loc.location_type);
+          const config = getNodeConfig(loc.location_type, loc.title);
 
           return (
             <View key={loc.id} style={styles.timelineRow}>
-              {/* Left Column: Spine Indicator & Connector Line */}
+              {/* Left Column: Flowing River Spine & Glowing Node */}
               <View style={styles.spineColumn}>
-                {/* Custom glowing node pin */}
+                {/* Consecrated Glow Node Pin */}
                 <View
                   style={[
                     styles.pinOuter,
-                    { borderColor: config.borderColor, backgroundColor: config.bgColor },
+                    {
+                      borderColor: config.borderColor,
+                      backgroundColor: config.bgColor,
+                    },
                   ]}
                 >
-                  <Ionicons name={config.iconName} size={15} color={config.iconColor} />
+                  <Ionicons
+                    name={config.iconName}
+                    size={16}
+                    color={config.iconColor}
+                  />
                 </View>
 
-                {/* Connecting River Line */}
-                {!isLast ? <View style={styles.riverLine} /> : null}
+                {/* Connecting River Stream */}
+                {!isLast && (
+                  <View style={styles.riverStreamWrapper}>
+                    <LinearGradient
+                      colors={[
+                        config.borderColor,
+                        COLORS.journey,
+                        "rgba(11, 110, 127, 0.4)",
+                      ]}
+                      style={styles.riverLineGradient}
+                    />
+                  </View>
+                )}
               </View>
 
-              {/* Right Column: Interactive Location Card */}
+              {/* Right Column: Interactive Consecrated Location Card */}
               <TouchableOpacity
                 style={styles.cardContainer}
-                activeOpacity={0.85}
-                onPress={() => onSelectLocation(loc)}
+                activeOpacity={0.86}
+                onPress={() => handleLocationPress(loc)}
                 accessibilityRole="button"
-                accessibilityLabel={`${loc.title}, Stage ${loc.route_order}`}
+                accessibilityLabel={`${loc.title}, Stage ${loc.route_order}, ${config.label}`}
               >
                 <View style={styles.locationCard}>
+                  {/* Top Bar with Stage & Consecration Tag */}
                   <View style={styles.cardHeader}>
-                    <View style={styles.badgeRow}>
-                      <View style={[styles.typeBadge, { backgroundColor: config.bgColor }]}>
+                    <XStack
+                      justifyContent="space-between"
+                      alignItems="center"
+                      flexWrap="wrap"
+                      gap="$1.5"
+                      marginBottom="$1.5"
+                    >
+                      <View
+                        style={[
+                          styles.typeBadge,
+                          { backgroundColor: config.bgColor, borderColor: config.borderColor },
+                        ]}
+                      >
+                        <Ionicons
+                          name={config.iconName}
+                          size={10}
+                          color={config.iconColor}
+                        />
                         <Text
                           style={[styles.typeBadgeText, { color: config.iconColor }]}
                           maxFontSizeMultiplier={1.2}
@@ -118,40 +186,73 @@ const RiverSpineTimeline = ({ locations, onSelectLocation }: Props) => {
                           {config.label}
                         </Text>
                       </View>
-                      <Text style={styles.stageText} maxFontSizeMultiplier={1.2}>
-                        Stage {loc.route_order}
-                      </Text>
-                    </View>
 
-                    <Text style={styles.locationTitle} numberOfLines={1} maxFontSizeMultiplier={1.25}>
+                      <View style={styles.stageChip}>
+                        <Text style={styles.stageText} maxFontSizeMultiplier={1.2}>
+                          Stage {loc.route_order}
+                        </Text>
+                      </View>
+                    </XStack>
+
+                    <Text
+                      style={styles.locationTitle}
+                      numberOfLines={2}
+                      maxFontSizeMultiplier={1.3}
+                    >
                       {loc.title}
                     </Text>
-                    <Text style={styles.regionText} maxFontSizeMultiplier={1.2}>
-                      📍 {loc.region}
-                    </Text>
+
+                    <XStack alignItems="center" gap="$1" marginTop="$0.5">
+                      <Ionicons name="location-sharp" size={12} color={COLORS.inkMuted} />
+                      <Text style={styles.regionText} maxFontSizeMultiplier={1.2}>
+                        {loc.region}
+                      </Text>
+                    </XStack>
                   </View>
 
-                  {/* Location Photo */}
-                  <Image
-                    source={{ uri: loc.image }}
-                    style={styles.locationImage}
-                    contentFit="cover"
-                    transition={200}
-                  />
+                  {/* High Quality Consecrated Image */}
+                  <View style={styles.imageContainer}>
+                    <Image
+                      source={{ uri: loc.image }}
+                      style={styles.locationImage}
+                      contentFit="cover"
+                      transition={250}
+                      cachePolicy="memory-disk"
+                    />
+                    <LinearGradient
+                      colors={["transparent", "rgba(0,0,0,0.45)"]}
+                      style={StyleSheet.absoluteFillObject}
+                    />
+                    <View style={styles.imageBadge}>
+                      <Text style={styles.imageBadgeText} maxFontSizeMultiplier={1.15}>
+                        {config.sublabel}
+                      </Text>
+                    </View>
+                  </View>
 
-                  {/* Description */}
-                  <View style={styles.cardBody}>
-                    <Text style={styles.locationDesc} numberOfLines={2} maxFontSizeMultiplier={1.2}>
+                  {/* Card Body & Assistance Prompt */}
+                  <YStack style={styles.cardBody} gap="$2">
+                    <Text
+                      style={styles.locationDesc}
+                      numberOfLines={3}
+                      maxFontSizeMultiplier={1.25}
+                    >
                       {loc.short_description}
                     </Text>
 
                     <View style={styles.footerRow}>
-                      <Text style={styles.actionPrompt} maxFontSizeMultiplier={1.2}>
-                        Yatra Details & Stays
+                      <Text style={styles.actionPrompt} maxFontSizeMultiplier={1.25}>
+                        Yatra Stays, Snan & Enquire
                       </Text>
-                      <Ionicons name="chevron-forward" size={13} color={COLORS.journey} />
+                      <View style={styles.chevronCircle}>
+                        <Ionicons
+                          name="chevron-forward"
+                          size={13}
+                          color="#FFFFFF"
+                        />
+                      </View>
                     </View>
-                  </View>
+                  </YStack>
                 </View>
               </TouchableOpacity>
             </View>
@@ -167,26 +268,44 @@ export default memo(RiverSpineTimeline);
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
-    marginBottom: 24,
+    marginBottom: 26,
   },
   header: {
     marginBottom: 16,
   },
+  headerTitleRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
   title: {
-    fontSize: 18,
+    fontSize: 19,
     fontFamily: FONTS.display.semiBold,
     color: COLORS.sacred,
-    letterSpacing: -0.2,
+    letterSpacing: -0.3,
+    flex: 1,
+    paddingRight: 8,
+  },
+  totalStopsBadge: {
+    backgroundColor: COLORS.journeyTint,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: RADIUS.full,
+  },
+  totalStopsText: {
+    fontSize: 11,
+    fontFamily: FONTS.body.bold,
+    color: COLORS.journey,
   },
   subtitle: {
     fontSize: 12,
     fontFamily: FONTS.body.regular,
     color: COLORS.inkMuted,
-    marginTop: 2,
-    lineHeight: 16,
+    marginTop: 3,
+    lineHeight: 17,
   },
   timelineWrapper: {
-    paddingLeft: 4,
+    paddingLeft: 2,
   },
   timelineRow: {
     flexDirection: "row",
@@ -197,27 +316,30 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   pinOuter: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    width: 34,
+    height: 34,
+    borderRadius: 17,
     borderWidth: 2,
     justifyContent: "center",
     alignItems: "center",
-    zIndex: 2,
+    zIndex: 3,
     ...SHADOWS.subtle,
   },
-  riverLine: {
-    width: 3,
+  riverStreamWrapper: {
     flex: 1,
-    backgroundColor: COLORS.journey,
+    width: 4,
+    alignItems: "center",
     marginVertical: 4,
-    borderRadius: 2,
-    opacity: 0.5,
+  },
+  riverLineGradient: {
+    width: 3,
+    height: "100%",
+    borderRadius: 1.5,
   },
   cardContainer: {
     flex: 1,
     marginLeft: 12,
-    marginBottom: 16,
+    marginBottom: 18,
   },
   locationCard: {
     backgroundColor: COLORS.surface,
@@ -228,66 +350,98 @@ const styles = StyleSheet.create({
     ...SHADOWS.card,
   },
   cardHeader: {
-    padding: 12,
-  },
-  badgeRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 6,
+    paddingHorizontal: 14,
+    paddingTop: 12,
+    paddingBottom: 8,
   },
   typeBadge: {
-    paddingHorizontal: 7,
-    paddingVertical: 2,
-    borderRadius: RADIUS.sm,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    paddingHorizontal: 8,
+    paddingVertical: 2.5,
+    borderRadius: RADIUS.xs,
+    borderWidth: 1,
   },
   typeBadgeText: {
     fontSize: 9,
     fontFamily: FONTS.body.bold,
     letterSpacing: 0.5,
   },
+  stageChip: {
+    backgroundColor: COLORS.bgStone,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: RADIUS.xs,
+  },
   stageText: {
     fontSize: 11,
-    fontFamily: FONTS.body.semiBold,
-    color: COLORS.inkMuted,
+    fontFamily: FONTS.body.bold,
+    color: COLORS.inkBody,
   },
   locationTitle: {
-    fontSize: 16,
+    fontSize: 17,
     fontFamily: FONTS.display.semiBold,
     color: COLORS.ink,
-    marginBottom: 2,
+    letterSpacing: -0.2,
   },
   regionText: {
     fontSize: 11,
     fontFamily: FONTS.body.medium,
     color: COLORS.inkMuted,
   },
+  imageContainer: {
+    width: "100%",
+    height: 125,
+    backgroundColor: COLORS.bgStone,
+    position: "relative",
+  },
   locationImage: {
     width: "100%",
-    height: 110,
-    backgroundColor: COLORS.bgStone,
+    height: "100%",
+  },
+  imageBadge: {
+    position: "absolute",
+    bottom: 8,
+    left: 10,
+    backgroundColor: "rgba(0, 0, 0, 0.65)",
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: RADIUS.xs,
+  },
+  imageBadgeText: {
+    fontSize: 10,
+    fontFamily: FONTS.body.semiBold,
+    color: "#FFFFFF",
   },
   cardBody: {
-    padding: 12,
+    padding: 14,
   },
   locationDesc: {
     fontSize: 12,
     fontFamily: FONTS.body.regular,
     color: COLORS.inkBody,
-    lineHeight: 16,
-    marginBottom: 8,
+    lineHeight: 18,
   },
   footerRow: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingTop: 8,
+    paddingTop: 10,
     borderTopWidth: 1,
     borderTopColor: COLORS.hairline,
   },
   actionPrompt: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
     color: COLORS.journey,
+  },
+  chevronCircle: {
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    backgroundColor: COLORS.journey,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

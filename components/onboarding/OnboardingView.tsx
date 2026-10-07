@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
-  FlatList,
   Platform,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -80,7 +80,6 @@ const BackdropItem = React.memo(
     return (
       <Animated.View
         style={[StyleSheet.absoluteFillObject, animatedStyle]}
-        collapsable={false}
       >
         <Image
           source={imageSource}
@@ -136,7 +135,6 @@ const HeaderItem = React.memo(
       <Animated.View
         style={[styles.headerItemContainer, animatedStyle]}
         pointerEvents="none"
-        collapsable={false}
       >
         <Text
           style={[
@@ -257,7 +255,6 @@ const CarouselCard = React.memo(
     return (
       <View
         style={{ width: cardWidth, marginHorizontal: spacing / 2 }}
-        collapsable={false}
       >
         <Animated.View
           style={[
@@ -265,11 +262,9 @@ const CarouselCard = React.memo(
             { width: cardWidth, height: cardHeight },
             animatedCardStyle,
           ]}
-          collapsable={false}
         >
           <Animated.View
             style={[StyleSheet.absoluteFillObject, animatedImageStyle]}
-            collapsable={false}
           >
             <Image
               source={imageSource}
@@ -328,7 +323,6 @@ const DotIndicator = React.memo(
     return (
       <Animated.View
         style={[styles.dot, animatedDotStyle]}
-        collapsable={false}
       />
     );
   }
@@ -336,9 +330,6 @@ const DotIndicator = React.memo(
 DotIndicator.displayName = "DotIndicator";
 
 export default function OnboardingView() {
-  // Start with defaults immediately — avoids blank flash and keeps the
-  // FlatList stable. Fetched data replaces only *content*, keys stay
-  // index-based so Fabric never destroys/re-inserts animated nodes.
   const [data, setData] = useState<OnboardingItem[]>(DEFAULT_ONBOARDING_ITEMS);
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
@@ -367,16 +358,28 @@ export default function OnboardingView() {
   const scrollX = useSharedValue(0);
   const [currentIndex, setCurrentIndex] = useState(0);
   const currentIndexRef = useRef(0);
-  const flatListRef = useRef<FlatList<OnboardingItem>>(null);
+  const scrollViewRef = useRef<Animated.ScrollView>(null);
 
   const load = useCallback(async () => {
     try {
       const items = await fetchOnboarding();
       if (items && items.length > 0) {
-        // Only update if the item *count* matches; if count changes a full
-        // remount is unavoidable anyway, but same-count swaps are safe with
-        // index-based keys because no node is destroyed.
-        setData(items);
+        setData((prev) => {
+          // Avoid triggering redundant re-renders if fetched items are identical
+          if (
+            prev.length === items.length &&
+            prev.every(
+              (p, i) =>
+                p.id === items[i].id &&
+                p.title === items[i].title &&
+                p.description === items[i].description &&
+                p.image === items[i].image
+            )
+          ) {
+            return prev;
+          }
+          return items;
+        });
       }
     } catch (e) {
       console.log("Onboarding fetch fallback:", e);
@@ -434,8 +437,8 @@ export default function OnboardingView() {
       handleFinish();
     } else {
       const nextIndex = currentIndex + 1;
-      flatListRef.current?.scrollToOffset({
-        offset: nextIndex * itemSize,
+      scrollViewRef.current?.scrollTo({
+        x: nextIndex * itemSize,
         animated: true,
       });
     }
@@ -516,7 +519,7 @@ export default function OnboardingView() {
         ))}
       </View>
 
-      {/* 4. Carousel Cards Layer: Snapping horizontal Animated.FlatList */}
+      {/* 4. Carousel Cards Layer: Snapping horizontal Animated.ScrollView (Non-virtualized for Fabric stability) */}
       <View
         style={[
           styles.carouselSection,
@@ -526,26 +529,14 @@ export default function OnboardingView() {
           },
         ]}
       >
-        <Animated.FlatList
-          ref={flatListRef}
-          data={data}
+        <Animated.ScrollView
+          ref={scrollViewRef}
           horizontal
           showsHorizontalScrollIndicator={false}
           snapToInterval={itemSize}
+          snapToAlignment="start"
           decelerationRate="fast"
           bounces={false}
-          removeClippedSubviews={false}
-          // Index-based key: prevents Fabric from destroying animated
-          // nodes when data content swaps (default → fetched from API).
-          keyExtractor={(_, index) => `slide-${index}`}
-          initialNumToRender={data.length}
-          maxToRenderPerBatch={data.length}
-          windowSize={5}
-          getItemLayout={(_, index) => ({
-            length: itemSize,
-            offset: itemSize * index,
-            index,
-          })}
           scrollEventThrottle={16}
           onScroll={scrollHandler}
           onMomentumScrollEnd={(e) => {
@@ -556,8 +547,10 @@ export default function OnboardingView() {
             paddingHorizontal: sideSpacer - spacing / 2,
             alignItems: "center",
           }}
-          renderItem={({ item, index }) => (
+        >
+          {data.map((item, index) => (
             <CarouselCard
+              key={`slide-${index}`}
               item={item}
               index={index}
               scrollX={scrollX}
@@ -566,8 +559,8 @@ export default function OnboardingView() {
               cardWidth={cardWidth}
               cardHeight={cardHeight}
             />
-          )}
-        />
+          ))}
+        </Animated.ScrollView>
       </View>
 
       {/* 5. Bottom Controls Layer: Dynamic indicators & CTA Button */}
@@ -622,31 +615,29 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 20,
     right: 20,
+    zIndex: 10,
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
-    zIndex: 20,
+    justifyContent: "space-between",
   },
   stepBadge: {
     backgroundColor: "rgba(255, 255, 255, 0.12)",
-    borderColor: "rgba(255, 255, 255, 0.18)",
-    borderWidth: 1,
     paddingHorizontal: 12,
     paddingVertical: 6,
-    borderRadius: 16,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.15)",
   },
   stepBadgeText: {
     color: "#E2E8F0",
     fontSize: 12,
     fontWeight: "700",
-    letterSpacing: 1.2,
+    letterSpacing: 0.8,
   },
   skipButton: {
-    backgroundColor: "rgba(255, 255, 255, 0.16)",
-    borderColor: "rgba(255, 255, 255, 0.28)",
-    borderWidth: 1,
-    paddingHorizontal: 16,
-    paddingVertical: 7,
+    paddingHorizontal: 14,
+    paddingVertical: 6,
+    backgroundColor: "rgba(255, 255, 255, 0.08)",
     borderRadius: 18,
   },
   skipText: {

@@ -11,9 +11,11 @@ import { FONTS } from "@/constants/typography";
 import { useParikrama } from "@/hooks/useParikrama";
 import { NarmadaLocationItem, ParikramaModeItem } from "@/types/parikrama";
 import { Ionicons } from "@expo/vector-icons";
+import * as Haptics from "expo-haptics";
 import { router } from "expo-router";
 import React, { useCallback, useMemo, useState } from "react";
 import {
+  Platform,
   ScrollView,
   Share,
   StyleSheet,
@@ -21,15 +23,24 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function NarmadaParikramaScreen() {
+  const insets = useSafeAreaInsets();
   const { data, isLoading, isError, refetch } = useParikrama();
 
   const [selectedMode, setSelectedMode] = useState<ParikramaModeItem | null>(null);
   const [selectedLocation, setSelectedLocation] = useState<NarmadaLocationItem | null>(null);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
 
+  // Compute adaptive bottom scroll padding for Android 3-button bar & iOS home indicator
+  const bottomScrollPadding = Math.max(insets.bottom, Platform.OS === "android" ? 28 : 16) + 36;
+
   const handleBack = useCallback(() => {
+    try {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    } catch {}
+
     if (router.canGoBack()) {
       router.back();
     } else {
@@ -38,12 +49,16 @@ export default function NarmadaParikramaScreen() {
   }, []);
 
   const handleShare = useCallback(() => {
+    try {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    } catch {}
+
     Share.share({
-      title: "Narmada Parikrama - Sacred Pilgrimage Circuit",
+      title: "Maa Narmada Parikrama - Sacred 3,450 KM Pilgrimage",
       message:
-        "🙏 Narmada Parikrama Pilgrimage Yatra\n" +
-        "Explore the sacred circumambulation of Mother Narmada across Amarkantak, Omkareshwar, Maheshwar, Nemawar & Bharuch Sangam.\n\n" +
-        "Plan your pilgrimage with UjjainTirth: https://ujjaintirth.com",
+        "🙏 Maa Narmada Parikrama Sacred Pilgrimage Circuit\n\n" +
+        "Explore the eternal circumambulation of Mother Narmada across Amarkantak, Omkareshwar, Maheshwar, Nemawar & Bharuch Sangam.\n\n" +
+        "Plan your sacred yatra with verified stays & guidance: https://ujjaintirth.com",
     }).catch((err) => console.log("Share error:", err));
   }, []);
 
@@ -84,7 +99,7 @@ export default function NarmadaParikramaScreen() {
           >
             <Ionicons name="arrow-back" size={20} color={COLORS.ink} />
           </TouchableOpacity>
-          <Text style={styles.topBarTitle} maxFontSizeMultiplier={1.25}>
+          <Text style={styles.topBarTitle} maxFontSizeMultiplier={1.3}>
             Narmada Parikrama
           </Text>
           <View style={styles.navButtonPlaceholder} />
@@ -96,7 +111,7 @@ export default function NarmadaParikramaScreen() {
 
   return (
     <ScreenContainer noPadding edges={["top", "bottom"]}>
-      {/* Persistent Top Navigation Bar */}
+      {/* Devotional Persistent Top Navigation Bar */}
       <View style={styles.topBar}>
         <TouchableOpacity
           style={styles.navButton}
@@ -109,11 +124,19 @@ export default function NarmadaParikramaScreen() {
         </TouchableOpacity>
 
         <View style={styles.topBarCenter}>
-          <Text style={styles.topBarTitle} numberOfLines={1} maxFontSizeMultiplier={1.25}>
-            Narmada Parikrama
+          <Text
+            style={styles.topBarTitle}
+            numberOfLines={1}
+            maxFontSizeMultiplier={1.3}
+          >
+            Maa Narmada Parikrama
           </Text>
-          <Text style={styles.topBarChant} maxFontSizeMultiplier={1.2}>
-            नर्मदे हर • Holy River Circuit
+          <Text
+            style={styles.topBarChant}
+            numberOfLines={1}
+            maxFontSizeMultiplier={1.2}
+          >
+            ॥ नर्मदे हर ॥ • Sacred 3,450 KM Circuit
           </Text>
         </View>
 
@@ -138,29 +161,30 @@ export default function NarmadaParikramaScreen() {
       >
         <ScrollView
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.scrollContainer}
-          bounces={false}
+          contentContainerStyle={[
+            styles.scrollContainer,
+            { paddingBottom: bottomScrollPadding },
+          ]}
+          bounces={true}
         >
-          {/* Sacred River Banner Header */}
+          {/* 1. Cinematic Devotional Hero Banner */}
           <ParikramaHero showBackButton={false} />
 
-          {/* 1. Mode Selection Carousel */}
+          {/* 2. Parikrama Modes & Yatras Carousel */}
           <ParikramaModeCarousel
             modes={data?.modes || []}
             selectedModeId={selectedMode?.id ?? null}
             onSelectMode={handleSelectMode}
           />
 
-          {/* 2. Chronological Sacred River Spine Timeline */}
+          {/* 3. Chronological Sacred River Spine Timeline */}
           <RiverSpineTimeline
             locations={data?.locations || []}
             onSelectLocation={handleSelectLocation}
           />
-
-          <View style={{ height: 32 }} />
         </ScrollView>
 
-        {/* Yatra Enquiry Modal */}
+        {/* Devotee Assistance & Yatra Enquiry Modal */}
         <ParikramaEnquiryModal
           visible={modalVisible}
           mode={selectedMode}
@@ -178,7 +202,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: 16,
-    paddingTop: 6,
+    paddingTop: 8,
     paddingBottom: 10,
     backgroundColor: COLORS.bg,
     borderBottomWidth: 1,
@@ -199,8 +223,8 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontFamily: FONTS.body.bold,
     color: COLORS.journey,
-    letterSpacing: 0.5,
-    marginTop: 1,
+    letterSpacing: 0.6,
+    marginTop: 2,
   },
   navButton: {
     width: 38,
@@ -216,12 +240,7 @@ const styles = StyleSheet.create({
   navButtonPlaceholder: {
     width: 38,
   },
-  loadingWrapper: {
-    paddingHorizontal: 16,
-    flex: 1,
-  },
   scrollContainer: {
-    paddingTop: 8,
-    paddingBottom: 28,
+    paddingTop: 6,
   },
 });
