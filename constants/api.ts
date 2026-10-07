@@ -7,6 +7,7 @@ export const API_BASE_URL = "https://ujjaintirth.com/wp-json/wp/v2";
 export const API_CUSTOM_URL = "https://ujjaintirth.com/wp-json/custom/v1";
 export const API_GRANTH_URL = "https://ujjaintirth.com/wp-json/granth/v1";
 export const API_UJJAIN_URL = "https://ujjaintirth.com/wp-json/ujjain/v1";
+export const API_CF7_URL = "https://ujjaintirth.com/wp-json/contact-form-7/v1";
 
 /**
  * API endpoints used across the app

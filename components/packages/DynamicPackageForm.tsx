@@ -118,12 +118,16 @@ export const DynamicPackageForm: React.FC<DynamicPackageFormProps> = ({
     // Validate fields dynamically
     const isValid = validateForm();
     if (!isValid) return;
+    if (!schema?.cf7_id) {
+      setServerError("Form configuration is unavailable. Please reload and try again.");
+      return;
+    }
 
     try {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
 
       // Submit dynamically collected values
-      const res = await submit(formValues);
+      const res = await submit({ formId: schema.cf7_id, formData: formValues });
 
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
 
@@ -212,7 +216,7 @@ export const DynamicPackageForm: React.FC<DynamicPackageFormProps> = ({
 
           <Text style={styles.successTitle}>Enquiry Received!</Text>
           <Text style={styles.successBlessing}>
-            "जय श्री महाकाल • Har Har Mahadev"
+            “जय श्री महाकाल • Har Har Mahadev”
           </Text>
 
           <Text style={styles.successMessage}>

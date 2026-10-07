@@ -36,7 +36,7 @@ export const usePackageFormSubmit = () => {
   const mutation = useMutation<
     FormSubmitSuccessResponse,
     FormSubmissionError,
-    Record<string, any>
+    { formId: number; formData: Record<string, any> }
   >({
     mutationFn: submitPackageForm,
   });

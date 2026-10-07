@@ -1,9 +1,7 @@
-import { API_ENDPOINTS, API_UJJAIN_URL, DEFAULT_HEADERS } from "@/constants/api";
+import { API_CF7_URL, API_ENDPOINTS, API_UJJAIN_URL } from "@/constants/api";
 import {
   FormApiResponse,
   FormDefinition,
-  FormSubmitErrorResponse,
-  FormSubmitPayload,
   FormSubmitSuccessResponse,
 } from "@/types/form";
 
@@ -51,40 +49,56 @@ export const fetchPackageFormSchema = async (): Promise<FormDefinition> => {
 };
 
 /**
- * Submit dynamic package enquiry form to Ujjain Custom REST API
+ * Submit dynamic package enquiry through Contact Form 7 so its mail workflow runs.
  */
 export const submitPackageForm = async (
-  formData: Record<string, any>
+  { formId, formData }: { formId: number; formData: Record<string, any> }
 ): Promise<FormSubmitSuccessResponse> => {
-  const url = `${API_UJJAIN_URL}${API_ENDPOINTS.FORMS_PACKAGE_SUBMIT}`;
+  const url = `${API_CF7_URL}/contact-forms/${formId}/feedback`;
+  const payload = new FormData();
 
-  const payload: FormSubmitPayload = {
-    ...formData,
-    "enquiry-source": "mobile_app",
-  };
+  Object.entries({ ...formData, "enquiry-source": "mobile_app" }).forEach(
+    ([field, value]) => {
+      if (Array.isArray(value)) {
+        value.forEach((item) => payload.append(`${field}[]`, String(item)));
+      } else if (value !== undefined && value !== null) {
+        payload.append(field, String(value));
+      }
+    }
+  );
+  payload.append("_wpcf7_unit_tag", `wpcf7-f${formId}-o1`);
 
   try {
     const response = await fetch(url, {
       method: "POST",
       headers: {
-        ...DEFAULT_HEADERS,
+        Accept: "application/json",
       },
-      body: JSON.stringify(payload),
+      body: payload,
     });
 
-    const data = await response.json().catch(() => null);
+    const data = await response.json().catch(() => null) as {
+      status?: string;
+      message?: string;
+      invalid_fields?: Array<{ field?: string; message?: string }>;
+    } | null;
 
-    if (!response.ok || (data && data.code && !data.success)) {
-      const errData = data as FormSubmitErrorResponse | null;
-      const message = errData?.message || "Failed to submit enquiry. Please try again.";
-      const code = errData?.code || "submission_error";
-      const field = errData?.data?.field;
-      const status = response.status || errData?.data?.status;
-
-      throw new FormSubmissionError(message, code, field, status);
+    if (!response.ok || data?.status !== "mail_sent") {
+      const invalidField = data?.invalid_fields?.[0];
+      throw new FormSubmissionError(
+        invalidField?.message || data?.message || "Failed to submit enquiry. Please try again.",
+        data?.status || "submission_error",
+        invalidField?.field,
+        response.status
+      );
     }
 
-    return data as FormSubmitSuccessResponse;
+    return {
+      success: true,
+      message: data.message || "Thank you for your enquiry. It has been sent.",
+      form: { key: "package", cf7Id: formId },
+      data: formData,
+    };
   } catch (error) {
     if (error instanceof FormSubmissionError) {
       throw error;
