@@ -167,16 +167,20 @@ export default function AccommodationDetailScreen() {
       >
         <View style={styles.bottomBarContent}>
           {/* Price details */}
-          <View>
+          <View style={{ flexShrink: 1, marginRight: 8 }}>
             <View style={styles.priceRow}>
-              <Text style={styles.priceAmount}>
+              <Text style={styles.priceAmount} maxFontSizeMultiplier={1.15}>
                 ₹{activePrice.toLocaleString("en-IN")}
               </Text>
-              <Text style={styles.priceUnit}> / night</Text>
+              <Text style={styles.priceUnit} maxFontSizeMultiplier={1.15}> / night</Text>
             </View>
             <View style={styles.taxReassurance}>
               <Ionicons name="checkmark-circle" size={12} color="#904D00" />
-              <Text style={styles.taxReassuranceText}>
+              <Text
+                style={styles.taxReassuranceText}
+                maxFontSizeMultiplier={1.15}
+                numberOfLines={1}
+              >
                 Taxes incl. • Free cancellation
               </Text>
             </View>
@@ -188,7 +192,15 @@ export default function AccommodationDetailScreen() {
             activeOpacity={0.85}
             onPress={() => setBookingModalVisible(true)}
           >
-            <Text style={styles.bookCtaText}>Check Availability</Text>
+            <Text
+              style={styles.bookCtaText}
+              numberOfLines={1}
+              adjustsFontSizeToFit
+              minimumFontScale={0.8}
+              maxFontSizeMultiplier={1.15}
+            >
+              Check Availability
+            </Text>
             <Ionicons name="arrow-forward" size={15} color="#FFFFFF" />
           </TouchableOpacity>
         </View>

@@ -232,11 +232,25 @@ export default function HotelDetailModal({ visible, hotel, onClose }: Props) {
         </ScrollView>
 
         {/* Bottom CTA */}
-        <View style={styles.bottomBar}>
+        <View
+          style={[
+            styles.bottomBar,
+            {
+              paddingBottom: Math.max(
+                insets.bottom > 0
+                  ? insets.bottom + (Platform.OS === "android" ? 8 : 4)
+                  : Platform.OS === "ios" ? 24 : 16,
+                16
+              ),
+            },
+          ]}
+        >
           <TouchableOpacity
             style={styles.ctaButton}
             activeOpacity={0.7}
             onPress={handleCall}
+            accessibilityRole="button"
+            accessibilityLabel="Book Hotel Room"
           >
             <LinearGradient
               colors={[COLORS.primary, "#D94535"]}
@@ -244,7 +258,9 @@ export default function HotelDetailModal({ visible, hotel, onClose }: Props) {
               end={{ x: 1, y: 0 }}
               style={styles.ctaGradient}
             >
-              <Text style={styles.ctaText}>Book Now</Text>
+              <Text style={styles.ctaText} maxFontSizeMultiplier={1.15}>
+                Book Now
+              </Text>
             </LinearGradient>
           </TouchableOpacity>
         </View>
@@ -465,8 +481,8 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    padding: 16,
-    paddingBottom: 34,
+    paddingHorizontal: 16,
+    paddingTop: 12,
     backgroundColor: "rgba(245,242,234,0.97)",
     borderTopWidth: 1,
     borderTopColor: "rgba(0,0,0,0.05)",

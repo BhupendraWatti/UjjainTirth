@@ -14,6 +14,10 @@ import {
   Manrope_700Bold,
 } from "@expo-google-fonts/manrope";
 import { AuthProvider } from "@/context/AuthContext";
+import {
+  SafeAreaProvider,
+  initialWindowMetrics,
+} from "react-native-safe-area-context";
 import { TamaguiProvider } from "tamagui";
 import { tamaguiConfig } from "@/tamagui.config";
 import { fetchPackages } from "@/services/packagesServices";
@@ -130,16 +134,18 @@ export default function RootLayout() {
   }
 
   return (
-    <TamaguiProvider config={tamaguiConfig} defaultTheme="light">
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <Stack
-            screenOptions={{
-              headerShown: false,
-            }}
-          />
-        </AuthProvider>
-      </QueryClientProvider>
-    </TamaguiProvider>
+    <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+      <TamaguiProvider config={tamaguiConfig} defaultTheme="light">
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider>
+            <Stack
+              screenOptions={{
+                headerShown: false,
+              }}
+            />
+          </AuthProvider>
+        </QueryClientProvider>
+      </TamaguiProvider>
+    </SafeAreaProvider>
   );
 }

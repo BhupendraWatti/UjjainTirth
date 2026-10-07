@@ -5,6 +5,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  useWindowDimensions,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Haptics from "expo-haptics";
@@ -28,46 +29,60 @@ export const PoojaBottomBar: React.FC<PoojaBottomBarProps> = ({
   onBook,
 }) => {
   const insets = useSafeAreaInsets();
+  const { width: screenWidth } = useWindowDimensions();
+  const isCompact = screenWidth < 375;
+
+  // Safe bottom padding handling 3-button navigation (48-56dp), gesture bar, or legacy devices
+  const bottomPadding = insets.bottom > 0
+    ? insets.bottom + (Platform.OS === "android" ? 6 : 4)
+    : (Platform.OS === "ios" ? 22 : 14);
 
   const handleCallWithHaptic = () => {
     if (Platform.OS !== "web") {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      try {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      } catch {}
     }
     onCall();
   };
 
   const handleBookWithHaptic = () => {
     if (Platform.OS !== "web") {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+      try {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+      } catch {}
     }
     onBook();
   };
 
+  const bookLabel = activePrice
+    ? `Book • ₹${activePrice.toLocaleString("en-IN")}`
+    : "Book Pooja";
+
   return (
-    <View
-      style={[
-        styles.bottomBar,
-        {
-          paddingBottom: Math.max(insets.bottom, Platform.OS === "ios" ? 24 : 14),
-        },
-      ]}
-    >
+    <View style={[styles.bottomBar, { paddingBottom: bottomPadding }]}>
+      {/* Price & Tier Summary Column */}
       <View style={styles.bottomPriceCol}>
         <Text
           style={styles.bottomPriceLabel}
           numberOfLines={1}
-          maxFontSizeMultiplier={1.2}
+          ellipsizeMode="tail"
+          maxFontSizeMultiplier={1.15}
         >
           {selectedTier ? selectedTier.title : "Dakshina"}
         </Text>
         <View style={styles.bottomPriceRow}>
           {activePrice ? (
             <>
-              <Text style={styles.bottomCurrency} maxFontSizeMultiplier={1.2}>₹</Text>
+              <Text style={styles.bottomCurrency} maxFontSizeMultiplier={1.15}>
+                ₹
+              </Text>
               <Text
                 style={styles.bottomAmount}
                 numberOfLines={1}
-                maxFontSizeMultiplier={1.25}
+                adjustsFontSizeToFit
+                minimumFontScale={0.8}
+                maxFontSizeMultiplier={1.15}
               >
                 {activePrice.toLocaleString("en-IN")}
               </Text>
@@ -76,7 +91,9 @@ export const PoojaBottomBar: React.FC<PoojaBottomBarProps> = ({
             <Text
               style={styles.bottomCustomPrice}
               numberOfLines={1}
-              maxFontSizeMultiplier={1.25}
+              adjustsFontSizeToFit
+              minimumFontScale={0.85}
+              maxFontSizeMultiplier={1.15}
             >
               As per Vidhi
             </Text>
@@ -84,7 +101,8 @@ export const PoojaBottomBar: React.FC<PoojaBottomBarProps> = ({
         </View>
       </View>
 
-      <View style={styles.bottomActions}>
+      {/* Action Buttons Column */}
+      <View style={[styles.bottomActions, { gap: isCompact ? 6 : 8 }]}>
         <TouchableOpacity
           style={styles.callIconBtn}
           onPress={handleCallWithHaptic}
@@ -96,7 +114,10 @@ export const PoojaBottomBar: React.FC<PoojaBottomBarProps> = ({
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.whatsappBtn}
+          style={[
+            styles.whatsappBtn,
+            isCompact && styles.whatsappBtnCompact,
+          ]}
           onPress={handleBookWithHaptic}
           activeOpacity={0.85}
           accessibilityRole="button"
@@ -106,13 +127,11 @@ export const PoojaBottomBar: React.FC<PoojaBottomBarProps> = ({
           <Text
             style={styles.whatsappBtnText}
             numberOfLines={1}
-            maxFontSizeMultiplier={1.2}
+            maxFontSizeMultiplier={1.15}
             adjustsFontSizeToFit={true}
-            minimumFontScale={0.85}
+            minimumFontScale={0.8}
           >
-            {activePrice
-              ? `Book • ₹${activePrice.toLocaleString("en-IN")}`
-              : "Book Pooja"}
+            {bookLabel}
           </Text>
         </TouchableOpacity>
       </View>
@@ -127,7 +146,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     backgroundColor: COLORS.surface,
-    paddingHorizontal: 14,
+    paddingHorizontal: 16,
     paddingTop: 10,
     borderTopWidth: 1,
     borderTopColor: COLORS.hairline,
@@ -140,7 +159,9 @@ const styles = StyleSheet.create({
   bottomPriceCol: {
     justifyContent: "center",
     flexShrink: 1,
-    minWidth: 80,
+    flexGrow: 0,
+    minWidth: 0,
+    maxWidth: "46%",
     marginRight: 8,
   },
   bottomPriceLabel: {
@@ -173,13 +194,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-end",
-    gap: 8,
-    flex: 1,
     flexShrink: 1,
+    flexGrow: 1,
   },
   callIconBtn: {
-    width: 42,
-    height: 42,
+    width: 44,
+    height: 44,
     borderRadius: RADIUS.sm,
     backgroundColor: COLORS.primaryTint,
     justifyContent: "center",
@@ -194,11 +214,18 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 6,
     backgroundColor: COLORS.whatsapp,
-    paddingHorizontal: 12,
+    paddingHorizontal: 13,
     paddingVertical: 11,
     borderRadius: RADIUS.sm,
+    minHeight: 44,
     flexShrink: 1,
+    flexGrow: 1,
     ...SHADOWS.subtle,
+  },
+  whatsappBtnCompact: {
+    paddingHorizontal: 10,
+    paddingVertical: 9,
+    gap: 5,
   },
   whatsappBtnText: {
     fontSize: 13,

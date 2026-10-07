@@ -536,7 +536,13 @@ export default function PackageDetailModal({ visible, item, onClose }: Props) {
             accessibilityLabel="Call support for package enquiry"
           >
             <Ionicons name="call-outline" size={17} color={COLORS.primary} />
-            <Text style={styles.bottomEnquiryText}>Enquiry</Text>
+            <Text
+              style={styles.bottomEnquiryText}
+              numberOfLines={1}
+              maxFontSizeMultiplier={1.15}
+            >
+              Enquiry
+            </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -554,7 +560,13 @@ export default function PackageDetailModal({ visible, item, onClose }: Props) {
             >
               <View style={styles.bottomBookRow}>
                 <Ionicons name="logo-whatsapp" size={17} color="#FFFFFF" />
-                <Text style={styles.bottomBookText}>
+                <Text
+                  style={styles.bottomBookText}
+                  numberOfLines={1}
+                  adjustsFontSizeToFit
+                  minimumFontScale={0.8}
+                  maxFontSizeMultiplier={1.15}
+                >
                   {pkg?.price ? `Book Now • ₹${pkg.price}` : "Book Now"}
                 </Text>
               </View>

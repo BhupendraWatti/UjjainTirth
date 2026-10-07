@@ -11,6 +11,7 @@ import {
 import { router, useLocalSearchParams } from "expo-router";
 import * as Haptics from "expo-haptics";
 import { Ionicons } from "@expo/vector-icons";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import ScreenContainer from "@/components/layout/ScreenContainer";
 import LoadingSkeleton from "@/components/layout/LoadingSkeleton";
 import PoojaBookingModal from "@/components/pooja/PoojaBookingModal";
@@ -35,9 +36,18 @@ export default function PoojaDetailScreen() {
   const { data: poojaDirect, isLoading: isLoadingDirect } = usePoojaById(id);
   const { data: poojas, isLoading: isLoadingPoojas } = usePoojas();
 
+  const insets = useSafeAreaInsets();
   const [activeTab, setActiveTab] = useState<number>(0);
   const [selectedTier, setSelectedTier] = useState<PoojaDakshinaTier | null>(null);
   const [bookingModalVisible, setBookingModalVisible] = useState<boolean>(false);
+
+  const scrollBottomPadding =
+    102 +
+    (insets.bottom > 0
+      ? insets.bottom + (Platform.OS === "android" ? 6 : 4)
+      : Platform.OS === "ios"
+      ? 22
+      : 14);
 
   const pooja = useMemo(() => {
     if (poojaDirect) return poojaDirect;
@@ -151,7 +161,10 @@ export default function PoojaDetailScreen() {
       <View style={styles.screenWrapper}>
         <ScrollView
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.scrollContent}
+          contentContainerStyle={[
+            styles.scrollContent,
+            { paddingBottom: scrollBottomPadding },
+          ]}
         >
           {/* Full-bleed Hero Section */}
           <PoojaHero item={pooja} onBack={handleBack} onShare={handleShare} />

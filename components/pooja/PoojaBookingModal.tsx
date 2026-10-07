@@ -19,6 +19,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 interface Props {
   visible: boolean;
@@ -28,6 +29,11 @@ interface Props {
 }
 
 const PoojaBookingModal = ({ visible, item, onClose, selectedTier }: Props) => {
+  const insets = useSafeAreaInsets();
+  const bottomInset = insets.bottom > 0
+    ? insets.bottom + (Platform.OS === "android" ? 6 : 4)
+    : (Platform.OS === "ios" ? 20 : 14);
+
   const activePrice = selectedTier && selectedTier.price !== null
     ? selectedTier.price
     : item?.starting_price ?? null;
@@ -96,7 +102,7 @@ const PoojaBookingModal = ({ visible, item, onClose, selectedTier }: Props) => {
       <TouchableWithoutFeedback onPress={handleClose}>
         <View style={styles.backdrop}>
           <TouchableWithoutFeedback>
-            <View style={styles.sheet}>
+            <View style={[styles.sheet, { paddingBottom: bottomInset + 12 }]}>
               <View style={styles.handle} />
 
               <View style={styles.header}>
@@ -239,7 +245,13 @@ const PoojaBookingModal = ({ visible, item, onClose, selectedTier }: Props) => {
                     onPress={handleWhatsApp}
                   >
                     <Ionicons name="logo-whatsapp" size={20} color="#FFFFFF" />
-                    <Text style={styles.whatsappText}>
+                    <Text
+                      style={styles.whatsappText}
+                      numberOfLines={1}
+                      adjustsFontSizeToFit
+                      minimumFontScale={0.85}
+                      maxFontSizeMultiplier={1.15}
+                    >
                       Book Pooja on WhatsApp
                     </Text>
                   </TouchableOpacity>
@@ -254,7 +266,13 @@ const PoojaBookingModal = ({ visible, item, onClose, selectedTier }: Props) => {
                       size={18}
                       color={COLORS.primaryDeep}
                     />
-                    <Text style={styles.callText}>
+                    <Text
+                      style={styles.callText}
+                      numberOfLines={1}
+                      adjustsFontSizeToFit
+                      minimumFontScale={0.85}
+                      maxFontSizeMultiplier={1.15}
+                    >
                       Talk to Vedic Coordinator
                     </Text>
                   </TouchableOpacity>
