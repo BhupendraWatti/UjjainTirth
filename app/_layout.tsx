@@ -14,6 +14,8 @@ import {
   Manrope_700Bold,
 } from "@expo-google-fonts/manrope";
 import { AuthProvider } from "@/context/AuthContext";
+import { TamaguiProvider } from "tamagui";
+import { tamaguiConfig } from "@/tamagui.config";
 import { fetchPackages } from "@/services/packagesServices";
 import { fetchParikramaData } from "@/services/parikramaService";
 import { fetchPoojas } from "@/services/poojaService";
@@ -128,14 +130,16 @@ export default function RootLayout() {
   }
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <Stack
-          screenOptions={{
-            headerShown: false,
-          }}
-        />
-      </AuthProvider>
-    </QueryClientProvider>
+    <TamaguiProvider config={tamaguiConfig} defaultTheme="light">
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <Stack
+            screenOptions={{
+              headerShown: false,
+            }}
+          />
+        </AuthProvider>
+      </QueryClientProvider>
+    </TamaguiProvider>
   );
 }

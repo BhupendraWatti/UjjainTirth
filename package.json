@@ -25,6 +25,7 @@
     "@react-navigation/bottom-tabs": "^7.4.0",
     "@react-navigation/elements": "^2.6.3",
     "@react-navigation/native": "^7.1.8",
+    "@tamagui/config": "^2.7.7",
     "@tanstack/react-query": "^5.90.21",
     "eas-cli": "^18.5.0",
     "expo": "~54.0.37",
@@ -52,9 +53,11 @@
     "react-native-screens": "~4.16.0",
     "react-native-svg": "15.12.1",
     "react-native-web": "~0.21.0",
-    "react-native-worklets": "0.5.1"
+    "react-native-worklets": "0.5.1",
+    "tamagui": "^2.7.7"
   },
   "devDependencies": {
+    "@tamagui/metro-plugin": "^2.7.7",
     "@types/react": "~19.1.0",
     "cross-env": "^10.1.0",
     "eslint": "^9.25.0",
