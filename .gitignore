@@ -63,13 +63,21 @@ build/
 **/build/
 modules/*/android/build/
 modules/*/android/.gradle/
-scratch
-.playwright-mcp
-CURRENT_UI_UX_DESIGN_SYSTEM.md
+scratch/
+.playwright-mcp/
 
-# Agent Workspaces, Scratch, Research & Generated Documentation
-.agents/
-active/
-docs/ui-ux-learnings/
-rules.md
+# Markdown Documentation, Specs & AI Notes (All Markdown Files)
+*.md
+**/*.md
+README.md
 GEMINI.md
+rules.md
+CURRENT_UI_UX_DESIGN_SYSTEM.md
+MOBILE_APP_API_SPEC.md
+docs/**/*.md
+docs/android-otp-autofill.md
+docs/headless-cms-architecture.md
+docs/ui-ux-learnings/
+active/
+.agents/
+
