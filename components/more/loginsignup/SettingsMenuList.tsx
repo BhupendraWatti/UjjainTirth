@@ -20,27 +20,33 @@ const menuItems = [
   {
     title: "Contact Us",
     icon: "call-outline" as const,
-    route: "/coming-soon",
+    route: "/help-support?tab=contact",
+  },
+  {
+    title: "About Us",
+    icon: "information-circle-outline" as const,
+    route: "/about-us",
   },
   {
     title: "About Ujjain",
-    icon: "information-circle-outline" as const,
+    icon: "trail-sign-outline" as const,
     route: "/coming-soon",
   },
-  {
-    title: "Language",
-    icon: "globe-outline" as const,
-    route: "/coming-soon",
-  },
+  // Language section hidden for now as requested
+  // {
+  //   title: "Language",
+  //   icon: "globe-outline" as const,
+  //   route: "/coming-soon",
+  // },
   {
     title: "Help & Support",
     icon: "help-circle-outline" as const,
-    route: "/coming-soon",
+    route: "/help-support?tab=help",
   },
   {
     title: "Privacy Policy",
     icon: "shield-checkmark-outline" as const,
-    route: "/coming-soon",
+    route: "/privacy-policy",
   },
 ];
 
