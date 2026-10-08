@@ -4,6 +4,7 @@ import {
   FormDefinition,
   FormSubmitSuccessResponse,
 } from "@/types/form";
+import { getBookingToken } from "@/services/booking-session";
 
 export class FormSubmissionError extends Error {
   code: string;
@@ -56,6 +57,7 @@ export const submitPackageForm = async (
 ): Promise<FormSubmitSuccessResponse> => {
   const url = `${API_CF7_URL}/contact-forms/${formId}/feedback`;
   const payload = new FormData();
+  const bookingToken = await getBookingToken();
 
   Object.entries({ ...formData, "enquiry-source": "mobile_app" }).forEach(
     ([field, value]) => {
@@ -67,12 +69,14 @@ export const submitPackageForm = async (
     }
   );
   payload.append("_wpcf7_unit_tag", `wpcf7-f${formId}-o1`);
+  if (bookingToken) payload.append("utbm-booking-token", bookingToken);
 
   try {
     const response = await fetch(url, {
       method: "POST",
       headers: {
         Accept: "application/json",
+        ...(bookingToken ? { "X-UTBM-Booking-Token": bookingToken } : {}),
       },
       body: payload,
     });
@@ -80,7 +84,7 @@ export const submitPackageForm = async (
     const data = await response.json().catch(() => null) as {
       status?: string;
       message?: string;
-      invalid_fields?: Array<{ field?: string; message?: string }>;
+      invalid_fields?: { field?: string; message?: string }[];
     } | null;
 
     if (!response.ok || data?.status !== "mail_sent") {

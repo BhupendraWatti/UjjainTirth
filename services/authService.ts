@@ -14,6 +14,8 @@ export interface VerifyOtpResponse {
   userId?: number;
   redirectUrl?: string;
   isMock?: boolean;
+  bookingToken?: string;
+  bookingUserId?: number;
 }
 
 export interface UserProfileInput {
@@ -203,11 +205,13 @@ export async function verifyOtp(
     const data = await response.json();
 
     if (response.ok && data.success) {
-      const userId = data.user_id ?? 1;
+      const userId = data.booking_user_id ?? data.user_id;
       return {
         success: true,
         message: data.message || "OTP verified successfully.",
-        userId: userId,
+        userId,
+        bookingUserId: data.booking_user_id,
+        bookingToken: data.booking_token,
         redirectUrl: data.redirect_url,
       };
     }

@@ -15,7 +15,7 @@ const menuItems = [
   {
     title: "My Bookings",
     icon: "calendar-outline" as const,
-    route: "/coming-soon",
+    route: "/my-bookings",
   },
   {
     title: "Contact Us",

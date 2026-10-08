@@ -8,6 +8,7 @@ export const API_CUSTOM_URL = "https://ujjaintirth.com/wp-json/custom/v1";
 export const API_GRANTH_URL = "https://ujjaintirth.com/wp-json/granth/v1";
 export const API_UJJAIN_URL = "https://ujjaintirth.com/wp-json/ujjain/v1";
 export const API_CF7_URL = "https://ujjaintirth.com/wp-json/contact-form-7/v1";
+export const API_UTBM_URL = "https://ujjaintirth.com/wp-json/utbm/v1";
 
 /**
  * API endpoints used across the app
@@ -35,6 +36,7 @@ export const API_ENDPOINTS = {
   // Dynamic CF7 Forms
   FORMS_PACKAGE: "/forms/package",
   FORMS_PACKAGE_SUBMIT: "/forms/package/submit",
+  MY_BOOKINGS: "/bookings",
 };
 
 /**

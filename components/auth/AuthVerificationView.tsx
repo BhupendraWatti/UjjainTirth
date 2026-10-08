@@ -5,6 +5,7 @@ import { resendOtp, sendOtp, verifyOtp } from "@/services/authService";
 import { fetchOtpScreens } from "@/services/otpScreenService";
 import { useAuth } from "@/context/AuthContext";
 import { startOtpAutofill } from "@/services/otpAutofill";
+import { setBookingToken } from "@/services/booking-session";
 import { COLORS } from "@/constants/colors";
 import LoginView from "./LoginView";
 import OtpVerificationView from "./OtpVerificationView";
@@ -123,8 +124,9 @@ export default function AuthVerificationView({
           ? phoneNumber
           : `+91${phoneNumber}`;
 
+        await setBookingToken(res.bookingToken ?? null);
         await login({
-          id: res.userId || 1,
+          id: res.bookingUserId || res.userId || 0,
           mobile: fullNumber,
           isLoggedIn: true,
         });

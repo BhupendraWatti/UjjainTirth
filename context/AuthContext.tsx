@@ -6,6 +6,7 @@ import {
   StoredUser,
 } from "@/utils/storage";
 import { saveUserProfile, UserProfileInput } from "@/services/authService";
+import { clearBookingToken } from "@/services/booking-session";
 
 interface AuthContextType {
   user: StoredUser | null;
@@ -55,7 +56,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const logout = async () => {
-    await clearStoredUser();
+    await Promise.all([clearStoredUser(), clearBookingToken()]);
     setUser(null);
   };
 
