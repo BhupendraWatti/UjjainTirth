@@ -30,7 +30,7 @@ const menuItems = [
   {
     title: "About Ujjain",
     icon: "trail-sign-outline" as const,
-    route: "/coming-soon",
+    route: "/about-ujjain",
   },
   // Language section hidden for now as requested
   // {

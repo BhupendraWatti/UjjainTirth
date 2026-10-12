@@ -218,13 +218,12 @@ const TempleDetailScreen = () => {
         </ScrollView>
 
         {/* CTA BUTTON */}
-        <TouchableOpacity style={styles.cta}>
-          <Text
-            onPress={() => router.push("/coming-soon")}
-            style={styles.ctaText}
-          >
-            Book My Darshan
-          </Text>
+        <TouchableOpacity
+          style={styles.cta}
+          activeOpacity={0.85}
+          onPress={() => router.push("/(tabs)/packages")}
+        >
+          <Text style={styles.ctaText}>Book My Darshan</Text>
         </TouchableOpacity>
       </View>
     </>
