@@ -79,11 +79,11 @@ const BackdropItem = React.memo(
 
     return (
       <Animated.View
-        style={[StyleSheet.absoluteFillObject, animatedStyle]}
+        style={[StyleSheet.absoluteFill, animatedStyle]}
       >
         <Image
           source={imageSource}
-          style={StyleSheet.absoluteFillObject}
+          style={StyleSheet.absoluteFill}
           contentFit="cover"
           // Keep within Android RenderEffect limit (<= 25)
           blurRadius={Platform.OS === "android" ? 18 : 35}
@@ -264,11 +264,11 @@ const CarouselCard = React.memo(
           ]}
         >
           <Animated.View
-            style={[StyleSheet.absoluteFillObject, animatedImageStyle]}
+            style={[StyleSheet.absoluteFill, animatedImageStyle]}
           >
             <Image
               source={imageSource}
-              style={StyleSheet.absoluteFillObject}
+              style={StyleSheet.absoluteFill}
               contentFit="cover"
               priority="high"
               cachePolicy="memory-disk"
@@ -278,7 +278,7 @@ const CarouselCard = React.memo(
           </Animated.View>
           <LinearGradient
             colors={["transparent", "rgba(0,0,0,0.12)", "rgba(0,0,0,0.42)"]}
-            style={StyleSheet.absoluteFillObject}
+            style={StyleSheet.absoluteFill}
             pointerEvents="none"
           />
         </Animated.View>
@@ -451,7 +451,7 @@ export default function OnboardingView() {
       <StatusBar style="light" />
 
       {/* 1. Backdrop Layer: Full-screen stack of cross-fading blurred wallpapers */}
-      <View style={StyleSheet.absoluteFillObject} pointerEvents="none">
+      <View style={StyleSheet.absoluteFill} pointerEvents="none">
         {data.map((item, idx) => (
           <BackdropItem
             key={`backdrop-${idx}`}
@@ -467,7 +467,7 @@ export default function OnboardingView() {
             "rgba(8, 14, 11, 0.72)",
             "rgba(6, 10, 8, 0.94)",
           ]}
-          style={StyleSheet.absoluteFillObject}
+          style={StyleSheet.absoluteFill}
         />
       </View>
 

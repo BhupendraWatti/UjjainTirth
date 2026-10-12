@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
   },
 
   imageBackdrop: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     backgroundColor: "#3A2E26",
   },
 

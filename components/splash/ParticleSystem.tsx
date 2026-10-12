@@ -141,7 +141,7 @@ interface ParticleSystemProps {
 
 const ParticleSystem = React.memo(({ count = 15 }: ParticleSystemProps) => {
   return (
-    <View style={StyleSheet.absoluteFillObject} pointerEvents="none">
+    <View style={StyleSheet.absoluteFill} pointerEvents="none">
       {Array.from({ length: count }).map((_, i) => (
         <Particle key={i} index={i} />
       ))}

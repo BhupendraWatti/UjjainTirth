@@ -41,7 +41,7 @@ export default function AboutSanctuary({ hotel }: Props) {
         <View style={styles.photoContainer}>
           <Image
             source={{ uri: secondaryImage }}
-            style={StyleSheet.absoluteFillObject}
+            style={StyleSheet.absoluteFill}
             contentFit="cover"
           />
           <View style={styles.photoBadge}>

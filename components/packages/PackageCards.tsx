@@ -279,7 +279,7 @@ export default function PackageCard({
             <View style={styles.placeholderBackdrop}>
               <LinearGradient
                 colors={["#2C2018", "#1C140F", "#100B08"]}
-                style={StyleSheet.absoluteFillObject}
+                style={StyleSheet.absoluteFill}
               />
               {/* Subtle Sacred Architectural Watermark */}
               <View style={styles.placeholderWatermark}>
@@ -301,7 +301,7 @@ export default function PackageCard({
               "rgba(18, 12, 9, 0.96)",
             ]}
             locations={[0, 0.35, 0.72, 1.0]}
-            style={StyleSheet.absoluteFillObject}
+            style={StyleSheet.absoluteFill}
           />
 
           {/* Optional Dynamic Price Tag in Top-Right (Rendered ONLY if price exists in API) */}
@@ -473,18 +473,18 @@ const styles = StyleSheet.create({
   },
 
   heroImage: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     width: "100%",
     height: "100%",
   },
 
   imageBackdropBase: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     backgroundColor: "#1F1611",
   },
 
   placeholderBackdrop: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     backgroundColor: "#201611",
     alignItems: "center",
     justifyContent: "center",

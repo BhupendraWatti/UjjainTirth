@@ -362,7 +362,7 @@ export const AvailabilityScreen: React.FC<AvailabilityScreenProps> = ({
       {!showContent && (
         <Animated.View
           exiting={FadeOut.duration(240)}
-          style={[StyleSheet.absoluteFillObject, styles.loadingScreenContainer]}
+          style={[StyleSheet.absoluteFill, styles.loadingScreenContainer]}
         >
           <AvailabilityLoader
             isLoading={isLoading}

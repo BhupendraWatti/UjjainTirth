@@ -133,7 +133,7 @@ const ParikramaModeCarousel = ({
 
                 <LinearGradient
                   colors={["rgba(0,0,0,0.15)", "transparent", "rgba(0,0,0,0.65)"]}
-                  style={StyleSheet.absoluteFillObject}
+                  style={StyleSheet.absoluteFill}
                 />
 
                 {/* Pilgrimage Tag Badge */}

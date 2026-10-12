@@ -56,11 +56,11 @@ export default function RoomSelection({
                 {room.image ? (
                   <Image
                     source={{ uri: room.image }}
-                    style={StyleSheet.absoluteFillObject}
+                    style={StyleSheet.absoluteFill}
                     contentFit="cover"
                   />
                 ) : (
-                  <View style={[StyleSheet.absoluteFillObject, styles.placeholder]}>
+                  <View style={[StyleSheet.absoluteFill, styles.placeholder]}>
                     <MaterialCommunityIcons name="bed-king-outline" size={36} color={COLORS.inkMuted} />
                   </View>
                 )}

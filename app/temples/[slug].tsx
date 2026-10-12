@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
     objectFit: "cover",
   },
   overlay: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
   },
   headerContent: {
     position: "absolute",

@@ -72,7 +72,7 @@ export default function GalleryHeader({ hotel, onShare }: Props) {
       <LinearGradient
         colors={["rgba(0,0,0,0.5)", "transparent", "rgba(0,0,0,0.65)"]}
         locations={[0, 0.45, 1]}
-        style={[StyleSheet.absoluteFillObject, { pointerEvents: "none" }]}
+        style={[StyleSheet.absoluteFill, { pointerEvents: "none" }]}
       />
 
       {/* Top Action Nav Bar */}

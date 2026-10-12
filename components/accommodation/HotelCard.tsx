@@ -61,7 +61,7 @@ const HotelCard = ({ hotel, onPress, style }: Props) => {
         <LinearGradient
           colors={["rgba(0,0,0,0.35)", "transparent", "rgba(78, 5, 26, 0.8)"]}
           locations={[0, 0.4, 1]}
-          style={StyleSheet.absoluteFillObject}
+          style={StyleSheet.absoluteFill}
         />
 
         {/* Proximity Ribbon (Top Left - only if provided by API) */}

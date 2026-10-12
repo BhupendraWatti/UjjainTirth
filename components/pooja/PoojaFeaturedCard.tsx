@@ -91,7 +91,7 @@ const PoojaFeaturedCard = ({ item, index = 0, onRequest, style }: Props) => {
               "rgba(35, 12, 16, 0.85)",
             ]}
             locations={[0, 0.4, 1]}
-            style={StyleSheet.absoluteFillObject}
+            style={StyleSheet.absoluteFill}
           />
 
           {/* Top Badges Row */}

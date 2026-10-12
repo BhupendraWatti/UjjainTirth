@@ -221,7 +221,7 @@ const RiverSpineTimeline = ({ locations, onSelectLocation }: Props) => {
                     />
                     <LinearGradient
                       colors={["transparent", "rgba(0,0,0,0.45)"]}
-                      style={StyleSheet.absoluteFillObject}
+                      style={StyleSheet.absoluteFill}
                     />
                     <View style={styles.imageBadge}>
                       <Text style={styles.imageBadgeText} maxFontSizeMultiplier={1.15}>

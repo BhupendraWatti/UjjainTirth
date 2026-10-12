@@ -73,7 +73,7 @@ const ParikramaHero = ({ onBack, showBackButton = false }: Props) => {
         {/* Layer 1: Authentic Consecrated River Ghats Photography */}
         <Image
           source={HERO_BG_LOCAL}
-          style={StyleSheet.absoluteFillObject}
+          style={StyleSheet.absoluteFill}
           contentFit="cover"
           priority="high"
           cachePolicy="memory-disk"
@@ -90,7 +90,7 @@ const ParikramaHero = ({ onBack, showBackButton = false }: Props) => {
           locations={[0, 0.55, 1]}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
-          style={StyleSheet.absoluteFillObject}
+          style={StyleSheet.absoluteFill}
         />
 
         {/* Layer 3: Warm Ambient Golden Light Overlay (Ghat Aarti Radiance) */}
@@ -103,7 +103,7 @@ const ParikramaHero = ({ onBack, showBackButton = false }: Props) => {
           locations={[0, 0.6, 1]}
           start={{ x: 0.8, y: 0 }}
           end={{ x: 0, y: 1 }}
-          style={StyleSheet.absoluteFillObject}
+          style={StyleSheet.absoluteFill}
         />
 
         {/* Banner Content Layout using Tamagui YStack & XStack */}

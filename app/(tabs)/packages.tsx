@@ -167,8 +167,8 @@ export default function PackagesScreen() {
       <View style={styles.tabContainer}>
         <TabSwitcher
           tabs={[
-            { label: "Latest Packages", value: "list", badge: "Curated" },
-            { label: "My Package / My Cost", value: "custom", badge: "Builder" },
+            { label: "Latest Packages", value: "list" },
+            { label: "My Package / My Cost", value: "custom" },
           ]}
           active={activeTab}
           onChange={setActiveTab}

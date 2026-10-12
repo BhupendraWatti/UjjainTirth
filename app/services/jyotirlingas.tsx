@@ -20,7 +20,7 @@ import { COLORS } from "@/constants/colors";
 import { FONTS } from "@/constants/typography";
 import { RADIUS, SHADOWS } from "@/constants/theme";
  
-import { useLayout } from "@/hooks/useLayout";
+import { useLayout } from "@/hooks/useLayout";
 import { sheetColumn } from "@/constants/layout";
 const getNormalizedCoreName = (name: string): string => {
   if (!name) return "";
@@ -438,12 +438,12 @@ export default function JyotirlingasScreen() {
                       {/* Blurred background image to fill space beautifully */}
                       <Image
                         source={selectedTour.image || selectedTour.acf?.jyotirling_image ? { uri: selectedTour.image || selectedTour.acf?.jyotirling_image } : require("../../assets/images/ujjain_tirth_logo.png")}
-                        style={StyleSheet.absoluteFillObject}
+                        style={StyleSheet.absoluteFill}
                         resizeMode="cover"
                         blurRadius={15}
                       />
                       {/* Semi-transparent dark overlay for contrast */}
-                      <View style={[StyleSheet.absoluteFillObject, { backgroundColor: "rgba(0, 0, 0, 0.15)" }]} />
+                      <View style={[StyleSheet.absoluteFill, { backgroundColor: "rgba(0, 0, 0, 0.15)" }]} />
                       {/* Sharp, full image in the foreground */}
                       <Image
                         source={selectedTour.image || selectedTour.acf?.jyotirling_image ? { uri: selectedTour.image || selectedTour.acf?.jyotirling_image } : require("../../assets/images/ujjain_tirth_logo.png")}

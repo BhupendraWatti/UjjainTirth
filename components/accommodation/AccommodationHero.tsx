@@ -41,7 +41,7 @@ export default function AccommodationHero({
       {imageUri ? (
         <Image
           source={{ uri: imageUri }}
-          style={StyleSheet.absoluteFillObject}
+          style={StyleSheet.absoluteFill}
           contentFit="cover"
           transition={300}
         />
@@ -55,7 +55,7 @@ export default function AccommodationHero({
           "rgba(78, 5, 26, 0.98)",
         ]}
         locations={[0, 0.5, 1]}
-        style={StyleSheet.absoluteFillObject}
+        style={StyleSheet.absoluteFill}
       />
 
       {/* In-hero Header Bar */}

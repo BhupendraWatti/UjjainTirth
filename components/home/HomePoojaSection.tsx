@@ -125,7 +125,7 @@ const HomePoojaSection = () => {
                     "rgba(35, 12, 16, 0.88)",
                   ]}
                   locations={[0, 0.4, 1]}
-                  style={StyleSheet.absoluteFillObject}
+                  style={StyleSheet.absoluteFill}
                 />
 
                 {/* Badge Tag */}

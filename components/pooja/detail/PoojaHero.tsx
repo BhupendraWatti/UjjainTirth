@@ -54,7 +54,7 @@ export const PoojaHero: React.FC<PoojaHeroProps> = ({
           "rgba(35, 12, 16, 0.94)",
         ]}
         locations={[0, 0.42, 1]}
-        style={StyleSheet.absoluteFillObject}
+        style={StyleSheet.absoluteFill}
       />
 
       {/* Top Navigation Controls */}
