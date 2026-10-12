@@ -10,6 +10,7 @@ import Animated, {
 } from "react-native-reanimated";
 import Svg, { Path } from "react-native-svg";
 
+import { COLORS } from "@/constants/colors";
 const CTA_BG_COLOR = "#FAF5EB";
 
 /**
@@ -34,7 +35,7 @@ const SacredBottomWaveSkeleton = () => {
         {/* Parallel Antique-Gold Accent Curve */}
         <Path
           d="M 0,20 C 65,20 105,38 155,36 C 215,33 245,8 305,10 C 350,12 380,22 400,22"
-          stroke="#C99A55"
+          stroke={COLORS.gold}
           strokeWidth={1.3}
           fill="none"
           opacity={0.5}
@@ -173,7 +174,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     borderWidth: 1,
     borderColor: "rgba(43, 36, 32, 0.08)",
-    shadowColor: "#2B2420",
+    shadowColor: COLORS.ink,
     shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.1,
     shadowRadius: 12,

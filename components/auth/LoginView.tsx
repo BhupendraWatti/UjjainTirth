@@ -7,13 +7,12 @@ import {
   Platform,
   ScrollView,
   StyleSheet,
-  Text,
-  TextInput,
   TouchableOpacity,
   TouchableWithoutFeedback,
   useWindowDimensions,
   View,
 } from "react-native";
+import { Text, TextInput } from "@/components/ui/AppText";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
@@ -200,7 +199,7 @@ export default function LoginView({
                   {/* Green Verified Circle Checkmark */}
                   {isValid && (
                     <View style={styles.verifiedCircle}>
-                      <Ionicons name="checkmark" size={15} color="#FFFFFF" />
+                      <Ionicons name="checkmark" size={15} color={COLORS.white} />
                     </View>
                   )}
                 </View>
@@ -231,7 +230,7 @@ export default function LoginView({
                     style={styles.ctaButtonGradient}
                   >
                     {loading ? (
-                      <ActivityIndicator color="#FFFFFF" size="small" />
+                      <ActivityIndicator color={COLORS.white} size="small" />
                     ) : (
                       <View style={styles.ctaContentRow}>
                         <Text style={styles.ctaText}>{"Send OTP"}</Text>
@@ -330,7 +329,7 @@ const styles = StyleSheet.create({
     letterSpacing: 1.4,
   },
   divineSubText: {
-    fontSize: 9.5,
+    fontSize: 11,
     fontFamily: FONTS.body.semiBold,
     color: COLORS.inkMuted,
     letterSpacing: 2,
@@ -348,9 +347,10 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.hairline,
   },
   ornamentDiamond: {
-    fontSize: 8,
+    fontSize: 12,
     color: COLORS.gold,
     marginHorizontal: 6,
+    flexShrink: 1,
   },
   middleSpacer: {
     flex: 1,
@@ -401,7 +401,7 @@ const styles = StyleSheet.create({
     borderRadius: RADIUS.md,
     borderWidth: 1.5,
     borderColor: COLORS.hairline,
-    height: 54,
+    minHeight: 54,
     paddingHorizontal: 14,
     ...SHADOWS.subtle,
   },
@@ -411,6 +411,7 @@ const styles = StyleSheet.create({
   },
   countryCodeBox: {
     paddingRight: 10,
+    flexShrink: 1,
   },
   countryCodeText: {
     fontSize: 17,
@@ -452,6 +453,7 @@ const styles = StyleSheet.create({
     fontSize: 12.5,
     fontFamily: FONTS.body.medium,
     color: COLORS.error,
+    flexShrink: 1,
   },
   ctaButtonWrapper: {
     width: "100%",
@@ -464,7 +466,7 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   ctaButtonGradient: {
-    height: 52,
+    minHeight: 52,
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: 20,
@@ -478,8 +480,9 @@ const styles = StyleSheet.create({
   ctaText: {
     fontSize: 16,
     fontFamily: FONTS.body.bold,
-    color: "#FFFFFF",
+    color: COLORS.white,
     letterSpacing: 0.3,
+    flexShrink: 1,
   },
   ctaArrowCircle: {
     width: 24,
@@ -513,13 +516,13 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   trustTitle: {
-    fontSize: 11.5,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
     color: COLORS.ink,
     textAlign: "center",
   },
   trustSubtitle: {
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: FONTS.body.regular,
     color: COLORS.inkMuted,
     textAlign: "center",

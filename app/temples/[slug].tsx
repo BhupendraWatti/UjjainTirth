@@ -8,10 +8,10 @@ import {
   Linking,
   ScrollView,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
 import LoadingSkeleton from "@/components/layout/LoadingSkeleton";
 import { useTempleDistances, formatDistance } from "@/hooks/useTempleDistances";
 import { usePoojas } from "@/hooks/usePooja";
@@ -99,7 +99,7 @@ const TempleDetailScreen = () => {
 
   return (
     <>
-      <View style={{ flex: 1, marginTop: 2, backgroundColor: "#F5F2EA" }}>
+      <View style={{ flex: 1, marginTop: 2, backgroundColor: COLORS.bg }}>
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 50 }}
@@ -192,7 +192,7 @@ const TempleDetailScreen = () => {
                   </View>
                   <View style={styles.templePoojaBtn}>
                     <Text style={styles.templePoojaBtnText}>View Vidhi</Text>
-                    <Ionicons name="chevron-forward" size={13} color="#FFFFFF" />
+                    <Ionicons name="chevron-forward" size={13} color={COLORS.white} />
                   </View>
                 </TouchableOpacity>
               ))}
@@ -266,7 +266,7 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
   },
   badgeText: {
-    color: "#FFFFFF",
+    color: COLORS.white,
     fontSize: 12,
     fontFamily: FONTS.body.bold,
   },
@@ -280,12 +280,12 @@ const styles = StyleSheet.create({
     borderColor: "rgba(255,255,255,0.2)",
   },
   distanceBadgeText: {
-    color: "#FFFFFF",
+    color: COLORS.white,
     fontSize: 12,
     fontFamily: FONTS.body.bold,
   },
   title: {
-    color: "#FFFFFF",
+    color: COLORS.white,
     fontSize: 26,
     fontFamily: FONTS.display.semiBold,
   },
@@ -297,6 +297,7 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.display.semiBold,
     color: COLORS.ink,
     marginBottom: 8,
+    flexShrink: 1,
   },
   description: {
     color: COLORS.inkBody,
@@ -333,7 +334,7 @@ const styles = StyleSheet.create({
     marginBottom: 3,
   },
   templePoojaDuration: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.regular,
     color: COLORS.inkMuted,
     marginBottom: 2,
@@ -351,11 +352,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: RADIUS.xs,
+    flexShrink: 1,
   },
   templePoojaBtnText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
-    color: "#FFFFFF",
+    color: COLORS.white,
+    flexShrink: 1,
   },
   cta: {
     position: "absolute",
@@ -369,7 +372,7 @@ const styles = StyleSheet.create({
     ...SHADOWS.elevated,
   },
   ctaText: {
-    color: "#FFFFFF",
+    color: COLORS.white,
     fontFamily: FONTS.body.bold,
     fontSize: 15,
   },

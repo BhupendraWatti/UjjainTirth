@@ -8,12 +8,13 @@ import { LinearGradient } from "expo-linear-gradient";
 import React, { memo, useCallback, useState } from "react";
 import {
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
   ViewStyle,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
 
+import { HIT_SLOP } from "@/constants/layout";
 interface Props {
   hotel: EnrichedHotel;
   onPress: (hotel: EnrichedHotel) => void;
@@ -52,7 +53,7 @@ const HotelCard = ({ hotel, onPress, style }: Props) => {
           />
         ) : (
           <View style={[styles.image, { backgroundColor: "#E0DBD5", justifyContent: "center", alignItems: "center" }]}>
-            <MaterialCommunityIcons name="temple-hindu" size={40} color="#877274" />
+            <MaterialCommunityIcons name="temple-hindu" size={40} color={COLORS.inkMuted} />
           </View>
         )}
 
@@ -74,7 +75,7 @@ const HotelCard = ({ hotel, onPress, style }: Props) => {
             <MaterialCommunityIcons
               name={isUltraClose ? "timer-outline" : "walk"}
               size={14}
-              color={isUltraClose ? "#4A2800" : "#FFDF98"}
+              color={isUltraClose ? "#4A2800" : COLORS.goldLight}
             />
             <Text
               style={[
@@ -88,7 +89,7 @@ const HotelCard = ({ hotel, onPress, style }: Props) => {
         ) : null}
 
         {/* Favorite Wishlist Button (Top Right) */}
-        <TouchableOpacity
+        <TouchableOpacity hitSlop={HIT_SLOP}
           style={styles.favoriteButton}
           activeOpacity={0.8}
           onPress={toggleFavorite}
@@ -97,7 +98,7 @@ const HotelCard = ({ hotel, onPress, style }: Props) => {
           <Ionicons
             name={isFavorite ? "heart" : "heart-outline"}
             size={18}
-            color={isFavorite ? COLORS.primary : "#4E051A"}
+            color={isFavorite ? COLORS.primary : COLORS.sacredDeep}
           />
         </TouchableOpacity>
 
@@ -111,7 +112,7 @@ const HotelCard = ({ hotel, onPress, style }: Props) => {
 
           {hotel.rating > 0 ? (
             <View style={styles.ratingPill}>
-              <Ionicons name="star" size={13} color="#FE932C" />
+              <Ionicons name="star" size={13} color={COLORS.saffron} />
               <Text style={styles.ratingScore}>{hotel.rating.toFixed(1)}</Text>
             </View>
           ) : null}
@@ -126,7 +127,7 @@ const HotelCard = ({ hotel, onPress, style }: Props) => {
             {hotel.name}
           </Text>
           <View style={styles.locationRow}>
-            <MaterialCommunityIcons name="compass-outline" size={14} color="#877274" />
+            <MaterialCommunityIcons name="compass-outline" size={14} color={COLORS.inkMuted} />
             <Text style={styles.locationText} numberOfLines={1}>
               {hotel.category ? `${hotel.category.toUpperCase()} · ` : ""}
               {hotel.location}
@@ -164,7 +165,7 @@ const HotelCard = ({ hotel, onPress, style }: Props) => {
 
         {/* 3. Card Footer: Price & View Details Action */}
         <View style={styles.footerRow}>
-          <View>
+          <View style={{ flexShrink: 1 }}>
             <View style={styles.priceContainer}>
               <Text style={styles.priceAmount}>₹{hotel.price.toLocaleString("en-IN")}</Text>
               <Text style={styles.priceUnit}> / night</Text>
@@ -174,7 +175,7 @@ const HotelCard = ({ hotel, onPress, style }: Props) => {
 
           <View style={styles.viewDetailsBtn}>
             <Text style={styles.viewDetailsText}>View Details</Text>
-            <Ionicons name="arrow-forward" size={14} color="#FFFFFF" />
+            <Ionicons name="arrow-forward" size={14} color={COLORS.white} />
           </View>
         </View>
       </View>
@@ -186,7 +187,7 @@ export default memo(HotelCard);
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.white,
     borderRadius: RADIUS.lg,
     marginHorizontal: 16,
     marginBottom: 16,
@@ -199,7 +200,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 190,
     position: "relative",
-    backgroundColor: "#EBE8E3",
+    backgroundColor: COLORS.bgStone,
   },
   image: {
     width: "100%",
@@ -218,12 +219,13 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(78, 5, 26, 0.92)",
   },
   proximityRibbonUltra: {
-    backgroundColor: "#FE932C",
+    backgroundColor: COLORS.saffron,
   },
   proximityText: {
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
-    color: "#FFDF98",
+    color: COLORS.goldLight,
+    flexShrink: 1,
   },
   proximityTextUltra: {
     color: "#4A2800",
@@ -255,9 +257,9 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.55)",
   },
   categoryText: {
-    fontSize: 9,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
-    color: "#FFFFFF",
+    color: COLORS.white,
     letterSpacing: 0.8,
     textTransform: "uppercase",
   },
@@ -268,18 +270,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: RADIUS.full,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.white,
     ...SHADOWS.xs,
   },
   ratingScore: {
     fontSize: 12,
     fontFamily: FONTS.body.bold,
-    color: "#4E051A",
+    color: COLORS.sacredDeep,
+    flexShrink: 1,
   },
   reviewCount: {
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: FONTS.body.regular,
-    color: "#877274",
+    color: COLORS.inkMuted,
   },
   body: {
     padding: 14,
@@ -288,7 +291,7 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 17,
     fontFamily: FONTS.display.semiBold,
-    color: "#4E051A",
+    color: COLORS.sacredDeep,
     letterSpacing: -0.2,
   },
   locationRow: {
@@ -300,22 +303,22 @@ const styles = StyleSheet.create({
   locationText: {
     fontSize: 12,
     fontFamily: FONTS.body.regular,
-    color: "#544244",
+    color: COLORS.inkBody,
     flex: 1,
   },
   routeMicroCard: {
     flexDirection: "row",
     alignItems: "center",
     gap: 6,
-    backgroundColor: "#F6F3EE",
+    backgroundColor: COLORS.surfaceMuted,
     paddingHorizontal: 10,
     paddingVertical: 7,
     borderRadius: RADIUS.sm,
   },
   routeText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.medium,
-    color: "#544244",
+    color: COLORS.inkBody,
     flex: 1,
   },
   amenitiesRow: {
@@ -327,12 +330,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: RADIUS.xs,
-    backgroundColor: "#F0EDE9",
+    backgroundColor: COLORS.surfaceMuted,
   },
   amenityText: {
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: FONTS.body.medium,
-    color: "#544244",
+    color: COLORS.inkBody,
   },
   divider: {
     height: 1,
@@ -351,33 +354,37 @@ const styles = StyleSheet.create({
   priceAmount: {
     fontSize: 20,
     fontFamily: FONTS.display.bold,
-    color: "#4E051A",
+    color: COLORS.sacredDeep,
     letterSpacing: -0.5,
+    flexShrink: 1,
   },
   priceUnit: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.regular,
-    color: "#877274",
+    color: COLORS.inkMuted,
+    flexShrink: 1,
   },
   taxNote: {
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: FONTS.body.semiBold,
-    color: "#904D00",
+    color: COLORS.goldDeep,
     marginTop: 1,
   },
   viewDetailsBtn: {
     flexDirection: "row",
     alignItems: "center",
     gap: 4,
-    backgroundColor: "#4E051A",
+    backgroundColor: COLORS.sacredDeep,
     paddingHorizontal: 14,
     paddingVertical: 9,
     borderRadius: RADIUS.md,
     ...SHADOWS.xs,
+    flexShrink: 1,
   },
   viewDetailsText: {
     fontSize: 12,
     fontFamily: FONTS.body.bold,
-    color: "#FFFFFF",
+    color: COLORS.white,
+    flexShrink: 1,
   },
 });

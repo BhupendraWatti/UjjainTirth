@@ -9,10 +9,10 @@ import {
   Dimensions,
   ImageBackground,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
 
 const { width } = Dimensions.get("window");
 
@@ -33,7 +33,7 @@ const HeroSection = ({ hero }: Props) => {
         accessibilityRole="button"
         accessibilityLabel="Go back"
       >
-        <Ionicons name="arrow-back" size={22} color="#FFFFFF" />
+        <Ionicons name="arrow-back" size={22} color={COLORS.white} />
       </TouchableOpacity>
 
       {/* Title & Subtitle */}
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontFamily: FONTS.display.semiBold,
-    color: "#FFFFFF",
+    color: COLORS.white,
     marginBottom: 6,
     letterSpacing: -0.3,
     textShadowColor: "rgba(0,0,0,0.3)",

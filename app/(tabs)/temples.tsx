@@ -1,5 +1,10 @@
 import React, { useMemo, useState } from "react";
-import { FlatList, StyleSheet, Text, View, useWindowDimensions } from "react-native";
+import {
+  FlatList,
+  StyleSheet,
+  View,
+} from "react-native";
+import { Text } from "@/components/ui/AppText";
 
 import ScreenContainer from "@/components/layout/ScreenContainer";
 import { AvailabilityScreen } from "@/components/common/AvailabilityLoader";
@@ -14,15 +19,15 @@ import { FONTS } from "@/constants/typography";
 
 import { useTempleDistances } from "@/hooks/useTempleDistances";
 import { useTemples } from "@/hooks/useTemples";
+import { useLayout } from "@/hooks/useLayout";
 
 export default function TemplesScreen() {
   const [search, setSearch] = useState("");
   const [selectedTag, setSelectedTag] = useState<number | null>(null);
 
-  const { width } = useWindowDimensions();
-  const isTablet = width >= 768;
+  const { contentWidth, isTablet, tabBarSpace } = useLayout();
   const numColumns = isTablet ? 2 : 1;
-  const cardWidth = isTablet ? (width - 44) / 2 : "100%";
+  const cardWidth = isTablet ? (contentWidth - 44) / 2 : "100%";
 
   const {
     data,
@@ -130,7 +135,7 @@ export default function TemplesScreen() {
 
             {selectedTag && (
               <View style={styles.filterBox}>
-                <View>
+                <View style={{ flexShrink: 1 }}>
                   <Text style={styles.filterInfo} maxFontSizeMultiplier={1.2}>
                     Showing results for selected category
                   </Text>
@@ -153,7 +158,7 @@ export default function TemplesScreen() {
         contentContainerStyle={{
           paddingHorizontal: 16,
           paddingTop: 10,
-          paddingBottom: 110,
+          paddingBottom: tabBarSpace,
           flexGrow: 1,
         }}
         ListEmptyComponent={
@@ -206,6 +211,7 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.body.medium,
     fontSize: 13,
     marginBottom: 10,
+    flexShrink: 1,
   },
   filterBox: {
     flexDirection: "row",

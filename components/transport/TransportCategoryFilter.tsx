@@ -2,7 +2,13 @@ import { COLORS } from "@/constants/colors";
 import { RADIUS, SHADOWS } from "@/constants/theme";
 import { FONTS } from "@/constants/typography";
 import React, { memo } from "react";
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { Text } from "@/components/ui/AppText";
 
 export interface CategoryOption {
   id: string;
@@ -85,7 +91,7 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.body.semiBold,
   },
   pillTextActive: {
-    color: "#FFFFFF",
+    color: COLORS.white,
   },
   pillTextInactive: {
     color: COLORS.inkBody,

@@ -1,5 +1,10 @@
 import React from "react";
-import { ScrollView, StyleSheet, Text, TouchableOpacity } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
+import { Text } from "@/components/ui/AppText";
 import { COLORS } from "@/constants/colors";
 import { FONTS } from "@/constants/typography";
 import { RADIUS } from "@/constants/theme";
@@ -97,7 +102,7 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.body.medium,
   },
   activeText: {
-    color: "#FFFFFF",
+    color: COLORS.white,
     fontFamily: FONTS.body.bold,
   },
   scrollContent: {

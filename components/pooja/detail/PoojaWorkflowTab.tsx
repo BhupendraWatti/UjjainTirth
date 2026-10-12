@@ -1,5 +1,9 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import {
+  StyleSheet,
+  View,
+} from "react-native";
+import { Text } from "@/components/ui/AppText";
 import Animated, { FadeIn } from "react-native-reanimated";
 import { COLORS } from "@/constants/colors";
 import { RADIUS, SHADOWS } from "@/constants/theme";
@@ -139,10 +143,11 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.whatsapp,
   },
   liveTagText: {
-    fontSize: 10,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
     color: COLORS.sacred,
     letterSpacing: 0.6,
+    flexShrink: 1,
   },
   liveAssuranceTitle: {
     fontSize: 14,
@@ -191,7 +196,7 @@ const styles = StyleSheet.create({
     borderRadius: RADIUS.xs,
   },
   badgeTagText: {
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
     color: COLORS.sacred,
   },
@@ -222,12 +227,12 @@ const styles = StyleSheet.create({
     borderColor: COLORS.sacred,
   },
   timelineDotText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
     color: COLORS.inkMuted,
   },
   timelineDotTextActive: {
-    color: "#FFFFFF",
+    color: COLORS.white,
   },
   timelineLine: {
     flex: 1,
@@ -261,7 +266,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   sankalpBadgeText: {
-    fontSize: 9,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
     color: COLORS.gold,
     letterSpacing: 0.5,
@@ -287,7 +292,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.hairline,
   },
   purohitTrustTag: {
-    fontSize: 10,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
     color: COLORS.gold,
     letterSpacing: 0.8,

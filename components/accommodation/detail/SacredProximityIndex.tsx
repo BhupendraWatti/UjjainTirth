@@ -7,10 +7,10 @@ import { LinearGradient } from "expo-linear-gradient";
 import React, { useState } from "react";
 import {
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
 
 interface Props {
   hotel: EnrichedHotel;
@@ -30,7 +30,7 @@ export default function SacredProximityIndex({ hotel }: Props) {
     <View style={styles.card}>
       {/* Sacred Gradient Top Border Accent */}
       <LinearGradient
-        colors={["#904D00", "#FE932C", "#4E051A"]}
+        colors={[COLORS.goldDeep, COLORS.saffron, COLORS.sacredDeep]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
         style={styles.accentBar}
@@ -56,7 +56,7 @@ export default function SacredProximityIndex({ hotel }: Props) {
       {/* Sanctum Card */}
       <View style={styles.sanctumBox}>
         <View style={styles.templeIconCircle}>
-          <MaterialCommunityIcons name="temple-hindu" size={20} color="#FFFFFF" />
+          <MaterialCommunityIcons name="temple-hindu" size={20} color={COLORS.white} />
         </View>
         <View style={styles.sanctumInfo}>
           <Text style={styles.sanctumTitle}>Mahakaleshwar Jyotirlinga Sanctum</Text>
@@ -69,7 +69,7 @@ export default function SacredProximityIndex({ hotel }: Props) {
       {/* Devotee Bhasma Aarti Advantage Callout (Dynamic from API) */}
       {hotel.bhasma_aarti_advantage ? (
         <View style={styles.bhasmaAartiCallout}>
-          <MaterialCommunityIcons name="weather-sunset" size={18} color="#904D00" />
+          <MaterialCommunityIcons name="weather-sunset" size={18} color={COLORS.goldDeep} />
           <Text style={styles.bhasmaAartiText}>
             {hotel.bhasma_aarti_advantage}
           </Text>
@@ -102,13 +102,13 @@ export default function SacredProximityIndex({ hotel }: Props) {
                   <View
                     style={[
                       styles.waypointDot,
-                      { backgroundColor: idx === shrines.length - 1 ? "#4E051A" : "#904D00" },
+                      { backgroundColor: idx === shrines.length - 1 ? COLORS.sacredDeep : COLORS.goldDeep },
                     ]}
                   />
                   <Text
                     style={[
                       styles.waypointText,
-                      idx === shrines.length - 1 && { fontFamily: FONTS.body.semiBold, color: "#4E051A" },
+                      idx === shrines.length - 1 && { fontFamily: FONTS.body.semiBold, color: COLORS.sacredDeep },
                     ]}
                   >
                     {shrine.title}
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     marginTop: 16,
     borderRadius: RADIUS.lg,
-    backgroundColor: "#F6F3EE",
+    backgroundColor: COLORS.surfaceMuted,
     padding: 14,
     position: "relative",
     overflow: "hidden",
@@ -156,10 +156,11 @@ const styles = StyleSheet.create({
     gap: 5,
   },
   headerTitle: {
-    fontSize: 10,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
-    color: "#904D00",
+    color: COLORS.goldDeep,
     letterSpacing: 1.1,
+    flexShrink: 1,
   },
   proximityPill: {
     paddingHorizontal: 8,
@@ -168,15 +169,15 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(144, 77, 0, 0.1)",
   },
   proximityPillText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
-    color: "#904D00",
+    color: COLORS.goldDeep,
   },
   sanctumBox: {
     flexDirection: "row",
     alignItems: "center",
     gap: 12,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.white,
     padding: 12,
     borderRadius: RADIUS.md,
     borderWidth: 1,
@@ -186,7 +187,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: "#4E051A",
+    backgroundColor: COLORS.sacredDeep,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -196,13 +197,13 @@ const styles = StyleSheet.create({
   sanctumTitle: {
     fontSize: 14,
     fontFamily: FONTS.display.semiBold,
-    color: "#4E051A",
+    color: COLORS.sacredDeep,
     marginBottom: 2,
   },
   sanctumPath: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.regular,
-    color: "#544244",
+    color: COLORS.inkBody,
   },
   bhasmaAartiCallout: {
     flexDirection: "row",
@@ -213,11 +214,11 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255, 220, 195, 0.45)",
     borderRadius: RADIUS.sm,
     borderLeftWidth: 3,
-    borderLeftColor: "#904D00",
+    borderLeftColor: COLORS.goldDeep,
   },
   bhasmaAartiText: {
     flex: 1,
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.regular,
     color: "#4A2800",
     lineHeight: 16,
@@ -229,7 +230,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     paddingVertical: 9,
     paddingHorizontal: 12,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.white,
     borderRadius: RADIUS.sm,
     borderWidth: 1,
     borderColor: "rgba(107, 29, 47, 0.08)",
@@ -239,7 +240,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
     fontSize: 12,
     fontFamily: FONTS.body.medium,
-    color: "#4E051A",
+    color: COLORS.sacredDeep,
   },
   waypointsList: {
     marginTop: 8,
@@ -257,8 +258,9 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   waypointText: {
-    fontSize: 11,
+    flexShrink: 1,
+    fontSize: 12,
     fontFamily: FONTS.body.regular,
-    color: "#544244",
+    color: COLORS.inkBody,
   },
 });

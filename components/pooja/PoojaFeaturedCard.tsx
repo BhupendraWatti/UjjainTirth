@@ -12,10 +12,10 @@ import {
   Platform,
   Pressable,
   StyleSheet,
-  Text,
   View,
   ViewStyle,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
 import Animated, {
   FadeInDown,
   useAnimatedStyle,
@@ -104,7 +104,7 @@ const PoojaFeaturedCard = ({ item, index = 0, onRequest, style }: Props) => {
             </View>
 
             <View style={styles.durationBadge}>
-              <Ionicons name="time-outline" size={12} color="#FFFFFF" />
+              <Ionicons name="time-outline" size={12} color={COLORS.white} />
               <Text style={styles.durationText} maxFontSizeMultiplier={1.2}>
                 {item.duration}
               </Text>
@@ -157,7 +157,7 @@ const PoojaFeaturedCard = ({ item, index = 0, onRequest, style }: Props) => {
                 style={styles.ctaGradient}
               >
                 <Text style={styles.ctaText} maxFontSizeMultiplier={1.2}>Book Pooja</Text>
-                <Ionicons name="arrow-forward" size={14} color="#FFFFFF" />
+                <Ionicons name="arrow-forward" size={14} color={COLORS.white} />
               </LinearGradient>
             </View>
           </View>
@@ -212,12 +212,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: RADIUS.sm,
+    flexShrink: 1,
   },
   featuredText: {
-    fontSize: 10,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
     color: "#FFE082",
     letterSpacing: 0.8,
+    flexShrink: 1,
   },
   durationBadge: {
     flexDirection: "row",
@@ -229,11 +231,13 @@ const styles = StyleSheet.create({
     borderRadius: RADIUS.sm,
     borderWidth: 1,
     borderColor: "rgba(255, 255, 255, 0.22)",
+    flexShrink: 1,
   },
   durationText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.semiBold,
-    color: "#FFFFFF",
+    color: COLORS.white,
+    flexShrink: 1,
   },
   overlayContent: {
     position: "absolute",
@@ -253,11 +257,12 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.body.bold,
     color: "#FFE082",
     letterSpacing: 0.2,
+    flexShrink: 1,
   },
   title: {
     fontSize: 20,
     fontFamily: FONTS.display.semiBold,
-    color: "#FFFFFF",
+    color: COLORS.white,
     lineHeight: 26,
     letterSpacing: -0.3,
   },
@@ -281,9 +286,10 @@ const styles = StyleSheet.create({
   },
   priceCol: {
     justifyContent: "center",
+    flexShrink: 1,
   },
   priceLabel: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.medium,
     color: COLORS.inkMuted,
     marginBottom: 2,
@@ -312,6 +318,7 @@ const styles = StyleSheet.create({
     borderRadius: RADIUS.sm,
     overflow: "hidden",
     ...SHADOWS.subtle,
+    flexShrink: 1,
   },
   ctaGradient: {
     flexDirection: "row",
@@ -323,6 +330,7 @@ const styles = StyleSheet.create({
   ctaText: {
     fontSize: 13,
     fontFamily: FONTS.body.bold,
-    color: "#FFFFFF",
+    color: COLORS.white,
+    flexShrink: 1,
   },
 });

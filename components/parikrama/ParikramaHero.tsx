@@ -9,13 +9,13 @@ import { router } from "expo-router";
 import React, { memo, useCallback } from "react";
 import {
   StyleSheet,
-  Text,
   TouchableOpacity,
-  useWindowDimensions,
   View,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
 import { XStack, YStack } from "tamagui";
 
+import { useLayout } from "@/hooks/useLayout";
 interface Props {
   onBack?: () => void;
   showBackButton?: boolean;
@@ -31,7 +31,7 @@ const STATS_DATA = [
 ];
 
 const ParikramaHero = ({ onBack, showBackButton = false }: Props) => {
-  const { width } = useWindowDimensions();
+  const { contentWidth: width } = useLayout();
   const isNarrowScreen = width < 360;
 
   const handleBack = useCallback(() => {
@@ -190,7 +190,7 @@ const ParikramaHero = ({ onBack, showBackButton = false }: Props) => {
                 accessibilityLabel={`${item.label}, ${item.sub}`}
               >
                 <View style={styles.statIconCircle}>
-                  <Ionicons name={item.icon} size={13} color="#FFFFFF" />
+                  <Ionicons name={item.icon} size={13} color={COLORS.white} />
                 </View>
                 <View style={styles.statTextColumn}>
                   <Text
@@ -263,6 +263,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: RADIUS.full,
     gap: 6,
+    flexShrink: 1,
   },
   sacredDiyaGlow: {
     width: 20,
@@ -273,10 +274,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   sacredChantText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
-    color: "#FFFFFF",
+    color: COLORS.white,
     letterSpacing: 0.8,
+    flexShrink: 1,
   },
   circuitPill: {
     backgroundColor: "rgba(255, 255, 255, 0.14)",
@@ -285,9 +287,10 @@ const styles = StyleSheet.create({
     borderRadius: RADIUS.full,
     borderWidth: 1,
     borderColor: "rgba(255, 255, 255, 0.2)",
+    flexShrink: 1,
   },
   circuitPillText: {
-    fontSize: 10,
+    fontSize: 11,
     fontFamily: FONTS.body.semiBold,
     color: "#E2F4F7",
     letterSpacing: 0.4,
@@ -295,7 +298,7 @@ const styles = StyleSheet.create({
   bannerMainTitle: {
     fontSize: 24,
     fontFamily: FONTS.display.bold,
-    color: "#FFFFFF",
+    color: COLORS.white,
     letterSpacing: -0.4,
     lineHeight: 30,
     textShadowColor: "rgba(0, 0, 0, 0.45)",
@@ -327,10 +330,11 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   scriptureText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.medium,
-    color: "#FFFFFF",
+    color: COLORS.white,
     letterSpacing: 0.3,
+    flexShrink: 1,
   },
   statsContainer: {
     marginTop: 6,
@@ -370,11 +374,11 @@ const styles = StyleSheet.create({
   statLabel: {
     fontSize: 12,
     fontFamily: FONTS.body.bold,
-    color: "#FFFFFF",
+    color: COLORS.white,
     letterSpacing: 0.2,
   },
   statSub: {
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: FONTS.body.regular,
     color: "rgba(255, 255, 255, 0.78)",
     marginTop: 1,

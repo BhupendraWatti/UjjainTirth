@@ -10,13 +10,14 @@ import React, { useState } from "react";
 import {
   ScrollView,
   StyleSheet,
-  Text,
   TouchableOpacity,
   useWindowDimensions,
   View,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { HIT_SLOP } from "@/constants/layout";
 interface Props {
   hotel: EnrichedHotel;
   onShare?: () => void;
@@ -76,26 +77,26 @@ export default function GalleryHeader({ hotel, onShare }: Props) {
 
       {/* Top Action Nav Bar */}
       <View style={[styles.topBar, { top: Math.max(10, insets.top + 6) }]}>
-        <TouchableOpacity
+        <TouchableOpacity hitSlop={HIT_SLOP}
           style={styles.navCircleBtn}
           activeOpacity={0.8}
           onPress={() => router.back()}
           accessibilityLabel="Back"
         >
-          <Ionicons name="arrow-back" size={20} color="#FFFFFF" />
+          <Ionicons name="arrow-back" size={20} color={COLORS.white} />
         </TouchableOpacity>
 
         <View style={styles.topRightActions}>
-          <TouchableOpacity
+          <TouchableOpacity hitSlop={HIT_SLOP}
             style={styles.navCircleBtn}
             activeOpacity={0.8}
             onPress={onShare}
             accessibilityLabel="Share"
           >
-            <Ionicons name="share-social-outline" size={18} color="#FFFFFF" />
+            <Ionicons name="share-social-outline" size={18} color={COLORS.white} />
           </TouchableOpacity>
 
-          <TouchableOpacity
+          <TouchableOpacity hitSlop={HIT_SLOP}
             style={[styles.navCircleBtn, isFavorite && styles.navCircleBtnActive]}
             activeOpacity={0.8}
             onPress={() => setIsFavorite((f) => !f)}
@@ -104,7 +105,7 @@ export default function GalleryHeader({ hotel, onShare }: Props) {
             <Ionicons
               name={isFavorite ? "heart" : "heart-outline"}
               size={18}
-              color={isFavorite ? "#FFFFFF" : "#FFFFFF"}
+              color={isFavorite ? COLORS.white : COLORS.white}
             />
           </TouchableOpacity>
         </View>
@@ -113,7 +114,7 @@ export default function GalleryHeader({ hotel, onShare }: Props) {
       {/* Tirth Shuddhi Badge (Top Left Overlay) */}
       <View style={[styles.badgeOverlay, { top: Math.max(64, insets.top + 52) }]}>
         <View style={styles.shuddhiPill}>
-          <MaterialIcons name="verified" size={14} color="#FE932C" />
+          <MaterialIcons name="verified" size={14} color={COLORS.saffron} />
           <Text style={styles.shuddhiText}>Tirth Shuddhi Certified</Text>
         </View>
       </View>
@@ -121,7 +122,7 @@ export default function GalleryHeader({ hotel, onShare }: Props) {
       {/* Bottom Overlays: Category Pill (Left) & Counter (Right) */}
       <View style={styles.bottomBar}>
         <View style={styles.categoryPill}>
-          <MaterialCommunityIcons name="temple-hindu" size={13} color="#FFDF98" />
+          <MaterialCommunityIcons name="temple-hindu" size={13} color={COLORS.goldLight} />
           <Text style={styles.categoryText}>{hotel.property_badge}</Text>
         </View>
 
@@ -140,12 +141,12 @@ export default function GalleryHeader({ hotel, onShare }: Props) {
 const styles = StyleSheet.create({
   container: {
     position: "relative",
-    backgroundColor: "#EBE8E3",
+    backgroundColor: COLORS.bgStone,
   },
   fallbackContainer: {
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#EBE8E3",
+    backgroundColor: COLORS.bgStone,
   },
   topBar: {
     position: "absolute",
@@ -189,11 +190,12 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255, 255, 255, 0.92)",
   },
   shuddhiText: {
-    fontSize: 10,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
-    color: "#4E051A",
+    color: COLORS.sacredDeep,
     letterSpacing: 0.5,
     textTransform: "uppercase",
+    flexShrink: 1,
   },
   bottomBar: {
     position: "absolute",
@@ -215,11 +217,12 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(107, 29, 47, 0.88)",
   },
   categoryText: {
-    fontSize: 10,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
-    color: "#FFDF98",
+    color: COLORS.goldLight,
     letterSpacing: 0.8,
     textTransform: "uppercase",
+    flexShrink: 1,
   },
   counterPill: {
     paddingHorizontal: 9,
@@ -228,9 +231,9 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.6)",
   },
   counterText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.semiBold,
-    color: "#FFFFFF",
+    color: COLORS.white,
     letterSpacing: 1,
   },
 });

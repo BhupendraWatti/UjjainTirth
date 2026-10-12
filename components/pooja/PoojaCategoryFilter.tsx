@@ -7,10 +7,10 @@ import {
   Platform,
   ScrollView,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
 
 export interface PoojaCategoryTab {
   id: string;
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   pillTextActive: {
-    color: "#FFFFFF",
+    color: COLORS.white,
     fontFamily: FONTS.body.bold,
   },
   pillTextInactive: {
@@ -170,11 +170,11 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(43, 36, 32, 0.08)",
   },
   countBadgeText: {
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
   },
   countBadgeTextActive: {
-    color: "#FFFFFF",
+    color: COLORS.white,
   },
   countBadgeTextInactive: {
     color: COLORS.inkMuted,

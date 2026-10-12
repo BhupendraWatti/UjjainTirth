@@ -5,9 +5,9 @@ import {
   Image,
   ScrollView,
   StyleSheet,
-  Text,
   View,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
 
 interface Props {
   highlights: AccommodationHighlight[];

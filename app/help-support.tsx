@@ -14,12 +14,12 @@ import {
   Platform,
   ScrollView,
   StyleSheet,
-  Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+import { Text, TextInput } from "@/components/ui/AppText";
 
+import { HIT_SLOP } from "@/constants/layout";
 interface FaqItem {
   id: string;
   category: string;
@@ -245,7 +245,7 @@ export default function HelpSupportScreen() {
     <ScreenContainer noPadding>
       {/* ── TOP HEADER ── */}
       <View style={styles.topHeader}>
-        <TouchableOpacity
+        <TouchableOpacity hitSlop={HIT_SLOP}
           style={styles.backButton}
           activeOpacity={0.7}
           onPress={handleBack}
@@ -260,7 +260,7 @@ export default function HelpSupportScreen() {
           <Text style={styles.headerTitle}>Help & Contact</Text>
         </View>
 
-        <TouchableOpacity
+        <TouchableOpacity hitSlop={HIT_SLOP}
           style={styles.headerCallBtn}
           activeOpacity={0.7}
           onPress={() => handleCall(APP_CONFIG.SUPPORT_PHONE)}
@@ -431,7 +431,7 @@ export default function HelpSupportScreen() {
                 <Ionicons name="chatbubbles" size={20} color={COLORS.primary} />
               </View>
               <View style={styles.helpCtaTextWrap}>
-                <Text style={styles.helpCtaTitle}>Didn't find your answer?</Text>
+                <Text style={styles.helpCtaTitle}>Didn&apos;t find your answer?</Text>
                 <Text style={styles.helpCtaSub}>
                   Our Ujjain pilgrim care team is ready to assist you personally.
                 </Text>
@@ -685,9 +685,10 @@ const styles = StyleSheet.create({
   },
   headerCenter: {
     alignItems: "center",
+    flexShrink: 1,
   },
   headerSubBadge: {
-    fontSize: 10,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
     color: COLORS.primary,
     letterSpacing: 1.1,
@@ -738,6 +739,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontFamily: FONTS.body.medium,
     color: COLORS.inkMuted,
+    flexShrink: 1,
   },
   tabButtonTextActive: {
     color: "#FFF",
@@ -831,7 +833,7 @@ const styles = StyleSheet.create({
     marginBottom: 3,
   },
   faqCategoryText: {
-    fontSize: 9,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
     color: COLORS.inkMuted,
     textTransform: "uppercase",
@@ -920,7 +922,7 @@ const styles = StyleSheet.create({
     color: COLORS.ink,
   },
   helpCtaSub: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.regular,
     color: COLORS.inkMuted,
     marginTop: 1,
@@ -936,8 +938,9 @@ const styles = StyleSheet.create({
   },
   helpCtaBtnText: {
     color: "#FFF",
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
+    flexShrink: 1,
   },
 
   /* ── Contact Us Styles ── */
@@ -957,6 +960,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 6,
+    flexShrink: 1,
   },
   liveDot: {
     width: 7,
@@ -968,11 +972,13 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: FONTS.body.bold,
     color: COLORS.ink,
+    flexShrink: 1,
   },
   responseTimeText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.medium,
     color: COLORS.success,
+    flexShrink: 1,
   },
 
   contactOptionsGrid: {
@@ -1014,7 +1020,7 @@ const styles = StyleSheet.create({
     marginBottom: 1,
   },
   contactCardSub: {
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: FONTS.body.regular,
     color: COLORS.inkMuted,
     marginBottom: 8,
@@ -1027,7 +1033,7 @@ const styles = StyleSheet.create({
   },
   contactPillText: {
     color: "#FFF",
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
   },
 
@@ -1051,6 +1057,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontFamily: FONTS.body.bold,
     color: COLORS.ink,
+    flexShrink: 1,
   },
   formInputsWrap: {
     gap: 8,
@@ -1083,6 +1090,7 @@ const styles = StyleSheet.create({
     color: "#FFF",
     fontSize: 12,
     fontFamily: FONTS.body.bold,
+    flexShrink: 1,
   },
   formSuccessBox: {
     alignItems: "center",
@@ -1101,7 +1109,7 @@ const styles = StyleSheet.create({
     color: COLORS.inkBody,
   },
   formSuccessDetail: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.regular,
     color: COLORS.inkMuted,
     marginTop: 4,
@@ -1114,7 +1122,7 @@ const styles = StyleSheet.create({
     borderRadius: RADIUS.full,
   },
   newQueryText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
     color: COLORS.ink,
   },
@@ -1140,6 +1148,7 @@ const styles = StyleSheet.create({
     color: COLORS.sacred,
     textTransform: "uppercase",
     letterSpacing: 0.5,
+    flexShrink: 1,
   },
   emergencyList: {
     gap: 6,
@@ -1167,12 +1176,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   emergencyItemName: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
     color: COLORS.ink,
   },
   emergencyItemPhone: {
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: FONTS.body.medium,
     color: COLORS.sacred,
   },
@@ -1184,11 +1193,13 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderRadius: RADIUS.full,
     gap: 3,
+    flexShrink: 1,
   },
   emergencyCallChipText: {
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
     color: COLORS.sacred,
+    flexShrink: 1,
   },
 
   /* Physical Office */
@@ -1215,7 +1226,7 @@ const styles = StyleSheet.create({
     color: COLORS.ink,
   },
   officeSub: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.regular,
     color: COLORS.inkMuted,
   },
@@ -1227,9 +1238,10 @@ const styles = StyleSheet.create({
     marginLeft: 26,
   },
   officeMetaText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.medium,
     color: COLORS.inkMuted,
+    flexShrink: 1,
   },
   mapsButton: {
     flexDirection: "row",
@@ -1241,9 +1253,10 @@ const styles = StyleSheet.create({
     gap: 5,
   },
   mapsButtonText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
     color: COLORS.journey,
+    flexShrink: 1,
   },
 
   /* Privacy Link */
@@ -1279,7 +1292,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.8,
   },
   brandNote: {
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: FONTS.body.regular,
     color: COLORS.inkFaint,
   },

@@ -12,15 +12,16 @@ import {
   Platform,
   ScrollView,
   StyleSheet,
-  Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
   useWindowDimensions,
   View,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { XStack, YStack } from "tamagui";
 
+import { HIT_SLOP, sheetColumn } from "@/constants/layout";
 interface Props {
   visible: boolean;
   mode: ParikramaModeItem | null;
@@ -160,7 +161,7 @@ const ParikramaEnquiryModal = ({
                   </Text>
                 </View>
 
-                <TouchableOpacity
+                <TouchableOpacity hitSlop={HIT_SLOP}
                   style={styles.closeButton}
                   onPress={handleClose}
                   activeOpacity={0.7}
@@ -259,7 +260,7 @@ const ParikramaEnquiryModal = ({
                     accessibilityRole="button"
                     accessibilityLabel="Enquire on WhatsApp"
                   >
-                    <Ionicons name="logo-whatsapp" size={21} color="#FFFFFF" />
+                    <Ionicons name="logo-whatsapp" size={21} color={COLORS.white} />
                     <Text style={styles.whatsappText} maxFontSizeMultiplier={1.25}>
                       Enquire on WhatsApp
                     </Text>
@@ -296,6 +297,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   sheet: {
+    ...sheetColumn,
     backgroundColor: COLORS.bg,
     borderTopLeftRadius: RADIUS.lg,
     borderTopRightRadius: RADIUS.lg,
@@ -332,7 +334,7 @@ const styles = StyleSheet.create({
     letterSpacing: -0.2,
   },
   sheetSub: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
     color: COLORS.journey,
     marginTop: 2,
@@ -381,7 +383,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   badgeText: {
-    fontSize: 9,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
     color: COLORS.journey,
     letterSpacing: 0.5,
@@ -418,6 +420,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: FONTS.body.bold,
     color: COLORS.journey,
+    flexShrink: 1,
   },
   inclusionRow: {
     flexDirection: "row",
@@ -442,7 +445,7 @@ const styles = StyleSheet.create({
     color: COLORS.ink,
   },
   inclusionText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.regular,
     color: COLORS.inkMuted,
     lineHeight: 16,
@@ -462,9 +465,10 @@ const styles = StyleSheet.create({
     borderColor: "rgba(11, 110, 127, 0.2)",
   },
   trustBadgeText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
     color: COLORS.journey,
+    flexShrink: 1,
   },
   actionButtons: {
     gap: 10,
@@ -481,9 +485,10 @@ const styles = StyleSheet.create({
     ...SHADOWS.subtle,
   },
   whatsappText: {
-    color: "#FFFFFF",
+    color: COLORS.white,
     fontSize: 15,
     fontFamily: FONTS.body.bold,
+    flexShrink: 1,
   },
   callButton: {
     backgroundColor: COLORS.surface,
@@ -501,5 +506,6 @@ const styles = StyleSheet.create({
     color: COLORS.journey,
     fontSize: 13,
     fontFamily: FONTS.body.bold,
+    flexShrink: 1,
   },
 });

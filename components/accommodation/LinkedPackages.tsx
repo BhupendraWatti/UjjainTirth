@@ -8,10 +8,10 @@ import React from "react";
 import {
   ScrollView,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
 
 interface Props {
   packages: LinkedPackage[];
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 15,
     fontFamily: FONTS.display.regular,
-    color: "#FFFFFF",
+    color: COLORS.white,
   },
 
   cardCta: {

@@ -1,17 +1,15 @@
 import React, { useEffect, useState, useMemo, useCallback } from "react";
 import {
   StyleSheet,
-  Text,
   View,
-  TextInput,
   FlatList,
   Image,
   TouchableOpacity,
-  useWindowDimensions,
   Modal,
   ScrollView,
   Linking,
 } from "react-native";
+import { Text, TextInput } from "@/components/ui/AppText";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import ScreenContainer from "@/components/layout/ScreenContainer";
@@ -22,6 +20,8 @@ import { COLORS } from "@/constants/colors";
 import { FONTS } from "@/constants/typography";
 import { RADIUS, SHADOWS } from "@/constants/theme";
  
+import { useLayout } from "@/hooks/useLayout";
+import { sheetColumn } from "@/constants/layout";
 const getNormalizedCoreName = (name: string): string => {
   if (!name) return "";
   return name
@@ -234,7 +234,7 @@ const FALLBACK_TOURS: JyotirlingTour[] = [
 ];
 
 export default function JyotirlingasScreen() {
-  const { width } = useWindowDimensions();
+  const { contentWidth: width } = useLayout();
   const [search, setSearch] = useState("");
   const [tours, setTours] = useState<JyotirlingTour[]>(FALLBACK_TOURS);
   const [loading, setLoading] = useState(true);
@@ -379,7 +379,7 @@ export default function JyotirlingasScreen() {
               activeOpacity={0.7}
               onPress={() => router.back()}
             >
-              <Ionicons name="arrow-back" size={20} color="#8B1E1E" />
+              <Ionicons name="arrow-back" size={20} color={COLORS.sacred} />
             </TouchableOpacity>
             <Text style={styles.headerTitle} maxFontSizeMultiplier={1.3}>12 Jyotirlingas</Text>
             <View style={styles.headerSpacer} />
@@ -390,7 +390,7 @@ export default function JyotirlingasScreen() {
             <Ionicons
               name="search"
               size={18}
-              color="#8B1E1E"
+              color={COLORS.sacred}
               style={styles.searchIcon}
             />
             <TextInput
@@ -477,7 +477,7 @@ export default function JyotirlingasScreen() {
                       
                       {selectedTour.acf?.jyotirling_location ? (
                         <View style={styles.locationContainer}>
-                          <Ionicons name="location-sharp" size={16} color="#8B1E1E" />
+                          <Ionicons name="location-sharp" size={16} color={COLORS.sacred} />
                           <Text style={styles.locationText}>
                             {cleanLocationText(selectedTour.acf.jyotirling_location)}
                           </Text>
@@ -530,7 +530,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontWeight: "700",
-    color: "#8B1E1E",
+    color: COLORS.sacred,
     textAlign: "center",
     flex: 1,
   },
@@ -540,10 +540,10 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#F1F1F1",
+    backgroundColor: COLORS.surfaceMuted,
     borderRadius: 18,
     paddingHorizontal: 14,
-    height: 46,
+    minHeight: 46,
     marginBottom: 20,
     borderWidth: 1,
     borderColor: "rgba(0,0,0,0.03)",
@@ -607,7 +607,7 @@ const styles = StyleSheet.create({
   },
   tagText: {
     color: COLORS.primaryDeep,
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
   },
   loadingContainer: {
@@ -640,7 +640,8 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   modalContent: {
-    backgroundColor: "#F5F2EA",
+    ...sheetColumn,
+    backgroundColor: COLORS.bg,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     padding: 20,
@@ -722,15 +723,16 @@ const styles = StyleSheet.create({
   mapButton: {
     backgroundColor: COLORS.primary,
     flexDirection: "row",
-    height: 48,
+    minHeight: 48,
     borderRadius: RADIUS.sm,
     justifyContent: "center",
     alignItems: "center",
     ...SHADOWS.subtle,
   },
   mapButtonText: {
-    color: "#FFFFFF",
+    color: COLORS.white,
     fontSize: 15,
     fontFamily: FONTS.body.semiBold,
+    flexShrink: 1,
   },
 });

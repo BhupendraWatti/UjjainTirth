@@ -5,7 +5,13 @@ import { useAuth } from "@/context/AuthContext";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React from "react";
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { Text } from "@/components/ui/AppText";
 
 interface UserCardProps {
   /** Whether the user is logged in (optional override) */
@@ -153,6 +159,7 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.body.bold,
     fontSize: 15,
     letterSpacing: 0.2,
+    flexShrink: 1,
   },
   authenticatedBadgeRow: {
     flexDirection: "row",
@@ -168,5 +175,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: FONTS.body.semiBold,
     color: COLORS.success,
+    flexShrink: 1,
   },
 });

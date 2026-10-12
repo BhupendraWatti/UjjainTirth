@@ -2,10 +2,10 @@ import React from "react";
 import {
   Platform,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
@@ -73,7 +73,7 @@ export const PoojaHero: React.FC<PoojaHeroProps> = ({
           accessibilityRole="button"
           accessibilityLabel="Go back"
         >
-          <Ionicons name="arrow-back" size={20} color="#FFFFFF" />
+          <Ionicons name="arrow-back" size={20} color={COLORS.white} />
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -83,7 +83,7 @@ export const PoojaHero: React.FC<PoojaHeroProps> = ({
           accessibilityRole="button"
           accessibilityLabel="Share pooja details"
         >
-          <Ionicons name="share-social-outline" size={20} color="#FFFFFF" />
+          <Ionicons name="share-social-outline" size={20} color={COLORS.white} />
         </TouchableOpacity>
       </View>
 
@@ -198,9 +198,10 @@ const styles = StyleSheet.create({
     borderRadius: RADIUS.xs,
   },
   templePillText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
     color: "#FFE082",
+    flexShrink: 1,
   },
   badgeTagPill: {
     backgroundColor: "rgba(184, 128, 46, 0.9)",
@@ -211,9 +212,9 @@ const styles = StyleSheet.create({
     borderColor: "rgba(255, 255, 255, 0.2)",
   },
   badgeTagPillText: {
-    fontSize: 10,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
-    color: "#FFFFFF",
+    color: COLORS.white,
     letterSpacing: 0.8,
   },
   featuredPill: {
@@ -225,15 +226,15 @@ const styles = StyleSheet.create({
     borderColor: "rgba(255, 255, 255, 0.2)",
   },
   featuredPillText: {
-    fontSize: 10,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
-    color: "#FFFFFF",
+    color: COLORS.white,
     letterSpacing: 0.8,
   },
   heroTitle: {
     fontSize: 21,
     fontFamily: FONTS.display.semiBold,
-    color: "#FFFFFF",
+    color: COLORS.white,
     lineHeight: 28,
     letterSpacing: -0.2,
     marginBottom: 6,
@@ -258,16 +259,19 @@ const styles = StyleSheet.create({
     gap: 3,
     borderWidth: 1,
     borderColor: "rgba(255, 215, 0, 0.4)",
+    flexShrink: 1,
   },
   ratingNumber: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
     color: "#FFD700",
+    flexShrink: 1,
   },
   devoteeCountText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.medium,
     color: "rgba(255, 255, 255, 0.9)",
+    flexShrink: 1,
   },
   verifiedDivider: {
     width: 3,
@@ -277,8 +281,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 2,
   },
   guaranteeText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.medium,
     color: "#A7F3D0",
+    flexShrink: 1,
   },
 });

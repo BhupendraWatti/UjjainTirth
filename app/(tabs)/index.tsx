@@ -7,13 +7,20 @@ import HomePoojaSection from "@/components/home/HomePoojaSection";
 import ScreenContainer from "@/components/layout/ScreenContainer";
 import { AvailabilityScreen } from "@/components/common/AvailabilityLoader";
 import { useServices } from "@/hooks/useServices";
+import { useLayout } from "@/hooks/useLayout";
 import { COLORS } from "@/constants/colors";
 import { FONTS } from "@/constants/typography";
 import React from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import {
+  FlatList,
+  StyleSheet,
+  View,
+} from "react-native";
+import { Text } from "@/components/ui/AppText";
 
 export default function HomeScreen() {
   const { data: services, refetch, isLoading, isError } = useServices();
+  const { tabBarSpace } = useLayout();
 
   const serviceImages = React.useMemo(() => {
     return (services || [])
@@ -60,7 +67,7 @@ export default function HomeScreen() {
           }
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
-            paddingBottom: 110,
+            paddingBottom: tabBarSpace,
           }}
         />
       </AvailabilityScreen>

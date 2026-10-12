@@ -9,10 +9,10 @@ import { LinearGradient } from "expo-linear-gradient";
 import React, { memo, useCallback } from "react";
 import {
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
 import { XStack, YStack } from "tamagui";
 
 interface Props {
@@ -248,7 +248,7 @@ const RiverSpineTimeline = ({ locations, onSelectLocation }: Props) => {
                         <Ionicons
                           name="chevron-forward"
                           size={13}
-                          color="#FFFFFF"
+                          color={COLORS.white}
                         />
                       </View>
                     </View>
@@ -291,9 +291,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: RADIUS.full,
+    flexShrink: 1,
   },
   totalStopsText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
     color: COLORS.journey,
   },
@@ -355,6 +356,7 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
   },
   typeBadge: {
+    flexShrink: 1,
     flexDirection: "row",
     alignItems: "center",
     gap: 4,
@@ -364,7 +366,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   typeBadgeText: {
-    fontSize: 9,
+    flexShrink: 1,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
     letterSpacing: 0.5,
   },
@@ -373,9 +376,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: RADIUS.xs,
+    flexShrink: 1,
   },
   stageText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
     color: COLORS.inkBody,
   },
@@ -386,9 +390,10 @@ const styles = StyleSheet.create({
     letterSpacing: -0.2,
   },
   regionText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.medium,
     color: COLORS.inkMuted,
+    flexShrink: 1,
   },
   imageContainer: {
     width: "100%",
@@ -410,9 +415,9 @@ const styles = StyleSheet.create({
     borderRadius: RADIUS.xs,
   },
   imageBadgeText: {
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: FONTS.body.semiBold,
-    color: "#FFFFFF",
+    color: COLORS.white,
   },
   cardBody: {
     padding: 14,
@@ -435,6 +440,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: FONTS.body.bold,
     color: COLORS.journey,
+    flexShrink: 1,
   },
   chevronCircle: {
     width: 22,

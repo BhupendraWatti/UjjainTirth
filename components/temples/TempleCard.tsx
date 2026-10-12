@@ -1,7 +1,13 @@
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import React, { memo, useCallback } from "react";
-import { StyleSheet, Text, TouchableOpacity, View, ViewStyle } from "react-native";
+import {
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from "react-native";
+import { Text } from "@/components/ui/AppText";
 
 import Badge from "@/components/ui/Badge";
 import Card from "@/components/ui/Card";
@@ -184,13 +190,15 @@ const styles = StyleSheet.create({
   },
 
   distanceIcon: {
-    fontSize: 10,
+    fontSize: 12,
+    flexShrink: 1,
   },
 
   distanceText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.semiBold,
     color: COLORS.success,
+    flexShrink: 1,
   },
 
   // ── Distance Badge (loading) ──
@@ -205,13 +213,15 @@ const styles = StyleSheet.create({
   },
 
   distanceIconLoading: {
-    fontSize: 10,
+    fontSize: 12,
+    flexShrink: 1,
   },
 
   distanceTextLoading: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.medium,
     color: COLORS.inkFaint,
+    flexShrink: 1,
   },
 
   // ── Distance Badge (GPS off) ──
@@ -226,13 +236,15 @@ const styles = StyleSheet.create({
   },
 
   distanceIconOff: {
-    fontSize: 10,
+    fontSize: 12,
+    flexShrink: 1,
   },
 
   distanceTextOff: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.medium,
     color: COLORS.inkMuted,
+    flexShrink: 1,
   },
 
   viewDetails: {

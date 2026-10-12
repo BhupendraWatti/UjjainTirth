@@ -3,8 +3,13 @@ import { FONTS } from "@/constants/typography";
 import { RADIUS } from "@/constants/theme";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import {
+  StyleSheet,
+  View,
+} from "react-native";
+import { Text } from "@/components/ui/AppText";
 
+import { COLORS } from "@/constants/colors";
 interface Props {
   amenities: HotelAmenity[];
 }
@@ -62,9 +67,9 @@ export default function YatraAmenities({ amenities }: Props) {
             <View key={item.name || idx} style={styles.amenityItem}>
               <View style={styles.iconCircle}>
                 {iconMeta.pack === "material" ? (
-                  <MaterialIcons name={iconMeta.icon as any} size={20} color="#4E051A" />
+                  <MaterialIcons name={iconMeta.icon as any} size={20} color={COLORS.sacredDeep} />
                 ) : (
-                  <MaterialCommunityIcons name={iconMeta.icon as any} size={20} color="#904D00" />
+                  <MaterialCommunityIcons name={iconMeta.icon as any} size={20} color={COLORS.goldDeep} />
                 )}
               </View>
               <Text style={styles.amenityLabel} numberOfLines={2}>
@@ -88,16 +93,16 @@ const styles = StyleSheet.create({
     gap: 2,
   },
   tagText: {
-    fontSize: 10,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
-    color: "#904D00",
+    color: COLORS.goldDeep,
     letterSpacing: 1.2,
     textTransform: "uppercase",
   },
   titleText: {
     fontSize: 18,
     fontFamily: FONTS.display.semiBold,
-    color: "#4E051A",
+    color: COLORS.sacredDeep,
   },
   grid: {
     flexDirection: "row",
@@ -107,7 +112,7 @@ const styles = StyleSheet.create({
   amenityItem: {
     width: "23%",
     alignItems: "center",
-    backgroundColor: "#F6F3EE",
+    backgroundColor: COLORS.surfaceMuted,
     paddingVertical: 10,
     paddingHorizontal: 4,
     borderRadius: RADIUS.md,
@@ -116,15 +121,15 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.white,
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 6,
   },
   amenityLabel: {
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: FONTS.body.medium,
-    color: "#1C1C19",
+    color: COLORS.ink,
     textAlign: "center",
   },
 });

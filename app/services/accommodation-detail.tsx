@@ -20,12 +20,13 @@ import {
   ScrollView,
   Share,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { COLORS } from "@/constants/colors";
 export default function AccommodationDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const insets = useSafeAreaInsets();
@@ -96,14 +97,14 @@ export default function AccommodationDetailScreen() {
             <Text style={styles.propertyName}>{enrichedHotel.name}</Text>
             {enrichedHotel.rating > 0 ? (
               <View style={styles.ratingBadge}>
-                <Ionicons name="star" size={13} color="#FFDF98" />
+                <Ionicons name="star" size={13} color={COLORS.goldLight} />
                 <Text style={styles.ratingText}>{enrichedHotel.rating.toFixed(1)}</Text>
               </View>
             ) : null}
           </View>
 
           <View style={styles.metaRow}>
-            <Ionicons name="location-sharp" size={13} color="#904D00" />
+            <Ionicons name="location-sharp" size={13} color={COLORS.goldDeep} />
             <Text style={styles.locationMeta}>{enrichedHotel.location}</Text>
             {enrichedHotel.property_badge ? (
               <>
@@ -175,7 +176,7 @@ export default function AccommodationDetailScreen() {
               <Text style={styles.priceUnit} maxFontSizeMultiplier={1.15}> / night</Text>
             </View>
             <View style={styles.taxReassurance}>
-              <Ionicons name="checkmark-circle" size={12} color="#904D00" />
+              <Ionicons name="checkmark-circle" size={12} color={COLORS.goldDeep} />
               <Text
                 style={styles.taxReassuranceText}
                 maxFontSizeMultiplier={1.15}
@@ -201,7 +202,7 @@ export default function AccommodationDetailScreen() {
             >
               Check Availability
             </Text>
-            <Ionicons name="arrow-forward" size={15} color="#FFFFFF" />
+            <Ionicons name="arrow-forward" size={15} color={COLORS.white} />
           </TouchableOpacity>
         </View>
       </View>
@@ -220,11 +221,11 @@ export default function AccommodationDetailScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FCF9F4",
+    backgroundColor: COLORS.bg,
   },
   centerContainer: {
     flex: 1,
-    backgroundColor: "#FCF9F4",
+    backgroundColor: COLORS.bg,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -243,7 +244,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 23,
     fontFamily: FONTS.display.bold,
-    color: "#4E051A",
+    color: COLORS.sacredDeep,
     letterSpacing: -0.3,
   },
   ratingBadge: {
@@ -253,13 +254,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: RADIUS.xs,
-    backgroundColor: "#6B1D2F",
+    backgroundColor: COLORS.sacred,
     marginTop: 2,
   },
   ratingText: {
     fontSize: 13,
     fontFamily: FONTS.body.bold,
-    color: "#FFFFFF",
+    color: COLORS.white,
+    flexShrink: 1,
   },
   metaRow: {
     flexDirection: "row",
@@ -270,7 +272,7 @@ const styles = StyleSheet.create({
   badgeMeta: {
     fontSize: 12,
     fontFamily: FONTS.body.semiBold,
-    color: "#904D00",
+    color: COLORS.goldDeep,
   },
   metaDot: {
     color: "#DAC0C2",
@@ -278,12 +280,13 @@ const styles = StyleSheet.create({
   locationMeta: {
     fontSize: 12,
     fontFamily: FONTS.body.regular,
-    color: "#544244",
+    color: COLORS.inkBody,
+    flexShrink: 1,
   },
   editorialLead: {
     fontSize: 13,
     fontFamily: FONTS.body.regular,
-    color: "#544244",
+    color: COLORS.inkBody,
     lineHeight: 19,
     marginTop: 4,
   },
@@ -311,13 +314,15 @@ const styles = StyleSheet.create({
   priceAmount: {
     fontSize: 22,
     fontFamily: FONTS.display.bold,
-    color: "#4E051A",
+    color: COLORS.sacredDeep,
     letterSpacing: -0.5,
+    flexShrink: 1,
   },
   priceUnit: {
     fontSize: 12,
     fontFamily: FONTS.body.regular,
-    color: "#544244",
+    color: COLORS.inkBody,
+    flexShrink: 1,
   },
   taxReassurance: {
     flexDirection: "row",
@@ -326,9 +331,10 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   taxReassuranceText: {
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: FONTS.body.medium,
-    color: "#904D00",
+    color: COLORS.goldDeep,
+    flexShrink: 1,
   },
   bookCtaBtn: {
     flexDirection: "row",
@@ -337,12 +343,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     paddingVertical: 12,
     borderRadius: RADIUS.md,
-    backgroundColor: "#4E051A",
+    backgroundColor: COLORS.sacredDeep,
     ...SHADOWS.md,
   },
   bookCtaText: {
     fontSize: 13,
     fontFamily: FONTS.body.bold,
-    color: "#FFFFFF",
+    color: COLORS.white,
+    flexShrink: 1,
   },
 });

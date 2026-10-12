@@ -1,7 +1,12 @@
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { memo } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { Text } from "@/components/ui/AppText";
 import { COLORS } from "@/constants/colors";
 import { FONTS } from "@/constants/typography";
 import { SHADOWS } from "@/constants/theme";

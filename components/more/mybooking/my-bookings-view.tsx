@@ -15,9 +15,9 @@ import {
   Pressable,
   RefreshControl,
   StyleSheet,
-  Text,
   View,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
 
 const STATUS_COLORS: Record<BookingRecord["status"], { background: string; text: string }> = {
   NEW: { background: COLORS.primaryTint, text: COLORS.primaryDeep },
@@ -35,7 +35,7 @@ function BookingCard({ booking }: { booking: BookingRecord }) {
   return (
     <View style={styles.card}>
       <View style={styles.cardHeader}>
-        <View>
+        <View style={{ flexShrink: 1 }}>
           <Text style={styles.reference}>{booking.reference}</Text>
           <Text style={styles.created}>Enquired {booking.created_at.slice(0, 10)}</Text>
         </View>
@@ -52,9 +52,9 @@ function BookingCard({ booking }: { booking: BookingRecord }) {
 
       {booking.total_price !== null && (
         <View style={styles.paymentBox}>
-          <View><Text style={styles.paymentLabel}>Total</Text><Text style={styles.paymentValue}>{money(booking.total_price)}</Text></View>
-          <View><Text style={styles.paymentLabel}>Advance</Text><Text style={styles.paymentValue}>{money(booking.advance_payment)}</Text></View>
-          <View><Text style={styles.paymentLabel}>Balance</Text><Text style={styles.paymentValue}>{money(booking.remaining_balance)}</Text></View>
+          <View style={styles.paymentItem}><Text style={styles.paymentLabel}>Total</Text><Text style={styles.paymentValue}>{money(booking.total_price)}</Text></View>
+          <View style={styles.paymentItem}><Text style={styles.paymentLabel}>Advance</Text><Text style={styles.paymentValue}>{money(booking.advance_payment)}</Text></View>
+          <View style={styles.paymentItem}><Text style={styles.paymentLabel}>Balance</Text><Text style={styles.paymentValue}>{money(booking.remaining_balance)}</Text></View>
         </View>
       )}
       {booking.payment_mode && <Text style={styles.paymentMode}>Payment mode: {booking.payment_mode}</Text>}
@@ -71,7 +71,7 @@ export default function MyBookingsView() {
       <Pressable onPress={() => router.back()} style={styles.backButton} accessibilityRole="button" accessibilityLabel="Go back">
         <Ionicons name="arrow-back" size={22} color={COLORS.ink} />
       </Pressable>
-      <View><Text style={styles.title}>My Bookings</Text><Text style={styles.subtitle}>Your private Ujjain travel records</Text></View>
+      <View style={{ flexShrink: 1 }}><Text style={styles.title}>My Bookings</Text><Text style={styles.subtitle}>Your private Ujjain travel records</Text></View>
     </View>
   );
 
@@ -111,16 +111,17 @@ const styles = StyleSheet.create({
   card: { backgroundColor: COLORS.surface, borderRadius: RADIUS.lg, borderWidth: 1, borderColor: COLORS.hairline, padding: 17, ...SHADOWS.card },
   cardHeader: { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start", gap: 10 },
   reference: { fontFamily: FONTS.body.bold, fontSize: 15, color: COLORS.ink },
-  created: { fontFamily: FONTS.body.regular, fontSize: 11.5, color: COLORS.inkMuted, marginTop: 3 },
+  created: { fontFamily: FONTS.body.regular, fontSize: 12, color: COLORS.inkMuted, marginTop: 3 },
   status: { borderRadius: RADIUS.full, paddingHorizontal: 10, paddingVertical: 6 },
-  statusText: { fontFamily: FONTS.body.bold, fontSize: 11 },
+  statusText: { fontFamily: FONTS.body.bold, fontSize: 12 },
   divider: { height: 1, backgroundColor: COLORS.hairline, marginVertical: 14 },
   detailRow: { flexDirection: "row", alignItems: "center", gap: 9, marginBottom: 10 },
   detailText: { flex: 1, fontFamily: FONTS.body.medium, fontSize: 13, color: COLORS.inkBody },
-  paymentBox: { flexDirection: "row", justifyContent: "space-between", backgroundColor: COLORS.surfaceMuted, borderRadius: RADIUS.md, padding: 12, marginTop: 4 },
-  paymentLabel: { fontFamily: FONTS.body.regular, fontSize: 10.5, color: COLORS.inkMuted },
+  paymentBox: { flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between", rowGap: 10, columnGap: 12, backgroundColor: COLORS.surfaceMuted, borderRadius: RADIUS.md, padding: 12, marginTop: 4 },
+  paymentItem: { flexShrink: 1, minWidth: 90 },
+  paymentLabel: { fontFamily: FONTS.body.regular, fontSize: 12, color: COLORS.inkMuted },
   paymentValue: { fontFamily: FONTS.body.bold, fontSize: 12.5, color: COLORS.ink, marginTop: 2 },
-  paymentMode: { fontFamily: FONTS.body.regular, fontSize: 11.5, color: COLORS.inkMuted, marginTop: 9 },
+  paymentMode: { fontFamily: FONTS.body.regular, fontSize: 12, color: COLORS.inkMuted, marginTop: 9 },
   center: { flex: 1, minHeight: 360, alignItems: "center", justifyContent: "center", paddingHorizontal: 34 },
   stateTitle: { fontFamily: FONTS.display.semiBold, fontSize: 20, color: COLORS.ink, marginTop: 14, textAlign: "center" },
   stateText: { fontFamily: FONTS.body.regular, fontSize: 13.5, lineHeight: 21, color: COLORS.inkMuted, marginTop: 7, textAlign: "center" },

@@ -1,5 +1,9 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import {
+  StyleSheet,
+  View,
+} from "react-native";
+import { Text } from "@/components/ui/AppText";
 import { COLORS } from "@/constants/colors";
 import { RADIUS } from "@/constants/theme";
 import { FONTS } from "@/constants/typography";
@@ -65,14 +69,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
   },
   metaLabel: {
-    fontSize: 9,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
     color: COLORS.gold,
     letterSpacing: 0.8,
     marginBottom: 2,
   },
   metaValue: {
-    fontSize: 11.5,
+    fontSize: 12,
     lineHeight: 15,
     fontFamily: FONTS.body.bold,
     color: COLORS.ink,

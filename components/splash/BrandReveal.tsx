@@ -1,5 +1,9 @@
 import React, { useEffect } from "react";
-import { StyleSheet, Text, Dimensions } from "react-native";
+import {
+  StyleSheet,
+  Dimensions,
+} from "react-native";
+import { Text } from "@/components/ui/AppText";
 import Svg, { Path, Defs, LinearGradient, Stop } from "react-native-svg";
 import Animated, {
   useSharedValue,
@@ -219,7 +223,7 @@ const styles = StyleSheet.create({
   },
   dot: {
     color: "#D4A373", // Accent color
-    fontSize: 10,
+    fontSize: 11,
     marginHorizontal: 8,
     opacity: 0.9,
   },

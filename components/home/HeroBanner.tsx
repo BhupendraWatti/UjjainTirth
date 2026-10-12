@@ -2,17 +2,17 @@ import { router } from "expo-router";
 import {
   ImageBackground,
   StyleSheet,
-  Text,
   TouchableOpacity,
-  useWindowDimensions,
   View,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
 import { COLORS } from "@/constants/colors";
 import { FONTS } from "@/constants/typography";
 import { RADIUS } from "@/constants/theme";
 
+import { useLayout } from "@/hooks/useLayout";
 export default function HeroBanner() {
-  const { width } = useWindowDimensions();
+  const { contentWidth: width } = useLayout();
   const heroHeight = Math.min(230, Math.max(185, Math.round(width * 0.52)));
   const explorePackages = () => router.push("/(tabs)/packages");
 
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    color: "#FFFFFF",
+    color: COLORS.white,
     fontSize: 20,
     fontFamily: FONTS.display.semiBold,
     lineHeight: 26,
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
   },
 
   buttonText: {
-    color: "#FFFFFF",
+    color: COLORS.white,
     fontSize: 14,
     fontFamily: FONTS.body.semiBold,
   },

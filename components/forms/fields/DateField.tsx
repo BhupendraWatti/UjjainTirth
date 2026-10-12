@@ -7,11 +7,13 @@ import React, { useMemo, useState } from "react";
 import {
   Modal,
   StyleSheet,
-  Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
+import { sheetColumn } from "@/constants/layout";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 interface DateFieldProps {
   field: FormField;
@@ -61,6 +63,7 @@ export const DateField: React.FC<DateFieldProps> = ({
   error,
   disabled = false,
 }) => {
+  const insets = useSafeAreaInsets();
   const [modalVisible, setModalVisible] = useState(false);
 
   // Initialize calendar view around currently selected value or today
@@ -198,10 +201,10 @@ export const DateField: React.FC<DateFieldProps> = ({
         <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
           <View style={styles.modalBackdrop}>
             <TouchableWithoutFeedback>
-              <View style={styles.modalContent}>
+              <View style={[styles.modalContent, { paddingBottom: Math.max(insets.bottom, 12) + 20 }]}>
                 {/* Header */}
                 <View style={styles.modalHeader}>
-                  <View>
+                  <View style={{ flexShrink: 1 }}>
                     <Text style={styles.modalTitle}>Choose Arrival Date</Text>
                     <Text style={styles.modalSubtitle}>Select your expected darshan date</Text>
                   </View>
@@ -386,7 +389,7 @@ const styles = StyleSheet.create({
     borderColor: "rgba(43, 36, 32, 0.12)",
     borderRadius: RADIUS.md,
     paddingHorizontal: 14,
-    height: 52,
+    minHeight: 52,
   },
   inputWrapperError: {
     borderColor: COLORS.error,
@@ -419,6 +422,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: FONTS.body.medium,
     color: COLORS.error,
+    flexShrink: 1,
   },
 
   // Modal
@@ -428,6 +432,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   modalContent: {
+    ...sheetColumn,
     backgroundColor: COLORS.surface,
     borderTopLeftRadius: RADIUS.lg,
     borderTopRightRadius: RADIUS.lg,
@@ -496,6 +501,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: FONTS.display.semiBold,
     color: COLORS.ink,
+    flexShrink: 1,
   },
   weekdayRow: {
     flexDirection: "row",

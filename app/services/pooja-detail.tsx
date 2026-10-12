@@ -4,10 +4,10 @@ import {
   ScrollView,
   Share,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
 import { router, useLocalSearchParams } from "expo-router";
 import * as Haptics from "expo-haptics";
 import { Ionicons } from "@expo/vector-icons";
@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
     borderRadius: RADIUS.sm,
   },
   backBtnText: {
-    color: "#FFFFFF",
+    color: COLORS.white,
     fontSize: 13,
     fontFamily: FONTS.body.bold,
   },

@@ -7,9 +7,9 @@ import {
   LayoutChangeEvent,
   Pressable,
   StyleSheet,
-  Text,
   View,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "rgba(43, 36, 32, 0.08)",
     // Soft organic floating shadow
-    shadowColor: "#2B2420",
+    shadowColor: COLORS.ink,
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.08,
     shadowRadius: 8,
@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
 
   activeTabLabel: {
     fontFamily: FONTS.body.bold,
-    color: "#FFFFFF",
+    color: COLORS.white,
   },
 
   inactiveTabLabel: {
@@ -214,14 +214,14 @@ const styles = StyleSheet.create({
   },
 
   microBadgeText: {
-    fontSize: 9,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
     textTransform: "uppercase",
     letterSpacing: 0.5,
   },
 
   activeMicroBadgeText: {
-    color: "#FFFFFF",
+    color: COLORS.white,
   },
 
   inactiveMicroBadgeText: {

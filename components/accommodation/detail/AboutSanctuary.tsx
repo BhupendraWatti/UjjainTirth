@@ -5,8 +5,13 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import {
+  StyleSheet,
+  View,
+} from "react-native";
+import { Text } from "@/components/ui/AppText";
 
+import { COLORS } from "@/constants/colors";
 interface Props {
   hotel: EnrichedHotel;
 }
@@ -48,7 +53,7 @@ export default function AboutSanctuary({ hotel }: Props) {
       {/* Dynamic Bhasma Aarti Advantage Banner (only if API returns it) */}
       {hotel.bhasma_aarti_advantage ? (
         <LinearGradient
-          colors={["#4E051A", "#6B1D2F", "#904D00"]}
+          colors={[COLORS.sacredDeep, COLORS.sacred, COLORS.goldDeep]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           style={styles.banner}
@@ -61,7 +66,7 @@ export default function AboutSanctuary({ hotel }: Props) {
             </Text>
           </View>
           <View style={styles.bannerIconBox}>
-            <MaterialIcons name="wb-sunny" size={26} color="#FFDF98" />
+            <MaterialIcons name="wb-sunny" size={26} color={COLORS.goldLight} />
           </View>
         </LinearGradient>
       ) : null}
@@ -76,22 +81,22 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   tagText: {
-    fontSize: 10,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
-    color: "#904D00",
+    color: COLORS.goldDeep,
     letterSpacing: 1.2,
     textTransform: "uppercase",
   },
   headline: {
     fontSize: 20,
     fontFamily: FONTS.display.semiBold,
-    color: "#4E051A",
+    color: COLORS.sacredDeep,
     marginTop: 2,
   },
   description: {
     fontSize: 13,
     fontFamily: FONTS.body.regular,
-    color: "#544244",
+    color: COLORS.inkBody,
     lineHeight: 20,
     marginTop: 6,
   },
@@ -101,7 +106,7 @@ const styles = StyleSheet.create({
     borderRadius: RADIUS.lg,
     overflow: "hidden",
     position: "relative",
-    backgroundColor: "#EBE8E3",
+    backgroundColor: COLORS.bgStone,
   },
   photoBadge: {
     position: "absolute",
@@ -113,9 +118,9 @@ const styles = StyleSheet.create({
     borderRadius: RADIUS.sm,
   },
   photoBadgeText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.medium,
-    color: "#FFFFFF",
+    color: COLORS.white,
   },
   banner: {
     borderRadius: RADIUS.lg,
@@ -127,22 +132,22 @@ const styles = StyleSheet.create({
     ...SHADOWS.sm,
   },
   bannerTag: {
-    fontSize: 9,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
-    color: "#FFDF98",
+    color: COLORS.goldLight,
     letterSpacing: 1.2,
     marginBottom: 2,
   },
   bannerHeadline: {
     fontSize: 15,
     fontFamily: FONTS.display.semiBold,
-    color: "#FFFFFF",
+    color: COLORS.white,
     marginBottom: 4,
   },
   bannerDesc: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.regular,
-    color: "#F0EDE9",
+    color: COLORS.surfaceMuted,
     lineHeight: 16,
   },
   bannerIconBox: {

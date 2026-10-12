@@ -1,5 +1,10 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
+import { Text } from "@/components/ui/AppText";
 import { COLORS } from '@/constants/colors';
 import { RADIUS, SHADOWS } from '@/constants/theme';
 import { FONTS } from '@/constants/typography';
@@ -45,7 +50,7 @@ const styles = StyleSheet.create({
     ...SHADOWS.subtle,
   },
   buttonText: {
-    color: '#FFFFFF',
+    color: COLORS.white,
     fontFamily: FONTS.body.bold,
   },
 });

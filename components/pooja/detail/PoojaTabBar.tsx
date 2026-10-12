@@ -3,10 +3,10 @@ import {
   LayoutChangeEvent,
   Platform,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
 import Animated, {
   useAnimatedStyle,
   withSpring,
@@ -174,10 +174,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   tabLabelActive: {
-    color: "#FFFFFF",
+    color: COLORS.white,
   },
   tabSubLabel: {
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: FONTS.body.medium,
     color: COLORS.inkMuted,
     marginTop: 1,

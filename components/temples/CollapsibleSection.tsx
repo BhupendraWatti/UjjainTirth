@@ -1,6 +1,12 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { Text } from "@/components/ui/AppText";
 
+import { COLORS } from "@/constants/colors";
 interface Props {
   title: string;
   items: {
@@ -56,11 +62,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 14,
     fontWeight: "600",
-    color: "#EB5C49",
+    color: COLORS.primary,
+    flexShrink: 1,
   },
   icon: {
     fontSize: 12,
     color: "#555",
+    flexShrink: 1,
   },
   content: {
     marginTop: 12,
@@ -75,9 +83,11 @@ const styles = StyleSheet.create({
   name: {
     color: "#333",
     fontSize: 13,
+    flexShrink: 1,
   },
   time: {
     color: "#666",
     fontSize: 12,
+    flexShrink: 1,
   },
 });

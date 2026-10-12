@@ -11,10 +11,10 @@ import {
   Platform,
   Pressable,
   StyleSheet,
-  Text,
   View,
   ViewStyle,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
 import Animated, {
   FadeInDown,
   useAnimatedStyle,
@@ -94,7 +94,7 @@ const PoojaCard = ({ item, index = 0, onRequest, style }: Props) => {
 
           {/* Duration Badge */}
           <View style={styles.durationBadge}>
-            <Ionicons name="time-outline" size={11} color="#FFFFFF" />
+            <Ionicons name="time-outline" size={11} color={COLORS.white} />
             <Text style={styles.durationText} maxFontSizeMultiplier={1.2}>{item.duration}</Text>
           </View>
         </View>
@@ -136,7 +136,7 @@ const PoojaCard = ({ item, index = 0, onRequest, style }: Props) => {
 
             <View style={styles.ctaButton}>
               <Text style={styles.ctaText} maxFontSizeMultiplier={1.2}>Book Pooja</Text>
-              <Ionicons name="arrow-forward" size={13} color="#FFFFFF" />
+              <Ionicons name="arrow-forward" size={13} color={COLORS.white} />
             </View>
           </View>
         </View>
@@ -187,9 +187,10 @@ const styles = StyleSheet.create({
     ...SHADOWS.subtle,
   },
   templeText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
     color: COLORS.sacred,
+    flexShrink: 1,
   },
   durationBadge: {
     position: "absolute",
@@ -206,9 +207,10 @@ const styles = StyleSheet.create({
     borderColor: "rgba(255, 255, 255, 0.22)",
   },
   durationText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.semiBold,
-    color: "#FFFFFF",
+    color: COLORS.white,
+    flexShrink: 1,
   },
   content: {
     padding: 14,
@@ -236,7 +238,7 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
   },
   featuredText: {
-    fontSize: 10,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
     color: COLORS.primaryDeep,
     letterSpacing: 0.8,
@@ -258,9 +260,10 @@ const styles = StyleSheet.create({
   },
   priceContainer: {
     justifyContent: "center",
+    flexShrink: 1,
   },
   priceLabel: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.medium,
     color: COLORS.inkMuted,
     marginBottom: 1,
@@ -294,10 +297,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 5,
     ...SHADOWS.subtle,
+    flexShrink: 1,
   },
   ctaText: {
     fontSize: 12,
     fontFamily: FONTS.body.bold,
-    color: "#FFFFFF",
+    color: COLORS.white,
+    flexShrink: 1,
   },
 });

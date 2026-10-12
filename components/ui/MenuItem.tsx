@@ -1,5 +1,10 @@
 import { Ionicons } from "@expo/vector-icons";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { Text } from "@/components/ui/AppText";
 import { COLORS } from "@/constants/colors";
 import { FONTS } from "@/constants/typography";
 
@@ -35,10 +40,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
+    flexShrink: 1,
   },
   text: {
     fontSize: 14,
     fontFamily: FONTS.body.medium,
     color: COLORS.ink,
+    flexShrink: 1,
   },
 });

@@ -19,12 +19,13 @@ import {
   ScrollView,
   Share,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { HIT_SLOP } from "@/constants/layout";
 export default function NarmadaParikramaScreen() {
   const insets = useSafeAreaInsets();
   const { data, isLoading, isError, refetch } = useParikrama();
@@ -90,7 +91,7 @@ export default function NarmadaParikramaScreen() {
     return (
       <ScreenContainer edges={["top", "bottom"]}>
         <View style={styles.topBar}>
-          <TouchableOpacity
+          <TouchableOpacity hitSlop={HIT_SLOP}
             style={styles.navButton}
             activeOpacity={0.7}
             onPress={handleBack}
@@ -113,7 +114,7 @@ export default function NarmadaParikramaScreen() {
     <ScreenContainer noPadding edges={["top", "bottom"]}>
       {/* Devotional Persistent Top Navigation Bar */}
       <View style={styles.topBar}>
-        <TouchableOpacity
+        <TouchableOpacity hitSlop={HIT_SLOP}
           style={styles.navButton}
           activeOpacity={0.7}
           onPress={handleBack}
@@ -140,7 +141,7 @@ export default function NarmadaParikramaScreen() {
           </Text>
         </View>
 
-        <TouchableOpacity
+        <TouchableOpacity hitSlop={HIT_SLOP}
           style={styles.navButton}
           activeOpacity={0.7}
           onPress={handleShare}
@@ -218,9 +219,10 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.display.semiBold,
     color: COLORS.ink,
     letterSpacing: -0.2,
+    flexShrink: 1,
   },
   topBarChant: {
-    fontSize: 10,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
     color: COLORS.journey,
     letterSpacing: 0.6,

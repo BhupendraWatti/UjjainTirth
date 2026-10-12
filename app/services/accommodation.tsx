@@ -15,11 +15,12 @@ import React, { useCallback, useMemo, useState } from "react";
 import {
   ScrollView,
   StyleSheet,
-  Text,
   View,
   useWindowDimensions,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
 
+import { COLORS } from "@/constants/colors";
 export default function AccommodationScreen() {
   const { width } = useWindowDimensions();
   const isTablet = width >= 768;
@@ -122,7 +123,7 @@ export default function AccommodationScreen() {
 
         {/* 4. Editorial Stays Listing Section Header */}
         <View style={styles.sectionHeaderRow}>
-          <View>
+          <View style={{ flexShrink: 1 }}>
             <Text style={styles.sectionTag}>SANCTUM SANCTORUM PROXIMITY</Text>
             <Text style={styles.sectionTitle}>Recommended Stays</Text>
           </View>
@@ -175,7 +176,7 @@ export default function AccommodationScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FCF9F4",
+    backgroundColor: COLORS.bg,
   },
   scrollContent: {
     flexGrow: 1,
@@ -189,25 +190,26 @@ const styles = StyleSheet.create({
     paddingBottom: 12,
   },
   sectionTag: {
-    fontSize: 10,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
-    color: "#904D00",
+    color: COLORS.goldDeep,
     letterSpacing: 1.1,
     textTransform: "uppercase",
   },
   sectionTitle: {
     fontSize: 20,
     fontFamily: FONTS.display.semiBold,
-    color: "#4E051A",
+    color: COLORS.sacredDeep,
     marginTop: 1,
   },
   availableCount: {
-    fontSize: 10,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
-    color: "#877274",
+    color: COLORS.inkMuted,
     letterSpacing: 0.8,
     textTransform: "uppercase",
     paddingBottom: 2,
+    flexShrink: 1,
   },
   hotelsGrid: {
     flexDirection: "row",
@@ -219,7 +221,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 36,
     marginHorizontal: 16,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.white,
     borderRadius: RADIUS.md,
     borderWidth: 1,
     borderColor: "rgba(107, 29, 47, 0.08)",
@@ -232,13 +234,13 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 15,
     fontFamily: FONTS.display.semiBold,
-    color: "#4E051A",
+    color: COLORS.sacredDeep,
     marginBottom: 4,
   },
   emptySubtext: {
     fontSize: 12,
     fontFamily: FONTS.body.regular,
-    color: "#544244",
+    color: COLORS.inkBody,
     textAlign: "center",
     paddingHorizontal: 20,
   },

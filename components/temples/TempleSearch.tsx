@@ -1,6 +1,10 @@
 import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, TextInput, View } from "react-native";
+import {
+  StyleSheet,
+  View,
+} from "react-native";
+import { TextInput } from "@/components/ui/AppText";
 import { COLORS } from "@/constants/colors";
 import { FONTS } from "@/constants/typography";
 import { RADIUS } from "@/constants/theme";
@@ -44,7 +48,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.surfaceMuted,
     paddingHorizontal: 16,
     borderRadius: RADIUS.md,
-    height: 52,
+    minHeight: 52,
     borderWidth: 1,
     borderColor: COLORS.hairline,
     marginVertical: 6,

@@ -10,13 +10,13 @@ import React, { memo, useCallback } from "react";
 import {
   ScrollView,
   StyleSheet,
-  Text,
   TouchableOpacity,
-  useWindowDimensions,
   View,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
 import { XStack, YStack } from "tamagui";
 
+import { useLayout } from "@/hooks/useLayout";
 interface Props {
   modes: ParikramaModeItem[];
   selectedModeId: number | null;
@@ -29,7 +29,7 @@ const getModeTheming = (modeType: string, title: string) => {
   if (combined.includes("sampoorna") || combined.includes("full")) {
     return {
       badgeBg: COLORS.sacred,
-      badgeText: "#FFFFFF",
+      badgeText: COLORS.white,
       accentColor: COLORS.sacred,
       tagLabel: "COMPLETE CIRCUIT",
     };
@@ -38,7 +38,7 @@ const getModeTheming = (modeType: string, title: string) => {
   if (combined.includes("ghat")) {
     return {
       badgeBg: COLORS.journey,
-      badgeText: "#FFFFFF",
+      badgeText: COLORS.white,
       accentColor: COLORS.journey,
       tagLabel: "GHAT DARSHAN",
     };
@@ -46,7 +46,7 @@ const getModeTheming = (modeType: string, title: string) => {
 
   return {
     badgeBg: COLORS.gold,
-    badgeText: "#FFFFFF",
+    badgeText: COLORS.white,
     accentColor: COLORS.gold,
     tagLabel: "SEGMENTED YATRA",
   };
@@ -57,7 +57,7 @@ const ParikramaModeCarousel = ({
   selectedModeId,
   onSelectMode,
 }: Props) => {
-  const { width: screenWidth } = useWindowDimensions();
+  const { contentWidth: screenWidth } = useLayout();
 
   // Responsive card sizing for 320px–430px screens
   const cardWidth = Math.min(Math.max(screenWidth * 0.76, 260), 320);
@@ -147,7 +147,7 @@ const ParikramaModeCarousel = ({
 
                 {isSelected && (
                   <View style={styles.selectedCheckBadge}>
-                    <Ionicons name="checkmark-circle" size={18} color="#FFFFFF" />
+                    <Ionicons name="checkmark-circle" size={18} color={COLORS.white} />
                   </View>
                 )}
               </View>
@@ -224,7 +224,7 @@ const ParikramaModeCarousel = ({
                     <Ionicons
                       name="chevron-forward"
                       size={14}
-                      color={isSelected ? "#FFFFFF" : COLORS.journey}
+                      color={isSelected ? COLORS.white : COLORS.journey}
                     />
                   </View>
                 </View>
@@ -271,9 +271,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 9,
     paddingVertical: 4,
     borderRadius: RADIUS.full,
+    flexShrink: 1,
   },
   modeCountText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
     color: COLORS.journey,
   },
@@ -314,9 +315,9 @@ const styles = StyleSheet.create({
     borderRadius: RADIUS.xs,
   },
   typeBadgeText: {
-    fontSize: 9,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
-    color: "#FFFFFF",
+    color: COLORS.white,
     letterSpacing: 0.6,
   },
   selectedCheckBadge: {
@@ -330,7 +331,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 1.5,
-    borderColor: "#FFFFFF",
+    borderColor: COLORS.white,
   },
   cardBody: {
     padding: 14,
@@ -352,9 +353,10 @@ const styles = StyleSheet.create({
     maxWidth: "100%",
   },
   metaText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.semiBold,
     color: COLORS.journey,
+    flexShrink: 1,
   },
   modeDescription: {
     fontSize: 12,
@@ -386,9 +388,10 @@ const styles = StyleSheet.create({
   ctaText: {
     fontSize: 12,
     fontFamily: FONTS.body.bold,
+    flexShrink: 1,
   },
   ctaTextActive: {
-    color: "#FFFFFF",
+    color: COLORS.white,
   },
   ctaTextInactive: {
     color: COLORS.journey,

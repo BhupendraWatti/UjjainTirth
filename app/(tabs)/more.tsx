@@ -8,6 +8,7 @@ import {
   getCachedShareContent,
   ShareContentData,
 } from "@/services/shareServices";
+import { useLayout } from "@/hooks/useLayout";
 import React, { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 
@@ -20,6 +21,7 @@ const DEFAULT_SHARE_DATA: ShareContentData = {
 
 export default function MoreScreen() {
   const [shareData, setShareData] = useState<ShareContentData | null>(null);
+  const { tabBarSpace } = useLayout();
 
   useEffect(() => {
     const loadShareContent = async () => {
@@ -64,7 +66,7 @@ export default function MoreScreen() {
     <ScreenContainer noPadding>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContent}
+        contentContainerStyle={[styles.scrollContent, { paddingBottom: tabBarSpace }]}
       >
         {/* ── Section 1: Sign Up / Sign In ── */}
         <UserCard />

@@ -14,13 +14,14 @@ import {
   Platform,
   ScrollView,
   StyleSheet,
-  Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+import { Text, TextInput } from "@/components/ui/AppText";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { HIT_SLOP } from "@/constants/layout";
+import { COLORS } from "@/constants/colors";
 interface Props {
   visible: boolean;
   hotel: EnrichedHotel | null;
@@ -131,9 +132,9 @@ export default function HotelBookingModal({
         <View style={styles.sheetHeader}>
           <View style={styles.dragPill} />
           <View style={styles.headerRow}>
-            <View>
+            <View style={{ flexShrink: 1 }}>
               <View style={styles.badgeRow}>
-                <MaterialIcons name="verified" size={15} color="#904D00" />
+                <MaterialIcons name="verified" size={15} color={COLORS.goldDeep} />
                 <Text style={styles.badgeText}>DIRECT BOOKING DESK</Text>
               </View>
               <Text style={styles.sheetTitle}>Book Your Stay</Text>
@@ -142,12 +143,14 @@ export default function HotelBookingModal({
               </Text>
             </View>
 
-            <TouchableOpacity
+            <TouchableOpacity hitSlop={HIT_SLOP}
               style={styles.closeBtn}
               activeOpacity={0.7}
               onPress={onClose}
+              accessibilityRole="button"
+              accessibilityLabel="Close booking form"
             >
-              <Ionicons name="close" size={20} color="#544244" />
+              <Ionicons name="close" size={20} color={COLORS.inkBody} />
             </TouchableOpacity>
           </View>
         </View>
@@ -174,7 +177,7 @@ export default function HotelBookingModal({
                 </Text>
                 {hotel.distance_to_mahakal ? (
                   <View style={styles.distanceRow}>
-                    <MaterialCommunityIcons name="navigation-variant" size={13} color="#904D00" />
+                    <MaterialCommunityIcons name="navigation-variant" size={13} color={COLORS.goldDeep} />
                     <Text style={styles.distanceText}>{hotel.distance_to_mahakal}</Text>
                   </View>
                 ) : null}
@@ -198,7 +201,7 @@ export default function HotelBookingModal({
             <View style={styles.datesGrid}>
               <View style={styles.dateBox}>
                 <View style={styles.dateIconBox}>
-                  <MaterialIcons name="calendar-today" size={16} color="#904D00" />
+                  <MaterialIcons name="calendar-today" size={16} color={COLORS.goldDeep} />
                 </View>
                 <View style={{ flex: 1 }}>
                   <Text style={styles.dateSmallLabel}>ARRIVAL (CHECK-IN)</Text>
@@ -208,23 +211,27 @@ export default function HotelBookingModal({
 
               <View style={styles.dateBox}>
                 <View style={styles.dateIconBox}>
-                  <MaterialIcons name="event-available" size={16} color="#904D00" />
+                  <MaterialIcons name="event-available" size={16} color={COLORS.goldDeep} />
                 </View>
                 <View style={{ flex: 1 }}>
                   <Text style={styles.dateSmallLabel}>DEPARTURE ({nights} NIGHTS)</Text>
                   <View style={styles.nightsCounterRow}>
-                    <TouchableOpacity
+                    <TouchableOpacity hitSlop={HIT_SLOP}
                       style={styles.miniStepBtn}
                       onPress={() => setNights((n) => Math.max(1, n - 1))}
+                      accessibilityRole="button"
+                      accessibilityLabel="Fewer nights"
                     >
-                      <Ionicons name="remove" size={12} color="#1C1C19" />
+                      <Ionicons name="remove" size={14} color={COLORS.ink} />
                     </TouchableOpacity>
                     <Text style={styles.nightsCount}>{nights}N</Text>
-                    <TouchableOpacity
+                    <TouchableOpacity hitSlop={HIT_SLOP}
                       style={styles.miniStepBtn}
                       onPress={() => setNights((n) => n + 1)}
+                      accessibilityRole="button"
+                      accessibilityLabel="More nights"
                     >
-                      <Ionicons name="add" size={12} color="#1C1C19" />
+                      <Ionicons name="add" size={14} color={COLORS.ink} />
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -238,46 +245,54 @@ export default function HotelBookingModal({
             <View style={styles.guestsGrid}>
               {/* Adults */}
               <View style={styles.stepperCard}>
-                <View>
+                <View style={styles.stepperLabel}>
                   <Text style={styles.stepperTitle}>Adults</Text>
                   <Text style={styles.stepperSubtitle}>Age 12+</Text>
                 </View>
                 <View style={styles.counterRow}>
-                  <TouchableOpacity
+                  <TouchableOpacity hitSlop={HIT_SLOP}
                     style={styles.stepBtn}
                     onPress={() => setAdults((a) => Math.max(1, a - 1))}
+                    accessibilityRole="button"
+                    accessibilityLabel="Fewer adults"
                   >
-                    <Ionicons name="remove" size={14} color="#1C1C19" />
+                    <Ionicons name="remove" size={14} color={COLORS.ink} />
                   </TouchableOpacity>
                   <Text style={styles.countText}>{adults}</Text>
-                  <TouchableOpacity
+                  <TouchableOpacity hitSlop={HIT_SLOP}
                     style={[styles.stepBtn, styles.stepBtnAdd]}
                     onPress={() => setAdults((a) => a + 1)}
+                    accessibilityRole="button"
+                    accessibilityLabel="More adults"
                   >
-                    <Ionicons name="add" size={14} color="#FFFFFF" />
+                    <Ionicons name="add" size={14} color={COLORS.white} />
                   </TouchableOpacity>
                 </View>
               </View>
 
               {/* Children */}
               <View style={styles.stepperCard}>
-                <View>
+                <View style={styles.stepperLabel}>
                   <Text style={styles.stepperTitle}>Children</Text>
                   <Text style={styles.stepperSubtitle}>Age 0–11</Text>
                 </View>
                 <View style={styles.counterRow}>
-                  <TouchableOpacity
+                  <TouchableOpacity hitSlop={HIT_SLOP}
                     style={styles.stepBtn}
                     onPress={() => setChildren((c) => Math.max(0, c - 1))}
+                    accessibilityRole="button"
+                    accessibilityLabel="Fewer children"
                   >
-                    <Ionicons name="remove" size={14} color="#1C1C19" />
+                    <Ionicons name="remove" size={14} color={COLORS.ink} />
                   </TouchableOpacity>
                   <Text style={styles.countText}>{children}</Text>
-                  <TouchableOpacity
+                  <TouchableOpacity hitSlop={HIT_SLOP}
                     style={[styles.stepBtn, styles.stepBtnAdd]}
                     onPress={() => setChildren((c) => c + 1)}
+                    accessibilityRole="button"
+                    accessibilityLabel="More children"
                   >
-                    <Ionicons name="add" size={14} color="#FFFFFF" />
+                    <Ionicons name="add" size={14} color={COLORS.white} />
                   </TouchableOpacity>
                 </View>
               </View>
@@ -289,7 +304,7 @@ export default function HotelBookingModal({
             <Text style={styles.sectionLabel}>LEAD DEVOTEE INFORMATION</Text>
 
             <View style={styles.inputContainer}>
-              <MaterialIcons name="badge" size={18} color="#877274" />
+              <MaterialIcons name="badge" size={18} color={COLORS.inkMuted} />
               <View style={{ flex: 1 }}>
                 <Text style={styles.inputSmallLabel}>FULL NAME (AS PER GOVT ID)</Text>
                 <TextInput
@@ -303,7 +318,7 @@ export default function HotelBookingModal({
             </View>
 
             <View style={[styles.inputContainer, { marginTop: 8 }]}>
-              <MaterialIcons name="call" size={18} color="#877274" />
+              <MaterialIcons name="call" size={18} color={COLORS.inkMuted} />
               <View style={{ flex: 1 }}>
                 <Text style={styles.inputSmallLabel}>MOBILE / WHATSAPP FOR VOUCHER</Text>
                 <TextInput
@@ -318,7 +333,7 @@ export default function HotelBookingModal({
             </View>
 
             <View style={[styles.inputContainer, { marginTop: 8, alignItems: "flex-start" }]}>
-              <MaterialIcons name="notes" size={18} color="#877274" style={{ marginTop: 2 }} />
+              <MaterialIcons name="notes" size={18} color={COLORS.inkMuted} style={{ marginTop: 2 }} />
               <View style={{ flex: 1 }}>
                 <Text style={styles.inputSmallLabel}>SPECIAL REQUEST / AARTI TIMINGS</Text>
                 <TextInput
@@ -341,7 +356,7 @@ export default function HotelBookingModal({
             onPress={() => setDarshanAssistance((d) => !d)}
           >
             <View style={[styles.checkbox, darshanAssistance && styles.checkboxActive]}>
-              {darshanAssistance && <Ionicons name="checkmark" size={14} color="#FFFFFF" />}
+              {darshanAssistance && <Ionicons name="checkmark" size={14} color={COLORS.white} />}
             </View>
             <View style={{ flex: 1 }}>
               <View style={styles.addonTitleRow}>
@@ -366,9 +381,9 @@ export default function HotelBookingModal({
             </View>
 
             <View style={styles.breakdownRow}>
-              <View style={{ flexDirection: "row", alignItems: "center", gap: 3 }}>
+              <View style={{ flexDirection: "row", flexShrink: 1, alignItems: "center", gap: 3 }}>
                 <Text style={styles.breakdownLabel}>Temple Pilgrim Cess & Taxes</Text>
-                <Ionicons name="information-circle-outline" size={12} color="#904D00" />
+                <Ionicons name="information-circle-outline" size={12} color={COLORS.goldDeep} />
               </View>
               <Text style={styles.includedText}>Included</Text>
             </View>
@@ -376,10 +391,10 @@ export default function HotelBookingModal({
             <View style={styles.breakdownDivider} />
 
             <View style={styles.totalRow}>
-              <View>
+              <View style={{ flexShrink: 1 }}>
                 <Text style={styles.totalLabel}>Total Payable</Text>
                 <View style={styles.payAtCheckinRow}>
-                  <MaterialIcons name="payments" size={13} color="#904D00" />
+                  <MaterialIcons name="payments" size={13} color={COLORS.goldDeep} />
                   <Text style={styles.payAtCheckinText}>Pay at Check-in Available</Text>
                 </View>
               </View>
@@ -395,7 +410,7 @@ export default function HotelBookingModal({
               onPress={handleConfirmBooking}
             >
               <Text style={styles.confirmBtnText}>Confirm Booking Request</Text>
-              <Ionicons name="arrow-forward" size={16} color="#FFFFFF" />
+              <Ionicons name="arrow-forward" size={16} color={COLORS.white} />
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -410,7 +425,7 @@ export default function HotelBookingModal({
 
           {/* Reassurance */}
           <View style={styles.trustReassurance}>
-            <MaterialIcons name="verified-user" size={15} color="#904D00" />
+            <MaterialIcons name="verified-user" size={15} color={COLORS.goldDeep} />
             <Text style={styles.trustReassuranceText}>
               Official UjjainTirth Verified Stay · 100% Satvik Atmosphere Guarantee
             </Text>
@@ -424,7 +439,7 @@ export default function HotelBookingModal({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FCF9F4",
+    backgroundColor: COLORS.bg,
   },
   sheetHeader: {
     paddingHorizontal: 16,
@@ -432,7 +447,7 @@ const styles = StyleSheet.create({
     paddingBottom: 14,
     borderBottomWidth: 1,
     borderBottomColor: "rgba(107, 29, 47, 0.08)",
-    backgroundColor: "#FCF9F4",
+    backgroundColor: COLORS.bg,
   },
   dragPill: {
     width: 48,
@@ -454,27 +469,28 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   badgeText: {
-    fontSize: 9,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
-    color: "#904D00",
+    color: COLORS.goldDeep,
     letterSpacing: 1.2,
+    flexShrink: 1,
   },
   sheetTitle: {
     fontSize: 20,
     fontFamily: FONTS.display.bold,
-    color: "#4E051A",
+    color: COLORS.sacredDeep,
   },
   sheetSubtitle: {
     fontSize: 12,
     fontFamily: FONTS.body.regular,
-    color: "#544244",
+    color: COLORS.inkBody,
     marginTop: 1,
   },
   closeBtn: {
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: "#EBE8E3",
+    backgroundColor: COLORS.bgStone,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -487,7 +503,7 @@ const styles = StyleSheet.create({
     gap: 12,
     padding: 10,
     borderRadius: RADIUS.lg,
-    backgroundColor: "#F6F3EE",
+    backgroundColor: COLORS.surfaceMuted,
     borderWidth: 1,
     borderColor: "rgba(107, 29, 47, 0.08)",
   },
@@ -495,7 +511,7 @@ const styles = StyleSheet.create({
     width: 76,
     height: 76,
     borderRadius: RADIUS.md,
-    backgroundColor: "#EBE8E3",
+    backgroundColor: COLORS.bgStone,
   },
   propertyInfo: {
     flex: 1,
@@ -504,7 +520,7 @@ const styles = StyleSheet.create({
   hotelName: {
     fontSize: 15,
     fontFamily: FONTS.display.semiBold,
-    color: "#4E051A",
+    color: COLORS.sacredDeep,
   },
   distanceRow: {
     flexDirection: "row",
@@ -513,9 +529,10 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   distanceText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.medium,
-    color: "#904D00",
+    color: COLORS.goldDeep,
+    flexShrink: 1,
   },
   roomTagRow: {
     flexDirection: "row",
@@ -527,43 +544,47 @@ const styles = StyleSheet.create({
     borderRadius: RADIUS.xs,
   },
   roomTagText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.medium,
-    color: "#544244",
+    color: COLORS.inkBody,
     flex: 1,
   },
   roomPriceTag: {
     fontSize: 13,
     fontFamily: FONTS.display.bold,
-    color: "#4E051A",
+    color: COLORS.sacredDeep,
+    flexShrink: 1,
   },
   roomPricePerNt: {
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: FONTS.body.regular,
-    color: "#877274",
+    color: COLORS.inkMuted,
   },
   formSection: {
     gap: 6,
   },
   sectionLabel: {
-    fontSize: 10,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
-    color: "#877274",
+    color: COLORS.inkMuted,
     letterSpacing: 1.1,
     marginBottom: 4,
   },
   datesGrid: {
     flexDirection: "row",
+    flexWrap: "wrap",
     gap: 8,
   },
   dateBox: {
-    flex: 1,
+    // Two per row when they fit; stacks on narrow phones / large text.
+    flexGrow: 1,
+    flexBasis: 150,
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
     padding: 10,
     borderRadius: RADIUS.md,
-    backgroundColor: "#F6F3EE",
+    backgroundColor: COLORS.surfaceMuted,
   },
   dateIconBox: {
     width: 32,
@@ -574,14 +595,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   dateSmallLabel: {
-    fontSize: 9,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
-    color: "#877274",
+    color: COLORS.inkMuted,
   },
   dateValue: {
     fontSize: 12,
     fontFamily: FONTS.body.semiBold,
-    color: "#1C1C19",
+    color: COLORS.ink,
     marginTop: 2,
   },
   nightsCounterRow: {
@@ -591,72 +612,81 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   miniStepBtn: {
-    width: 20,
-    height: 20,
-    borderRadius: 4,
-    backgroundColor: "#EBE8E3",
+    width: 28,
+    height: 28,
+    borderRadius: 8,
+    backgroundColor: COLORS.bgStone,
     justifyContent: "center",
     alignItems: "center",
   },
   nightsCount: {
     fontSize: 12,
     fontFamily: FONTS.body.bold,
-    color: "#4E051A",
+    color: COLORS.sacredDeep,
+    flexShrink: 1,
   },
   guestsGrid: {
     flexDirection: "row",
+    flexWrap: "wrap",
     gap: 10,
   },
   stepperCard: {
-    flex: 1,
+    flexGrow: 1,
+    flexBasis: 150,
+    gap: 8,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.white,
     paddingHorizontal: 12,
     paddingVertical: 10,
     borderRadius: RADIUS.md,
     borderWidth: 1,
     borderColor: "rgba(107, 29, 47, 0.08)",
   },
+  stepperLabel: {
+    flexShrink: 1,
+  },
   stepperTitle: {
     fontSize: 13,
     fontFamily: FONTS.body.bold,
-    color: "#1C1C19",
+    color: COLORS.ink,
   },
   stepperSubtitle: {
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: FONTS.body.regular,
-    color: "#877274",
+    color: COLORS.inkMuted,
   },
   counterRow: {
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
+    flexShrink: 1,
   },
   stepBtn: {
-    width: 26,
-    height: 26,
-    borderRadius: 6,
-    backgroundColor: "#EBE8E3",
+    width: 32,
+    height: 32,
+    borderRadius: 8,
+    backgroundColor: COLORS.bgStone,
     justifyContent: "center",
     alignItems: "center",
   },
   stepBtnAdd: {
-    backgroundColor: "#6B1D2F",
+    backgroundColor: COLORS.sacred,
   },
   countText: {
     fontSize: 14,
     fontFamily: FONTS.body.bold,
-    color: "#4E051A",
+    color: COLORS.sacredDeep,
     minWidth: 14,
     textAlign: "center",
+    flexShrink: 1,
   },
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
-    backgroundColor: "#F6F3EE",
+    backgroundColor: COLORS.surfaceMuted,
     borderRadius: RADIUS.md,
     paddingHorizontal: 12,
     paddingVertical: 8,
@@ -664,15 +694,15 @@ const styles = StyleSheet.create({
     borderColor: "rgba(107, 29, 47, 0.06)",
   },
   inputSmallLabel: {
-    fontSize: 9,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
-    color: "#877274",
+    color: COLORS.inkMuted,
     letterSpacing: 0.8,
   },
   textInput: {
     fontSize: 13,
     fontFamily: FONTS.body.semiBold,
-    color: "#1C1C19",
+    color: COLORS.ink,
     paddingVertical: 2,
   },
   addonCard: {
@@ -689,13 +719,13 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     borderRadius: 4,
-    backgroundColor: "#EBE8E3",
+    backgroundColor: COLORS.bgStone,
     justifyContent: "center",
     alignItems: "center",
     marginTop: 2,
   },
   checkboxActive: {
-    backgroundColor: "#4E051A",
+    backgroundColor: COLORS.sacredDeep,
   },
   addonTitleRow: {
     flexDirection: "row",
@@ -705,31 +735,32 @@ const styles = StyleSheet.create({
   addonTitle: {
     fontSize: 12,
     fontFamily: FONTS.body.bold,
-    color: "#4E051A",
+    color: COLORS.sacredDeep,
     flex: 1,
   },
   freePill: {
     paddingHorizontal: 5,
     paddingVertical: 1,
     borderRadius: 4,
-    backgroundColor: "#FE932C",
+    backgroundColor: COLORS.saffron,
+    flexShrink: 1,
   },
   freeText: {
-    fontSize: 8,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
     color: "#2F1500",
   },
   addonDescription: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.regular,
-    color: "#544244",
+    color: COLORS.inkBody,
     marginTop: 2,
     lineHeight: 15,
   },
   priceBreakdownCard: {
     padding: 14,
     borderRadius: RADIUS.lg,
-    backgroundColor: "#F0EDE9",
+    backgroundColor: COLORS.surfaceMuted,
     gap: 8,
   },
   breakdownRow: {
@@ -740,17 +771,20 @@ const styles = StyleSheet.create({
   breakdownLabel: {
     fontSize: 12,
     fontFamily: FONTS.body.regular,
-    color: "#544244",
+    color: COLORS.inkBody,
+    flexShrink: 1,
   },
   breakdownValue: {
     fontSize: 13,
     fontFamily: FONTS.body.bold,
-    color: "#1C1C19",
+    color: COLORS.ink,
+    flexShrink: 1,
   },
   includedText: {
     fontSize: 12,
     fontFamily: FONTS.body.semiBold,
-    color: "#904D00",
+    color: COLORS.goldDeep,
+    flexShrink: 1,
   },
   breakdownDivider: {
     height: 1,
@@ -765,7 +799,7 @@ const styles = StyleSheet.create({
   totalLabel: {
     fontSize: 14,
     fontFamily: FONTS.display.bold,
-    color: "#4E051A",
+    color: COLORS.sacredDeep,
   },
   payAtCheckinRow: {
     flexDirection: "row",
@@ -774,15 +808,17 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   payAtCheckinText: {
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: FONTS.body.semiBold,
-    color: "#904D00",
+    color: COLORS.goldDeep,
+    flexShrink: 1,
   },
   totalAmount: {
     fontSize: 22,
     fontFamily: FONTS.display.bold,
-    color: "#4E051A",
+    color: COLORS.sacredDeep,
     letterSpacing: -0.5,
+    flexShrink: 1,
   },
   actionButtonsCol: {
     gap: 8,
@@ -793,31 +829,33 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     gap: 6,
-    height: 48,
+    minHeight: 48,
     borderRadius: RADIUS.md,
-    backgroundColor: "#6B1D2F",
+    backgroundColor: COLORS.sacred,
     ...SHADOWS.md,
   },
   confirmBtnText: {
     fontSize: 14,
     fontFamily: FONTS.body.bold,
-    color: "#FFFFFF",
+    color: COLORS.white,
+    flexShrink: 1,
   },
   whatsappDeskBtn: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     gap: 8,
-    height: 44,
+    minHeight: 44,
     borderRadius: RADIUS.md,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.white,
     borderWidth: 1,
     borderColor: "rgba(107, 29, 47, 0.12)",
   },
   whatsappDeskText: {
     fontSize: 12,
     fontFamily: FONTS.body.bold,
-    color: "#4E051A",
+    color: COLORS.sacredDeep,
+    flexShrink: 1,
   },
   trustReassurance: {
     flexDirection: "row",
@@ -827,9 +865,10 @@ const styles = StyleSheet.create({
     paddingTop: 4,
   },
   trustReassuranceText: {
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: FONTS.body.medium,
-    color: "#877274",
+    color: COLORS.inkMuted,
     textAlign: "center",
+    flexShrink: 1,
   },
 });

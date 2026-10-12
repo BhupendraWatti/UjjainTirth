@@ -4,7 +4,12 @@ import { FONTS } from "@/constants/typography";
 import { FormField } from "@/types/form";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { Text } from "@/components/ui/AppText";
 
 interface RadioFieldProps {
   field: FormField;
@@ -145,6 +150,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: FONTS.body.medium,
     color: COLORS.ink,
+    flexShrink: 1,
   },
   optionTextSelected: {
     fontFamily: FONTS.body.bold,
@@ -161,5 +167,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: FONTS.body.medium,
     color: COLORS.error,
+    flexShrink: 1,
   },
 });

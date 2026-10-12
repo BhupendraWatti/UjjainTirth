@@ -13,11 +13,12 @@ import {
   Platform,
   ScrollView,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
 
+import { HIT_SLOP } from "@/constants/layout";
 interface ServiceOffering {
   id: string;
   icon: keyof typeof Ionicons.glyphMap;
@@ -160,7 +161,7 @@ export default function AboutUsScreen() {
     <ScreenContainer noPadding>
       {/* ── TOP HEADER ── */}
       <View style={styles.topHeader}>
-        <TouchableOpacity
+        <TouchableOpacity hitSlop={HIT_SLOP}
           style={styles.backButton}
           activeOpacity={0.7}
           onPress={handleBack}
@@ -175,7 +176,7 @@ export default function AboutUsScreen() {
           <Text style={styles.headerTitle}>About Ujjain Tirth</Text>
         </View>
 
-        <TouchableOpacity
+        <TouchableOpacity hitSlop={HIT_SLOP}
           style={styles.headerHelpBtn}
           activeOpacity={0.7}
           onPress={() => {
@@ -438,9 +439,10 @@ const styles = StyleSheet.create({
   },
   headerCenter: {
     alignItems: "center",
+    flexShrink: 1,
   },
   headerSubBadge: {
-    fontSize: 10,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
     color: COLORS.sacred,
     letterSpacing: 1.1,
@@ -489,10 +491,11 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   heroTopBadgeText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
     color: COLORS.sacred,
     letterSpacing: 0.5,
+    flexShrink: 1,
   },
   heroHeadline: {
     fontSize: 19,
@@ -538,14 +541,14 @@ const styles = StyleSheet.create({
     color: COLORS.primary,
   },
   milestoneLabel: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
     color: COLORS.ink,
     marginTop: 2,
     textAlign: "center",
   },
   milestoneSub: {
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: FONTS.body.regular,
     color: COLORS.inkMuted,
     textAlign: "center",
@@ -572,7 +575,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   sectionSmallTitle: {
-    fontSize: 10,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
     color: COLORS.inkMuted,
     letterSpacing: 0.8,
@@ -674,7 +677,7 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   categoryPillText: {
-    fontSize: 9,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
     textTransform: "uppercase",
   },
@@ -684,7 +687,7 @@ const styles = StyleSheet.create({
     color: COLORS.ink,
   },
   offeringDesc: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.regular,
     color: COLORS.inkBody,
     lineHeight: 16,
@@ -713,17 +716,20 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
     borderRadius: RADIUS.full,
     gap: 4,
+    flexShrink: 1,
   },
   techBadgeText: {
-    fontSize: 9,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
     color: "#FFF",
     letterSpacing: 0.6,
+    flexShrink: 1,
   },
   techPlatformBadge: {
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: FONTS.body.medium,
     color: "#D0C8BF",
+    flexShrink: 1,
   },
   techBrandRow: {
     flexDirection: "row",
@@ -745,7 +751,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   poweredBySub: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.regular,
     color: "#A79C8E",
   },
@@ -774,6 +780,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: FONTS.body.bold,
     color: COLORS.primary,
+    flexShrink: 1,
   },
 
   /* Office Card */
@@ -800,7 +807,7 @@ const styles = StyleSheet.create({
   },
   officeText: {
     flex: 1,
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.regular,
     color: COLORS.inkBody,
     lineHeight: 16,
@@ -825,9 +832,10 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   mapsBtnText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
     color: COLORS.journey,
+    flexShrink: 1,
   },
   contactDeskBtn: {
     flex: 1,
@@ -840,9 +848,10 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   contactDeskBtnText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
     color: "#FFF",
+    flexShrink: 1,
   },
 
   /* Devotional Footer */
@@ -858,12 +867,12 @@ const styles = StyleSheet.create({
     letterSpacing: 0.8,
   },
   brandFooter: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.regular,
     color: COLORS.inkMuted,
   },
   granthFooter: {
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: FONTS.body.medium,
     color: COLORS.inkFaint,
   },

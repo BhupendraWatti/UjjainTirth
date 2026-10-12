@@ -7,10 +7,9 @@ import React, { useState } from "react";
 import {
   KeyboardTypeOptions,
   StyleSheet,
-  Text,
-  TextInput,
   View,
 } from "react-native";
+import { Text, TextInput } from "@/components/ui/AppText";
 
 interface TextInputFieldProps {
   field: FormField;
@@ -148,7 +147,7 @@ const styles = StyleSheet.create({
     borderColor: "rgba(43, 36, 32, 0.12)",
     borderRadius: RADIUS.md,
     paddingHorizontal: 14,
-    height: 52,
+    minHeight: 52,
   },
   inputWrapperFocused: {
     borderColor: COLORS.primary,
@@ -184,5 +183,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: FONTS.body.medium,
     color: COLORS.error,
+    flexShrink: 1,
   },
 });

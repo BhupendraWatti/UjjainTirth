@@ -2,8 +2,13 @@ import { FONTS } from "@/constants/typography";
 import { RADIUS, SHADOWS } from "@/constants/theme";
 import { MaterialIcons } from "@expo/vector-icons";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import {
+  StyleSheet,
+  View,
+} from "react-native";
+import { Text } from "@/components/ui/AppText";
 
+import { COLORS } from "@/constants/colors";
 interface Props {
   title?: string;
   description?: string;
@@ -20,7 +25,7 @@ export default function TirthShuddhiBanner({ title, description }: Props) {
   return (
     <View style={styles.container}>
       <View style={styles.iconBox}>
-        <MaterialIcons name="verified-user" size={24} color="#FFDF98" />
+        <MaterialIcons name="verified-user" size={24} color={COLORS.goldLight} />
       </View>
       <View style={styles.textBox}>
         {displayTitle ? <Text style={styles.title}>{displayTitle}</Text> : null}
@@ -36,7 +41,7 @@ const styles = StyleSheet.create({
     marginVertical: 14,
     padding: 14,
     borderRadius: RADIUS.lg,
-    backgroundColor: "#F0EDE9",
+    backgroundColor: COLORS.surfaceMuted,
     flexDirection: "row",
     alignItems: "center",
     gap: 12,
@@ -48,7 +53,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: RADIUS.md,
-    backgroundColor: "#6B1D2F",
+    backgroundColor: COLORS.sacred,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -58,13 +63,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 14,
     fontFamily: FONTS.display.semiBold,
-    color: "#4E051A",
+    color: COLORS.sacredDeep,
     marginBottom: 2,
   },
   description: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.regular,
-    color: "#544244",
+    color: COLORS.inkBody,
     lineHeight: 16,
   },
 });

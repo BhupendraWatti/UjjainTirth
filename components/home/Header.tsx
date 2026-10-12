@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import React, { useState } from "react";
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import { COLORS } from "@/constants/colors";
@@ -20,7 +21,12 @@ export default function Header() {
         accessibilityLabel="Ujjain Tirth"
       />
 
-      <TouchableOpacity style={styles.searchBtn} accessibilityRole="button" accessibilityLabel="Search">
+      <TouchableOpacity
+        style={styles.searchBtn}
+        onPress={() => router.push("/(tabs)/temples")}
+        accessibilityRole="button"
+        accessibilityLabel="Search temples"
+      >
         <Ionicons name="search" size={20} color={COLORS.inkBody} />
       </TouchableOpacity>
     </View>

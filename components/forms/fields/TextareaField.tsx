@@ -4,7 +4,11 @@ import { FONTS } from "@/constants/typography";
 import { FormField } from "@/types/form";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  StyleSheet,
+  View,
+} from "react-native";
+import { Text, TextInput } from "@/components/ui/AppText";
 
 interface TextareaFieldProps {
   field: FormField;
@@ -129,5 +133,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: FONTS.body.medium,
     color: COLORS.error,
+    flexShrink: 1,
   },
 });

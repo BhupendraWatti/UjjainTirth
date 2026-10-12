@@ -2,6 +2,7 @@ import React from "react";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { Edge, SafeAreaView } from "react-native-safe-area-context";
 import { COLORS } from "@/constants/colors";
+import { contentColumn } from "@/constants/layout";
 
 export interface ScreenContainerProps {
   children: React.ReactNode;
@@ -23,6 +24,7 @@ export default function ScreenContainer({
       <View
         style={[
           styles.container,
+          contentColumn,
           noPadding && styles.noPadding,
           containerStyle,
         ]}

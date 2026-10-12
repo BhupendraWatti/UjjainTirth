@@ -5,18 +5,18 @@ import React from "react";
 import {
   Image,
   StyleSheet,
-  Text,
   TouchableOpacity,
-  useWindowDimensions,
   View,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
 import { COLORS } from "@/constants/colors";
 import { FONTS } from "@/constants/typography";
 import { RADIUS, SHADOWS } from "@/constants/theme";
 
+import { useLayout } from "@/hooks/useLayout";
 const ServiceGrid = ({ services }: { services: Service[] }) => {
   const router = useRouter();
-  const { width } = useWindowDimensions();
+  const { contentWidth: width } = useLayout();
   const isCompact = width < 375;
   const sidePadding = 16;
   const gap = 10;
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     fontSize: 13.5,
     fontFamily: FONTS.display.semiBold,
     textAlign: "center",
-    color: "#FFFFFF",
+    color: COLORS.white,
     lineHeight: 17,
     paddingHorizontal: 2,
   },

@@ -4,8 +4,14 @@ import { RADIUS, SHADOWS } from "@/constants/theme";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { Text } from "@/components/ui/AppText";
 
+import { COLORS } from "@/constants/colors";
 interface Props {
   rooms: RoomTier[];
   selectedRoomId: string;
@@ -55,14 +61,14 @@ export default function RoomSelection({
                   />
                 ) : (
                   <View style={[StyleSheet.absoluteFillObject, styles.placeholder]}>
-                    <MaterialCommunityIcons name="bed-king-outline" size={36} color="#877274" />
+                    <MaterialCommunityIcons name="bed-king-outline" size={36} color={COLORS.inkMuted} />
                   </View>
                 )}
 
                 {/* Badge Overlay */}
                 {room.badge && (
                   <View style={styles.badgePill}>
-                    <Ionicons name="star" size={11} color="#FFDF98" />
+                    <Ionicons name="star" size={11} color={COLORS.goldLight} />
                     <Text style={styles.badgePillText}>{room.badge}</Text>
                   </View>
                 )}
@@ -82,7 +88,7 @@ export default function RoomSelection({
                     <Text style={styles.roomTitle}>{room.title}</Text>
                     {room.view ? (
                       <View style={styles.viewRow}>
-                        <MaterialCommunityIcons name="flower" size={13} color="#904D00" />
+                        <MaterialCommunityIcons name="flower" size={13} color={COLORS.goldDeep} />
                         <Text style={styles.viewText}>{room.view}</Text>
                       </View>
                     ) : null}
@@ -98,12 +104,12 @@ export default function RoomSelection({
                 {/* Spec Pills */}
                 <View style={styles.specsRow}>
                   <View style={styles.specChip}>
-                    <MaterialCommunityIcons name="account-group" size={13} color="#544244" />
+                    <MaterialCommunityIcons name="account-group" size={13} color={COLORS.inkBody} />
                     <Text style={styles.specText}>{room.max_guests} Guests</Text>
                   </View>
 
                   <View style={styles.specChip}>
-                    <MaterialCommunityIcons name="bed" size={13} color="#544244" />
+                    <MaterialCommunityIcons name="bed" size={13} color={COLORS.inkBody} />
                     <Text style={styles.specText}>{room.beds}</Text>
                   </View>
                 </View>
@@ -113,7 +119,7 @@ export default function RoomSelection({
                   <View style={styles.inclusionsRow}>
                     {room.amenity_highlights.map((item, idx) => (
                       <View key={idx} style={styles.inclusionItem}>
-                        <Ionicons name="checkmark-circle" size={13} color="#904D00" />
+                        <Ionicons name="checkmark-circle" size={13} color={COLORS.goldDeep} />
                         <Text style={styles.inclusionText}>{item}</Text>
                         {idx < room.amenity_highlights.length - 1 && (
                           <Text style={styles.bullet}>•</Text>
@@ -134,7 +140,7 @@ export default function RoomSelection({
                     ]}
                   >
                     {isSelected && (
-                      <Ionicons name="checkmark" size={14} color="#FFFFFF" style={{ marginRight: 3 }} />
+                      <Ionicons name="checkmark" size={14} color={COLORS.white} style={{ marginRight: 3 }} />
                     )}
                     <Text
                       style={[
@@ -173,29 +179,30 @@ const styles = StyleSheet.create({
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: "#904D00",
+    backgroundColor: COLORS.goldDeep,
   },
   tagText: {
-    fontSize: 10,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
-    color: "#904D00",
+    color: COLORS.goldDeep,
     letterSpacing: 1.2,
+    flexShrink: 1,
   },
   titleText: {
     fontSize: 20,
     fontFamily: FONTS.display.semiBold,
-    color: "#4E051A",
+    color: COLORS.sacredDeep,
   },
   subtext: {
     fontSize: 12,
     fontFamily: FONTS.body.regular,
-    color: "#544244",
+    color: COLORS.inkBody,
   },
   roomsList: {
     gap: 14,
   },
   roomCard: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.white,
     borderRadius: RADIUS.lg,
     overflow: "hidden",
     borderWidth: 1,
@@ -203,7 +210,7 @@ const styles = StyleSheet.create({
     ...SHADOWS.xs,
   },
   roomCardSelected: {
-    borderColor: "#904D00",
+    borderColor: COLORS.goldDeep,
     borderWidth: 1.5,
     ...SHADOWS.md,
   },
@@ -211,7 +218,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 160,
     position: "relative",
-    backgroundColor: "#EBE8E3",
+    backgroundColor: COLORS.bgStone,
   },
   placeholder: {
     justifyContent: "center",
@@ -230,10 +237,11 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(78, 5, 26, 0.9)",
   },
   badgePillText: {
-    fontSize: 10,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
-    color: "#FFFFFF",
+    color: COLORS.white,
     letterSpacing: 0.5,
+    flexShrink: 1,
   },
   areaTag: {
     position: "absolute",
@@ -245,9 +253,9 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255, 255, 255, 0.9)",
   },
   areaText: {
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
-    color: "#4E051A",
+    color: COLORS.sacredDeep,
   },
   body: {
     padding: 14,
@@ -261,7 +269,7 @@ const styles = StyleSheet.create({
   roomTitle: {
     fontSize: 16,
     fontFamily: FONTS.display.semiBold,
-    color: "#4E051A",
+    color: COLORS.sacredDeep,
   },
   viewRow: {
     flexDirection: "row",
@@ -270,22 +278,24 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   viewText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.medium,
-    color: "#904D00",
+    color: COLORS.goldDeep,
+    flexShrink: 1,
   },
   priceCol: {
     alignItems: "flex-end",
+    flexShrink: 1,
   },
   priceAmount: {
     fontSize: 18,
     fontFamily: FONTS.display.bold,
-    color: "#4E051A",
+    color: COLORS.sacredDeep,
   },
   priceUnit: {
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: FONTS.body.regular,
-    color: "#877274",
+    color: COLORS.inkMuted,
   },
   specsRow: {
     flexDirection: "row",
@@ -298,12 +308,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: RADIUS.xs,
-    backgroundColor: "#F0EDE9",
+    backgroundColor: COLORS.surfaceMuted,
+    flexShrink: 1,
   },
   specText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.medium,
-    color: "#544244",
+    color: COLORS.inkBody,
+    flexShrink: 1,
   },
   inclusionsRow: {
     flexDirection: "row",
@@ -317,12 +329,13 @@ const styles = StyleSheet.create({
     gap: 3,
   },
   inclusionText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.regular,
-    color: "#544244",
+    color: COLORS.inkBody,
+    flexShrink: 1,
   },
   bullet: {
-    fontSize: 10,
+    fontSize: 12,
     color: "#A09895",
     marginLeft: 4,
   },
@@ -335,9 +348,10 @@ const styles = StyleSheet.create({
     borderTopColor: "rgba(107, 29, 47, 0.06)",
   },
   taxText: {
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: FONTS.body.regular,
-    color: "#877274",
+    color: COLORS.inkMuted,
+    flexShrink: 1,
   },
   selectBtn: {
     flexDirection: "row",
@@ -345,19 +359,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: RADIUS.sm,
+    flexShrink: 1,
   },
   selectBtnActive: {
-    backgroundColor: "#4E051A",
+    backgroundColor: COLORS.sacredDeep,
   },
   selectBtnInactive: {
-    backgroundColor: "#F0EDE9",
+    backgroundColor: COLORS.surfaceMuted,
   },
   selectBtnText: {
     fontSize: 12,
     fontFamily: FONTS.body.bold,
-    color: "#4E051A",
+    color: COLORS.sacredDeep,
   },
   selectBtnTextActive: {
-    color: "#FFFFFF",
+    color: COLORS.white,
   },
 });

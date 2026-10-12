@@ -13,11 +13,11 @@ import {
   Platform,
   ScrollView,
   StyleSheet,
-  Text,
   TouchableOpacity,
   useWindowDimensions,
   View,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
 
 interface Props {
   visible: boolean;
@@ -28,6 +28,10 @@ interface Props {
 export default function HotelDetailModal({ visible, hotel, onClose }: Props) {
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
+  // iOS presents pageSheet below the status bar already; window insets would push the
+  // close button ~60pt into the sheet. Android shows the modal full-screen, so it needs them.
+  const sheetTopOffset =
+    Platform.OS === "ios" ? 12 : Math.max(12, insets.top + 8);
   const sliderHeight = Math.min(300, Math.max(220, height * 0.38));
   const [activeSlide, setActiveSlide] = useState(0);
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -141,7 +145,7 @@ export default function HotelDetailModal({ visible, hotel, onClose }: Props) {
 
               {/* Close button */}
               <TouchableOpacity
-                style={[styles.closeButton, { top: Math.max(12, insets.top + 8) }]}
+                style={[styles.closeButton, { top: sheetTopOffset }]}
                 onPress={onClose}
                 activeOpacity={0.7}
               >
@@ -209,7 +213,7 @@ export default function HotelDetailModal({ visible, hotel, onClose }: Props) {
             {/* Price Section */}
             <View style={styles.section}>
               <View style={styles.priceCard}>
-                <View>
+                <View style={{ flexShrink: 1 }}>
                   <Text style={styles.priceLabel}>Price per night</Text>
                   <View style={styles.priceValueRow}>
                     <Text style={styles.priceSymbol}>₹</Text>
@@ -253,7 +257,7 @@ export default function HotelDetailModal({ visible, hotel, onClose }: Props) {
             accessibilityLabel="Book Hotel Room"
           >
             <LinearGradient
-              colors={[COLORS.primary, "#D94535"]}
+              colors={[COLORS.primary, COLORS.primaryDeep]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={styles.ctaGradient}
@@ -272,7 +276,7 @@ export default function HotelDetailModal({ visible, hotel, onClose }: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F5F2EA",
+    backgroundColor: COLORS.bg,
   },
 
   scrollContent: {
@@ -374,12 +378,14 @@ const styles = StyleSheet.create({
 
   locationIcon: {
     fontSize: 14,
+    flexShrink: 1,
   },
 
   locationText: {
     fontSize: 14,
     color: COLORS.textLight,
     fontWeight: "500",
+    flexShrink: 1,
   },
 
   ratingRow: {
@@ -435,7 +441,7 @@ const styles = StyleSheet.create({
   },
 
   priceLabel: {
-    fontSize: 11,
+    fontSize: 12,
     color: COLORS.textLight,
     fontWeight: "600",
     textTransform: "uppercase",
@@ -453,6 +459,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "800",
     color: COLORS.primary,
+    flexShrink: 1,
   },
 
   priceAmount: {
@@ -460,6 +467,7 @@ const styles = StyleSheet.create({
     fontWeight: "900",
     color: COLORS.primary,
     letterSpacing: -0.5,
+    flexShrink: 1,
   },
 
   categoryBadge: {
@@ -467,6 +475,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 20,
+    flexShrink: 1,
   },
 
   categoryText: {

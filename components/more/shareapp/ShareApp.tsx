@@ -3,7 +3,13 @@ import { RADIUS, SHADOWS } from "@/constants/theme";
 import { FONTS } from "@/constants/typography";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
-import { Share, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Share,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { Text } from "@/components/ui/AppText";
 import { ShareContentData } from "@/services/shareServices";
 
 interface ShareAppProps {
@@ -120,5 +126,6 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.body.bold,
     fontSize: 15,
     letterSpacing: 0.2,
+    flexShrink: 1,
   },
 });

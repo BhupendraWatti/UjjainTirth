@@ -20,6 +20,14 @@ export const COLORS = {
   journeyTint: "#DFF0F2",
   /** Temple bronze. Dividers, icons, small decorative accents, badges only */
   gold: "#B8802E",
+  /** Darkest kumkum. Accommodation headings, gradient anchors, text on light tints */
+  sacredDeep: "#4E051A",
+  /** Text-safe bronze (AA on white/parchment). Accent labels, small icons with text */
+  goldDeep: "#904D00",
+  /** Pale gold. Text/icons on dark maroon or photo overlays only */
+  goldLight: "#FFDF98",
+  /** Bright saffron. Star ratings, "popular" chips, small highlight dots */
+  saffron: "#FE932C",
   /** Status color: verified, available, confirmed */
   success: "#2E7D32",
   /** Status color: form errors, failed states */

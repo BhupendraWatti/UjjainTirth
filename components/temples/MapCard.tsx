@@ -3,11 +3,12 @@ import React from "react";
 import {
   Image,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
 
+import { COLORS } from "@/constants/colors";
 interface Props {
   latitude?: number;
   longitude?: number;
@@ -150,7 +151,7 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   locationSub: {
-    fontSize: 11,
+    fontSize: 12,
     color: "#666",
   },
   distancePill: {
@@ -160,18 +161,18 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   distanceText: {
-    fontSize: 10,
+    fontSize: 12,
     fontWeight: "700",
     color: "#2E7D32",
   },
   button: {
-    backgroundColor: "#EB5C49",
+    backgroundColor: COLORS.primary,
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 20,
   },
   buttonText: {
     color: "#fff",
-    fontSize: 11,
+    fontSize: 12,
   },
 });

@@ -7,11 +7,13 @@ import React, { useState } from "react";
 import {
   Modal,
   StyleSheet,
-  Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
+import { sheetColumn } from "@/constants/layout";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 interface SelectFieldProps {
   field: FormField;
@@ -28,6 +30,7 @@ export const SelectField: React.FC<SelectFieldProps> = ({
   error,
   disabled = false,
 }) => {
+  const insets = useSafeAreaInsets();
   const [modalVisible, setModalVisible] = useState(false);
   const options = field.options || [];
 
@@ -92,9 +95,9 @@ export const SelectField: React.FC<SelectFieldProps> = ({
         <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
           <View style={styles.modalBackdrop}>
             <TouchableWithoutFeedback>
-              <View style={styles.modalContent}>
+              <View style={[styles.modalContent, { paddingBottom: Math.max(insets.bottom, 12) + 20 }]}>
                 <View style={styles.modalHeader}>
-                  <View>
+                  <View style={{ flexShrink: 1 }}>
                     <Text style={styles.modalTitle}>
                       Select {field.label.replace(/\*+$/, "").trim()}
                     </Text>
@@ -190,7 +193,7 @@ const styles = StyleSheet.create({
     borderColor: "rgba(43, 36, 32, 0.12)",
     borderRadius: RADIUS.md,
     paddingHorizontal: 14,
-    height: 52,
+    minHeight: 52,
   },
   inputWrapperError: {
     borderColor: COLORS.error,
@@ -223,6 +226,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: FONTS.body.medium,
     color: COLORS.error,
+    flexShrink: 1,
   },
 
   // Modal
@@ -232,6 +236,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   modalContent: {
+    ...sheetColumn,
     backgroundColor: COLORS.surface,
     borderTopLeftRadius: RADIUS.lg,
     borderTopRightRadius: RADIUS.lg,
@@ -304,6 +309,7 @@ const styles = StyleSheet.create({
     fontSize: 14.5,
     fontFamily: FONTS.body.medium,
     color: COLORS.ink,
+    flexShrink: 1,
   },
   optionLabelSelected: {
     fontFamily: FONTS.body.bold,

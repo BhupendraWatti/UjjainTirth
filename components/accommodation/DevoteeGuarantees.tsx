@@ -7,9 +7,9 @@ import React from "react";
 import {
   ScrollView,
   StyleSheet,
-  Text,
   View,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
 
 interface Props {
   highlights?: AccommodationHighlight[];
@@ -48,7 +48,7 @@ export default function DevoteeGuarantees({ highlights }: Props) {
             <MaterialCommunityIcons
               name={iconName as any}
               size={14}
-              color={isHighlight ? "#904D00" : COLORS.secondary}
+              color={isHighlight ? COLORS.goldDeep : COLORS.secondary}
             />
             <Text
               style={[styles.badgeText, isHighlight && styles.badgeTextHighlight]}
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: RADIUS.sm,
-    backgroundColor: "#F6F3EE",
+    backgroundColor: COLORS.surfaceMuted,
     borderWidth: 1,
     borderColor: "rgba(107, 29, 47, 0.04)",
   },
@@ -85,9 +85,10 @@ const styles = StyleSheet.create({
     borderColor: "rgba(254, 147, 44, 0.3)",
   },
   badgeText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.medium,
-    color: "#1C1C19",
+    color: COLORS.ink,
+    flexShrink: 1,
   },
   badgeTextHighlight: {
     color: "#2F1500",

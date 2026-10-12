@@ -13,10 +13,10 @@ import {
   Platform,
   ScrollView,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
 import Svg, { Circle, Line, Path } from "react-native-svg";
 
 interface DynamicPackageFormProps {
@@ -269,10 +269,10 @@ export const DynamicPackageForm: React.FC<DynamicPackageFormProps> = ({
               <Text style={styles.headerTitle}>{schema.title || "My Package & My Cost"}</Text>
               <View style={styles.headerFlourish}>
                 <Svg width={36} height={12} viewBox="0 0 36 12" fill="none">
-                  <Line x1="0" y1="6" x2="12" y2="6" stroke="#C99A55" strokeWidth="1" strokeDasharray="2 2" />
-                  <Path d="M 18 1 C 16 4 16 8 18 11 C 20 8 20 4 18 1 Z" fill="#C99A55" />
+                  <Line x1="0" y1="6" x2="12" y2="6" stroke={COLORS.gold} strokeWidth="1" strokeDasharray="2 2" />
+                  <Path d="M 18 1 C 16 4 16 8 18 11 C 20 8 20 4 18 1 Z" fill={COLORS.gold} />
                   <Circle cx="18" cy="6" r="1.5" fill="#FAF4EA" />
-                  <Line x1="24" y1="6" x2="36" y2="6" stroke="#C99A55" strokeWidth="1" strokeDasharray="2 2" />
+                  <Line x1="24" y1="6" x2="36" y2="6" stroke={COLORS.gold} strokeWidth="1" strokeDasharray="2 2" />
                 </Svg>
               </View>
             </View>
@@ -368,6 +368,7 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.display.semiBold,
     color: COLORS.ink,
     letterSpacing: 0.2,
+    flexShrink: 1,
   },
   headerFlourish: {
     alignItems: "center",
@@ -429,7 +430,7 @@ const styles = StyleSheet.create({
   submitButton: {
     backgroundColor: COLORS.primary,
     borderRadius: RADIUS.md,
-    height: 52,
+    minHeight: 52,
     justifyContent: "center",
     alignItems: "center",
     marginTop: 10,
@@ -453,9 +454,10 @@ const styles = StyleSheet.create({
     fontSize: 15.5,
     fontFamily: FONTS.body.bold,
     letterSpacing: 0.2,
+    flexShrink: 1,
   },
   footerNote: {
-    fontSize: 11.5,
+    fontSize: 12,
     fontFamily: FONTS.body.regular,
     color: COLORS.inkFaint,
     textAlign: "center",
@@ -519,6 +521,7 @@ const styles = StyleSheet.create({
     color: COLORS.white,
     fontSize: 14,
     fontFamily: FONTS.body.bold,
+    flexShrink: 1,
   },
 
   // Success Card View

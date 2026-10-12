@@ -21,6 +21,7 @@ import Animated, {
 import { icons } from "@/components/ui/Icons";
 import { COLORS } from "@/constants/colors";
 import { FONTS } from "@/constants/typography";
+import { TAB_BAR } from "@/constants/layout";
 
 // Spring transition configs for fluid physical tab morphing
 const TAB_LAYOUT_TRANSITION = LinearTransition.springify()
@@ -209,8 +210,11 @@ export default function AnimatedTabBar({
       style={[
         styles.wrapper,
         {
-          paddingBottom: Math.max(insets.bottom, isCompact ? 6 : 8),
-          paddingTop: 4,
+          paddingBottom: Math.max(
+            insets.bottom,
+            isCompact ? TAB_BAR.minBottomPaddingCompact : TAB_BAR.minBottomPadding
+          ),
+          paddingTop: TAB_BAR.paddingTop,
         },
       ]}
       pointerEvents="box-none"
@@ -274,9 +278,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-around",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.white,
     borderRadius: 24,
-    height: 58,
+    height: TAB_BAR.height,
     width: "92%",
     maxWidth: 420,
     paddingHorizontal: 8,
@@ -284,7 +288,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.hairline,
     ...Platform.select({
       ios: {
-        shadowColor: "#2B2420",
+        shadowColor: COLORS.ink,
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.08,
         shadowRadius: 12,
@@ -295,7 +299,7 @@ const styles = StyleSheet.create({
     }),
   },
   containerCompact: {
-    height: 52,
+    height: TAB_BAR.heightCompact,
     width: "95%",
     paddingHorizontal: 4,
     borderRadius: 20,
@@ -336,7 +340,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.2,
   },
   labelCompact: {
-    fontSize: 10.5,
+    fontSize: 12,
     marginLeft: 4,
   },
 });

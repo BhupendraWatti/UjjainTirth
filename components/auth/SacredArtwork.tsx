@@ -165,7 +165,7 @@ export function TempleSkylineArt({
           justifyContent: "center",
         }}
       >
-        <RNText style={styles.omSunText}>{"ॐ"}</RNText>
+        <RNText style={styles.omSunText} allowFontScaling={false}>{"ॐ"}</RNText>
       </View>
     </View>
   );
@@ -254,7 +254,7 @@ export function MandalaAura({ size = 280 }: { size?: number }) {
           justifyContent: "center",
         }}
       >
-        <RNText style={[styles.mandalaOmText, { fontSize: size * 0.14 }]}>{"ॐ"}</RNText>
+        <RNText style={[styles.mandalaOmText, { fontSize: size * 0.14 }]} allowFontScaling={false}>{"ॐ"}</RNText>
       </View>
     </View>
   );

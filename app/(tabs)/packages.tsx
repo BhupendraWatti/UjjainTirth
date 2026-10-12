@@ -20,17 +20,16 @@ import {
   Platform,
   RefreshControl,
   StyleSheet,
-  Text,
   View,
-  useWindowDimensions,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
 import Svg, { Circle, Line, Path } from "react-native-svg";
+import { useLayout } from "@/hooks/useLayout";
 
 export default function PackagesScreen() {
-  const { width } = useWindowDimensions();
-  const isTablet = width >= 768;
+  const { contentWidth, isTablet, tabBarSpace } = useLayout();
   const numColumns = isTablet ? 2 : 1;
-  const cardWidth = isTablet ? (width - 44) / 2 : "100%";
+  const cardWidth = isTablet ? (contentWidth - 44) / 2 : "100%";
 
   // Default tab set to "list" (Latest Packages) so curated Sacred Journey cards appear immediately
   const [activeTab, setActiveTab] = useState<PackageTab>("list");
@@ -81,10 +80,10 @@ export default function PackagesScreen() {
         <Text style={styles.editorialTitle}>Sacred Journeys</Text>
         <View style={styles.headerFlourish}>
           <Svg width={36} height={12} viewBox="0 0 36 12" fill="none">
-            <Line x1="0" y1="6" x2="12" y2="6" stroke="#C99A55" strokeWidth="1" strokeDasharray="2 2" />
-            <Path d="M 18 1 C 16 4 16 8 18 11 C 20 8 20 4 18 1 Z" fill="#C99A55" />
+            <Line x1="0" y1="6" x2="12" y2="6" stroke={COLORS.gold} strokeWidth="1" strokeDasharray="2 2" />
+            <Path d="M 18 1 C 16 4 16 8 18 11 C 20 8 20 4 18 1 Z" fill={COLORS.gold} />
             <Circle cx="18" cy="6" r="1.5" fill="#FAF4EA" />
-            <Line x1="24" y1="6" x2="36" y2="6" stroke="#C99A55" strokeWidth="1" strokeDasharray="2 2" />
+            <Line x1="24" y1="6" x2="36" y2="6" stroke={COLORS.gold} strokeWidth="1" strokeDasharray="2 2" />
           </Svg>
         </View>
       </View>
@@ -135,7 +134,7 @@ export default function PackagesScreen() {
           showsVerticalScrollIndicator={false}
           ListHeaderComponent={renderEditorialHeader}
           contentContainerStyle={{
-            paddingBottom: 110,
+            paddingBottom: tabBarSpace,
             paddingTop: 4,
           }}
           renderItem={({ item, index }) => (
@@ -233,6 +232,7 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.display.semiBold,
     color: COLORS.ink,
     letterSpacing: 0.2,
+    flexShrink: 1,
   },
 
   headerFlourish: {

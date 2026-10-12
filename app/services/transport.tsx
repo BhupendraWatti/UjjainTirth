@@ -10,7 +10,12 @@ import { FONTS } from "@/constants/typography";
 import { useTransportServices } from "@/hooks/useTransport";
 import { TransportServiceItem } from "@/types/transport";
 import React, { useCallback, useMemo, useState } from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import {
+  FlatList,
+  StyleSheet,
+  View,
+} from "react-native";
+import { Text } from "@/components/ui/AppText";
 
 export default function TransportScreen() {
   const { data: transportItems, isLoading, isError, refetch } = useTransportServices();

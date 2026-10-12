@@ -13,11 +13,12 @@ import {
   Platform,
   ScrollView,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
 
+import { HIT_SLOP } from "@/constants/layout";
 interface PolicyItem {
   id: string;
   icon: keyof typeof Ionicons.glyphMap;
@@ -130,7 +131,7 @@ export default function PrivacyPolicyScreen() {
     <ScreenContainer noPadding>
       {/* ── TOP HEADER ── */}
       <View style={styles.topHeader}>
-        <TouchableOpacity
+        <TouchableOpacity hitSlop={HIT_SLOP}
           style={styles.backButton}
           activeOpacity={0.7}
           onPress={handleBack}
@@ -145,7 +146,7 @@ export default function PrivacyPolicyScreen() {
           <Text style={styles.headerTitle}>Privacy Policy</Text>
         </View>
 
-        <TouchableOpacity
+        <TouchableOpacity hitSlop={HIT_SLOP}
           style={styles.helpHeaderBtn}
           activeOpacity={0.7}
           onPress={() => {
@@ -344,9 +345,10 @@ const styles = StyleSheet.create({
   },
   headerCenter: {
     alignItems: "center",
+    flexShrink: 1,
   },
   headerSubBadge: {
-    fontSize: 10,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
     color: COLORS.sacred,
     letterSpacing: 1.1,
@@ -397,16 +399,19 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderRadius: RADIUS.full,
     gap: 5,
+    flexShrink: 1,
   },
   pillBadgeText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
     color: COLORS.sacred,
+    flexShrink: 1,
   },
   versionText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.medium,
     color: COLORS.inkMuted,
+    flexShrink: 1,
   },
   heroHeadline: {
     fontSize: 18,
@@ -438,17 +443,17 @@ const styles = StyleSheet.create({
     borderColor: COLORS.hairline,
   },
   bentoTitle: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
     color: COLORS.ink,
     marginTop: 5,
     marginBottom: 1,
   },
   bentoSub: {
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: FONTS.body.regular,
     color: COLORS.inkMuted,
-    lineHeight: 13,
+    lineHeight: 16,
   },
 
   /* Policy Sections */
@@ -496,7 +501,7 @@ const styles = StyleSheet.create({
     color: COLORS.ink,
   },
   policySummary: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.regular,
     color: COLORS.inkMuted,
     lineHeight: 15,
@@ -555,16 +560,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: RADIUS.full,
+    flexShrink: 1,
   },
   grievancePillText: {
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
     color: COLORS.sacred,
+    flexShrink: 1,
   },
   responseSpeed: {
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: FONTS.body.medium,
     color: COLORS.success,
+    flexShrink: 1,
   },
   grievanceTitle: {
     fontSize: 14,
@@ -573,7 +581,7 @@ const styles = StyleSheet.create({
     marginBottom: 3,
   },
   grievanceDesc: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.regular,
     color: COLORS.inkMuted,
     lineHeight: 16,
@@ -592,17 +600,17 @@ const styles = StyleSheet.create({
     color: COLORS.ink,
   },
   officerRole: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.regular,
     color: COLORS.inkMuted,
   },
   officerEmail: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.medium,
     color: COLORS.primary,
   },
   officerAddress: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.regular,
     color: COLORS.inkMuted,
   },
@@ -619,6 +627,7 @@ const styles = StyleSheet.create({
     color: "#FFF",
     fontSize: 12,
     fontFamily: FONTS.body.bold,
+    flexShrink: 1,
   },
 
   /* Footer Help Card */
@@ -640,7 +649,7 @@ const styles = StyleSheet.create({
     color: COLORS.ink,
   },
   footerHelpSub: {
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: FONTS.body.regular,
     color: COLORS.inkBody,
     marginTop: 1,
@@ -655,9 +664,10 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   contactSupportBtnText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
     color: COLORS.primary,
+    flexShrink: 1,
   },
 
   /* Legal Note */
@@ -667,12 +677,12 @@ const styles = StyleSheet.create({
     gap: 2,
   },
   copyrightText: {
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: FONTS.body.medium,
     color: COLORS.inkMuted,
   },
   legalSub: {
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: FONTS.body.regular,
     color: COLORS.inkFaint,
   },

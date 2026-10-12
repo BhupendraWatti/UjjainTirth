@@ -9,10 +9,10 @@ import {
   Alert,
   Platform,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
 
 /**
  * "Need Assistance?" support card.
@@ -141,5 +141,6 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.body.bold,
     fontSize: 15,
     letterSpacing: 0.2,
+    flexShrink: 1,
   },
 });

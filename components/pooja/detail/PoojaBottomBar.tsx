@@ -2,11 +2,10 @@ import React from "react";
 import {
   Platform,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
-  useWindowDimensions,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Haptics from "expo-haptics";
 import { Ionicons } from "@expo/vector-icons";
@@ -15,6 +14,7 @@ import { RADIUS, SHADOWS } from "@/constants/theme";
 import { FONTS } from "@/constants/typography";
 import { PoojaDakshinaTier } from "@/types/pooja";
 
+import { useLayout } from "@/hooks/useLayout";
 interface PoojaBottomBarProps {
   activePrice: number | null;
   selectedTier: PoojaDakshinaTier | null;
@@ -29,7 +29,7 @@ export const PoojaBottomBar: React.FC<PoojaBottomBarProps> = ({
   onBook,
 }) => {
   const insets = useSafeAreaInsets();
-  const { width: screenWidth } = useWindowDimensions();
+  const { contentWidth: screenWidth } = useLayout();
   const isCompact = screenWidth < 375;
 
   // Safe bottom padding handling 3-button navigation (48-56dp), gesture bar, or legacy devices
@@ -123,7 +123,7 @@ export const PoojaBottomBar: React.FC<PoojaBottomBarProps> = ({
           accessibilityRole="button"
           accessibilityLabel="Book Pooja via WhatsApp"
         >
-          <Ionicons name="logo-whatsapp" size={17} color="#FFFFFF" />
+          <Ionicons name="logo-whatsapp" size={17} color={COLORS.white} />
           <Text
             style={styles.whatsappBtnText}
             numberOfLines={1}
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   bottomPriceLabel: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.medium,
     color: COLORS.inkMuted,
     marginBottom: 1,
@@ -230,6 +230,7 @@ const styles = StyleSheet.create({
   whatsappBtnText: {
     fontSize: 13,
     fontFamily: FONTS.body.bold,
-    color: "#FFFFFF",
+    color: COLORS.white,
+    flexShrink: 1,
   },
 });

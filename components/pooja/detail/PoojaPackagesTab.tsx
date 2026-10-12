@@ -1,5 +1,10 @@
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { Text } from "@/components/ui/AppText";
 import Animated, { FadeIn } from "react-native-reanimated";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "@/constants/colors";
@@ -277,9 +282,9 @@ const styles = StyleSheet.create({
     zIndex: 3,
   },
   popularRibbonText: {
-    fontSize: 9,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
-    color: "#FFFFFF",
+    color: COLORS.white,
     letterSpacing: 0.5,
   },
   tierHeader: {
@@ -308,15 +313,16 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   selectedBadgeText: {
-    fontSize: 9,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
-    color: "#FFFFFF",
+    color: COLORS.white,
     letterSpacing: 0.5,
   },
   tierPrice: {
     fontSize: 17,
     fontFamily: FONTS.display.semiBold,
     color: COLORS.sacred,
+    flexShrink: 1,
   },
   tierDesc: {
     fontSize: 12,
@@ -344,11 +350,13 @@ const styles = StyleSheet.create({
   samagriChipBullet: {
     fontSize: 12,
     color: COLORS.sacred,
+    flexShrink: 1,
   },
   samagriChipText: {
     fontSize: 12,
     fontFamily: FONTS.body.medium,
     color: COLORS.ink,
+    flexShrink: 1,
   },
   provideList: {
     gap: 12,
@@ -367,7 +375,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.white,
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 1,
@@ -406,7 +414,7 @@ const styles = StyleSheet.create({
     marginTop: 1,
   },
   stepNumberText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
     color: COLORS.sacred,
   },

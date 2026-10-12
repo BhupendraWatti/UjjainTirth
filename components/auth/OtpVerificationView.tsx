@@ -8,12 +8,11 @@ import {
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
-  Text,
-  TextInput,
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
+import { Text, TextInput } from "@/components/ui/AppText";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
@@ -266,7 +265,7 @@ export default function OtpVerificationView({
                 <Animated.View style={{ transform: [{ rotate: spin }] }}>
                   <Ionicons name="sync" size={16} color={COLORS.primary} />
                 </Animated.View>
-                <View style={{ marginLeft: 8 }}>
+                <View style={{ marginLeft: 8, flexShrink: 1 }}>
                   <Text style={styles.detectTitle}>Detecting OTP automatically...</Text>
                   <Text style={styles.detectSub}>You can also enter the code manually</Text>
                 </View>
@@ -403,6 +402,7 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.body.bold,
     color: COLORS.ink,
     letterSpacing: 0.3,
+    flexShrink: 1,
   },
 
   kav: { flex: 1 },
@@ -502,7 +502,7 @@ const styles = StyleSheet.create({
     color: COLORS.ink,
   },
   detectSub: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.regular,
     color: COLORS.inkMuted,
     marginTop: 1,
@@ -528,6 +528,7 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.body.semiBold,
     color: COLORS.success,
     letterSpacing: 0.1,
+    flexShrink: 1,
   },
   progressTrack: {
     height: 3,
@@ -554,6 +555,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: FONTS.body.medium,
     color: COLORS.error,
+    flexShrink: 1,
   },
 
   // Resend
@@ -569,6 +571,7 @@ const styles = StyleSheet.create({
     fontSize: 12.5,
     fontFamily: FONTS.body.regular,
     color: COLORS.inkMuted,
+    flexShrink: 1,
   },
   resendTimer: {
     fontSize: 12.5,

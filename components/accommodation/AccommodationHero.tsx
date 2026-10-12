@@ -9,14 +9,14 @@ import { router } from "expo-router";
 import React from "react";
 import {
   StyleSheet,
-  Text,
-  TextInput,
   TouchableOpacity,
   useWindowDimensions,
   View,
 } from "react-native";
+import { Text, TextInput } from "@/components/ui/AppText";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { HIT_SLOP } from "@/constants/layout";
 interface Props {
   hero: AccommodationHeroType;
   searchQuery: string;
@@ -66,7 +66,7 @@ export default function AccommodationHero({
           onPress={() => router.back()}
           accessibilityLabel="Go back"
         >
-          <Ionicons name="arrow-back" size={20} color="#FFFFFF" />
+          <Ionicons name="arrow-back" size={20} color={COLORS.white} />
         </TouchableOpacity>
 
         {/* Location Selector */}
@@ -80,7 +80,7 @@ export default function AccommodationHero({
           activeOpacity={0.7}
           accessibilityLabel="Saved stays"
         >
-          <Ionicons name="bookmark-outline" size={18} color="#FFFFFF" />
+          <Ionicons name="bookmark-outline" size={18} color={COLORS.white} />
         </TouchableOpacity>
       </View>
 
@@ -111,13 +111,13 @@ export default function AccommodationHero({
           <TextInput
             style={styles.searchInput}
             placeholder="Search hotels, ghats, dharamshalas..."
-            placeholderTextColor="#877274"
+            placeholderTextColor={COLORS.inkMuted}
             value={searchQuery}
             onChangeText={onSearchChange}
             clearButtonMode="while-editing"
             returnKeyType="search"
           />
-          <TouchableOpacity
+          <TouchableOpacity hitSlop={HIT_SLOP}
             style={styles.filterButton}
             activeOpacity={0.8}
             onPress={onFilterPress}
@@ -164,13 +164,15 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255, 255, 255, 0.22)",
     borderWidth: 1,
     borderColor: "rgba(255, 255, 255, 0.18)",
+    flexShrink: 1,
   },
   locationText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
-    color: "#FFFFFF",
+    color: COLORS.white,
     letterSpacing: 0.8,
     textTransform: "uppercase",
+    flexShrink: 1,
   },
   pitchContent: {
     paddingHorizontal: 20,
@@ -186,24 +188,25 @@ const styles = StyleSheet.create({
     width: 7,
     height: 7,
     borderRadius: 4,
-    backgroundColor: "#FE932C",
+    backgroundColor: COLORS.saffron,
   },
   tagText: {
-    fontSize: 10,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
     color: COLORS.gold,
     letterSpacing: 1.5,
+    flexShrink: 1,
   },
   headline: {
     fontSize: 27,
     fontFamily: FONTS.display.semiBold,
-    color: "#FCF9F4",
-    lineHeight: 33,
+    color: COLORS.bg,
+    lineHeight: 35,
   },
   headlineItalic: {
     fontFamily: FONTS.display.regular,
     fontStyle: "italic",
-    color: "#FFDF98",
+    color: COLORS.goldLight,
   },
   subtext: {
     fontSize: 12,
@@ -221,7 +224,7 @@ const styles = StyleSheet.create({
   searchBar: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.white,
     borderRadius: RADIUS.lg,
     padding: 6,
     borderWidth: 1,
@@ -245,7 +248,7 @@ const styles = StyleSheet.create({
     width: 38,
     height: 38,
     borderRadius: RADIUS.md,
-    backgroundColor: "#6B1D2F",
+    backgroundColor: COLORS.sacred,
     justifyContent: "center",
     alignItems: "center",
   },

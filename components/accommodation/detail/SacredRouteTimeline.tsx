@@ -3,8 +3,13 @@ import { FONTS } from "@/constants/typography";
 import { RADIUS, SHADOWS } from "@/constants/theme";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import {
+  StyleSheet,
+  View,
+} from "react-native";
+import { Text } from "@/components/ui/AppText";
 
+import { COLORS } from "@/constants/colors";
 interface Props {
   nodes: SacredRouteNode[];
 }
@@ -18,7 +23,7 @@ export default function SacredRouteTimeline({ nodes }: Props) {
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.tagRow}>
-          <MaterialCommunityIcons name="compass-outline" size={15} color="#904D00" />
+          <MaterialCommunityIcons name="compass-outline" size={15} color={COLORS.goldDeep} />
           <Text style={styles.tagText}>WALKING DISTANCE PATH</Text>
         </View>
         <Text style={styles.titleText}>Nearby Sacred Places</Text>
@@ -48,7 +53,7 @@ export default function SacredRouteTimeline({ nodes }: Props) {
                 <MaterialCommunityIcons
                   name={node.icon as any || "temple-hindu"}
                   size={16}
-                  color={isStay || isSanctum ? "#FFFFFF" : "#4E051A"}
+                  color={isStay || isSanctum ? COLORS.white : COLORS.sacredDeep}
                 />
               </View>
 
@@ -82,7 +87,7 @@ export default function SacredRouteTimeline({ nodes }: Props) {
                 {/* Distance & Time Metric */}
                 {node.distance_text && node.distance_text !== "0 m" && (
                   <View style={styles.distanceBadge}>
-                    <MaterialCommunityIcons name="walk" size={13} color="#904D00" />
+                    <MaterialCommunityIcons name="walk" size={13} color={COLORS.goldDeep} />
                     <Text style={styles.distanceBadgeText}>
                       {node.distance_text} · {node.walk_time}
                     </Text>
@@ -101,7 +106,7 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
     paddingTop: 20,
-    backgroundColor: "#F6F3EE",
+    backgroundColor: COLORS.surfaceMuted,
     paddingBottom: 24,
   },
   header: {
@@ -114,20 +119,21 @@ const styles = StyleSheet.create({
     gap: 5,
   },
   tagText: {
-    fontSize: 10,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
-    color: "#904D00",
+    color: COLORS.goldDeep,
     letterSpacing: 1.2,
+    flexShrink: 1,
   },
   titleText: {
     fontSize: 19,
     fontFamily: FONTS.display.semiBold,
-    color: "#4E051A",
+    color: COLORS.sacredDeep,
   },
   subtext: {
     fontSize: 12,
     fontFamily: FONTS.body.regular,
-    color: "#544244",
+    color: COLORS.inkBody,
   },
   timelineWrapper: {
     position: "relative",
@@ -140,7 +146,7 @@ const styles = StyleSheet.create({
     top: 14,
     bottom: 24,
     width: 2,
-    backgroundColor: "#FE932C",
+    backgroundColor: COLORS.saffron,
     opacity: 0.45,
   },
   nodeWrapper: {
@@ -152,21 +158,21 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: "#EBE8E3",
+    backgroundColor: COLORS.bgStone,
     justifyContent: "center",
     alignItems: "center",
     zIndex: 2,
     ...SHADOWS.xs,
   },
   nodeCircleStay: {
-    backgroundColor: "#4E051A",
+    backgroundColor: COLORS.sacredDeep,
   },
   nodeCircleSanctum: {
-    backgroundColor: "#904D00",
+    backgroundColor: COLORS.goldDeep,
   },
   nodeContent: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: COLORS.white,
     padding: 12,
     borderRadius: RADIUS.md,
     gap: 4,
@@ -182,13 +188,13 @@ const styles = StyleSheet.create({
   nodeTitle: {
     fontSize: 13,
     fontFamily: FONTS.display.semiBold,
-    color: "#4E051A",
+    color: COLORS.sacredDeep,
   },
   tagPill: {
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: RADIUS.xs,
-    backgroundColor: "#F0EDE9",
+    backgroundColor: COLORS.surfaceMuted,
   },
   tagPillStay: {
     backgroundColor: "#FFD9DD",
@@ -197,9 +203,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFDCC3",
   },
   tagPillText: {
-    fontSize: 9,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
-    color: "#544244",
+    color: COLORS.inkBody,
     textTransform: "uppercase",
   },
   tagPillTextStay: {
@@ -209,9 +215,9 @@ const styles = StyleSheet.create({
     color: "#2F1500",
   },
   nodeDesc: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.regular,
-    color: "#544244",
+    color: COLORS.inkBody,
     lineHeight: 15,
   },
   distanceBadge: {
@@ -226,8 +232,9 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   distanceBadgeText: {
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
-    color: "#904D00",
+    color: COLORS.goldDeep,
+    flexShrink: 1,
   },
 });

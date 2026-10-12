@@ -4,11 +4,12 @@ import React from "react";
 import {
   ScrollView,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
 
+import { COLORS } from "@/constants/colors";
 export type DetailTabType = "overview" | "rooms" | "amenities" | "route";
 
 interface Props {
@@ -78,7 +79,7 @@ export default function SegmentedTabs({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#FCF9F4",
+    backgroundColor: COLORS.bg,
     paddingVertical: 10,
     borderBottomWidth: 1,
     borderBottomColor: "rgba(107, 29, 47, 0.06)",
@@ -91,17 +92,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 7,
     borderRadius: RADIUS.full,
-    backgroundColor: "#F0EDE9",
+    backgroundColor: COLORS.surfaceMuted,
   },
   tabBtnActive: {
-    backgroundColor: "#4E051A",
+    backgroundColor: COLORS.sacredDeep,
   },
   tabText: {
     fontSize: 12,
     fontFamily: FONTS.body.semiBold,
-    color: "#544244",
+    color: COLORS.inkBody,
   },
   tabTextActive: {
-    color: "#FFFFFF",
+    color: COLORS.white,
   },
 });

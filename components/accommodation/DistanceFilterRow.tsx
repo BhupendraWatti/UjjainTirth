@@ -6,10 +6,10 @@ import React from "react";
 import {
   ScrollView,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
 
 export type DistanceFilterType =
   | "all"
@@ -93,11 +93,12 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   titleText: {
-    fontSize: 10,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
-    color: "#6B1D2F",
+    color: COLORS.sacred,
     letterSpacing: 1.2,
     textTransform: "uppercase",
+    flexShrink: 1,
   },
   decorCue: {
     flexDirection: "row",
@@ -121,21 +122,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: RADIUS.full,
-    backgroundColor: "#F0EDE9",
+    backgroundColor: COLORS.surfaceMuted,
     borderWidth: 1,
     borderColor: "transparent",
   },
   chipActive: {
-    backgroundColor: "#6B1D2F",
-    borderColor: "#4E051A",
+    backgroundColor: COLORS.sacred,
+    borderColor: COLORS.sacredDeep,
   },
   chipText: {
     fontSize: 12,
     fontFamily: FONTS.body.semiBold,
-    color: "#544244",
+    color: COLORS.inkBody,
   },
   chipTextActive: {
-    color: "#FFFFFF",
+    color: COLORS.white,
   },
   miniBadge: {
     paddingHorizontal: 6,
@@ -144,10 +145,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFDCC3",
   },
   miniBadgeActive: {
-    backgroundColor: "#FFDF98",
+    backgroundColor: COLORS.goldLight,
   },
   miniBadgeText: {
-    fontSize: 9,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
     color: "#663500",
     textTransform: "uppercase",

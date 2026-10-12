@@ -19,11 +19,11 @@ import {
   Platform,
   ScrollView,
   StyleSheet,
-  Text,
   TouchableOpacity,
   useWindowDimensions,
   View,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
 
 interface Props {
   visible: boolean;
@@ -81,6 +81,10 @@ function cleanHtmlEntities(text: string): string {
 export default function PackageDetailModal({ visible, item, onClose }: Props) {
   const { height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
+  // iOS presents pageSheet below the status bar already; window insets would push the
+  // close button ~60pt into the sheet. Android shows the modal full-screen, so it needs them.
+  const sheetTopOffset =
+    Platform.OS === "ios" ? 12 : Math.max(12, insets.top + 8);
   const heroHeight = Math.min(320, Math.max(220, height * 0.4));
   // Fetch full details when modal opens
   const { packageDetail, loading: detailLoading } = usePackageDetail(
@@ -220,7 +224,7 @@ export default function PackageDetailModal({ visible, item, onClose }: Props) {
                 style={styles.heroGradient}
               />
               <TouchableOpacity
-                style={[styles.closeButton, { top: Math.max(12, insets.top + 8) }]}
+                style={[styles.closeButton, { top: sheetTopOffset }]}
                 onPress={() => {
                   if (Platform.OS !== "web") {
                     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -232,7 +236,7 @@ export default function PackageDetailModal({ visible, item, onClose }: Props) {
                 accessibilityLabel="Close package details"
                 hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
               >
-                <Ionicons name="close" size={20} color="#FFFFFF" />
+                <Ionicons name="close" size={20} color={COLORS.white} />
               </TouchableOpacity>
               <View style={styles.heroTitleContainer}>
                 <Text style={styles.heroTitle}>{item.name}</Text>
@@ -266,7 +270,7 @@ export default function PackageDetailModal({ visible, item, onClose }: Props) {
 
               {/* Close button with defensive glassmorphic pill */}
               <TouchableOpacity
-                style={[styles.closeButton, { top: Math.max(12, insets.top + 8) }]}
+                style={[styles.closeButton, { top: sheetTopOffset }]}
                 onPress={() => {
                   if (Platform.OS !== "web") {
                     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -278,7 +282,7 @@ export default function PackageDetailModal({ visible, item, onClose }: Props) {
                 accessibilityLabel="Close package details"
                 hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
               >
-                <Ionicons name="close" size={20} color="#FFFFFF" />
+                <Ionicons name="close" size={20} color={COLORS.white} />
               </TouchableOpacity>
 
               {/* Title on image */}
@@ -287,7 +291,7 @@ export default function PackageDetailModal({ visible, item, onClose }: Props) {
                 <View style={styles.heroBadgeRow}>
                   {pkg?.duration?.trim() ? (
                     <View style={styles.heroDurationBadge}>
-                      <Ionicons name="time-outline" size={13} color="#FFFFFF" />
+                      <Ionicons name="time-outline" size={13} color={COLORS.white} />
                       <Text style={styles.heroDuration}>
                         {pkg.duration.trim()}
                       </Text>
@@ -295,7 +299,7 @@ export default function PackageDetailModal({ visible, item, onClose }: Props) {
                   ) : null}
                   {details?.transport ? (
                     <View style={styles.heroTransportBadge}>
-                      <Ionicons name="car-outline" size={13} color="#FFFFFF" />
+                      <Ionicons name="car-outline" size={13} color={COLORS.white} />
                       <Text style={styles.heroDuration}>
                         {details.transport}
                       </Text>
@@ -314,7 +318,7 @@ export default function PackageDetailModal({ visible, item, onClose }: Props) {
               {/* Price Banner - Upper Fold Price Discovery */}
               {pkg?.price ? (
                 <View style={styles.priceBanner}>
-                  <View>
+                  <View style={{ flexShrink: 1 }}>
                     <Text style={styles.priceLabel}>Package Dakshina</Text>
                     <View style={styles.priceRow}>
                       <Text style={styles.priceSymbol}>₹</Text>
@@ -466,7 +470,7 @@ export default function PackageDetailModal({ visible, item, onClose }: Props) {
                         "#E8F5E9",
                         "#FFF3E0",
                         "#FFEBEE",
-                        "#F5F5F5",
+                        COLORS.surfaceMuted,
                       ];
                       return (
                         <View
@@ -553,13 +557,13 @@ export default function PackageDetailModal({ visible, item, onClose }: Props) {
             accessibilityLabel="Book package on WhatsApp"
           >
             <LinearGradient
-              colors={[COLORS.primary, "#D94535"]}
+              colors={[COLORS.primary, COLORS.primaryDeep]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={styles.bottomBookGradient}
             >
               <View style={styles.bottomBookRow}>
-                <Ionicons name="logo-whatsapp" size={17} color="#FFFFFF" />
+                <Ionicons name="logo-whatsapp" size={17} color={COLORS.white} />
                 <Text
                   style={styles.bottomBookText}
                   numberOfLines={1}
@@ -703,6 +707,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: "#FFF",
     fontWeight: "700",
+    flexShrink: 1,
   },
 
   // Price Banner
@@ -725,7 +730,7 @@ const styles = StyleSheet.create({
   },
 
   priceLabel: {
-    fontSize: 11,
+    fontSize: 12,
     color: COLORS.textLight,
     marginBottom: 4,
     fontWeight: "600",
@@ -743,6 +748,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "800",
     color: COLORS.primary,
+    flexShrink: 1,
   },
 
   priceAmount: {
@@ -750,6 +756,7 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.display.semiBold,
     color: COLORS.primary,
     letterSpacing: -0.5,
+    flexShrink: 1,
   },
 
   priceBadge: {
@@ -762,6 +769,7 @@ const styles = StyleSheet.create({
     gap: 4,
     borderWidth: 1,
     borderColor: COLORS.hairline,
+    flexShrink: 1,
   },
 
   priceUnitText: {
@@ -769,6 +777,7 @@ const styles = StyleSheet.create({
     color: COLORS.textLight,
     fontFamily: FONTS.body.medium,
     marginLeft: 4,
+    flexShrink: 1,
   },
 
   priceBadgeEmoji: {
@@ -780,6 +789,7 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.body.bold,
     color: COLORS.success,
     letterSpacing: 0.3,
+    flexShrink: 1,
   },
 
   // Section divider
@@ -815,6 +825,7 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.display.semiBold,
     color: COLORS.ink,
     letterSpacing: -0.2,
+    flexShrink: 1,
   },
 
   // Description Card
@@ -822,7 +833,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.surface,
     borderRadius: RADIUS.md,
     padding: 20,
-    shadowColor: "#2B2420",
+    shadowColor: COLORS.ink,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.06,
     shadowRadius: 8,
@@ -903,7 +914,7 @@ const styles = StyleSheet.create({
   },
 
   gridLabel: {
-    fontSize: 10,
+    fontSize: 11,
     color: COLORS.textLight,
     fontWeight: "700",
     marginBottom: 4,
@@ -973,7 +984,7 @@ const styles = StyleSheet.create({
   },
 
   locationLabel: {
-    fontSize: 10,
+    fontSize: 11,
     color: COLORS.textLight,
     fontWeight: "700",
     textTransform: "uppercase",
@@ -1120,6 +1131,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: COLORS.primary,
     letterSpacing: 0.3,
+    flexShrink: 1,
   },
 
   bottomBook: {
@@ -1146,5 +1158,6 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: "#FFF",
     letterSpacing: 0.2,
+    flexShrink: 1,
   },
 });

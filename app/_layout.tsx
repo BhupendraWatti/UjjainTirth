@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 import * as Updates from "expo-updates";
 import { useEffect, useState } from "react";
 import { useFonts } from "expo-font";
@@ -138,6 +139,8 @@ export default function RootLayout() {
       <TamaguiProvider config={tamaguiConfig} defaultTheme="light">
         <QueryClientProvider client={queryClient}>
           <AuthProvider>
+            {/* App is light-only; keep status bar icons dark even when the OS is in dark mode. */}
+            <StatusBar style="dark" />
             <Stack
               screenOptions={{
                 headerShown: false,

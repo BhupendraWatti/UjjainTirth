@@ -10,12 +10,13 @@ import {
   Modal,
   ScrollView,
   StyleSheet,
-  Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
 
+import { HIT_SLOP, sheetColumn } from "@/constants/layout";
 interface Props {
   visible: boolean;
   item: TransportServiceItem | null;
@@ -59,7 +60,7 @@ const TransportEnquiryModal = ({ visible, item, onClose }: Props) => {
 
               <View style={styles.header}>
                 <Text style={styles.sheetTitle}>Book Transport</Text>
-                <TouchableOpacity
+                <TouchableOpacity hitSlop={HIT_SLOP}
                   style={styles.closeButton}
                   onPress={onClose}
                   accessibilityLabel="Close modal"
@@ -125,7 +126,7 @@ const TransportEnquiryModal = ({ visible, item, onClose }: Props) => {
                     activeOpacity={0.8}
                     onPress={handleWhatsApp}
                   >
-                    <Ionicons name="logo-whatsapp" size={20} color="#FFFFFF" />
+                    <Ionicons name="logo-whatsapp" size={20} color={COLORS.white} />
                     <Text style={styles.whatsappText}>Enquire on WhatsApp</Text>
                   </TouchableOpacity>
 
@@ -158,6 +159,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   sheet: {
+    ...sheetColumn,
     backgroundColor: COLORS.bg,
     borderTopLeftRadius: RADIUS.lg,
     borderTopRightRadius: RADIUS.lg,
@@ -183,6 +185,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: FONTS.display.semiBold,
     color: COLORS.ink,
+    flexShrink: 1,
   },
   closeButton: {
     width: 34,
@@ -232,7 +235,7 @@ const styles = StyleSheet.create({
     borderRadius: RADIUS.sm,
   },
   tagText: {
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
     color: COLORS.journey,
   },
@@ -278,9 +281,10 @@ const styles = StyleSheet.create({
     ...SHADOWS.subtle,
   },
   whatsappText: {
-    color: "#FFFFFF",
+    color: COLORS.white,
     fontSize: 15,
     fontFamily: FONTS.body.bold,
+    flexShrink: 1,
   },
   callButton: {
     backgroundColor: COLORS.journeyTint,
@@ -297,5 +301,6 @@ const styles = StyleSheet.create({
     color: COLORS.journey,
     fontSize: 14,
     fontFamily: FONTS.body.bold,
+    flexShrink: 1,
   },
 });

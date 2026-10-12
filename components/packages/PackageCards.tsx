@@ -12,10 +12,10 @@ import {
   Platform,
   Pressable,
   StyleSheet,
-  Text,
   View,
   ViewStyle,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
 import Animated, {
   Easing,
   FadeInDown,
@@ -116,7 +116,7 @@ const SacredBottomWave = React.memo(() => {
         {/* Second Ultra-Thin Parallel Antique-Gold Curve */}
         <Path
           d="M 0,20 C 65,20 105,38 155,36 C 215,33 245,8 305,10 C 350,12 380,22 400,22"
-          stroke="#C99A55"
+          stroke={COLORS.gold}
           strokeWidth={1.3}
           fill="none"
           opacity={0.85}
@@ -284,9 +284,9 @@ export default function PackageCard({
               {/* Subtle Sacred Architectural Watermark */}
               <View style={styles.placeholderWatermark}>
                 <Svg width={140} height={140} viewBox="0 0 100 100" fill="none">
-                  <Circle cx={50} cy={50} r={44} stroke="#C99A55" strokeWidth={0.8} strokeDasharray="3 3" opacity={0.25} />
-                  <Path d="M 50 12 L 72 50 L 50 88 L 28 50 Z" stroke="#C99A55" strokeWidth={0.8} opacity={0.22} />
-                  <Circle cx={50} cy={50} r={18} stroke="#C99A55" strokeWidth={0.8} opacity={0.28} />
+                  <Circle cx={50} cy={50} r={44} stroke={COLORS.gold} strokeWidth={0.8} strokeDasharray="3 3" opacity={0.25} />
+                  <Path d="M 50 12 L 72 50 L 50 88 L 28 50 Z" stroke={COLORS.gold} strokeWidth={0.8} opacity={0.22} />
+                  <Circle cx={50} cy={50} r={18} stroke={COLORS.gold} strokeWidth={0.8} opacity={0.28} />
                 </Svg>
               </View>
             </View>
@@ -384,7 +384,7 @@ export default function PackageCard({
             <View style={styles.pathwayBadgeRow}>
               <View style={styles.pathwayStarNode}>
                 <Svg width={10} height={10} viewBox="0 0 10 10" fill="none">
-                  <Path d="M 5 0 L 6.2 3.8 L 10 5 L 6.2 6.2 L 5 10 L 3.8 6.2 L 0 5 L 3.8 3.8 Z" fill="#C99A55" />
+                  <Path d="M 5 0 L 6.2 3.8 L 10 5 L 6.2 6.2 L 5 10 L 3.8 6.2 L 0 5 L 3.8 3.8 Z" fill={COLORS.gold} />
                 </Svg>
               </View>
               <Text style={styles.pathwayBadgeText}>PILGRIMAGE ITINERARY</Text>
@@ -424,7 +424,7 @@ export default function PackageCard({
               <Svg width={18} height={16} viewBox="0 0 18 14" fill="none" style={{ marginBottom: 2 }}>
                 <Path
                   d="M 3 7 L 15 7 M 10 2 L 15 7 L 10 12"
-                  stroke="#FFFFFF"
+                  stroke={COLORS.white}
                   strokeWidth={2.2}
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -454,7 +454,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "rgba(43, 36, 32, 0.08)",
     // Deep warm spiritual shadow
-    shadowColor: "#2B2420",
+    shadowColor: COLORS.ink,
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.12,
     shadowRadius: 14,
@@ -518,21 +518,24 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: FONTS.body.bold,
     color: "#E5B869",
+    flexShrink: 1,
   },
 
   priceValue: {
     fontSize: 15,
     fontFamily: FONTS.display.semiBold,
-    color: "#FFFFFF",
+    color: COLORS.white,
     letterSpacing: 0.2,
+    flexShrink: 1,
   },
 
   priceSuffix: {
-    fontSize: 10,
+    fontSize: 11,
     fontFamily: FONTS.body.regular,
     color: "rgba(255, 255, 255, 0.7)",
     marginLeft: 2,
     letterSpacing: 0.4,
+    flexShrink: 1,
   },
 
   // -------------------------------------------------------------
@@ -561,9 +564,10 @@ const styles = StyleSheet.create({
   durationNumber: {
     fontSize: 22,
     fontFamily: FONTS.display.semiBold,
-    color: "#FFFFFF",
-    lineHeight: 26,
+    color: COLORS.white,
+    lineHeight: 29,
     letterSpacing: 0.5,
+    flexShrink: 1,
   },
 
   durationUnit: {
@@ -572,12 +576,13 @@ const styles = StyleSheet.create({
     color: "#E2C8A2",
     textTransform: "uppercase",
     letterSpacing: 0.8,
+    flexShrink: 1,
   },
 
   packageTitle: {
     fontSize: 19,
     fontFamily: FONTS.display.semiBold,
-    color: "#FFFFFF",
+    color: COLORS.white,
     lineHeight: 26,
     marginBottom: 6,
     textShadowColor: "rgba(0, 0, 0, 0.6)",
@@ -623,10 +628,11 @@ const styles = StyleSheet.create({
   },
 
   highlightText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.semiBold,
     color: "#FAF6EE",
     letterSpacing: 0.2,
+    flexShrink: 1,
   },
 
   // -------------------------------------------------------------
@@ -678,10 +684,11 @@ const styles = StyleSheet.create({
   },
 
   pathwayBadgeText: {
-    fontSize: 9.5,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
     color: "#8C6538",
     letterSpacing: 1.2,
+    flexShrink: 1,
   },
 
   pathwayTitle: {
@@ -699,17 +706,18 @@ const styles = StyleSheet.create({
   },
 
   waypointLabel: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.medium,
     color: COLORS.inkMuted,
     letterSpacing: 0.1,
+    flexShrink: 1,
   },
 
   waypointDot: {
     width: 3,
     height: 3,
     borderRadius: 1.5,
-    backgroundColor: "#C99A55",
+    backgroundColor: COLORS.gold,
     opacity: 0.7,
   },
 
@@ -738,9 +746,9 @@ const styles = StyleSheet.create({
   },
 
   portalLabel: {
-    fontSize: 8.5,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
-    color: "#FFFFFF",
+    color: COLORS.white,
     letterSpacing: 0.8,
     marginTop: 1,
   },

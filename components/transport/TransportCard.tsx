@@ -5,7 +5,13 @@ import { TransportHighlight, TransportServiceItem } from "@/types/transport";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import React, { memo, useCallback } from "react";
-import { StyleSheet, Text, TouchableOpacity, View, ViewStyle } from "react-native";
+import {
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from "react-native";
+import { Text } from "@/components/ui/AppText";
 
 interface Props {
   item: TransportServiceItem;
@@ -64,7 +70,7 @@ const TransportCard = ({ item, onEnquire, style }: Props) => {
 
         {/* Capacity Floating Pill */}
         <View style={styles.capacityPill}>
-          <Ionicons name="people" size={13} color="#FFFFFF" />
+          <Ionicons name="people" size={13} color={COLORS.white} />
           <Text style={styles.capacityText}>{item.passenger_capacity} Seats</Text>
         </View>
       </View>
@@ -110,7 +116,7 @@ const TransportCard = ({ item, onEnquire, style }: Props) => {
             accessibilityLabel={`Enquire about ${item.title}`}
           >
             <Text style={styles.ctaText}>Enquire Now</Text>
-            <Ionicons name="chevron-forward" size={14} color="#FFFFFF" />
+            <Ionicons name="chevron-forward" size={14} color={COLORS.white} />
           </TouchableOpacity>
         </View>
       </View>
@@ -154,7 +160,7 @@ const styles = StyleSheet.create({
     ...SHADOWS.subtle,
   },
   badgeText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
     color: COLORS.journey,
     letterSpacing: 0.3,
@@ -172,9 +178,10 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   capacityText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
-    color: "#FFFFFF",
+    color: COLORS.white,
+    flexShrink: 1,
   },
   content: {
     padding: 16,
@@ -202,7 +209,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.gold + "33",
   },
   recText: {
-    fontSize: 10,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
     color: COLORS.gold,
     letterSpacing: 0.5,
@@ -233,9 +240,10 @@ const styles = StyleSheet.create({
     marginRight: 4,
   },
   highlightText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.semiBold,
     color: COLORS.journey,
+    flexShrink: 1,
   },
   footer: {
     flexDirection: "row",
@@ -249,11 +257,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 5,
+    flexShrink: 1,
   },
   featureNoteText: {
     fontSize: 12,
     fontFamily: FONTS.body.medium,
     color: COLORS.inkMuted,
+    flexShrink: 1,
   },
   ctaButton: {
     backgroundColor: COLORS.journey,
@@ -268,6 +278,7 @@ const styles = StyleSheet.create({
   ctaText: {
     fontSize: 13,
     fontFamily: FONTS.body.bold,
-    color: "#FFFFFF",
+    color: COLORS.white,
+    flexShrink: 1,
   },
 });

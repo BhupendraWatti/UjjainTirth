@@ -6,12 +6,11 @@ import {
   Platform,
   ScrollView,
   StyleSheet,
-  Text,
-  TextInput,
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
+import { Text, TextInput } from "@/components/ui/AppText";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
@@ -243,6 +242,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: FONTS.display.semiBold,
     color: COLORS.ink,
+    flexShrink: 1,
   },
   skipHeaderBtn: {
     flexDirection: "row",
@@ -260,6 +260,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontFamily: FONTS.body.bold,
     color: COLORS.primary,
+    flexShrink: 1,
   },
   scrollContent: {
     paddingHorizontal: 20,
@@ -321,15 +322,17 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.body.bold,
     letterSpacing: 1,
     color: COLORS.inkMuted,
+    flexShrink: 1,
   },
   optionalBadge: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.semiBold,
     color: COLORS.inkMuted,
     backgroundColor: COLORS.bgStone,
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: RADIUS.sm,
+    flexShrink: 1,
   },
   tableRow: {
     flexDirection: "row",
@@ -347,6 +350,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: FONTS.body.semiBold,
     color: COLORS.inkBody,
+    flexShrink: 1,
   },
   rowValueCol: {
     flex: 1,
@@ -358,6 +362,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: FONTS.body.semiBold,
     color: COLORS.ink,
+    flexShrink: 1,
   },
   verifiedBadge: {
     flexDirection: "row",
@@ -367,11 +372,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: RADIUS.sm,
+    flexShrink: 1,
   },
   verifiedText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
     color: COLORS.success,
+    flexShrink: 1,
   },
   tableInput: {
     flex: 1,
@@ -423,7 +430,7 @@ const styles = StyleSheet.create({
   saveBtn: {
     flexDirection: "row",
     backgroundColor: COLORS.primary,
-    height: 52,
+    minHeight: 52,
     borderRadius: RADIUS.sm,
     alignItems: "center",
     justifyContent: "center",

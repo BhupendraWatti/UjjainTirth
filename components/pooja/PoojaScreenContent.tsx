@@ -9,6 +9,7 @@ import { COLORS } from "@/constants/colors";
 import { RADIUS } from "@/constants/theme";
 import { FONTS } from "@/constants/typography";
 import { usePoojas } from "@/hooks/usePooja";
+import { useLayout } from "@/hooks/useLayout";
 import { PoojaItem } from "@/types/pooja";
 import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
@@ -18,17 +19,19 @@ import {
   FlatList,
   Platform,
   StyleSheet,
-  Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+import { Text, TextInput } from "@/components/ui/AppText";
 
 interface Props {
   showBackButton?: boolean;
 }
 
 const PoojaScreenContent = ({ showBackButton = true }: Props) => {
+  const { tabBarSpace, insets } = useLayout();
+  // On the Puja tab the floating tab bar overlaps content; in the stack screen only the home indicator does.
+  const bottomSpace = showBackButton ? insets.bottom + 24 : tabBarSpace;
   const { data: poojas, isLoading, isError, refetch } = usePoojas();
 
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
@@ -315,7 +318,7 @@ const PoojaScreenContent = ({ showBackButton = true }: Props) => {
             </View>
           }
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.listContent}
+          contentContainerStyle={[styles.listContent, { paddingBottom: bottomSpace }]}
           initialNumToRender={4}
           maxToRenderPerBatch={4}
           windowSize={5}
@@ -343,7 +346,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.surfaceMuted,
     borderRadius: RADIUS.md,
     paddingHorizontal: 12,
-    height: 44,
+    minHeight: 44,
     borderWidth: 1,
     borderColor: COLORS.hairline,
     gap: 8,
@@ -370,6 +373,7 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.display.semiBold,
     color: COLORS.ink,
     letterSpacing: -0.2,
+    flexShrink: 1,
   },
   sectionBadge: {
     backgroundColor: "rgba(184, 128, 46, 0.15)",
@@ -377,9 +381,10 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     borderRadius: 8,
     marginLeft: 2,
+    flexShrink: 1,
   },
   sectionBadgeText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
     color: COLORS.gold,
   },

@@ -14,16 +14,16 @@ import {
   FlatList,
   Platform,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
-  useWindowDimensions,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
 
+import { useLayout } from "@/hooks/useLayout";
 const HomePoojaSection = () => {
   const router = useRouter();
   const { data: poojas, isLoading } = usePoojas();
-  const { width } = useWindowDimensions();
+  const { contentWidth: width } = useLayout();
 
   const cardWidth = Math.min(280, width * 0.72);
 
@@ -59,7 +59,7 @@ const HomePoojaSection = () => {
     <View style={styles.container}>
       {/* Header Row */}
       <View style={styles.headerRow}>
-        <View>
+        <View style={{ flexShrink: 1 }}>
           <View style={styles.titleBadgeRow}>
             <Ionicons name="flame" size={16} color={COLORS.gold} />
             <Text style={styles.sectionTitle} maxFontSizeMultiplier={1.3}>
@@ -159,7 +159,7 @@ const HomePoojaSection = () => {
 
                 {/* Footer / Price Row */}
                 <View style={styles.cardFooter}>
-                  <View>
+                  <View style={{ flexShrink: 1 }}>
                     <Text style={styles.priceLabel} maxFontSizeMultiplier={1.15}>Starting Dakshina</Text>
                     <Text style={styles.priceAmount} maxFontSizeMultiplier={1.25}>
                       {item.starting_price
@@ -170,7 +170,7 @@ const HomePoojaSection = () => {
 
                   <View style={styles.ctaPill}>
                     <Text style={styles.ctaPillText} maxFontSizeMultiplier={1.15}>View Vidhi</Text>
-                    <Ionicons name="arrow-forward" size={11} color="#FFFFFF" />
+                    <Ionicons name="arrow-forward" size={11} color={COLORS.white} />
                   </View>
                 </View>
               </View>
@@ -206,6 +206,7 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.display.semiBold,
     color: COLORS.sacred,
     letterSpacing: -0.2,
+    flexShrink: 1,
   },
   sectionSub: {
     fontSize: 12,
@@ -228,6 +229,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: FONTS.body.bold,
     color: COLORS.sacred,
+    flexShrink: 1,
   },
   listContent: {
     paddingHorizontal: 16,
@@ -264,7 +266,7 @@ const styles = StyleSheet.create({
     borderColor: "rgba(255, 224, 130, 0.4)",
   },
   badgeTagText: {
-    fontSize: 9,
+    fontSize: 11,
     fontFamily: FONTS.body.bold,
     color: "#FFE082",
     letterSpacing: 0.4,
@@ -281,7 +283,7 @@ const styles = StyleSheet.create({
   templeText: {
     fontSize: 11,
     fontFamily: FONTS.body.bold,
-    color: "#FFFFFF",
+    color: COLORS.white,
     flex: 1,
     textShadowColor: "rgba(0, 0, 0, 0.75)",
     textShadowOffset: { width: 0, height: 1 },
@@ -309,9 +311,10 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   metaText: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: FONTS.body.regular,
     color: COLORS.inkMuted,
+    flexShrink: 1,
   },
   cardFooter: {
     flexDirection: "row",
@@ -322,7 +325,7 @@ const styles = StyleSheet.create({
     paddingTop: 8,
   },
   priceLabel: {
-    fontSize: 9,
+    fontSize: 12,
     fontFamily: FONTS.body.medium,
     color: COLORS.inkMuted,
   },
@@ -339,10 +342,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: RADIUS.xs,
+    flexShrink: 1,
   },
   ctaPillText: {
-    fontSize: 10,
+    fontSize: 12,
     fontFamily: FONTS.body.bold,
-    color: "#FFFFFF",
+    color: COLORS.white,
+    flexShrink: 1,
   },
 });

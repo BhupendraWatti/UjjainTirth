@@ -14,13 +14,14 @@ import {
   Platform,
   ScrollView,
   StyleSheet,
-  Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { HIT_SLOP, sheetColumn } from "@/constants/layout";
 interface Props {
   visible: boolean;
   item: PoojaItem | null;
@@ -107,7 +108,7 @@ const PoojaBookingModal = ({ visible, item, onClose, selectedTier }: Props) => {
 
               <View style={styles.header}>
                 <Text style={styles.sheetTitle}>Request Vedic Pooja</Text>
-                <TouchableOpacity
+                <TouchableOpacity hitSlop={HIT_SLOP}
                   style={styles.closeButton}
                   onPress={handleClose}
                   accessibilityLabel="Close modal"
@@ -244,7 +245,7 @@ const PoojaBookingModal = ({ visible, item, onClose, selectedTier }: Props) => {
                     activeOpacity={0.8}
                     onPress={handleWhatsApp}
                   >
-                    <Ionicons name="logo-whatsapp" size={20} color="#FFFFFF" />
+                    <Ionicons name="logo-whatsapp" size={20} color={COLORS.white} />
                     <Text
                       style={styles.whatsappText}
                       numberOfLines={1}
@@ -297,6 +298,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   sheet: {
+    ...sheetColumn,
     backgroundColor: COLORS.surface,
     borderTopLeftRadius: RADIUS.lg,
     borderTopRightRadius: RADIUS.lg,
@@ -322,6 +324,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: FONTS.display.semiBold,
     color: COLORS.ink,
+    flexShrink: 1,
   },
   closeButton: {
     width: 36,
@@ -416,6 +419,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: FONTS.body.bold,
     color: COLORS.sacred,
+    flexShrink: 1,
   },
   guaranteeTitleBold: {
     fontSize: 12,
@@ -444,9 +448,10 @@ const styles = StyleSheet.create({
     ...SHADOWS.subtle,
   },
   whatsappText: {
-    color: "#FFFFFF",
+    color: COLORS.white,
     fontSize: 15,
     fontFamily: FONTS.body.bold,
+    flexShrink: 1,
   },
   callButton: {
     backgroundColor: COLORS.primaryTint,
@@ -463,5 +468,6 @@ const styles = StyleSheet.create({
     color: COLORS.primaryDeep,
     fontSize: 14,
     fontFamily: FONTS.body.bold,
+    flexShrink: 1,
   },
 });

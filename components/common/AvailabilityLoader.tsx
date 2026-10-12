@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
 import {
   StyleSheet,
-  Text,
   View,
   ViewStyle,
 } from "react-native";
+import { Text } from "@/components/ui/AppText";
 import { FONTS } from "@/constants/typography";
 import Animated, {
   Easing,
@@ -464,12 +464,14 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: COLORS.primary,
     fontFamily: FONTS.display.semiBold,
+    flexShrink: 1,
   },
   labelText: {
     fontSize: 16,
     fontFamily: FONTS.body.bold,
     color: COLORS.ink,
     letterSpacing: 0.2,
+    flexShrink: 1,
   },
   subtitleText: {
     fontSize: 12,
@@ -493,6 +495,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: FONTS.body.semiBold,
     color: COLORS.success,
+    flexShrink: 1,
   },
 
   // Card Styles
@@ -501,7 +504,7 @@ const styles = StyleSheet.create({
     height: 68,
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: "#FFFFFF",
+    borderColor: COLORS.white,
     overflow: "hidden",
     backgroundColor: "#F3EDE2",
     shadowColor: "#000",
